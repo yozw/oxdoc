@@ -1,5 +1,7 @@
 <project name="oxdoc" default="jar" basedir=".">
-   <description>Ant build file for oxdoc</description>
+  <description>Ant build file for oxdoc</description>
+
+  <property name="javacc"  location="javacc/" />
 
   <property name="src"     location="src"/>
   <property name="bin"     location="bin"/>
@@ -12,7 +14,7 @@
   <target name="parser">
      <mkdir dir="${parser}"/>
      <javacc target="${src}/ox.jj" outputdirectory="${parser}"
-      javacchome="e:/yori/javacc"
+      javacchome="${javacc}"
       debuglookahead="false"
       debugparser="false"
       static="false" />
