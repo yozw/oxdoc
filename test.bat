@@ -6,3 +6,5 @@ java -classpath ..\bin\oxdoc.jar OxDoc *.ox
 move *.html html
 if not exist oxdoc.css copy ..\oxdoc.css html\
 popd
+
+
