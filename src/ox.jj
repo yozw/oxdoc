@@ -1,0 +1,490 @@
+/* Ox grammar definition use with JavaCC
+   by Yori Zwols (yori@brown.edu)
+
+   Based on C grammar definition for use with JavaCC
+   Contributed by Doug South (dsouth@squirrel.com.au) 21/3/97 */
+
+
+PARSER_BEGIN(oxdoc)
+
+import java.util.*;
+import java.io.*;
+
+  public class oxdoc {
+
+    private static OxProject project = new OxProject();
+	private static OxFile currentFile = null;
+	private static ArrayList files = new ArrayList();
+
+	public static String ProductName = "oxdoc";
+	public static String Version = "0.5beta";
+	public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols [yori@brown.edu]";
+
+	public static void warning(String msg) {
+		System.out.println("Warning: " + msg);
+	}
+
+	public static void message(String msg) {
+		System.out.println(msg);
+	}
+
+	public static void parseFiles() throws Exception {
+	  	for (int i = 0; i < files.size(); i++) {
+			String filename = (String) files.get(i);
+   	       	System.out.println("Processing file " + filename + "...");
+			try {
+		   		currentFile = project.addFile(filename);
+           		oxdoc parser = new oxdoc(new java.io.FileInputStream(filename));
+           		parser.OxFileDefinition();
+			}
+        	catch(ParseException e) {
+           		System.out.println("Parsing of file " + filename + " failed");
+ 	       		System.out.println(e.toString());
+	    	}
+		}
+	}
+
+	public static void examineCommandLine(String args[]) throws Exception {
+		// examine command line
+	    for (int i = 0; i < args.length; i++) {
+	  	  if (!args[i].startsWith("-")) {
+		  	files.add(args[i]);
+		  	continue;
+		 }
+
+		 String option = args[i].substring(1);
+		 if (OxDocConfig.SetSimpleOption(option))
+		 	  continue;
+
+		 i++;
+		 if (i == args.length) 
+		     throw new Exception("Value expected after option -" + option);
+
+		 if (!OxDocConfig.SetOption(option, args[i]))
+		   throw new Exception("Invalid option -" + option);
+	  }
+	}
+	
+    // oxdoc entry point
+    public static void main ( String args [ ] ) {
+      System.out.println(ProductName + " " + Version + " " + CopyrightNotice);
+
+      if (args.length == 0) {
+        System.out.println("\nUsage is:");
+        System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
+		System.out.println("\nOptions:");
+		OxDocConfig.ListOptions();
+	  	return;
+      }
+
+      try {
+	    // do configuration
+	    OxDocConfig.Load();
+		examineCommandLine(args);
+		OxDocConfig.Validate();
+
+		// execute parsing and document generation
+		parseFiles();
+	    OxDocumentor.generateDocs(project);
+	  }
+      catch(Exception e){
+   	    System.out.println(e.getMessage());
+      }
+    }
+  }
+
+PARSER_END(oxdoc)
+
+SKIP : {
+ " "
+|  "\t"
+|  "\n"
+|  "\r"
+|  <"#"  (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
+|  <"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
+}
+
+SPECIAL_TOKEN : {
+ <"/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/">
+}
+
+TOKEN : {
+ <INTEGER_LITERAL: <DECIMAL_LITERAL> (["l","L"])? | <HEX_LITERAL> (["l","L"])? | <OCTAL_LITERAL> (["l","L"])?>
+|  <#DECIMAL_LITERAL: ["1"-"9"] (["0"-"9"])*>
+|  <#HEX_LITERAL: "0" ["x","X"] (["0"-"9","a"-"f","A"-"F"])+>
+|  <#OCTAL_LITERAL: "0" (["0"-"7"])*>
+|  <FLOATING_POINT_LITERAL: (["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)? (["f","F","d","D"])? | "." (["0"-"9"])+ (<EXPONENT>)? (["f","F","d","D"])? | (["0"-"9"])+ <EXPONENT> (["f","F","d","D"])? | (["0"-"9"])+ (<EXPONENT>)? ["f","F","d","D"] >
+|  <#EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+>
+|  <CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'">
+|  <STRING_LITERAL: "\"" (~["\"","\\","\n","\r"] | "\\" (["x","n","t","b","r","f","{","}","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"]))* "\"">
+}
+
+TOKEN : {
+	<CONTINUE: "continue"> |
+	<DECL: "decl"> |
+	<DFLT: "default"> |
+	<SWITCH: "switch"> |
+	<RETURN: "return"> |
+	<STATIC: "static"> |
+	<WHILE: "while"> |
+	<NAN: ".NaN"> |
+	<INF: ".Inf"> |
+	<BREAK: "break"> |
+	<NEW: "new"> | 
+	<DELETE: "delete"> | 
+	<CONST: "const"> |
+	<CLASS: "class"> |
+	<EXTERN: "extern"> |
+	<VIRTUAL: "virtual"> |
+	<NAMESPACE: "namespace"> |
+	<ELSE: "else"> |
+	<CASE: "case"> |
+	<ENUM: "enum"> |
+	<FOR: "for"> |
+	<IF: "if"> |
+	<DO: "do">
+}
+
+TOKEN : {
+ <IDENTIFIER: <LETTER> (<LETTER> | <DIGIT>)*>
+|  <#LETTER: ["$","A"-"Z","_","a"-"z"]>
+|  <#DIGIT: ["0"-"9"]>
+}
+
+void OxFileDefinition() : {}
+{
+	( NamespaceDeclaration() |
+	  NamespaceDefinition() )+
+}
+
+void NamespaceDefinition() : {}
+{
+	( LOOKAHEAD( FunctionDeclaration() ) FunctionDeclaration() |
+	  ExternFunctionDeclaration() |
+	  LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() |
+	  ClassDefinition() |
+	  DeclarationStatement() )
+}
+
+void NamespaceDeclaration() : {}
+{
+	<NAMESPACE> <IDENTIFIER> "{" (NamespaceDefinition())* "}"
+}
+
+void DeclarationStatement() : {}
+{
+	Declaration() ";"
+}
+
+
+void ClassDefinition() :
+{ Token name, classtoken, parentclassname = null; }
+{
+	classtoken = <CLASS> name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
+	"{" ClassBody() "}"
+	{
+      System.out.println("Class " + name.image);
+	  OxClass newClass;
+	  if (parentclassname == null)
+	  	 newClass = currentFile.addClass(name.image);
+	  else
+	  	 newClass = currentFile.addClass(name.image, parentclassname.image);
+	  if (classtoken.specialToken != null)
+         newClass.SetComment(classtoken.specialToken.image);
+	  project.addSymbol(newClass);
+	} [";"]
+}
+
+void ClassBody() : {}
+{
+	( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() ) )*
+}
+
+void MethodDeclaration() : {}
+{
+	[<VIRTUAL>] [<STATIC>] ["~"] <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
+}
+
+void MemberDeclaration() : {}
+{
+	[<CONST>] [<STATIC>] <DECL> <IDENTIFIER> (","  <IDENTIFIER>)* ";"
+}
+
+void EnumDeclaration() : {}
+{
+	<ENUM> "{" [<IDENTIFIER> ("," <IDENTIFIER>)*] "}"
+}
+
+void ExternFunctionDeclaration() : {}
+{
+	<EXTERN> [<STRING_LITERAL>] <IDENTIFIER> "(" [ ArgumentList() ] ")"  ";"
+}
+
+void FunctionDeclaration() :{}
+{
+	[<STATIC>]
+	(
+	  LOOKAHEAD(4)
+	  <IDENTIFIER> ("::") ["~" ] <IDENTIFIER>
+|	  <IDENTIFIER> 
+	)
+    "(" [ ArgumentList() ] ")"  ";"
+}
+
+void FunctionDefinition() :
+{ Token name, classname, t1 = getToken(1), t2;
+  String methodPrefix = "";
+  OxFunction func;}
+{
+	[<STATIC>]
+	(
+	  LOOKAHEAD(4)
+	  classname = <IDENTIFIER> ("::") ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER>
+	  {
+	  	 OxClass oxClass = currentFile.getClass(classname.image);
+		 if (oxClass == null) {
+		    System.out.println("WARNING: Class " + classname.image + " was not yet defined.");
+			oxClass = currentFile.addClass(classname.image);
+		 }
+		 String methodName = classname.image + "::" + methodPrefix + name.image;
+	     OxMethod newMethod = oxClass.addMethod(methodName);
+	     if (classname.specialToken != null)
+		    newMethod.SetComment(classname.specialToken.image);
+	     System.out.println("Method " + methodName);
+		 project.addSymbol(newMethod);
+		 func = newMethod;
+	  }
+|	  name = <IDENTIFIER> 
+	  {
+	  	 OxFunction newFunction = currentFile.addFunction(name.image);
+	     if (name.specialToken != null)
+		    newFunction.SetComment(name.specialToken.image);
+	     System.out.println("Function " + name.image);
+		 project.addSymbol(newFunction);
+		 func = newFunction;
+	  }
+	)
+    "(" [ ArgumentList() ] ")" 
+	{
+	  t2 = getToken(0);
+
+	  String decl = "";
+	  for(; t1 != t2; t1 = t1.next)
+	  	decl += t1.image + " ";
+	  decl += t2.image;
+	  func._declaration = decl;
+	}
+	CompoundStatement()
+}
+
+void ArgumentList() : {}
+{
+	"..." | 
+	[<CONST>] <IDENTIFIER> [ "," ArgumentList() ]
+}
+
+void CompoundStatement() : {}
+{
+	"{"
+		(Statement())*
+	"}"
+}
+
+void SimpleStatement() : {}
+{
+	LOOKAHEAD(3)
+	  Declaration() |
+	  AssignmentExpression() ("," AssignmentExpression())* |
+	  JumpStatement() 
+}
+
+void Statement() : {}
+{
+  	LOOKAHEAD(CompoundStatement()) CompoundStatement()
+|	LOOKAHEAD(SimpleStatement()) SimpleStatement() ";"
+|	IterationStatement()
+|	SelectionStatement()
+}
+
+void JumpStatement() : {}
+{
+	( <CONTINUE>  |
+	  <BREAK>  |
+		  <RETURN> [ Expression() ]  )
+}
+
+void VariableDeclaration() : {}
+{
+	<IDENTIFIER> [ "=" AssignmentExpression() ]
+}
+
+void Declaration() : {}
+{
+	[<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
+| EnumDeclaration() 	
+}
+
+void SelectionStatement() : {}
+{
+	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
+	  <SWITCH> "(" Expression() ")" Statement() )
+}
+
+void IterationStatement() : {}
+{
+	( <WHILE> "(" Expression() ")" Statement() |
+	  <DO> Statement() <WHILE> "(" Expression() ")" ";" |
+	  <FOR> "("
+	  		[ SimpleStatement() ]
+	  		";"
+	  		[ Expression() ]
+			";"
+	  		[ SimpleStatement() ]
+		")" Statement() )
+}
+
+void Expression() : {}
+{
+	AssignmentExpression() 
+}
+
+void AssignmentExpression() : {}  
+{
+	  "[" <IDENTIFIER> ("," <IDENTIFIER>)* "]" "=" AssignmentExpression() |
+	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression() |
+	  LOOKAHEAD(3) ConditionalExpression()
+}
+
+void AssignmentOperator() : {}
+{
+	( "=" | "*=" | "/=" | "+=" | "-=" | "~=" | "|=" | ".*=" | "./=" )
+}
+
+void ConditionalExpression() : {}
+{
+	LogicalORExpression()
+		[ "?" AssignmentExpression()  ":" ConditionalExpression() |
+		 ".?" AssignmentExpression() ".:" ConditionalExpression() ]
+}
+
+void LogicalORExpression() : {}
+{
+	LogicalDOTORExpression() [ "||" LogicalORExpression() ]
+}
+
+void LogicalDOTORExpression() : {}
+{
+	LogicalANDExpression() [ ".||" LogicalDOTORExpression() ]
+}
+
+void LogicalANDExpression() : {}
+{
+	LogicalDOTANDExpression() [ "&&" LogicalANDExpression() ]
+}
+
+void LogicalDOTANDExpression() : {}
+{
+	EqualityExpression() [ ".&&" LogicalDOTANDExpression() ]
+}
+
+void EqualityExpression() : {}
+{
+	RelationalExpression() [ ( "==" | "!=" | ".==" | ".!=" ) EqualityExpression() ]
+}
+
+void RelationalExpression() : {}
+{
+	VerticalConcatenationExpression() [ ( "<" | ">" | "<=" | ">=" | ".<" | ".>" | ".<=" | ".>=" ) RelationalExpression() ]
+}
+
+void VerticalConcatenationExpression() : {}
+{
+	HorizontalConcatenationExpression() [ "|" VerticalConcatenationExpression() ]
+}
+
+void HorizontalConcatenationExpression() : {}
+{
+	AdditiveExpression() [ "~" HorizontalConcatenationExpression() ]
+}
+
+void AdditiveExpression() : {}
+{
+	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
+}
+
+void MultiplicativeExpression() : {}
+{
+	UnaryExpression() [ ( "**" | "*" | "/" | ".*" | "./" ) MultiplicativeExpression() ]
+}
+
+void UnaryExpression() : {}
+{
+	( LOOKAHEAD(3) PowerExpression() |
+	  UnaryOperator() UnaryExpression() 
+	)
+}
+
+void UnaryOperator() : {}
+{
+	( "::" | "++" | "--" | "&" | "+" | "-" | "!" | "~" | <NEW> | <DELETE> )
+}
+
+void PowerExpression() : {}
+{
+	PostfixExpression() [ (  "^" | ".^" ) PowerExpression() ]
+}
+
+void PostfixExpression() : {}
+{
+	PrimaryExpression()  ( "[" [ RangeExpression() ] "]" |
+	                      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
+	  					  "." <IDENTIFIER> |
+						  LOOKAHEAD(3) "->" <IDENTIFIER> "::" <IDENTIFIER> |
+	  					  "->" <IDENTIFIER> |
+	  					  "++" |
+						  "'" [<IDENTIFIER>] |
+	  					  "--" )*
+}
+
+void RangeExpression() : {}
+{
+	ConditionalExpression() [ ":" [ ConditionalExpression() ] ] |
+	":" [ConditionalExpression() ]
+}
+
+void PrimaryExpression() : {}
+{
+	( LOOKAHEAD(2) <IDENTIFIER> "::" <IDENTIFIER> |
+	  <IDENTIFIER> |
+	  Constant() |
+      "(" Expression() ")" )
+}
+
+void ArgumentExpressionList() : {}
+{
+	AssignmentExpression() ( "," AssignmentExpression() )*
+}
+
+void MatrixConstantElement() : {}
+{
+	"[" Constant() "]" "*" Constant() |
+	LOOKAHEAD(3) Constant() ":" [ "[" Constant() "]" ] Constant() |
+	Constant() |
+	<IDENTIFIER>
+}
+
+void MatrixConstant() : {}
+{
+	"<" [MatrixConstantElement() ( [","|";"] MatrixConstantElement() )*] ">"
+}
+
+void ArrayConstant() : {}
+{
+	"{" [ Expression() ( "," Expression() )* ] "}"
+}
+
+void Constant() : {}
+{
+ LOOKAHEAD(2) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(2) ["+"|"-"]  <INTEGER_LITERAL> |
+ <CHARACTER_LITERAL> | <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "." | LOOKAHEAD(2) ["+"|"-"] <INF> | <NAN>
+}

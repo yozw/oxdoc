@@ -1,0 +1,47 @@
+<project name="oxdoc" default="jar" basedir=".">
+   <description>Ant build file for oxdoc</description>
+
+  <property name="src"     location="src"/>
+  <property name="bin"     location="bin"/>
+  <property name="parser"  location="src/parser" />
+  <property name="build"   location="build"/>
+  <property name="distbin" location="dist/bin"/>
+  <property name="dist"    location="dist"/>
+  <property name="zips"    location="zips"/>
+
+  <target name="parser">
+     <mkdir dir="${parser}"/>
+     <javacc target="${src}/ox.jj" outputdirectory="${parser}"
+      javacchome="e:/yori/javacc"
+      debuglookahead="false"
+      debugparser="false"
+      static="false" />
+  </target>
+
+  <target name="compile" depends="parser">
+     <mkdir dir="${build}"/>
+     <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${bin}"/>
+    <copy file="oxdoc.css" todir="${build}" />
+    <copy file="oxdoc.xml" todir="${bin}"  />
+    <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
+  </target>
+
+  <target name="dist" depends="jar">
+    <mkdir dir="${distbin}"/>
+    <mkdir dir="${zips}"/>
+    <copy file="${bin}/oxdoc.xml" todir="${distbin}"/>
+    <copy file="${bin}/oxdoc.jar" todir="${distbin}"/>
+    <zip destfile="${zips}/oxdoc.zip" basedir="${dist}" />
+  </target>
+
+  <target name="clean">
+    <delete dir="${bin}"/>
+    <delete dir="${build}"/>
+    <delete dir="${parser}"/>
+  </target>
+
+</project>
