@@ -1,3 +1,4 @@
+import java.util.*;
 import java.io.File;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
@@ -14,6 +15,7 @@ public class OxDocConfig {
 	public static String  TempDir     = ".";
 	public static String  OutputDir   = ".";
 	public static boolean EnableLatex = true;
+	public static ArrayList LatexPackages = new ArrayList();
 
 	public static boolean SetSimpleOption(String name) {
 		if (name.equals("nolatex"))
@@ -29,6 +31,11 @@ public class OxDocConfig {
 		else if (name.equals("dvipng"))      Dvipng = value;
 		else if (name.equals("tempdir"))     TempDir = value;
 		else if (name.equals("outputdir"))   OutputDir = value;
+		else if (name.equals("latexpackages")) {
+			String[] packages = value.split("[,;]");
+			for (int i = 0; i < packages.length; i++)
+				LatexPackages.add(packages[i]);
+		}
 		else if (name.equals("enablelatex")) EnableLatex = ToBoolean(value);
 		else return false;
 		
@@ -40,6 +47,7 @@ public class OxDocConfig {
 		System.out.println("    -tempdir <dir>         Provides the directory in which temporary files");
 		System.out.println("                           will be written");
 		System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
+		System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
 		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
 		System.out.println("    -nolatex               Disables LaTeX support. Formulas will be ");
 		System.out.println("                           inserted literally");

@@ -1,5 +1,5 @@
 <oxdoc>
-	<option name="latex"     value="e:\yori\texmf\miktex\bin\latex.exe" />
-	<option name="dvipng"    value="e:\yori\texmf\miktex\bin\dvipng.exe" />
-	<option name="tempdir"   value="e:\yori\temp\" />
+	<option name="latex"     value="c:\texmf\miktex\bin\latex.exe" />
+	<option name="dvipng"    value="c:\texmf\miktex\bin\dvipng.exe" />
+	<option name="tempdir"   value="c:\temp\" />
 </oxdoc>

@@ -95,8 +95,9 @@ import javax.xml.transform.stream.*;
 			File aFile = new File(OxDocConfig.TempDir + "__oxdoc.tex");
      		Writer output = new BufferedWriter( new FileWriter(aFile) );
 			output.write("\\documentclass{article}\n");
-			output.write("\\usepackage{amsmath}\n");
-			output.write("\\usepackage{bbm}\n");
+
+			for (int i = 0; i < OxDocConfig.LatexPackages.size(); i++)
+				output.write("\\usepackage{"  + (String) OxDocConfig.LatexPackages.get(i) + "}\n");
 			output.write("\\begin{document}\n");
 			output.write("\\pagestyle{empty}\n");
 			output.write("\\begin{align*}\n");
