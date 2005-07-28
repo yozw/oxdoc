@@ -7,12 +7,12 @@ import java.util.*;
 		private String _parentClassName = null;
 		
 		OxClass(String name, OxFile parentFile) {
-			super(name);
+			super(name, new OxDocClassComment());
 			_parentFile = parentFile;
 		}
 
 		OxClass(String name, String parentClassName, OxFile parentFile) {
-			super(name);
+			super(name, new OxDocClassComment());
 			_parentFile = parentFile;
 			_parentClassName = parentClassName;
 		}

@@ -4,7 +4,7 @@ import java.util.*;
 		public String _declaration;
 
 		OxFunction(String name, OxFile parentFile) {
-			super(name, parentFile);
+			super(name, new OxDocFunctionComment(), parentFile);
 		}
 
 		public String url() {

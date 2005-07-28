@@ -13,7 +13,7 @@ import java.util.regex.*;
 				String[] params = ((String) get(i)).split("[\t ]", 2);
 				out += "<tr><td valign=\"top\"><tt>" + params[0] + "&nbsp;&nbsp;</tt></td>";
 				if (params.length > 1)
-					out += "<td valign=\"top\">" +  LatexImageManager.FilterLatex(params[1]) + "</td>";
+					out += "<td valign=\"top\">" + LatexImageManager.FilterLatex(params[1]) + "</td>";
 				out += "</tr>\n";
 			}
 			out += "</table>\n";

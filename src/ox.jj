@@ -12,7 +12,7 @@ import java.io.*;
 
   public class oxdoc {
 
-    private static OxProject project = new OxProject();
+    private static OxProject _project = new OxProject();
 	private static OxFile currentFile = null;
 	private static ArrayList files = new ArrayList();
 
@@ -20,6 +20,10 @@ import java.io.*;
 	public static String Version = "0.5beta";
 	public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols [yori@brown.edu]";
 
+	public static OxProject project() {
+		return _project;
+	}
+	
 	public static void warning(String msg) {
 		System.out.println("Warning: " + msg);
 	}
@@ -33,7 +37,7 @@ import java.io.*;
 			String filename = (String) files.get(i);
    	       	System.out.println("Processing file " + filename + "...");
 			try {
-		   		currentFile = project.addFile(filename);
+		   		currentFile = project().addFile(filename);
            		oxdoc parser = new oxdoc(new java.io.FileInputStream(filename));
            		parser.OxFileDefinition();
 			}
@@ -85,7 +89,7 @@ import java.io.*;
 
 		// execute parsing and document generation
 		parseFiles();
-	    OxDocumentor.generateDocs(project);
+	    OxDocumentor.generateDocs();
 	  }
       catch(Exception e){
    	    System.out.println(e.getMessage());
@@ -183,7 +187,6 @@ void ClassDefinition() :
 	classtoken = <CLASS> name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
 	"{" ClassBody() "}"
 	{
-      System.out.println("Class " + name.image);
 	  OxClass newClass;
 	  if (parentclassname == null)
 	  	 newClass = currentFile.addClass(name.image);
@@ -191,7 +194,7 @@ void ClassDefinition() :
 	  	 newClass = currentFile.addClass(name.image, parentclassname.image);
 	  if (classtoken.specialToken != null)
          newClass.SetComment(classtoken.specialToken.image);
-	  project.addSymbol(newClass);
+	  project().addSymbol(newClass);
 	} [";"]
 }
 
@@ -250,8 +253,7 @@ void FunctionDefinition() :
 	     OxMethod newMethod = oxClass.addMethod(methodName);
 	     if (classname.specialToken != null)
 		    newMethod.SetComment(classname.specialToken.image);
-	     System.out.println("Method " + methodName);
-		 project.addSymbol(newMethod);
+		 project().addSymbol(newMethod);
 		 func = newMethod;
 	  }
 |	  name = <IDENTIFIER> 
@@ -259,8 +261,7 @@ void FunctionDefinition() :
 	  	 OxFunction newFunction = currentFile.addFunction(name.image);
 	     if (name.specialToken != null)
 		    newFunction.SetComment(name.specialToken.image);
-	     System.out.println("Function " + name.image);
-		 project.addSymbol(newFunction);
+		 project().addSymbol(newFunction);
 		 func = newFunction;
 	  }
 	)

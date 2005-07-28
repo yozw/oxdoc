@@ -6,7 +6,7 @@ import java.util.*;
 		private OxProject  _project;
 		
 		public OxFile(String fileName, OxProject project) {
-			super(fileName);
+			super(fileName, null);
 			_project = project;
 		}
 

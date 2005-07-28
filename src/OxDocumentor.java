@@ -2,11 +2,8 @@ import java.util.*;
 import java.io.*;
 
 	public class OxDocumentor {
-		static OxProject project = null;
-
-		static void generateDocs(OxProject _project) throws IOException {
-			project = _project;
-			ArrayList files = project.files();
+		static void generateDocs() throws IOException {
+			ArrayList files = oxdoc.project().files();
 			for (int i = 0; i < files.size(); i++) {
 				OxFile file = (OxFile) files.get(i);
 				generateDoc(file, file.url());
@@ -22,12 +19,12 @@ import java.io.*;
 
 		static void generateStartPage(String fileName) throws IOException {
 			OxDocOutputFile output = new OxDocOutputFile(fileName, "Project homepage");
-			ArrayList files = project.files();
+			ArrayList files = oxdoc.project().files();
 			output.writeln("<h2>Project files</h2>");
 			output.writeln("<ul>");
 			for (int i = 0; i < files.size(); i++) {
 				OxFile file = (OxFile) files.get(i);
-				output.writeln("<li>" + project.linkToEntity(file));
+				output.writeln("<li>" + oxdoc.project().linkToEntity(file));
 			}		
 			output.writeln("</ul>");
 			output.writeln("<h2>Other links</h2>");
@@ -40,10 +37,10 @@ import java.io.*;
 		static void generateIndex(String fileName) throws IOException {
 			OxDocOutputFile output = new OxDocOutputFile(fileName, "Index");
 			output.writeln("<ul>");
-			ArrayList symbols = project.symbols();
+			ArrayList symbols = oxdoc.project().symbols();
 			for (int i = 0; i < symbols.size(); i++) {
 				OxEntity entity = (OxEntity) symbols.get(i);
-				output.write("<li>" + project.linkToEntity(entity));
+				output.write("<li>" + oxdoc.project().linkToEntity(entity));
 				if (entity instanceof OxClass)
 					output.write(" class");
 					
@@ -82,11 +79,11 @@ import java.io.*;
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
 			output.write("<h2>" + className);
 			if ((oxclass != null) && (oxclass.parentClassName() != null)) 
-				output.write(" : " + project.linkToSymbol(oxclass.parentClassName()));
+				output.write(" : " + oxdoc.project().linkToSymbol(oxclass.parentClassName()));
 			output.writeln("</h2>");
 
 			if (oxclass != null) {
-				output.write(oxclass.Comment().description());
+				output.write(oxclass.Comment());
 			}
 			
 			output.writeln("<table class=\"methods\">");
@@ -115,33 +112,10 @@ import java.io.*;
 			    	output.writeln("<a name=\"" + method.displayName() + "\">");
 				output.writeln("<h3>" + method.displayName() + "</h3></a>");
 				output.writeln("<pre>" + method.declaration() + "</pre>");
-				output.write("<dl><dd>");
-				output.write(method.Comment().description());
-				output.write("<dl>");
 
-				generateSection(output, "Parameters", method.Comment().parameters());
-				generateSection(output, "Returns", method.Comment().returns());
-				generateSection(output, "Example", method.Comment().example());
-				generateSection(output, "Comments", method.Comment().comments());
-
-				if (method.Comment().see().size() > 0) {
-					output.write("<dt><b>See also:</b><dd>");
-					for (int j = 0; j < method.Comment().see().size(); j++) {
-						if (j > 0) output.write(", ");
-						output.write(project.linkToSymbol(method.Comment().see().get(j).toString()));
-					}
-					output.writeln("</dd>");
-				}						
-				output.writeln("</dl></dd></dl>");
+				output.write(method.Comment());
 				output.writeln("<hr>");
 			}
-		}
-
-		static void generateSection(OxDocOutputFile output, String name, ArrayList lines) throws IOException {
-			if (lines.size() == 0) return;
-			output.write("<dt><b>" + name + ":</b><dd>");
-			output.writeln(lines.toString());
-			output.write("</dd>");
 		}
 
 		static void writeCss() throws IOException {

@@ -10,5 +10,15 @@ import java.util.regex.*;
 				super.add(references[j].trim());
 			return true;
 		}
+
+		public String toString() {
+			String out = "";
+			for (int j = 0; j < size(); j++) {
+				if (j > 0)
+					out += ", ";
+				out += oxdoc.project().linkToSymbol(get(j).toString());
+			}
+			return out;
+		}
 		
 	}
