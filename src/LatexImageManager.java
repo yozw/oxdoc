@@ -71,17 +71,34 @@ import javax.xml.transform.stream.*;
 		}
 
 		public static String FilterLatex(String text) {
-			String pattern = "\\$[^\\$]+\\$";
+			return FilterExpressions(text);
+		}
+
+		private static String FilterExpressions(String text) {
+			String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
 			Pattern p = Pattern.compile(pattern);
 			Matcher m = p.matcher(text);
 			StringBuffer myStringBuffer = new StringBuffer();
 
 			int formulaNumber = 1;
 			while (m.find()) {
-				String formula = text.substring(m.start()+1, m.end()-1);
+				boolean isEquation = false;
+				String formula = text.substring(m.start(), m.end());
+				if (formula.startsWith("$$")) {
+					formula = "\\displaystyle{}" + text.substring(m.start()+2, m.end()-2);
+					isEquation = true;
+				}
+				else {
+					formula = "\\textstyle{}" + text.substring(m.start()+1, m.end()-1);
+				}
+					
 				if (OxDocConfig.EnableLatex)  {
 					String fileName = RegisterFormula(formula);
-    				m.appendReplacement(myStringBuffer, "<img align=\"center\" src=\"" + fileName + "\" alt=\"" + formula + "\">");
+					String replacement = "<img align=\"center\" src=\"" + fileName + "\" alt=\"" + formula + "\">";
+					if (isEquation)
+						replacement = "<div align=\"center\">" + replacement + "</div>";
+					
+    				m.appendReplacement(myStringBuffer, replacement);
 				}
 				else
     				m.appendReplacement(myStringBuffer, "<i>" + formula + "</i>");
@@ -95,6 +112,7 @@ import javax.xml.transform.stream.*;
 			File aFile = new File(OxDocConfig.TempDir + "__oxdoc.tex");
      		Writer output = new BufferedWriter( new FileWriter(aFile) );
 			output.write("\\documentclass{article}\n");
+			output.write("\\usepackage{amsmath}\n");
 
 			for (int i = 0; i < OxDocConfig.LatexPackages.size(); i++)
 				output.write("\\usepackage{"  + (String) OxDocConfig.LatexPackages.get(i) + "}\n");
@@ -112,7 +130,7 @@ import javax.xml.transform.stream.*;
 					" -interaction=batchmode " + OxDocConfig.TempDir + "__oxdoc.tex");
 			for (int i = 0; i < 2; i++)
 				Run(OxDocConfig.Dvipng, OxDocConfig.DvipngArg +
-						" -T tight -bg Transparent -o " +
+						" -T tight --gamma 1.5 -bg Transparent -o " +
 						OxDocConfig.OutputDir + e.filename + " " + OxDocConfig.TempDir + "__oxdoc.dvi");
 		}
 
