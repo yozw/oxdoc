@@ -21,14 +21,14 @@ import java.io.*;
 			OxDocOutputFile output = new OxDocOutputFile(fileName, "Project homepage");
 			ArrayList files = oxdoc.project().files();
 			output.writeln("<h2>Project files</h2>");
-			output.writeln("<ul>");
+			output.writeln("<ul class=\"table_of_contents\">");
 			for (int i = 0; i < files.size(); i++) {
 				OxFile file = (OxFile) files.get(i);
 				output.writeln("<li>" + oxdoc.project().linkToEntity(file));
 			}		
 			output.writeln("</ul>");
 			output.writeln("<h2>Other links</h2>");
-			output.writeln("<ul><li>");
+			output.writeln("<ul class=\"table_of_contents\"><li>");
 			output.writeln("<a href=\"index.html\">Symbol index</a>");
 			output.writeln("<ul>");
 			output.close();
@@ -36,7 +36,7 @@ import java.io.*;
 
 		static void generateIndex(String fileName) throws IOException {
 			OxDocOutputFile output = new OxDocOutputFile(fileName, "Index");
-			output.writeln("<ul>");
+			output.writeln("<ul class=\"index\">");
 			ArrayList symbols = oxdoc.project().symbols();
 			for (int i = 0; i < symbols.size(); i++) {
 				OxEntity entity = (OxEntity) symbols.get(i);
@@ -75,18 +75,21 @@ import java.io.*;
 		}
 		
 		static void generateClassHeaderDocs(OxDocOutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
-			String className = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
+			String sectionName = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
-			output.write("<h2>" + className);
+
+			output.writeln("\n<!-- " + sectionName + " --!>");
+			output.write("<h2>" + sectionName);
 			if ((oxclass != null) && (oxclass.parentClassName() != null)) 
 				output.write(" : " + oxdoc.project().linkToSymbol(oxclass.parentClassName()));
 			output.writeln("</h2>");
 
 			if (oxclass != null) {
-				output.write(oxclass.Comment());
+				output.writeln(oxclass.Comment());
 			}
 			
-			output.writeln("<table class=\"methods\">");
+			output.writeln("\n<!-- Methods of " + sectionName + " --!>");
+			output.writeln("<table class=\"method_table\">");
 
 			for (int i = 0; i < methodList.size(); i++) {
 				OxFunction method = (OxFunction) methodList.get(i);
@@ -94,27 +97,33 @@ import java.io.*;
          		output.writeln("<a href=\"" + method.url() + "\">" + method.displayName() + "</a>");
 			    output.writeln("</td><td class=\"description\">");
 				output.write  (method.Comment().description());
-				output.writeln("</td>");
+				output.writeln("</td></tr>");
 			}
 			output.writeln("</table>");
 		}
 
 		static void generateClassDetailDocs(OxDocOutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
-			String className = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
+			String sectionName = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
-			output.writeln("<h2>" + className + " details</h2>");
+
+			output.writeln("\n<!-- Details for " + sectionName + " --!>");
+			output.writeln("<h2>" + sectionName + " details</h2>");
 			for (int i = 0; i < methodList.size(); i++) {
 				OxFunction method = (OxFunction) methodList.get(i);
+
+				if (i != 0)
+					output.writeln("\n<hr>");
+					
+				output.writeln("\n<!-- Method " + method.displayName() + " --!>");
 
 				if (method instanceof OxMethod)
 			    	output.writeln("<a name=\"" + classPrefix + "___" + method.displayName() + "\">");
 				else
 			    	output.writeln("<a name=\"" + method.displayName() + "\">");
 				output.writeln("<h3>" + method.displayName() + "</h3></a>");
-				output.writeln("<pre>" + method.declaration() + "</pre>");
+				output.writeln("<span class=\"declaration\">" + method.declaration() + "</span>");
 
-				output.write(method.Comment());
-				output.writeln("<hr>");
+				output.writeln(method.Comment());
 			}
 		}
 

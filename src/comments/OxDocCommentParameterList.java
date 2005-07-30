@@ -6,14 +6,17 @@ import java.util.regex.*;
 
 		public String toString() {
 			if (size() == 0) return "";
-			
-			String out = "<table class=\"parameters\">";
+
+			String out = "<!-- parameter table --!>\n";
+			out += "<table class=\"parameter_table\">\n";
 
 			for (int i = 0; i < size(); i++) {
 				String[] params = ((String) get(i)).split("[\t ]", 2);
-				out += "<tr><td valign=\"top\"><tt>" + params[0] + "&nbsp;&nbsp;</tt></td>";
+
+				out += "<tr>\n";
+				out += "<td class=\"declaration\" valign=\"top\">" + params[0] + "</td>\n";
 				if (params.length > 1)
-					out += "<td valign=\"top\">" + LatexImageManager.FilterLatex(params[1]) + "</td>";
+					out += "<td class=\"description\" valign=\"top\">" + LatexImageManager.FilterLatex(params[1]) + "</td>\n";
 				out += "</tr>\n";
 			}
 			out += "</table>\n";

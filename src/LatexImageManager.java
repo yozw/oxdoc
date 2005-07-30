@@ -85,23 +85,22 @@ import javax.xml.transform.stream.*;
 				boolean isEquation = false;
 				String formula = text.substring(m.start(), m.end());
 				if (formula.startsWith("$$")) {
-					formula = "\\displaystyle{}" + text.substring(m.start()+2, m.end()-2);
+					formula = text.substring(m.start()+2, m.end()-2);
 					isEquation = true;
 				}
 				else {
-					formula = "\\textstyle{}" + text.substring(m.start()+1, m.end()-1);
+					formula = text.substring(m.start()+1, m.end()-1);
 				}
-					
+
+				String replacement = formula;
 				if (OxDocConfig.EnableLatex)  {
-					String fileName = RegisterFormula(formula);
-					String replacement = "<img align=\"center\" src=\"" + fileName + "\" alt=\"" + formula + "\">";
-					if (isEquation)
-						replacement = "<div align=\"center\">" + replacement + "</div>";
-					
-    				m.appendReplacement(myStringBuffer, replacement);
+					String fileName = RegisterFormula( (isEquation?"\\displaystyle{}":"\\textstyle{}") + formula);
+					replacement = "<img align=\"center\" src=\"" + fileName + "\" alt=\"" + formula + "\">";
 				}
-				else
-    				m.appendReplacement(myStringBuffer, "<i>" + formula + "</i>");
+
+				Object[] args = { isEquation?"equation":"expression", replacement };
+				replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);
+				m.appendReplacement(myStringBuffer, replacement); 
 			}
 			return m.appendTail(myStringBuffer).toString();
 		}	
