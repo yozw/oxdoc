@@ -17,7 +17,7 @@ import java.io.*;
 	private static ArrayList files = new ArrayList();
 
 	public static String ProductName = "oxdoc";
-	public static String Version = "0.6alpha";
+	public static String Version = "0.7alpha";
 	public static String Url = "http://oxdoc.sourceforge.net";
 	public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols";
 

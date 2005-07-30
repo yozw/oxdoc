@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.text.*;
 
 	public class OxDocumentor {
 		static void generateDocs() throws IOException {
@@ -78,10 +79,41 @@ import java.io.*;
 			String sectionName = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
 
+			String inheritedMethods = "";
+			String inheritanceText = "";
+
+			if ((oxclass != null) && (oxclass.parentClassName() != null)) {
+				OxClass pclass = oxclass;
+
+				while (true) {
+					String parentClassName = pclass.parentClassName();
+					if (parentClassName == null)
+						break;
+
+					String link = oxdoc.project().linkToSymbol(parentClassName);
+
+					inheritanceText += " : " + link;
+					
+					OxEntity entity = oxdoc.project().getSymbol(parentClassName);
+					if ((entity == null) || !(entity instanceof OxClass))
+						break;
+					pclass = (OxClass) entity;
+
+					ArrayList methods = pclass.methods();
+					if (methods.size() > 0) {
+						inheritedMethods += "<dt>Inherited methods from " + link + ":</dt><dd>\n";
+						for (int i = 0; i < methods.size(); i++) {
+							OxFunction method = (OxFunction) methods.get(i);
+							if (i > 0) inheritedMethods += ", ";
+							inheritedMethods += method.link();
+						}
+						inheritedMethods += "</dd>\n";
+					}
+				}
+			}
+			
 			output.writeln("\n<!-- " + sectionName + " --!>");
-			output.write("<h2>" + sectionName);
-			if ((oxclass != null) && (oxclass.parentClassName() != null)) 
-				output.write(" : " + oxdoc.project().linkToSymbol(oxclass.parentClassName()));
+			output.write("<h2>" + sectionName + " " + inheritanceText);
 			output.writeln("</h2>");
 
 			if (oxclass != null) {
@@ -93,13 +125,16 @@ import java.io.*;
 
 			for (int i = 0; i < methodList.size(); i++) {
 				OxFunction method = (OxFunction) methodList.get(i);
-			    output.writeln("<tr><td class=\"declaration\">");
-         		output.writeln("<a href=\"" + method.url() + "\">" + method.displayName() + "</a>");
-			    output.writeln("</td><td class=\"description\">");
+			    output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
+         		output.writeln(method.link());
+			    output.writeln("</td><td class=\"description\" valign=\"top\">");
 				output.write  (method.Comment().description());
 				output.writeln("</td></tr>");
 			}
 			output.writeln("</table>");
+
+			if (inheritedMethods.length() > 0)
+				output.writeln("<dl class=\"inherited_methods\">" + inheritedMethods + "</dl>\n");
 		}
 
 		static void generateClassDetailDocs(OxDocOutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
@@ -110,17 +145,17 @@ import java.io.*;
 			output.writeln("<h2>" + sectionName + " details</h2>");
 			for (int i = 0; i < methodList.size(); i++) {
 				OxFunction method = (OxFunction) methodList.get(i);
+				String anchorName = ((method instanceof OxMethod)?classPrefix+"___":"")
+									+ method.displayName();
 
 				if (i != 0)
 					output.writeln("\n<hr>");
 					
 				output.writeln("\n<!-- Method " + method.displayName() + " --!>");
 
-				if (method instanceof OxMethod)
-			    	output.writeln("<a name=\"" + classPrefix + "___" + method.displayName() + "\">");
-				else
-			    	output.writeln("<a name=\"" + method.displayName() + "\">");
-				output.writeln("<h3>" + method.displayName() + "</h3></a>");
+				Object[] args = {anchorName, method.displayName()};
+				output.writeln(MessageFormat.format("<a name=\"{0}\"><h3>{1}</h3></a>", args));
+
 				output.writeln("<span class=\"declaration\">" + method.declaration() + "</span>");
 
 				output.writeln(method.Comment());

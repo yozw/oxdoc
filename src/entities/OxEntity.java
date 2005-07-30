@@ -37,4 +37,15 @@ import java.util.*;
 		public String url() {
 			return ""; 
 		}
+
+		public String displayName() {
+			return name;
+		}
+
+		public String link() {
+			if (url().length() == 0)
+				return displayName();
+			else
+				return "<a href=\"" + url() + "\">" + displayName() + "</a>";
+		}
 	}
