@@ -46,4 +46,16 @@
     <delete dir="${parser}"/>
   </target>
 
+  <target name="doc">
+    <javadoc packagenames="*"
+           defaultexcludes="yes"
+           destdir="docs"
+           use="true"
+           windowtitle="oxdoc Development Documentation">
+      <fileset dir="src" defaultexcludes="yes">
+        <include name="**/*.java" />
+      </fileset>
+    </javadoc>
+  </target>
+
 </project>
