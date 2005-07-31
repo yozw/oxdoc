@@ -8,8 +8,8 @@ import java.text.*;
 		private String _author = "";
 		private String _version = "";
 
-		protected boolean AddToSection(String name, String text) {
-			if (!super.AddToSection(name, text)) {
+		protected boolean addToSection(String name, String text) {
+			if (!super.addToSection(name, text)) {
 				if (name.compareToIgnoreCase("author") == 0)      _author = text;
 				else if (name.compareToIgnoreCase("version") == 0) _version = text;
 				else return false;

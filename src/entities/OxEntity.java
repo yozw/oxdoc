@@ -25,12 +25,12 @@ import java.util.*;
 			return (_parentFile == null)?"":_parentFile.url();
 		}
 
-		public BaseComment SetComment(String comment) throws ParseException {
-			_comment.SetText(comment);
+		public BaseComment setComment(String comment) throws ParseException {
+			_comment.setText(comment);
 			return _comment;
 		}
 
-		public BaseComment Comment() {
+		public BaseComment comment() {
 			return _comment;
 		}
 		

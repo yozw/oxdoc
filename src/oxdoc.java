@@ -7,7 +7,7 @@ import java.io.*;
 	private static ArrayList files = new ArrayList();
 
 	public static String ProductName = "oxdoc";
-	public static String Version = "0.7alpha";
+	public static String Version = "0.75alpha";
 	public static String Url = "http://oxdoc.sourceforge.net";
 	public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols";
 
@@ -28,8 +28,7 @@ import java.io.*;
 			String filename = (String) files.get(i);
    	       	System.out.println("Processing file " + filename + "...");
 			try {
-           		Parser parser = new Parser(new java.io.FileInputStream(filename));
-		   	parser.currentFile = project().addFile(filename);
+           		Parser parser = new Parser(new java.io.FileInputStream(filename), project().addFile(filename), project());
            		parser.OxFileDefinition();
 			}
         	catch(ParseException e) {
@@ -48,14 +47,14 @@ import java.io.*;
 		 }
 
 		 String option = args[i].substring(1);
-		 if (Config.SetSimpleOption(option))
+		 if (Config.setSimpleOption(option))
 		 	  continue;
 
 		 i++;
 		 if (i == args.length) 
 		     throw new Exception("Value expected after option -" + option);
 
-		 if (!Config.SetOption(option, args[i]))
+		 if (!Config.setOption(option, args[i]))
 		   throw new Exception("Invalid option -" + option);
 	  }
 	}
@@ -68,15 +67,15 @@ import java.io.*;
         System.out.println("\nUsage is:");
         System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
 		System.out.println("\nOptions:");
-		Config.ListOptions();
+		Config.listOptions();
 	  	return;
       }
 
       try {
 	    // do configuration
-	    Config.Load();
+	    Config.load();
 		examineCommandLine(args);
-		Config.Validate();
+		Config.validate();
 
 		// execute parsing and document generation
 		parseFiles();

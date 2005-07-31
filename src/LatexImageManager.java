@@ -30,11 +30,11 @@ import javax.xml.transform.stream.*;
 			public String filename() { return _filename; }
 			public String formula()  { return _formula; }
 
-			public static ImageEntry Register(String Formula) {
-				return Register(Formula, null);
+			public static ImageEntry register(String Formula) {
+				return register(Formula, null);
 			}
 
-			public static ImageEntry Register(String formula, String filename) {
+			public static ImageEntry register(String formula, String filename) {
 				formula = formula.trim().replace('\n',' ');
 				ImageEntry entry = ((ImageEntry) _formulas.get(formula));
 				if (entry != null)
@@ -51,7 +51,7 @@ import javax.xml.transform.stream.*;
 		}
 
 
-		public static void SaveCache() {
+		private static void saveCache() {
 			try {
 				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 				Document doc = builder.newDocument();
@@ -83,7 +83,7 @@ import javax.xml.transform.stream.*;
 			}
 		}
 
-		public static void LoadCache() {
+		private static void loadCache() {
     		try {
             	File file = new File(FileManager.imageCache());
 				if (!file.exists())
@@ -100,7 +100,7 @@ import javax.xml.transform.stream.*;
 					String formula  = element.getAttribute("formula");
 					String filename = element.getAttribute("filename");
 					if (FileManager.outputFileExists(filename)) {
-						ImageEntry entry = ImageEntry.Register(formula, filename);
+						ImageEntry entry = ImageEntry.register(formula, filename);
 						entry.needsGenerating = false;
 					}
 				}
@@ -110,15 +110,15 @@ import javax.xml.transform.stream.*;
 			}
 		}
 
-		public static String FilterLatex(String text) {
+		public static String filterLatex(String text) {
 			if (!_cacheLoaded) {
-				LoadCache();
+				loadCache();
 				_cacheLoaded = true;
 			}
-			return FilterExpressions(text);
+			return filterExpressions(text);
 		}
 
-		private static String FilterExpressions(String text) {
+		private static String filterExpressions(String text) {
 			String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
 			Pattern p = Pattern.compile(pattern);
 			Matcher m = p.matcher(text);
@@ -138,7 +138,7 @@ import javax.xml.transform.stream.*;
 
 				String replacement = formula;
 				if (Config.EnableLatex)  {
-					ImageEntry entry = ImageEntry.Register( (isEquation?"\\displaystyle{}":"\\textstyle{}") + formula);  
+					ImageEntry entry = ImageEntry.register( (isEquation?"\\displaystyle{}":"\\textstyle{}") + formula);  
 					replacement = "<img align=\"center\" src=\"" + entry.filename() + "\" alt=\"" + formula + "\">";
 				}
 
@@ -149,17 +149,17 @@ import javax.xml.transform.stream.*;
 			return m.appendTail(myStringBuffer).toString();
 		}	
 
-		public static void MakeLatexFiles() throws IOException {
+		public static void makeLatexFiles() throws IOException {
 
 			for (Enumeration enum = _formulas.elements(); enum.hasMoreElements() ;) {
 				ImageEntry e = (ImageEntry) enum.nextElement();
 				if (e.needsGenerating) 
-					MakeLatexFile(e);
+					makeLatexFile(e);
 			}
-			SaveCache();
+			saveCache();
 		}
 
-		public static void MakeLatexFile(ImageEntry e) throws IOException {
+		private static void makeLatexFile(ImageEntry e) throws IOException {
 			oxdoc.message("Generating image for formula \"" + e.formula() + "\"...");
 
 			File aFile = new File(FileManager.tempTexFile());
@@ -181,16 +181,16 @@ import javax.xml.transform.stream.*;
 			String latexParams  = "{0} -aux-directory={1} -output-directory={1} -interaction=batchmode {2}";
 			Object[] args = {Config.LatexArg, FileManager.tempDir(), FileManager.tempFile("__oxdoc.tex")};
 			
-			Run(Config.Latex, MessageFormat.format(latexParams, args));
+			run(Config.Latex, MessageFormat.format(latexParams, args));
 			
 			String dvipngParams = "{0} -T tight --gamma 1.5 -bg Transparent -o {1} {2}";
 			for (int i = 0; i < 2; i++) {
 				Object[] _args = {Config.DvipngArg, FileManager.outputFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
-				Run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
+				run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
 			}
 		}
 
-		public static void Run(String filename, String parameters) throws IOException {
+		private static void run(String filename, String parameters) throws IOException {
 			oxdoc.message("   " + filename + " "+ parameters);
 			Runtime run = Runtime.getRuntime();
 			try {

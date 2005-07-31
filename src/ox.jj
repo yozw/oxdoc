@@ -12,8 +12,14 @@ import java.io.*;
 
   public class Parser {
 
-	public OxFile currentFile = null;
-	private static OxProject project() { return oxdoc.project(); }
+	private OxFile file = null;
+	private OxProject project = null;
+
+  	public Parser(java.io.InputStream stream, OxFile file, OxProject project) {
+     		this(stream, null);
+		this.file = file; 
+		this.project = project;
+  	}
 
   }
 
@@ -109,12 +115,12 @@ void ClassDefinition() :
 	{
 	  OxClass newClass;
 	  if (parentclassname == null)
-	  	 newClass = currentFile.addClass(name.image);
+	  	 newClass = file.addClass(name.image);
 	  else
-	  	 newClass = currentFile.addClass(name.image, parentclassname.image);
+	  	 newClass = file.addClass(name.image, parentclassname.image);
 	  if (classtoken.specialToken != null)
-         newClass.SetComment(classtoken.specialToken.image);
-	  project().addSymbol(newClass);
+         newClass.setComment(classtoken.specialToken.image);
+	  project.addSymbol(newClass);
 	} [";"]
 }
 
@@ -164,24 +170,24 @@ void FunctionDefinition() :
 	  LOOKAHEAD(4)
 	  classname = <IDENTIFIER> ("::") ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER>
 	  {
-	  	 OxClass oxClass = currentFile.getClass(classname.image);
+	  	 OxClass oxClass = file.getClass(classname.image);
 		 if (oxClass == null) {
 		    System.out.println("WARNING: Class " + classname.image + " was not yet defined.");
-			oxClass = currentFile.addClass(classname.image);
+			oxClass = file.addClass(classname.image);
 		 }
 		 String methodName = classname.image + "::" + methodPrefix + name.image;
 	     OxMethod newMethod = oxClass.addMethod(methodName);
 	     if (classname.specialToken != null)
-		    newMethod.SetComment(classname.specialToken.image);
-		 project().addSymbol(newMethod);
+		    newMethod.setComment(classname.specialToken.image);
+		 project.addSymbol(newMethod);
 		 func = newMethod;
 	  }
 |	  name = <IDENTIFIER> 
 	  {
-	  	 OxFunction newFunction = currentFile.addFunction(name.image);
+	  	 OxFunction newFunction = file.addFunction(name.image);
 	     if (name.specialToken != null)
-		    newFunction.SetComment(name.specialToken.image);
-		 project().addSymbol(newFunction);
+		    newFunction.setComment(name.specialToken.image);
+		 project.addSymbol(newFunction);
 		 func = newFunction;
 	  }
 	)

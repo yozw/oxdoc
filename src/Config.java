@@ -18,16 +18,16 @@ public class Config {
 	public static String  ConfigFile  = "oxdoc.xml";
 	public static ArrayList LatexPackages = new ArrayList();
 
-	public static boolean SetSimpleOption(String name) {
+	public static boolean setSimpleOption(String name) {
 		if (name.equals("nolatex"))
-			SetOption("enablelatex", "0");
+			setOption("enablelatex", "0");
 		else
 			return false;
 
 		return true;
 	}
 
-	public static boolean SetOption(String name, String value) {
+	public static boolean setOption(String name, String value) {
 		if (name.equals("latex"))            Latex = value;
 		else if (name.equals("dvipng"))      Dvipng = value;
 		else if (name.equals("tempdir"))     TempDir = value;
@@ -37,13 +37,13 @@ public class Config {
 			for (int i = 0; i < packages.length; i++)
 				LatexPackages.add(packages[i]);
 		}
-		else if (name.equals("enablelatex")) EnableLatex = ToBoolean(value);
+		else if (name.equals("enablelatex")) EnableLatex = toBoolean(value);
 		else return false;
 		
 		return true;
 	}
 
-	public static void ListOptions() {
+	public static void listOptions() {
 		System.out.println("    -outputdir <dir>       Specifies the output directory");
 		System.out.println("    -tempdir <dir>         Provides the directory in which temporary files");
 		System.out.println("                           will be written");
@@ -54,7 +54,7 @@ public class Config {
 		System.out.println("                           inserted literally");
 	}
 
-	public static void Validate() {
+	public static void validate() {
 		// check whether LaTeX executable exists
 		if ( EnableLatex && !(new File(Latex)).exists() ) {
 			oxdoc.warning("LaTeX executable not found. LaTeX support disabled");
@@ -72,15 +72,15 @@ public class Config {
 			TempDir += File.separator;
 	}
 
-	private static boolean ToBoolean(String value) {
+	private static boolean toBoolean(String value) {
 		return (value.equals("1") || value.equals("yes"));
 	}
 	
-	public static void Load() {
+	public static void load() {
 		File appDir = getApplicationDirectory(oxdoc.class);
 		if (appDir != null)
-			Load(appDir.toString() + File.separator + ConfigFile);
-		Load(ConfigFile);
+			load(appDir.toString() + File.separator + ConfigFile);
+		load(ConfigFile);
 	}
 
 	public static File getApplicationDirectory( Class clas ) {
@@ -96,7 +96,7 @@ public class Config {
       	return new File( url.getFile() ).getParentFile();
    } 
 	
-	public static void Load(String Filename) {
+	public static void load(String Filename) {
      	File file = new File(Filename);
 		if (!file.exists()) 
 			return;
@@ -114,7 +114,7 @@ public class Config {
 
             	String name  = element.getAttribute("name");
 				String value = element.getAttribute("value");
-				SetOption(name, value);
+				setOption(name, value);
 			}
 		}
 		catch (Exception E)

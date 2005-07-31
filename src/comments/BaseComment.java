@@ -15,7 +15,7 @@ import java.util.regex.*;
 		/** Add a piece of text to one of the sections. Do not access this
 		method directly. It is used by SetText. Override this method to add more sections. 
 		**/
-		protected boolean AddToSection(String name, String text) {
+		protected boolean addToSection(String name, String text) {
 				if (name.compareToIgnoreCase("comments") == 0) _comments.add(text);
 				else if (name.compareToIgnoreCase("desc") == 0) _longdescription.add(text);
 				else if (name.compareToIgnoreCase("todo") == 0) _longdescription.add(text);
@@ -29,7 +29,7 @@ import java.util.regex.*;
 
 		/** Feeds an input comment block as a string and parses it. It interprets @<section name> blocks and
 		passes the contents to AddToSection. **/
-		public void SetText(String text) throws ParseException {
+		public void setText(String text) throws ParseException {
 			if (!text.startsWith("/**") || !text.endsWith("**/"))
 				return;
 			text = text.substring(3, text.length() - 3).trim();
@@ -43,7 +43,7 @@ import java.util.regex.*;
 				String sectionName = words[0];
 				String sectionText = (words.length>1)?words[1]:"";
 
-				if (!AddToSection(sectionName, sectionText))
+				if (!addToSection(sectionName, sectionText))
 					throw new ParseException("Comment section '@" + sectionName + "' unknown -- ignored");
 			}
 		}

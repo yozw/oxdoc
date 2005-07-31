@@ -3,7 +3,7 @@ import java.io.*;
 import java.text.*;
 
 	public class Documentor {
-		static void generateDocs() throws IOException {
+		public static void generateDocs() throws IOException {
 			ArrayList files = oxdoc.project().files();
 			for (int i = 0; i < files.size(); i++) {
 				OxFile file = (OxFile) files.get(i);
@@ -15,10 +15,10 @@ import java.text.*;
 
 			writeCss();
 
-			LatexImageManager.MakeLatexFiles();
+			LatexImageManager.makeLatexFiles();
 		}
 
-		static void generateStartPage(String fileName) throws IOException {
+		private static void generateStartPage(String fileName) throws IOException {
 			OutputFile output = new OutputFile(fileName, "Project homepage");
 			ArrayList files = oxdoc.project().files();
 			output.writeln("<h2>Project files</h2>");
@@ -35,7 +35,7 @@ import java.text.*;
 			output.close();
 		}
 
-		static void generateIndex(String fileName) throws IOException {
+		private static void generateIndex(String fileName) throws IOException {
 			OutputFile output = new OutputFile(fileName, "Index");
 			output.writeln("<ul class=\"index\">");
 			ArrayList symbols = oxdoc.project().symbols();
@@ -51,7 +51,7 @@ import java.text.*;
 			output.close();
 		}
 
-		static void generateDoc(OxFile oxFile, String fileName) throws IOException {
+		private static void generateDoc(OxFile oxFile, String fileName) throws IOException {
 			OutputFile output = new OutputFile(fileName, oxFile.name());
     		try {
 				ArrayList classes = oxFile.classes();
@@ -75,7 +75,7 @@ import java.text.*;
     		}
 		}
 		
-		static void generateClassHeaderDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
+		private static void generateClassHeaderDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
 			String sectionName = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
 
@@ -117,7 +117,7 @@ import java.text.*;
 			output.writeln("</h2>");
 
 			if (oxclass != null) {
-				output.writeln(oxclass.Comment());
+				output.writeln(oxclass.comment());
 			}
 			
 			output.writeln("\n<!-- Methods of " + sectionName + " --!>");
@@ -128,7 +128,7 @@ import java.text.*;
 			    output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
          		output.writeln(method.link());
 			    output.writeln("</td><td class=\"description\" valign=\"top\">");
-				output.write  (method.Comment().description());
+				output.write  (method.comment().description());
 				output.writeln("</td></tr>");
 			}
 			output.writeln("</table>");
@@ -137,7 +137,7 @@ import java.text.*;
 				output.writeln("<dl class=\"inherited_methods\">" + inheritedMethods + "</dl>\n");
 		}
 
-		static void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
+		private static void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
 			String sectionName = (oxclass != null) ? "Class " + oxclass.name() : "Global functions";
 			String classPrefix = (oxclass != null) ? oxclass.name() : "";
 
@@ -158,11 +158,11 @@ import java.text.*;
 
 				output.writeln("<span class=\"declaration\">" + method.declaration() + "</span>");
 
-				output.writeln(method.Comment());
+				output.writeln(method.comment());
 			}
 		}
 
-		static void writeCss() throws IOException {
+		private static void writeCss() throws IOException {
 			if (OutputFile.exists("oxdoc.css"))
 				return;
 

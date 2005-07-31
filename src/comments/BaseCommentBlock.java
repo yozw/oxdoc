@@ -4,7 +4,7 @@ import java.util.*;
 	public class BaseCommentBlock extends ArrayList {
 
 		public String toString() {
-			return LatexImageManager.FilterLatex(renderHTML());
+			return LatexImageManager.filterLatex(renderHTML());
 		}
 
 		protected String renderHTML() {

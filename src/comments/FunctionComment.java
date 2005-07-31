@@ -8,8 +8,8 @@ import java.util.regex.*;
 		private BaseCommentBlock _params = new CommentParameterList();
 		private BaseCommentBlock _returns = new CommentTextBlock();
 
-		protected boolean AddToSection(String name, String text) {
-			if (!super.AddToSection(name, text)) {
+		protected boolean addToSection(String name, String text) {
+			if (!super.addToSection(name, text)) {
 				if (name.compareToIgnoreCase("param") == 0)        _params.add(text);
 				else if (name.compareToIgnoreCase("returns") == 0) _returns.add(text);
 				else return false;
