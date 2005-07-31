@@ -163,7 +163,7 @@ import java.text.*;
 		}
 
 		static void writeCss() throws IOException {
-			if (OxDocOutputFile.fileExists("oxdoc.css"))
+			if (OxDocOutputFile.exists("oxdoc.css"))
 				return;
 
 			InputStream resourceFile = oxdoc.class.getResourceAsStream("oxdoc.css");

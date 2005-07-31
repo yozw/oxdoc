@@ -15,6 +15,7 @@ public class OxDocConfig {
 	public static String  TempDir     = ".";
 	public static String  OutputDir   = ".";
 	public static boolean EnableLatex = true;
+	public static String  ConfigFile  = "oxdoc.xml";
 	public static ArrayList LatexPackages = new ArrayList();
 
 	public static boolean SetSimpleOption(String name) {
@@ -78,8 +79,8 @@ public class OxDocConfig {
 	public static void Load() {
 		File appDir = getApplicationDirectory(oxdoc.class);
 		if (appDir != null)
-			Load(appDir.toString() + File.separator + "oxdoc.xml");
-		Load("oxdoc.xml");
+			Load(appDir.toString() + File.separator + ConfigFile);
+		Load(ConfigFile);
 	}
 
 	public static File getApplicationDirectory( Class clas ) {

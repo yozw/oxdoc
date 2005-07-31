@@ -10,7 +10,7 @@ import java.text.*;
 
 		// create a blank file
 		public OxDocOutputFile(String fileName) throws IOException {
-			File aFile = new File(OutputFileName(fileName));
+			File aFile = new File(FileManager.outputFile(fileName));
      		output = new BufferedWriter( new FileWriter(aFile) );
 			_fileName = fileName;
 		}
@@ -21,15 +21,6 @@ import java.text.*;
 			this(fileName);
 			isHtml = true;
 			writeDocHeader(title);
-		}
-
-		private static String OutputFileName(String fileName) {
-			return OxDocConfig.OutputDir + fileName;
-		}
-
-		public static boolean fileExists(String fileName) {
-			File aFile = new File(OutputFileName(fileName));
-			return aFile.exists();			
 		}
 
 		public void close() throws IOException {
@@ -63,10 +54,6 @@ import java.text.*;
 			writeln("<h1>" + title + "</h1>");
 		}
 
-		private String dateStr() {
-			return (new Date()).toString();
-		}
-		
 		private void writeDocFooter() throws IOException {
 			Object[] args = {oxdoc.ProductName, oxdoc.Version, _fileName, oxdoc.Url, oxdoc.CopyrightNotice};
 
@@ -76,5 +63,9 @@ import java.text.*;
 					"<br>\nOriginal filename: <tt>{2}</tt>" +
 					"<br>\n{4}</div>",
 					args));
+		}
+
+		public static boolean exists(String filename) {
+			return FileManager.outputFileExists(filename);
 		}
 }
