@@ -137,7 +137,7 @@ import javax.xml.transform.stream.*;
 				}
 
 				String replacement = formula;
-				if (OxDocConfig.EnableLatex)  {
+				if (Config.EnableLatex)  {
 					ImageEntry entry = ImageEntry.Register( (isEquation?"\\displaystyle{}":"\\textstyle{}") + formula);  
 					replacement = "<img align=\"center\" src=\"" + entry.filename() + "\" alt=\"" + formula + "\">";
 				}
@@ -162,13 +162,13 @@ import javax.xml.transform.stream.*;
 		public static void MakeLatexFile(ImageEntry e) throws IOException {
 			oxdoc.message("Generating image for formula \"" + e.formula() + "\"...");
 
-			File aFile = new File(OxDocConfig.TempDir + "__oxdoc.tex");
+			File aFile = new File(FileManager.tempTexFile());
      		Writer output = new BufferedWriter( new FileWriter(aFile) );
 			output.write("\\documentclass{article}\n");
 			output.write("\\usepackage{amsmath}\n");
 
-			for (int i = 0; i < OxDocConfig.LatexPackages.size(); i++)
-				output.write("\\usepackage{"  + (String) OxDocConfig.LatexPackages.get(i) + "}\n");
+			for (int i = 0; i < Config.LatexPackages.size(); i++)
+				output.write("\\usepackage{"  + (String) Config.LatexPackages.get(i) + "}\n");
 			output.write("\\begin{document}\n");
 			output.write("\\pagestyle{empty}\n");
 			output.write("\\begin{align*}\n");
@@ -179,14 +179,14 @@ import javax.xml.transform.stream.*;
 
 
 			String latexParams  = "{0} -aux-directory={1} -output-directory={1} -interaction=batchmode {2}";
-			Object[] args = {OxDocConfig.LatexArg, FileManager.tempDir(), FileManager.tempFile("__oxdoc.tex")};
+			Object[] args = {Config.LatexArg, FileManager.tempDir(), FileManager.tempFile("__oxdoc.tex")};
 			
-			Run(OxDocConfig.Latex, MessageFormat.format(latexParams, args));
+			Run(Config.Latex, MessageFormat.format(latexParams, args));
 			
 			String dvipngParams = "{0} -T tight --gamma 1.5 -bg Transparent -o {1} {2}";
 			for (int i = 0; i < 2; i++) {
-				Object[] _args = {OxDocConfig.DvipngArg, FileManager.outputFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
-				Run(OxDocConfig.Dvipng, MessageFormat.format(dvipngParams, _args));
+				Object[] _args = {Config.DvipngArg, FileManager.outputFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
+				Run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
 			}
 		}
 

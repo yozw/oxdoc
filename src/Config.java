@@ -6,7 +6,7 @@ import org.xml.sax.*;
 import java.security.*;
 import java.net.*;
 
-public class OxDocConfig {
+public class Config {
 
 	public static String  Latex       = "latex.exe";
 	public static String  LatexArg    = "";

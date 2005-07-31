@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-	public class OxDocCommentParameterList extends ArrayList {
+	public class CommentParameterList extends BaseCommentBlock {
 
-		public String toString() {
+		protected String renderHTML() {
 			if (size() == 0) return "";
 
 			String out = "<!-- parameter table --!>\n";
@@ -16,7 +16,7 @@ import java.util.regex.*;
 				out += "<tr>\n";
 				out += "<td class=\"declaration\" valign=\"top\">" + params[0] + "</td>\n";
 				if (params.length > 1)
-					out += "<td class=\"description\" valign=\"top\">" + LatexImageManager.FilterLatex(params[1]) + "</td>\n";
+					out += "<td class=\"description\" valign=\"top\">" + params[1] + "</td>\n";
 				out += "</tr>\n";
 			}
 			out += "</table>\n";

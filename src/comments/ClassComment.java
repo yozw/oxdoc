@@ -3,10 +3,10 @@ import java.util.*;
 import java.util.regex.*;
 import java.text.*;
 
-	public class OxDocClassComment extends OxDocComment {
+	public class ClassComment extends BaseComment {
 	
-		String _author = "";
-		String _version = "";
+		private String _author = "";
+		private String _version = "";
 
 		protected boolean AddToSection(String name, String text) {
 			if (!super.AddToSection(name, text)) {
@@ -31,9 +31,9 @@ import java.text.*;
 			out += generateSection("Author", "author", _author);
 			out += generateSection("Version", "version", _version);
 
-			out += generateSection("Example", "example", _example);
-			out += generateSection("Comments", "comments", _comments);
-			out += generateSection("See also", "seealso", _see);
+			out += generateSection("Example", "example", example());
+			out += generateSection("Comments", "comments", comments());
+			out += generateSection("See also", "seealso", see());
 
 			out += "</dl>";
 			return out;

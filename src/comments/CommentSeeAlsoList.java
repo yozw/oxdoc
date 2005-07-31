@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-	public class OxDocCommentReferenceList extends ArrayList {
+	public class CommentSeeAlsoList extends BaseCommentBlock {
 
 		public boolean add(Object o) {
 			String[] references = o.toString().split(",");
@@ -11,7 +11,7 @@ import java.util.regex.*;
 			return true;
 		}
 
-		public String toString() {
+		protected String renderHTML() {
 			String out = "";
 			for (int j = 0; j < size(); j++) {
 				if (j > 0)

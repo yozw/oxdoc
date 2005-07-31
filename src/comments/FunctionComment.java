@@ -3,10 +3,10 @@ import java.util.*;
 import java.text.*;
 import java.util.regex.*;
 
-	public class OxDocFunctionComment extends OxDocComment {
+	public class FunctionComment extends BaseComment {
 
-		protected ArrayList _params = new OxDocCommentParameterList();
-		protected ArrayList _returns = new OxDocCommentTextBlock();
+		private BaseCommentBlock _params = new CommentParameterList();
+		private BaseCommentBlock _returns = new CommentTextBlock();
 
 		protected boolean AddToSection(String name, String text) {
 			if (!super.AddToSection(name, text)) {
@@ -28,13 +28,16 @@ import java.util.regex.*;
 		public String toString() {
 			String out = "<dl>\n<dd>" + description() + "<dl>\n";
 
-			out += generateSection("Parameters", "parameters", _params);
-			out += generateSection("Returns",    "returns", _returns);
-			out += generateSection("Example",    "example", _example);
-			out += generateSection("Comments",   "comments", _comments);
-			out += generateSection("See also",   "seealso", _see);
+			out += generateSection("Parameters", "parameters", params());
+			out += generateSection("Returns",    "returns", returns());
+			out += generateSection("Example",    "example", example());
+			out += generateSection("Comments",   "comments", comments());
+			out += generateSection("See also",   "seealso", see());
 
 			out += "</dl></dd>\n</dl>";
 			return out;
 		}
+
+		public BaseCommentBlock params() { return _params; }
+		public BaseCommentBlock returns() { return _returns; }
 }

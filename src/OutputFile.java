@@ -2,14 +2,14 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
-	public class OxDocOutputFile {
+	public class OutputFile {
 
 		Writer output = null;
 		String _fileName;
 		boolean isHtml = false;
 
 		// create a blank file
-		public OxDocOutputFile(String fileName) throws IOException {
+		public OutputFile(String fileName) throws IOException {
 			File aFile = new File(FileManager.outputFile(fileName));
      		output = new BufferedWriter( new FileWriter(aFile) );
 			_fileName = fileName;
@@ -17,7 +17,7 @@ import java.text.*;
 		
 
 		// create an HTML file
-		public OxDocOutputFile(String fileName, String title) throws IOException {
+		public OutputFile(String fileName, String title) throws IOException {
 			this(fileName);
 			isHtml = true;
 			writeDocHeader(title);

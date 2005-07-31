@@ -3,15 +3,15 @@ import java.util.*;
 	public class OxEntity {
 		private String name;
 		protected OxFile _parentFile = null;
-		private OxDocComment _comment = null;
+		private BaseComment _comment = null;
 		private String comments = "";
 
-		public OxEntity(String name, OxDocComment comment) {
+		public OxEntity(String name, BaseComment comment) {
 			this.name = name;
 			_comment = comment;
 		}
 
-		public OxEntity(String name, OxDocComment comment, OxFile parentFile) {
+		public OxEntity(String name, BaseComment comment, OxFile parentFile) {
 			this.name = name;
 			_comment = comment;
 			_parentFile = parentFile;
@@ -25,12 +25,12 @@ import java.util.*;
 			return (_parentFile == null)?"":_parentFile.url();
 		}
 
-		public OxDocComment SetComment(String comment) throws ParseException {
+		public BaseComment SetComment(String comment) throws ParseException {
 			_comment.SetText(comment);
 			return _comment;
 		}
 
-		public OxDocComment Comment() {
+		public BaseComment Comment() {
 			return _comment;
 		}
 		
