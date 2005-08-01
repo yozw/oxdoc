@@ -1,7 +1,11 @@
 <project name="oxdoc" default="jar" basedir=".">
+
   <description>Ant build file for oxdoc</description>
 
+
   <property name="javacc"  location="javacc/" />
+  <property name="version" value="0.75alpha"/>
+
 
   <property name="src"     location="src"/>
   <property name="bin"     location="bin"/>
@@ -9,7 +13,21 @@
   <property name="build"   location="build"/>
   <property name="distbin" location="dist/bin"/>
   <property name="dist"    location="dist"/>
+  <property name="docs"    location="docs"/>
   <property name="zips"    location="zips"/>
+
+
+  <property name="distbinzip" value="${zips}/oxdoc-${version}-bin.zip" />
+  <property name="distsrczip" value="${zips}/oxdoc-${version}-src.zip" />
+
+
+  <target name="clean">
+    <delete dir="${bin}"/>
+    <delete dir="${build}"/>
+    <delete dir="${parser}"/>
+    <delete dir="${zips}"/>
+  </target>
+
 
   <target name="parser">
      <mkdir dir="${parser}"/>
@@ -20,36 +38,11 @@
       static="false" />
   </target>
 
-  <target name="compile" depends="parser">
-     <mkdir dir="${build}"/>
-     <javac srcdir="${src}" destdir="${build}"/>
-  </target>
 
-  <target name="jar" depends="compile">
-    <mkdir dir="${bin}"/>
-    <copy file="oxdoc.css" todir="${build}" />
-    <copy file="oxdoc.xml" todir="${bin}"  />
-    <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
-  </target>
-
-  <target name="dist" depends="jar">
-    <mkdir dir="${distbin}"/>
-    <mkdir dir="${zips}"/>
-    <copy file="${bin}/oxdoc.xml" todir="${distbin}"/>
-    <copy file="${bin}/oxdoc.jar" todir="${distbin}"/>
-    <zip destfile="${zips}/oxdoc.zip" basedir="${dist}" />
-  </target>
-
-  <target name="clean">
-    <delete dir="${bin}"/>
-    <delete dir="${build}"/>
-    <delete dir="${parser}"/>
-  </target>
-
-  <target name="doc">
+  <target name="doc" depends="parser">
     <javadoc packagenames="*"
            defaultexcludes="yes"
-           destdir="docs"
+           destdir="${docs}"
            use="true"
            windowtitle="oxdoc Development Documentation">
       <fileset dir="src" defaultexcludes="yes">
@@ -58,4 +51,43 @@
     </javadoc>
   </target>
 
+
+  <target name="compile" depends="parser">
+     <mkdir dir="${build}"/>
+     <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${bin}"/>
+    <copy file="${src}/oxdoc.css" todir="${build}" />
+    <copy file="oxdoc.xml" todir="${bin}"  />
+    <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
+  </target>
+
+
+  <target name="dist" depends="distbin,distsrc">
+  </target>
+
+
+  <target name="distbin" depends="jar,distsrc">
+    <mkdir dir="${distbin}"/>
+    <mkdir dir="${zips}"/>
+    <copy file="${bin}/oxdoc.xml" todir="${distbin}"/>
+    <copy file="${bin}/oxdoc.jar" todir="${distbin}"/>
+    <zip destfile="${distbinzip}" basedir="${dist}" />
+  </target>
+
+
+  <target name="distsrc" depends="doc">
+    <mkdir dir="${zips}"/>
+    <zip destfile="${distsrczip}">
+      <zipfileset dir="${src}" prefix="src/" defaultexcludes="yes" excludes="parser/**" />
+      <zipfileset dir="${docs}" prefix="docs/" />
+      <zipfileset dir="./" includes="*.xml.template,oxdoc.bat" />
+    </zip>
+  </target>
+
+
 </project>
+
