@@ -14,9 +14,9 @@ import java.util.regex.*;
 				String[] params = ((String) get(i)).split("[\t ]", 2);
 
 				out += "<tr>\n";
-				out += "<td class=\"declaration\" valign=\"top\">" + params[0] + "</td>\n";
+				out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
 				if (params.length > 1)
-					out += "<td class=\"description\" valign=\"top\">" + params[1] + "</td>\n";
+					out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
 				out += "</tr>\n";
 			}
 			out += "</table>\n";
