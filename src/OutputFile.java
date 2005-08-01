@@ -47,7 +47,7 @@ import java.text.*;
 			writeln("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
 			writeln("<head>");
             writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
-			writeln("<title>" + title + "</title>");
+			writeln("<title>" + title + " - " + Config.WindowTitle + "</title>");
 			writeln("</head>");
 			writeln("<body>");
 			writeln("<div class=\"header\">[ <a href=\"default.html\">Home</a> | <a href=\"index.html\">Index</a> ]</div>");

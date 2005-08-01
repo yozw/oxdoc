@@ -14,6 +14,8 @@ public class Config {
 	public static String  DvipngArg   = "-Q 10 -D 110";
 	public static String  TempDir     = ".";
 	public static String  OutputDir   = ".";
+	public static String  ProjectName = "Project";
+	public static String  WindowTitle = "";
 	public static boolean EnableLatex = true;
 	public static String  ConfigFile  = "oxdoc.xml";
 	public static ArrayList LatexPackages = new ArrayList();
@@ -38,20 +40,24 @@ public class Config {
 				LatexPackages.add(packages[i]);
 		}
 		else if (name.equals("enablelatex")) EnableLatex = toBoolean(value);
+		else if (name.equals("projectname")) ProjectName = value;
+		else if (name.equals("windowtitle")) WindowTitle = value;
 		else return false;
 		
 		return true;
 	}
 
 	public static void listOptions() {
-		System.out.println("    -outputdir <dir>       Specifies the output directory");
-		System.out.println("    -tempdir <dir>         Provides the directory in which temporary files");
-		System.out.println("                           will be written");
+		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
 		System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
 		System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
-		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
-		System.out.println("    -nolatex               Disables LaTeX support. Formulas will be ");
+		System.out.println("    -nolatex               Disables LaTeX support. Formulas will be");
 		System.out.println("                           inserted literally");
+		System.out.println("    -outputdir <dir>       Specifies the output directory");
+		System.out.println("    -projectname \"name\"    Specifies the name of the project");
+		System.out.println("    -tempdir <dir>         Provides the directory in which temporary files");
+		System.out.println("                           will be written");
+		System.out.println("    -windowtitle \"title\"   Specifies a browser title");
 	}
 
 	public static void validate() {

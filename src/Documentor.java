@@ -19,9 +19,9 @@ import java.text.*;
 		}
 
 		private static void generateStartPage(String fileName) throws IOException {
-			OutputFile output = new OutputFile(fileName, "Project homepage");
+			OutputFile output = new OutputFile(fileName, Config.ProjectName + " summary");
 			ArrayList files = oxdoc.project().files();
-			output.writeln("<h2>Project files</h2>");
+			output.writeln("<h2>" + Config.ProjectName + " files</h2>");
 			output.writeln("<ul class=\"table_of_contents\">");
 			for (int i = 0; i < files.size(); i++) {
 				OxFile file = (OxFile) files.get(i);
@@ -31,7 +31,7 @@ import java.text.*;
 			output.writeln("<h2>Other links</h2>");
 			output.writeln("<ul class=\"table_of_contents\"><li>");
 			output.writeln("<a href=\"index.html\">Symbol index</a>");
-			output.writeln("<ul>");
+			output.writeln("</ul>");
 			output.close();
 		}
 
