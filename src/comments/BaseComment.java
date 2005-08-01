@@ -60,7 +60,7 @@ import java.util.regex.*;
 		/** The long description of the entity **/
 		public CommentTextBlock longdescription() { return _longdescription; }
 
-		/** The see also... list of the entity **/
+		/** The see also list of the entity **/
 		public CommentSeeAlsoList see() { return _see; }
 
 		/** The reference list of the entity **/
