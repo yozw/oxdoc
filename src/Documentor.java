@@ -37,17 +37,23 @@ import java.text.*;
 
 		private static void generateIndex(String fileName) throws IOException {
 			OutputFile output = new OutputFile(fileName, "Index");
-			output.writeln("<ul class=\"index\">");
-			ArrayList symbols = oxdoc.project().symbols();
+			output.writeln("<table class=\"index\">");
+			
+			ArrayList symbols = oxdoc.project().symbolsByDisplayName();
 			for (int i = 0; i < symbols.size(); i++) {
 				OxEntity entity = (OxEntity) symbols.get(i);
-				output.write("<li>" + oxdoc.project().linkToEntity(entity));
+				output.write("<tr><td class=\"declaration\" valign=\"top\">" + oxdoc.project().linkToEntity(entity, true) + "</td>");
+				output.write("<td class=\"description\" valign=\"top\">");
 				if (entity instanceof OxClass)
-					output.write(" class");
+					output.write("Class");
+				else if (entity instanceof OxMethod)
+					output.write("Method of " + oxdoc.project().linkToEntity(( (OxMethod) entity).parentClass()));
+				else if (entity instanceof OxFunction)
+					output.write("Global function");
 					
-				output.writeln("");
+				output.writeln("</tr>");
 			}		
-			output.writeln("</ul>");
+			output.writeln("</table>");
 			output.close();
 		}
 
@@ -128,7 +134,7 @@ import java.text.*;
 			    output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
          		output.writeln(method.link());
 			    output.writeln("</td><td class=\"description\" valign=\"top\">");
-				output.write  (method.comment().description());
+				output.write  (method.description());
 				output.writeln("</td></tr>");
 			}
 			output.writeln("</table>");

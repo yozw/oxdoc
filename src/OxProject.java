@@ -20,6 +20,10 @@ import java.util.*;
 			return _symbols.sortedList();
 		}
 
+		public ArrayList symbolsByDisplayName() {
+			return _symbols.sortedListByDisplayName();
+		}
+
 		public OxEntity getSymbol(String name) {
 			return (OxEntity) _symbols.get(name);
 		}
@@ -35,7 +39,14 @@ import java.util.*;
 		}
 
 		public String linkToEntity(OxEntity entity) {
-			return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
+			return linkToEntity(entity, false);
+		}
+		
+		public String linkToEntity(OxEntity entity, boolean useDisplayName) {
+			if (useDisplayName)
+				return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
+			else
+				return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
 		}
 		
 

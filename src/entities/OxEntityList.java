@@ -29,5 +29,19 @@ import java.util.*;
 				}});
 			return list;
 		}
-	}
+
+		public ArrayList sortedListByDisplayName() {
+			ArrayList list = new ArrayList();
+			for (Enumeration e = entities.elements(); e.hasMoreElements() ;)
+				list.add(e.nextElement());
+
+			Collections.sort(list, new Comparator() {
+				public int compare(Object o1, Object o2) {
+					OxEntity e1 = (OxEntity) o1;
+					OxEntity e2 = (OxEntity) o2;
+					return e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase());
+				}});
+			return list;
+		}
+}
 	

@@ -4,10 +4,10 @@ import java.util.regex.*;
 
 	public class BaseComment {
 
-		private CommentTextBlock   _description = new CommentTextBlock();
+		private String 			   _description = "";
+		private CommentTextBlock   _longdescription = new CommentTextBlock();
 		private CommentTextBlock   _comments = new CommentTextBlock();
 		private CommentTextBlock   _example = new CommentTextBlock();
-		private CommentTextBlock   _longdescription = new CommentTextBlock();
 		private CommentSeeAlsoList _see = new CommentSeeAlsoList();
 		private CommentList        _ref = new CommentList();
 		private CommentList        _todo = new CommentList();
@@ -17,8 +17,6 @@ import java.util.regex.*;
 		**/
 		protected boolean addToSection(String name, String text) {
 				if (name.compareToIgnoreCase("comments") == 0) _comments.add(text);
-				else if (name.compareToIgnoreCase("desc") == 0) _longdescription.add(text);
-				else if (name.compareToIgnoreCase("todo") == 0) _longdescription.add(text);
 				else if (name.compareToIgnoreCase("ref") == 0) _ref.add(text);
 				else if (name.compareToIgnoreCase("example") == 0) _example.add(text);
 				else if (name.compareToIgnoreCase("see") == 0) _see.add(text);
@@ -36,7 +34,10 @@ import java.util.regex.*;
 
 			String[] sections = text.split("@");
 
-			_description.add(sections[0]);
+			String[] descr = sections[0].split("\\.", 2);
+
+			_description = descr[0];
+			_longdescription.add(sections[0]);
 			
 			for (int i = 1; i < sections.length; i++) {
 				String[] words = sections[i].split("[\t ]", 2);
@@ -48,17 +49,18 @@ import java.util.regex.*;
 			}
 		}
 
-		/** Description of the entity **/
-		public CommentTextBlock description() { return _description; }
+
+		/** Short description of the entity, i.e. the part before the first . **/
+		public String description() { return _description; }
+		
+		/** Long description of the entity **/
+		public CommentTextBlock longdescription() { return _longdescription; }
 
 		/** Comments of the entity **/
 		public CommentTextBlock comments() { return _comments; }
 
 		/** Example block of the entity **/
 		public CommentTextBlock example() { return _example; }
-
-		/** The long description of the entity **/
-		public CommentTextBlock longdescription() { return _longdescription; }
 
 		/** The see also list of the entity **/
 		public CommentSeeAlsoList see() { return _see; }

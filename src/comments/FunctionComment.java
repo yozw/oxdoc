@@ -26,7 +26,7 @@ import java.util.regex.*;
 		}
 
 		public String toString() {
-			String out = "<dl>\n<dd>" + description() + "<dl>\n";
+			String out = "<dl>\n<dd>" + longdescription() + "<dl>\n";
 
 			out += generateSection("Parameters", "parameters", params());
 			out += generateSection("Returns",    "returns", returns());

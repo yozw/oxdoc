@@ -21,6 +21,10 @@ import java.util.*;
 			return this.name;
 		}
 
+		public String description() {
+			return _comment.description();
+		}
+
 		protected String parentFileUrl() {
 			return (_parentFile == null)?"":_parentFile.url();
 		}

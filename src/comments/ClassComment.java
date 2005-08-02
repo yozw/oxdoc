@@ -26,7 +26,7 @@ import java.text.*;
 		}
 
 		public String toString() {
-			String out = description() + "\n<dl>";
+			String out = longdescription() + "\n<dl>";
 
 			out += generateSection("Author", "author", _author);
 			out += generateSection("Version", "version", _version);
