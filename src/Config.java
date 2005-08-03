@@ -3,8 +3,6 @@ import java.io.File;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.*;
-import java.security.*;
-import java.net.*;
 
 public class Config {
 
@@ -14,6 +12,7 @@ public class Config {
 	public static String  DvipngArg   = "-Q 10 -D 110";
 	public static String  TempDir     = ".";
 	public static String  OutputDir   = ".";
+	public static String  ImagePath   = "images/";
 	public static String  ProjectName = "Project";
 	public static String  WindowTitle = "";
 	public static boolean EnableLatex = true;
@@ -30,20 +29,24 @@ public class Config {
 	}
 
 	public static boolean setOption(String name, String value) {
-		if (name.equals("latex"))            Latex = value;
-		else if (name.equals("dvipng"))      Dvipng = value;
-		else if (name.equals("tempdir"))     TempDir = value;
-		else if (name.equals("outputdir"))   OutputDir = value;
-		else if (name.equals("latexpackages")) {
-			String[] packages = value.split("[,;]");
-			for (int i = 0; i < packages.length; i++)
-				LatexPackages.add(packages[i]);
+		try {
+			if (name.equals("latex"))            Latex = FileManager.nativeFileName(value);
+			else if (name.equals("dvipng"))      Dvipng = FileManager.nativeFileName(value);
+			else if (name.equals("tempdir"))     TempDir = FileManager.nativePath(value);
+			else if (name.equals("outputdir"))   OutputDir = FileManager.nativePath(value);
+			else if (name.equals("latexpackages")) {
+				String[] packages = value.split("[,;]");
+				for (int i = 0; i < packages.length; i++)
+					LatexPackages.add(packages[i]);
+			}
+			else if (name.equals("enablelatex")) EnableLatex = toBoolean(value);
+			else if (name.equals("projectname")) ProjectName = value;
+			else if (name.equals("windowtitle")) WindowTitle = value;
+			else return false;
 		}
-		else if (name.equals("enablelatex")) EnableLatex = toBoolean(value);
-		else if (name.equals("projectname")) ProjectName = value;
-		else if (name.equals("windowtitle")) WindowTitle = value;
-		else return false;
-		
+		catch (Exception E)	{
+			oxdoc.warning(E.getMessage());
+		}
 		return true;
 	}
 
@@ -71,11 +74,6 @@ public class Config {
 			oxdoc.warning("Dvipng executable not found. LaTeX support disabled");
 			EnableLatex = false;
 		}
-
-		if ( (OutputDir.length() != 0) && (!OutputDir.endsWith(File.separator) ) )
-			OutputDir += File.separator;
-		if ( (TempDir.length() != 0) && (!TempDir.endsWith(File.separator) ) )
-			TempDir += File.separator;
 	}
 
 	private static boolean toBoolean(String value) {
@@ -83,25 +81,10 @@ public class Config {
 	}
 	
 	public static void load() {
-		File appDir = getApplicationDirectory(oxdoc.class);
-		if (appDir != null)
-			load(appDir.toString() + File.separator + ConfigFile);
+		load(FileManager.appDirFile(ConfigFile));
 		load(ConfigFile);
 	}
 
-	public static File getApplicationDirectory( Class clas ) {
-      	ProtectionDomain pd = clas.getProtectionDomain();
-      	if ( pd == null ) return null;
-
-      	CodeSource cs = pd.getCodeSource();
-      	if ( cs == null ) return null;
-
-      	URL url = cs.getLocation();
-      	if ( url == null ) return null;
-
-      	return new File( url.getFile() ).getParentFile();
-   } 
-	
 	public static void load(String Filename) {
      	File file = new File(Filename);
 		if (!file.exists()) 

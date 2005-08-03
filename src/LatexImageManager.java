@@ -107,7 +107,7 @@ import javax.xml.transform.stream.*;
             		Element element = (Element) nodes.item(i);
 					String formula  = element.getAttribute("formula");
 					String filename = element.getAttribute("filename");
-					if (FileManager.outputFileExists(filename)) {
+					if (FileManager.imageFileExists(filename)) {
 						ImageEntry entry = ImageEntry.register(formula, filename);
 						entry.needsGenerating = false;
 					}
@@ -117,7 +117,6 @@ import javax.xml.transform.stream.*;
 				oxdoc.warning("Error reading image cache. Don't worry.");
 			}
 		}
-
 
 		public static void makeLatexFiles() throws IOException {
 
@@ -155,7 +154,7 @@ import javax.xml.transform.stream.*;
 			
 			String dvipngParams = "{0} -T tight --gamma 1.5 -bg Transparent -o {1} {2}";
 			for (int i = 0; i < 2; i++) {
-				Object[] _args = {Config.DvipngArg, FileManager.outputFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
+				Object[] _args = {Config.DvipngArg, FileManager.imageFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
 				run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
 			}
 		}
