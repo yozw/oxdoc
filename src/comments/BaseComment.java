@@ -25,6 +25,15 @@ import java.util.regex.*;
 				return true;
 		}
 
+		private static String extractShortDescription(String text) {
+			text = text + " ";
+			int i = text.indexOf(". ");
+			if (i == -1)
+				return text;
+			else
+				return text.substring(0, i+1);
+		}
+
 		/** Feeds an input comment block as a string and parses it. It interprets @<section name> blocks and
 		passes the contents to AddToSection. **/
 		public void setText(String text) throws ParseException {
@@ -34,9 +43,7 @@ import java.util.regex.*;
 
 			String[] sections = text.split("@");
 
-			String[] descr = sections[0].split("\\.", 2);
-
-			_description = descr[0];
+			_description = extractShortDescription(sections[0]);
 			_longdescription.add(sections[0]);
 			
 			for (int i = 1; i < sections.length; i++) {
@@ -51,7 +58,7 @@ import java.util.regex.*;
 
 
 		/** Short description of the entity, i.e. the part before the first . **/
-		public String description() { return _description; }
+		public String description() { return TextProcessor.process(_description); }
 		
 		/** Long description of the entity **/
 		public CommentTextBlock longdescription() { return _longdescription; }
