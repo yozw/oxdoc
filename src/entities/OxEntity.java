@@ -22,7 +22,7 @@ import java.util.*;
 		}
 
 		public String description() {
-			return _comment.description();
+			return TextProcessor.process(_comment.description());
 		}
 
 		protected String parentFileUrl() {
