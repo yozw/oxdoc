@@ -7,7 +7,7 @@ import java.io.*;
 	private static ArrayList files = new ArrayList();
 
 	public static String ProductName = "oxdoc";
-	public static String Version = "0.75alpha";
+	public static String Version = Constants.VERSION;
 	public static String Url = "http://oxdoc.sourceforge.net";
 	public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols";
 
@@ -61,7 +61,7 @@ import java.io.*;
 	
     // oxdoc entry point
     public static void main ( String args [ ] ) {
-      System.out.println(ProductName + " " + Version + " " + CopyrightNotice);
+      System.out.println(ProductName + " " + Version + " [" + Constants.COMPILETIME + "] " + CopyrightNotice);
 
       if (args.length == 0) {
         System.out.println("\nUsage is:");

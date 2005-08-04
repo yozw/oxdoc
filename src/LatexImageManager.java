@@ -40,7 +40,7 @@ import javax.xml.transform.stream.*;
 					loadCache();
 				}
 
-				formula = formula.trim().replace('\n',' ');
+				formula = formula.trim().replace('\n',' ').replace('\r',' ');
 				ImageEntry entry = ((ImageEntry) _formulas.get(formula));
 				if (entry != null)
 					return entry;

@@ -16,7 +16,7 @@ import java.net.*;
 		}
 
 		public static String imageFile(String filename) {
-			return nativePath(Config.OutputDir) + Config.ImagePath + filename;
+			return nativePath(Config.OutputDir + Config.ImagePath) + filename;
 		}
 		
 		public static String tempDir() {
@@ -25,6 +25,10 @@ import java.net.*;
 
 		public static String tempFile(String filename) {
 			return nativePath(tempDir()) + filename;
+		}
+
+		public static String imageUrl(String filename) {
+			return unixPath(Config.ImagePath) + filename;
 		}
 
 		public static boolean fileExists(String fileName) {
@@ -75,6 +79,15 @@ import java.net.*;
 				return out;
 			if (!out.endsWith(File.separator))
 				out += File.separator;
+			return out;
+		}
+		
+		public static String unixPath(String Path) {
+			String out = Path.replace('\\', '/');
+			if (out.length() == 0)
+				return out;
+			if (!out.endsWith("/"))
+				out += "/";
 			return out;
 		}
 

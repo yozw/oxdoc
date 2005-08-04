@@ -90,6 +90,7 @@ void OxFileDefinition() : {}
 void NamespaceDefinition() : {}
 {
 	( LOOKAHEAD( FunctionDeclaration() ) FunctionDeclaration() |
+	  LOOKAHEAD(2)
 	  ExternFunctionDeclaration() |
 	  LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() |
 	  ClassDefinition() |
@@ -136,7 +137,7 @@ void MethodDeclaration() : {}
 
 void MemberDeclaration() : {}
 {
-	[<CONST>] [<STATIC>] <DECL> <IDENTIFIER> (","  <IDENTIFIER>)* ";"
+	[<CONST>] [<STATIC>] <DECL> VariableDeclaration() (","  VariableDeclaration() )* ";"
 }
 
 void EnumDeclaration() : {}
@@ -247,7 +248,7 @@ void VariableDeclaration() : {}
 
 void Declaration() : {}
 {
-	[<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
+	[<EXTERN>] [<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
 | EnumDeclaration() 	
 }
 

@@ -34,6 +34,7 @@ public class Config {
 			else if (name.equals("dvipng"))      Dvipng = FileManager.nativeFileName(value);
 			else if (name.equals("tempdir"))     TempDir = FileManager.nativePath(value);
 			else if (name.equals("outputdir"))   OutputDir = FileManager.nativePath(value);
+			else if (name.equals("imagepath"))   ImagePath = value;
 			else if (name.equals("latexpackages")) {
 				String[] packages = value.split("[,;]");
 				for (int i = 0; i < packages.length; i++)

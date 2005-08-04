@@ -55,6 +55,11 @@
 
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
+     <javac srcdir="${src}/WriteConstants" destdir="${build}"/>
+     <java classname="WriteConstants" classpath="${build}" output="${parser}/Constants.java">
+         <arg value="${version}" />
+     </java>
+     <delete file="${build}/Constants.class"/>
      <javac srcdir="${src}" destdir="${build}"/>
   </target>
 
@@ -88,6 +93,9 @@
       <zipfileset dir="./" includes="*.xml.template,oxdoc.bat" />
     </zip>
   </target>
+
+
+  <target name="all" depends="clean,dist" />
 
 
 </project>

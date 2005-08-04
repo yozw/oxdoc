@@ -49,7 +49,7 @@ import javax.xml.transform.stream.*;
 				String replacement = formula;
 				if (Config.EnableLatex)  {
 					String filename = LatexImageManager.getFormulaFilename( (isEquation?"\\displaystyle{}":"\\textstyle{}") + formula);  
-					replacement = "<img align=\"center\" src=\"" + filename + "\" alt=\"" + formula + "\">";
+					replacement = "<img align=\"center\" src=\"" + FileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
 				}
 
 				Object[] args = { isEquation?"equation":"expression", replacement };

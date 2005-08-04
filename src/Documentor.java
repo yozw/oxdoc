@@ -127,6 +127,7 @@ import java.text.*;
 			}
 			
 			output.writeln("\n<!-- Methods of " + sectionName + " --!>");
+			output.writeln("<h3>Methods</h3>");
 			output.writeln("<table class=\"method_table\">");
 
 			for (int i = 0; i < methodList.size(); i++) {
