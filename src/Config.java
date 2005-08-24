@@ -16,12 +16,13 @@ public class Config {
 	public static String  ProjectName = "Project";
 	public static String  WindowTitle = "";
 	public static boolean EnableLatex = true;
+	public static boolean EnableIcons = false;
 	public static String  ConfigFile  = "oxdoc.xml";
 	public static ArrayList LatexPackages = new ArrayList();
 
 	public static boolean setSimpleOption(String name) {
-		if (name.equals("nolatex"))
-			setOption("enablelatex", "0");
+		if (name.equals("nolatex")) setOption("enablelatex", "0");
+		if (name.equals("icons"))   setOption("enableicons", "1");
 		else
 			return false;
 
@@ -41,6 +42,7 @@ public class Config {
 					LatexPackages.add(packages[i]);
 			}
 			else if (name.equals("enablelatex")) EnableLatex = toBoolean(value);
+			else if (name.equals("enableicons")) EnableIcons = toBoolean(value);
 			else if (name.equals("projectname")) ProjectName = value;
 			else if (name.equals("windowtitle")) WindowTitle = value;
 			else return false;
@@ -55,6 +57,7 @@ public class Config {
 		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
 		System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
 		System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
+		System.out.println("    -icons                 Enables icons");
 		System.out.println("    -nolatex               Disables LaTeX support. Formulas will be");
 		System.out.println("                           inserted literally");
 		System.out.println("    -outputdir <dir>       Specifies the output directory");

@@ -6,6 +6,7 @@ import java.util.*;
 
 		OxMethod(String name, OxClass oxclass) {
 			super(name, oxclass.parentFile());
+			setIconType(FileManager.METHOD);
 			_class = oxclass;
 		}
 
