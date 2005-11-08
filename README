@@ -1,0 +1,7 @@
+Installation instructions
+
+
+* Install JavaCC
+* Rename or copy oxdoc.xml.template to oxdoc.xml, and edit parameters
+* Rename or copy build.xml.template to build.xml, and edit parameters
+* Run 'ant jar'

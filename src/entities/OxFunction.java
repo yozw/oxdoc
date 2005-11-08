@@ -1,21 +1,21 @@
 import java.util.*;
 
-	public class OxFunction extends OxEntity {
-		public String _declaration;
+public class OxFunction extends OxEntity {
+    public String _declaration;
 
-		OxFunction(String name, OxFile parentFile) {
-			super(name, new FunctionComment(), parentFile);
-		}
+    OxFunction(String name, OxFile parentFile) {
+	super(name, new FunctionComment(), parentFile);
+    }
 
-		public String url() {
-			return parentFileUrl() + "#" + name();
-		}
+    public String url() {
+	return parentFileUrl() + "#" + name();
+    }
 
-		public String declaration() {
-			return _declaration;
-		}
+    public String declaration() {
+	return _declaration;
+    }
 
-		public String displayName() {
-			return name();
-		}
+    public String displayName() {
+	return name();
+    }
 }

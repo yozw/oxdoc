@@ -1,15 +1,15 @@
 import java.io.*;
 import java.util.*;
 
-	public class CommentTextBlock extends BaseCommentBlock {
+public class CommentTextBlock extends BaseCommentBlock {
 		
-		protected String renderHTML() {
-			String out = "";
+    protected String renderHTML() {
+	String out = "";
 
-			for (int i = 0; i < size(); i++)
-				out += ((String)get(i)).trim() + "\n";
+	for (int i = 0; i < size(); i++)
+	    out += ((String)get(i)).trim() + "\n";
 				
-			return out;
-		}
+	return out;
+    }
 
-	}
+}
