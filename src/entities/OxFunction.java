@@ -5,7 +5,6 @@ import java.util.*;
 
 		OxFunction(String name, OxFile parentFile) {
 			super(name, new FunctionComment(), parentFile);
-			setIconType(FileManager.FUNCTION);
 		}
 
 		public String url() {

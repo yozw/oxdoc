@@ -4,8 +4,6 @@ import java.net.*;
 
 	public class FileManager {
 
-		public static final int NONE = -1, INDEX = 0, PROJECT = 1, FILE = 2, CLASS = 3, METHOD = 4, FUNCTION = 5;
-		public static final String[] iconFiles = {"index", "project", "file", "class", "method", "function"};
 		private static String _imageCache = "images.xml";
 		private static String _tempTexFileBase = "__oxdoc";
 
@@ -96,18 +94,6 @@ import java.net.*;
 		public static String nativeFileName(String FileName) {
 			String out = FileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
 			return out;
-		}
-		
-		public static String largeIcon(int iconType) {
-			if (!Config.EnableIcons) return "";
-			if (iconType < 0) return "";
-			return "<img align=\"center\" src=\"icons/" + iconFiles[iconType] + ".png\">&nbsp;";
-		}
-
-		public static String smallIcon(int iconType) {
-			if (!Config.EnableIcons) return "";
-			if (iconType < 0) return "";
-			return "<img align=\"center\" src=\"icons/" + iconFiles[iconType] + "_s.png\">&nbsp;";
 		}
 	}
 	

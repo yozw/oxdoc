@@ -17,10 +17,10 @@ import java.text.*;
 		
 
 		// create an HTML file
-		public OutputFile(String fileName, String title, int iconType) throws IOException {
+		public OutputFile(String fileName, String title) throws IOException {
 			this(fileName);
 			isHtml = true;
-			writeDocHeader(title, iconType);
+			writeDocHeader(title);
 		}
 
 		public void close() throws IOException {
@@ -41,7 +41,7 @@ import java.text.*;
 			output.write(s.toString() + "\n");
 		}
 		
-		private void writeDocHeader(String title, int iconType) throws IOException {
+		private void writeDocHeader(String title) throws IOException {
 			writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			writeln("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
 			writeln("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
@@ -50,10 +50,8 @@ import java.text.*;
 			writeln("<title>" + title + " - " + Config.WindowTitle + "</title>");
 			writeln("</head>");
 			writeln("<body>");
-			writeln("<div class=\"header\">");
-			writeln("[ " + FileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
-			writeln(" | " + FileManager.smallIcon(FileManager.INDEX) + "<a href=\"index.html\">Index</a> ]</div>");
-			writeln("<h1>" + FileManager.largeIcon(iconType) + title + "</h1>");
+			writeln("<div class=\"header\">[ <a href=\"default.html\">Home</a> | <a href=\"index.html\">Index</a> ]</div>");
+			writeln("<h1>" + title + "</h1>");
 		}
 
 		private void writeDocFooter() throws IOException {

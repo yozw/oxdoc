@@ -6,9 +6,8 @@ import java.util.*;
 		private OxProject  _project;
 		
 		public OxFile(String fileName, OxProject project) {
-			super(fileName, new FileComment());
+			super(fileName, null);
 			_project = project;
-			setIconType(FileManager.FILE);
 		}
 
 		public OxProject project() {

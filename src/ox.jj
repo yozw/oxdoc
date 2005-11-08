@@ -83,17 +83,6 @@ TOKEN : {
 
 void OxFileDefinition() : {}
 {
-	{
-		/* Try and get the first special token in the file */
-		Token t = getToken(1);
-		if ((t != null) && t.specialToken != null) {
-			Token tmp_t = t.specialToken;
-			while (tmp_t.specialToken != null) tmp_t = tmp_t.specialToken;
-			if (tmp_t.beginLine == 1)
-				file.setComment(tmp_t.image);
-		}
-	}
-	
 	( NamespaceDeclaration() |
 	  NamespaceDefinition() )+
 }
@@ -131,8 +120,7 @@ void ClassDefinition() :
 	  else
 	  	 newClass = file.addClass(name.image, parentclassname.image);
 	  if (classtoken.specialToken != null)
-         if (classtoken.specialToken.beginLine != 1)
-            newClass.setComment(classtoken.specialToken.image);
+         newClass.setComment(classtoken.specialToken.image);
 	  project.addSymbol(newClass);
 	} [";"]
 }
@@ -191,8 +179,7 @@ void FunctionDefinition() :
 		 String methodName = classname.image + "::" + methodPrefix + name.image;
 	     OxMethod newMethod = oxClass.addMethod(methodName);
 	     if (classname.specialToken != null)
-            if (classname.specialToken.beginLine != 1)
-		       newMethod.setComment(classname.specialToken.image);
+		    newMethod.setComment(classname.specialToken.image);
 		 project.addSymbol(newMethod);
 		 func = newMethod;
 	  }
@@ -200,8 +187,7 @@ void FunctionDefinition() :
 	  {
 	  	 OxFunction newFunction = file.addFunction(name.image);
 	     if (name.specialToken != null)
-            if (name.specialToken.beginLine != 1)
-		       newFunction.setComment(name.specialToken.image);
+		    newFunction.setComment(name.specialToken.image);
 		 project.addSymbol(newFunction);
 		 func = newFunction;
 	  }

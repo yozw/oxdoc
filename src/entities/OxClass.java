@@ -8,14 +8,12 @@ import java.util.*;
 		
 		OxClass(String name, OxFile parentFile) {
 			super(name, new ClassComment());
-			setIconType(FileManager.CLASS);
 			_parentFile = parentFile;
 		}
 
 		OxClass(String name, String parentClassName, OxFile parentFile) {
 			super(name, new ClassComment());
 			_parentFile = parentFile;
-			setIconType(FileManager.CLASS);
 			_parentClassName = parentClassName;
 		}
 

@@ -5,7 +5,6 @@ import java.util.*;
 		protected OxFile _parentFile = null;
 		private BaseComment _comment = null;
 		private String comments = "";
-		private int _iconType = FileManager.NONE;
 
 		public OxEntity(String name, BaseComment comment) {
 			this.name = name;
@@ -20,22 +19,6 @@ import java.util.*;
 
 		public String name() {
 			return this.name;
-		}
-
-		public int iconType() {
-			return _iconType;
-		}
-
-		public String smallIcon() {
-			return FileManager.smallIcon(_iconType);
-		}
-
-		public String largeIcon() {
-			return FileManager.largeIcon(_iconType);
-		}
-
-		protected void setIconType(int iconType) {
-			_iconType = iconType;
 		}
 
 		public String description() {

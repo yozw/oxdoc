@@ -72,14 +72,6 @@ dd.example PRE {
     background: white;
 }
 
-.method_table .header {
-    text-align: left;
-    font-size: 11pt;
-    font-weight: bold;
-    padding: 4px;
-    border-bottom: 1px solid gray;
-}
-
 .declaration {
     font-family: courier;
     font-size: 10pt;
