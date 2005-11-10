@@ -1,7 +1,38 @@
-Installation instructions
+oxdoc 0.85alpha [11/09/05] (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
 
+oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+See the LICENSE file for distribution details.
+
+
+
+
+Installation instructions (binaries)
+------------------------------------
+
+WINDOWS
+-------
+* Unzip the binary zip file
+* Edit bin\oxdoc.xml
+* Use oxdoc.bat to run oxdoc
+* You may want to copy oxdoc.bat to a directory in your path, e.g. 
+  c:\windows\system32 .  Don't forget to edit oxdoc.bat and change the 
+  classpath to match the location on your computer.
+
+
+Linux
+-----
+* Unzip the binary zip file
+* Activate execute permission for the oxdoc script in the bin/ directory
+* Edit bin/oxdoc.xml
+* Run bin/oxdoc
+* Alternatively, you can place oxdoc and oxdoc.jar in a directory in your path,
+  e.g. ~/bin  or  /usr/local/bin
+
+Installation instructions (source code)
+---------------------------------------
 
 * Install JavaCC
-* Rename or copy oxdoc.xml.template to oxdoc.xml, and edit parameters
+* Edit build.properties
 * Rename or copy build.xml.template to build.xml, and edit parameters
 * Run 'ant jar'
