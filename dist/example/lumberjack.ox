@@ -1,6 +1,9 @@
 #include <oxstd.h>
 
-/** The Lumberjack class represents a lumber jack **/
+/** The Lumberjack class represents a lumber jack.
+Lumberjacks, by the way, like formulas involving trigonometric functions, e.g.
+$$\int_0^\infty \frac{x}{1+x^2}\sin^2 x\ dx.$$
+ **/
 class Lumberjack {
    decl wearsWomensClothes;
    isOk();

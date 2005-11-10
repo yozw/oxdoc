@@ -3,99 +3,141 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <link rel="stylesheet" type="text/css" href="oxdoc.css">
-<title>lumberjack.ox</title>
+<title>lumberjack.ox - </title>
 </head>
 <body>
-<div align="right">[ <a href="default.html">Home</a> | <a href="index.html">Index</a> ]</div>
+<div class="header">[ <a href="default.html">Home</a> | <a href="index.html">Index</a> ]</div>
 <h1>lumberjack.ox</h1>
-<h2>Class Lumberjack</h2>
-The Lumberjack class represents a lumber jack
-<table class="methods">
-<tr><td class="declaration">
+
+<!-- Class Lumberjack --!>
+<h2>Class Lumberjack </h2>
+The Lumberjack class represents a lumber jack.
+Lumberjacks, by the way, like formulas involving trigonometric functions, e.g.
+<span class="equation"><img align="center" src="images/img1.png" alt="\int_0^\infty \frac{x}{1+x^2}\sin^2 x\ dx."></span>
+
+<dl></dl>
+
+<!-- Methods of Class Lumberjack --!>
+<h3>Methods</h3>
+<table class="method_table">
+<tr><td class="declaration" valign="top">
 <a href="lumberjack.ox.html#Lumberjack___isOk">isOk</a>
-</td><td class="description">
+</td><td class="description" valign="top">
 Checks whether this lumber jack is okay
-   
-</td>
-<tr><td class="declaration">
+    </td></tr>
+<tr><td class="declaration" valign="top">
 <a href="lumberjack.ox.html#Lumberjack___Lumberjack">Lumberjack</a>
-</td><td class="description">
+</td><td class="description" valign="top">
 Construct a new lumber jack
-    
-</td>
-<tr><td class="declaration">
+     </td></tr>
+<tr><td class="declaration" valign="top">
 <a href="lumberjack.ox.html#Lumberjack___sleep">sleep</a>
-</td><td class="description">
+</td><td class="description" valign="top">
 Make the lumber jack sleep for a specified number of hours 
-   
-</td>
-<tr><td class="declaration">
+    </td></tr>
+<tr><td class="declaration" valign="top">
 <a href="lumberjack.ox.html#Lumberjack___~Lumberjack">~Lumberjack</a>
-</td><td class="description">
-Kills the lumber jack
-</td>
+</td><td class="description" valign="top">
+Kills the lumber jack </td></tr>
 </table>
-<h2>Global functions</h2>
-<table class="methods">
-<tr><td class="declaration">
+
+<!-- Global functions --!>
+<h2>Global functions </h2>
+
+<!-- Methods of Global functions --!>
+<h3>Methods</h3>
+<table class="method_table">
+<tr><td class="declaration" valign="top">
 <a href="lumberjack.ox.html#main">main</a>
-</td><td class="description">
+</td><td class="description" valign="top">
 The main program 
- 
-</td>
+  </td></tr>
 </table>
+
+<!-- Details for Class Lumberjack --!>
 <h2>Class Lumberjack details</h2>
-<a name="Lumberjack___isOk">
-<h3>isOk</h3></a>
-<pre>Lumberjack :: isOk ( )</pre>
-<dl><dd>Checks whether this lumber jack is okay
-   
-<dl><dt><b>Returns:</b><dd><tt>TRUE</tt> if this lumber jack is okay, <TT>FALSE</TT> if not.
 
-</dd><dt><b>Comments:</b><dd>In the current implementation, lumber jacks are okay if and only
+<!-- Method isOk --!>
+<a name="Lumberjack___isOk"><h3>isOk</h3></a>
+<span class="declaration">Lumberjack :: isOk ( )</span>
+<dl>
+<dd>Checks whether this lumber jack is okay
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns"><tt>TRUE</tt> if this lumber jack is okay, <TT>FALSE</TT> if not.
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">In the current implementation, lumber jacks are okay if and only
    if they wear women's clothing.
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="lumberjack.ox.html">Lumberjack</a></dd>
+</dl></dd>
+</dl>
 
-</dd><dt><b>See also:</b><dd><a href="lumberjack.ox.html">Lumberjack</a></dd>
-</dl></dd></dl>
 <hr>
-<a name="Lumberjack___Lumberjack">
-<h3>Lumberjack</h3></a>
-<pre>Lumberjack :: Lumberjack ( const wearsWomensClothes )</pre>
-<dl><dd>Construct a new lumber jack
-    
-<dl><dt><b>Parameters:</b><dd><table class="parameters"><tr><td><tt>wearsWomensClothes&nbsp;&nbsp;</tt></td><td>Indicates whether the lumber jack wears women's clothes.</td></tr>
+
+<!-- Method Lumberjack --!>
+<a name="Lumberjack___Lumberjack"><h3>Lumberjack</h3></a>
+<span class="declaration">Lumberjack :: Lumberjack ( const wearsWomensClothes )</span>
+<dl>
+<dd>Construct a new lumber jack
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">wearsWomensClothes</td>
+<td class="description" valign="baseline">Indicates whether the lumber jack wears women's clothes.</td>
+</tr>
 </table>
+</dd>
+</dl></dd>
+</dl>
 
-</dd></dl></dd></dl>
 <hr>
-<a name="Lumberjack___sleep">
-<h3>sleep</h3></a>
-<pre>Lumberjack :: sleep ( const hours )</pre>
-<dl><dd>Make the lumber jack sleep for a specified number of hours 
-   
-<dl><dt><b>Parameters:</b><dd><table class="parameters"><tr><td><tt>hours&nbsp;&nbsp;</tt></td><td>Number of hours to sleep. Has to be integer.
-   </td></tr>
+
+<!-- Method sleep --!>
+<a name="Lumberjack___sleep"><h3>sleep</h3></a>
+<span class="declaration">Lumberjack :: sleep ( const hours )</span>
+<dl>
+<dd>Make the lumber jack sleep for a specified number of hours
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">hours</td>
+<td class="description" valign="baseline">Number of hours to sleep. Has to be integer.
+   </td>
+</tr>
 </table>
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">The lumber jack cannot sleep more than 24 hours a day.
+</dd>
+</dl></dd>
+</dl>
 
-</dd><dt><b>Comments:</b><dd>The lumber jack cannot sleep more than 24 hours a day.
+<hr>
 
-</dd></dl></dd></dl>
-<hr>
-<a name="Lumberjack___~Lumberjack">
-<h3>~Lumberjack</h3></a>
-<pre>Lumberjack :: ~ Lumberjack ( )</pre>
-<dl><dd>Kills the lumber jack
-<dl></dl></dd></dl>
-<hr>
+<!-- Method ~Lumberjack --!>
+<a name="Lumberjack___~Lumberjack"><h3>~Lumberjack</h3></a>
+<span class="declaration">Lumberjack :: ~ Lumberjack ( )</span>
+<dl>
+<dd>Kills the lumber jack
+<dl>
+</dl></dd>
+</dl>
+
+<!-- Details for Global functions --!>
 <h2>Global functions details</h2>
-<a name="main">
-<h3>main</h3></a>
-<pre>main ( )</pre>
-<dl><dd>The main program 
- 
-<dl><dt><b>Comments:</b><dd>Gives birth to a lumber jack, have him sleep, checks whether
-  the lumber jack is okay, and kills it.
 
-</dd></dl></dd></dl>
-<hr>
-<div align="center"><small>Generated by oxdoc 0.31beta on <script>document.write(document.lastModified);</script>.<br>Original filename: <tt>lumberjack.ox.html</tt><br>oxdoc &copy; Copyright 2005 by Y. Zwols [<a href="mailto:yori@brown.edu">yori@brown.edu</a>]</small></div>
+<!-- Method main --!>
+<a name="main"><h3>main</h3></a>
+<span class="declaration">main ( )</span>
+<dl>
+<dd>The main program
+<dl>
+<dt class="comments">Comments:</dt><dd class="comments">Gives birth to a lumber jack, have him sleep, checks whether
+  the lumber jack is okay, and kills it.
+</dd>
+</dl></dd>
+</dl>
+<div class="footer">Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 0.85alpha</a> on <script>document.write(document.lastModified);</script>.<br>
+Original filename: <tt>lumberjack.ox.html</tt><br>
+(c) Copyright 2005 by Y. Zwols</div>

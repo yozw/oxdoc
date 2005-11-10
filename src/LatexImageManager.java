@@ -1,10 +1,28 @@
+/**
+
+oxdoc (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+**/
+
 import java.io.*;
 import java.util.*;
 import java.text.*;
-import java.util.regex.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
-import org.xml.sax.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
@@ -60,35 +78,35 @@ public class LatexImageManager extends ArrayList {
     }
 
     private static void saveCache() {
-	/**			try {
-	   DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-	   Document doc = builder.newDocument();
+	try {
+	    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+	    Document doc = builder.newDocument();
 
-	   Element root = doc.createElement("cache");
-	   doc.appendChild(root);
+	    Element root = doc.createElement("cache");
+	    doc.appendChild(root);
 				
-	   for (Enumeration enum = _formulas.elements(); enum.hasMoreElements() ;) {
-	   ImageEntry e = (ImageEntry) enum.nextElement();
-	   Element newElement = doc.createElement("image");
-	   newElement.setAttribute("formula", e.formula());
-	   newElement.setAttribute("filename", e.filename());
-	   root.appendChild(newElement);
-	   }
+	    for (Enumeration elements = _formulas.elements(); elements.hasMoreElements() ;) {
+		ImageEntry e = (ImageEntry) elements.nextElement();
+		Element newElement = doc.createElement("image");
+		newElement.setAttribute("formula", e.formula());
+		newElement.setAttribute("filename", e.filename());
+		root.appendChild(newElement);
+	    }
 
-	   // Prepare the DOM document for writing
-	   Source source = new DOMSource(doc);
+	    // Prepare the DOM document for writing
+	    Source source = new DOMSource(doc);
     
-	   // Prepare the output file
-	   File file = new File(FileManager.imageCache().trim());
-	   Result result = new StreamResult(file);
+	    // Prepare the output file
+	    File file = new File(FileManager.imageCache());
+	    Result result = new StreamResult(new FileWriter(file));
     
-	   // Write the DOM document to the file
-	   Transformer xformer = TransformerFactory.newInstance().newTransformer();
-	   xformer.transform(source, result);
-	   }
-	   catch (Exception e) {
-	   oxdoc.warning("Error writing image cache. Don't worry.");
-	   }**/
+	    // Write the DOM document to the file
+	    Transformer xformer = TransformerFactory.newInstance().newTransformer();
+	    xformer.transform(source, result);
+	}
+	catch (Exception e) {
+	    oxdoc.warning("Error writing image cache. Don't worry.");
+	}
     }
 
     private static void loadCache() {
@@ -120,8 +138,8 @@ public class LatexImageManager extends ArrayList {
 
     public static void makeLatexFiles() throws IOException {
 
-	for (Enumeration enum = _formulas.elements(); enum.hasMoreElements() ;) {
-	    ImageEntry e = (ImageEntry) enum.nextElement();
+	for (Enumeration elements = _formulas.elements(); elements.hasMoreElements() ;) {
+	    ImageEntry e = (ImageEntry) elements.nextElement();
 	    if (e.needsGenerating) 
 		makeLatexFile(e);
 	}
@@ -153,7 +171,11 @@ public class LatexImageManager extends ArrayList {
 	run(Config.Latex, MessageFormat.format(latexParams, args));
 			
 	String dvipngParams = "{0} -T tight --gamma 1.5 -bg Transparent -o {1} {2}";
+
+	// have to do the following twice, because it sometimes seems to miss fonts at the first run
 	for (int i = 0; i < 2; i++) {
+	    // make sure the directory exists.  If not, create it
+	    (new File(FileManager.imageFile(e.filename()))).mkdirs();
 	    Object[] _args = {Config.DvipngArg, FileManager.imageFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
 	    run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
 	}
