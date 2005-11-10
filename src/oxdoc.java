@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
+oxdoc (c) Copyright 2005 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@ public class oxdoc {
     public static String ProductName = "oxdoc";
     public static String Version = Constants.VERSION;
     public static String Url = "http://oxdoc.sourceforge.net";
-    public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols [yori@brown.edu]\n\n" +
+    public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols [yorizwols@users.sourceforge.net]\n\n" +
 	"oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n" +
 	"You are welcome to redistribute it under certain conditions.\n" +
 	"See the LICENSE file for distribution details.\n";
@@ -103,7 +103,8 @@ public class oxdoc {
 	
     // oxdoc entry point
     public static void main ( String args [ ] ) {
-	System.out.println(ProductName + " " + Version + " [" + Constants.COMPILETIME + "] " + CopyrightNotice);
+	System.out.println(ProductName + " " + Version + " [" + Constants.COMPILETIME + "]");
+	System.out.println(CopyrightNotice);
 
 	if (emptyArray(args)) {
 	    System.out.println("\nUsage is:");
