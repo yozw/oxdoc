@@ -7,6 +7,7 @@
   <property name="version" value="0.85alpha"/>
 
   <property name="src"     location="src"/>
+  <property name="srcmisc" location="src/misc"/>
   <property name="bin"     location="bin"/>
   <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
@@ -54,19 +55,19 @@
 
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
-     <javac srcdir="${src}/WriteConstants" destdir="${build}" nowarn="on"/>
+     <javac srcdir="${src}/WriteConstants" destdir="${build}" nowarn="on" debug="${debug}" />
      <java classname="WriteConstants" classpath="${build}" output="${parser}/Constants.java">
          <arg value="${version}" />
      </java>
      <delete file="${build}/Constants.class"/>
-     <javac srcdir="${src}" destdir="${build}" nowarn="on"/>
+     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" />
   </target>
 
 
   <target name="jar" depends="compile">
     <mkdir dir="${bin}"/>
-    <copy file="${src}/oxdoc.css" todir="${build}" />
-    <copy file="oxdoc.xml" todir="${bin}"  />
+    <copy file="${srcmisc}/oxdoc.css" todir="${build}" />
+    <copy file="${srcmisc}/oxdoc.xml" todir="${bin}"  />
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
   </target>
 
@@ -77,10 +78,14 @@
   <target name="distbin" depends="jar,distsrc">
     <mkdir dir="${distbin}"/>
     <mkdir dir="${zips}"/>
+
     <copy file="README" todir="${dist}"/>
     <copy file="LICENSE" todir="${dist}"/>
-    <copy file="${bin}/oxdoc.xml" todir="${distbin}"/>
+    <copy file="${srcmisc}/oxdoc.xml" todir="${distbin}"/>
+    <copy file="${srcmisc}/oxdoc" todir="${distbin}"  />
+    <copy file="${srcmisc}/oxdoc.bat" todir="${distbin}"  />
     <copy file="${bin}/oxdoc.jar" todir="${distbin}"/>
+
     <zip destfile="${distbinzip}.zip" basedir="${dist}" />
     <tar destfile="${distbinzip}.tgz" basedir="${dist}" compression="gzip" />
   </target>
@@ -91,12 +96,12 @@
     <zip destfile="${distsrczip}.zip">
       <zipfileset dir="${src}" prefix="src/" defaultexcludes="yes" excludes="parser/**" />
       <zipfileset dir="${docs}" prefix="docs/" />
-      <zipfileset dir="./" includes="*.xml.template,build.properties" />
+      <zipfileset dir="./" includes="build.xml,oxdoc.xml.template,build.properties.template" />
     </zip>
     <tar destfile="${distsrczip}.tgz" basedir="./" compression="gzip">
       <tarfileset dir="${src}" prefix="src/" defaultexcludes="yes" excludes="parser/**" />
       <tarfileset dir="${docs}" prefix="docs/" />
-      <tarfileset dir="./" includes="*.xml.template,build.properties" />
+      <tarfileset dir="./" includes="build.xml,oxdoc.xml.template,build.properties.template" />
     </tar>
   </target>
 

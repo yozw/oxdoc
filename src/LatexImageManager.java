@@ -158,6 +158,8 @@ public class LatexImageManager extends ArrayList {
 	    output.write("\\usepackage{"  + (String) Config.LatexPackages.get(i) + "}\n");
 	output.write("\\begin{document}\n");
 	output.write("\\pagestyle{empty}\n");
+	if (Config.ImageBgColor != null)
+        	output.write("\\special{background " + Config.ImageBgColor + " }");
 	output.write("\\begin{align*}\n");
 	output.write(e.formula() + "\n");
 	output.write("\\end{align*}\n");
@@ -170,15 +172,21 @@ public class LatexImageManager extends ArrayList {
 			
 	run(Config.Latex, MessageFormat.format(latexParams, args));
 			
-	String dvipngParams = "{0} -T tight --gamma 1.5 -bg Transparent -o {1} {2}";
+	String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
+	if (Config.ImageBgColor == null)
+		dvipngParams += " -bg Transparent";
 
 	// have to do the following twice, because it sometimes seems to miss fonts at the first run
 	for (int i = 0; i < 2; i++) {
 	    // make sure the directory exists.  If not, create it
-	    (new File(FileManager.imageFile(e.filename()))).mkdirs();
+	    (new File(FileManager.imageFile(e.filename()))).getParentFile().mkdirs();
 	    Object[] _args = {Config.DvipngArg, FileManager.imageFile(e.filename()), FileManager.tempFile("__oxdoc.dvi")};
 	    run(Config.Dvipng, MessageFormat.format(dvipngParams, _args));
 	}
+	(new File(FileManager.tempFile("__oxdoc.tex"))).delete();
+	(new File(FileManager.tempFile("__oxdoc.dvi"))).delete();
+	(new File(FileManager.tempFile("__oxdoc.aux"))).delete();
+	(new File(FileManager.tempFile("__oxdoc.log"))).delete();
     }
 
     private static void run(String filename, String parameters) throws IOException {

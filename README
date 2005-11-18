@@ -33,6 +33,6 @@ Installation instructions (source code)
 ---------------------------------------
 
 * Install JavaCC
-* Edit build.properties
+* Rename build.properties.template to build.properties edit it
 * Rename or copy build.xml.template to build.xml, and edit parameters
 * Run 'ant jar'
