@@ -54,7 +54,7 @@
 
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
-     <javac srcdir="${src}/WriteConstants" destdir="${build}" nowarn="on" debug="${debug}" />
+     <javac srcdir="${src}/writeconstants" destdir="${build}" nowarn="on" debug="${debug}" />
      <java classname="WriteConstants" classpath="${build}" output="${parser}/Constants.java">
          <arg value="${version}" />
      </java>
