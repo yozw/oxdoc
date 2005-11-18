@@ -89,10 +89,11 @@
 
   <target name="pkg-bin" depends="jar">
     <antcall target="prepare-pkg"><param name="target" value="${pkg-bin}"/></antcall>
-    <copy file="${srcmisc}/oxdoc.xml"       todir="${pkg-bin}/bin" />
-    <copy file="${srcmisc}/oxdoc"           todir="${pkg-bin}/bin" />
-    <copy file="${srcmisc}/oxdoc.bat"       todir="${pkg-bin}/bin" />
-    <copy file="${bin}/oxdoc.jar"           todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc.xml.linux"   todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc.xml.windows" todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc"             todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc.bat"         todir="${pkg-bin}/bin" />
+    <copy file="${bin}/oxdoc.jar"             todir="${pkg-bin}/bin" />
 
     <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
     <tar destfile="${pkg-bin}.tgz" basedir="${pkg-bin}" compression="gzip" />
