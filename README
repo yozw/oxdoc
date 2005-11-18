@@ -1,4 +1,4 @@
-oxdoc 0.85alpha [11/09/05] (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
+oxdoc 0.85alpha [11/18/05] (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
 
 oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -33,6 +33,5 @@ Installation instructions (source code)
 ---------------------------------------
 
 * Install JavaCC
-* Rename build.properties.template to build.properties edit it
-* Rename or copy build.xml.template to build.xml, and edit parameters
+* Copy build.properties.template to build.properties edit it
 * Run 'ant jar'
