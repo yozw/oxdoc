@@ -29,9 +29,11 @@ public class oxdoc {
     public static String ProductName = "oxdoc";
     public static String Version = Constants.VERSION;
     public static String Url = "http://oxdoc.sourceforge.net";
-    public static String CopyrightNotice = "(c) Copyright 2005 by Y. Zwols [yorizwols@users.sourceforge.net]\n\n" +
-	"oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n" +
-	"You are welcome to redistribute it under certain conditions.\n" +
+    public static String CopyrightNotice = 
+        "(c) Copyright 2005 by Y. Zwols [yorizwols@users.sourceforge.net]";
+    public static String LicenseNotice = 
+        "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n" +
+ 	"You are welcome to redistribute it under certain conditions.\n" +
 	"See the LICENSE file for distribution details.\n";
 
     public static OxProject project() {
@@ -105,6 +107,7 @@ public class oxdoc {
     public static void main ( String args [ ] ) {
 	System.out.println(ProductName + " " + Version + " [" + Constants.COMPILETIME + "]");
 	System.out.println(CopyrightNotice);
+	System.out.println("\n\n" + LicenseNotice);
 
 	if (emptyArray(args)) {
 	    System.out.println("\nUsage is:");
