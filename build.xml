@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.85alpha"/>
+  <property name="version" value="0.90alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
@@ -20,7 +20,7 @@
 
 
   <target name="clean">
-    <delete dir="${bin}"/>
+    <delete file="${bin}/oxdoc.jar"/>
     <delete dir="${build}"/>
     <delete dir="${docs}"/>
     <delete dir="${parser}"/>
