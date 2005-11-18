@@ -22,6 +22,7 @@
   <target name="clean">
     <delete dir="${bin}"/>
     <delete dir="${build}"/>
+    <delete dir="${docs}"/>
     <delete dir="${parser}"/>
     <delete dir="${zips}"/>
   </target>
