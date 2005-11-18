@@ -24,6 +24,7 @@ public class OxMethod extends OxFunction {
 
     OxMethod(String name, OxClass oxclass) {
 	super(name, oxclass.parentFile());
+			setIconType(FileManager.METHOD);
 	_class = oxclass;
     }
 

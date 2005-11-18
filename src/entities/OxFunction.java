@@ -23,6 +23,7 @@ public class OxFunction extends OxEntity {
 
     OxFunction(String name, OxFile parentFile) {
 	super(name, new FunctionComment(), parentFile);
+			setIconType(FileManager.FUNCTION);
     }
 
     public String url() {
