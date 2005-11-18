@@ -11,7 +11,6 @@
   <property name="bin"     location="bin"/>
   <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
-  <property name="dist"    location="dist"/>
   <property name="docs"    location="docs"/>
 
   <property name="zips"    location="zips"/>
@@ -79,14 +78,20 @@
   <target name="dist" depends="pkg-bin,pkg-src">
   </target>
 
+  <target name="prepare-pkg">
+    <copy file="README"                     todir="${target}" />
+    <copy file="LICENSE"                    todir="${target}" />
+    <copy todir="${target}/css">     <fileset dir="css" />     </copy>
+    <copy todir="${target}/example"> <fileset dir="example" /> </copy>
+    <copy todir="${target}/manual">  <fileset dir="manual" />  </copy>  
+  </target>
+
   <target name="pkg-bin" depends="jar">
-    <copy file="README"                     todir="${pkg-bin}" />
-    <copy file="LICENSE"                    todir="${pkg-bin}" />
+    <antcall target="prepare-pkg"><param name="target" value="${pkg-bin}"/></antcall>
     <copy file="${srcmisc}/oxdoc.xml"       todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc"           todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc.bat"       todir="${pkg-bin}/bin" />
     <copy file="${bin}/oxdoc.jar"           todir="${pkg-bin}/bin" />
-    <copy todir="${pkg-bin}"> <fileset dir="${dist}" /> </copy>
 
     <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
     <tar destfile="${pkg-bin}.tgz" basedir="${pkg-bin}" compression="gzip" />
@@ -94,14 +99,12 @@
 
 
   <target name="pkg-src" depends="">
-    <copy file="README"                     todir="${pkg-src}" />
-    <copy file="LICENSE"                    todir="${pkg-src}" />
+    <antcall target="prepare-pkg"><param name="target" value="${pkg-src}"/></antcall>
     <copy file="build.xml"                  todir="${pkg-src}" />
     <copy file="build.properties.template"  todir="${pkg-src}" />
     <copy todir="${pkg-src}/src">
        <fileset dir="${src}" defaultexcludes="yes" excludes="parser/**" />
     </copy>
-    <copy todir="${pkg-src}/dist"> <fileset dir="${dist}" /> </copy>
 
     <zip destfile="${pkg-src}.zip" basedir="${pkg-src}" />
     <tar destfile="${pkg-src}.tgz" basedir="${pkg-src}" compression="gzip" />
