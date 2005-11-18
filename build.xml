@@ -112,7 +112,7 @@
   </target>
 
   
-  <target name="all" depends="clean,dist" />
+  <target name="rebuild" depends="clean,dist" />
 
 
 </project>
