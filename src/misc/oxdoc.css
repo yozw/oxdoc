@@ -1,6 +1,5 @@
-body {
-    margin: 16px;
-    background: #eeeeee;
+body {    margin: 16px;
+    background: white;
     font-size: 10pt;
     color: black;
     font-family: verdana, arial, helvetica, sans-serif;
@@ -58,7 +57,7 @@ dd {
 
 
 dd.example PRE {
-    background: white;
+    background: #eeeeee;
     border: 1px solid silver;
     padding: 4px;
 }

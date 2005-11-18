@@ -35,8 +35,10 @@ public class Config {
     public static String  ProjectName = "Project";
     public static String  WindowTitle = "";
     public static boolean EnableLatex = true;
-    public static String  ImageBgColor= null;   // color in the form "rgb <r> <g> <b>", 
-						// or null for transparent
+
+    // color in the form "rgb <r> <g> <b>", or null for transparent
+    public static String  ImageBgColor= "rgb 1.0 1.0 1.0";   
+
     public static String  ConfigFile  = "oxdoc.xml";
     public static ArrayList LatexPackages = new ArrayList();
 
