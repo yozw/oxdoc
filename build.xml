@@ -11,14 +11,13 @@
   <property name="bin"     location="bin"/>
   <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
-  <property name="distbin" location="dist/bin"/>
   <property name="dist"    location="dist"/>
   <property name="docs"    location="docs"/>
+
   <property name="zips"    location="zips"/>
 
-
-  <property name="distbinzip" value="${zips}/oxdoc-${version}-bin" />
-  <property name="distsrczip" value="${zips}/oxdoc-${version}-src" />
+  <property name="pkg-bin" value="${zips}/oxdoc-${version}-bin" />
+  <property name="pkg-src" value="${zips}/oxdoc-${version}-src" />
 
 
   <target name="clean">
@@ -71,38 +70,41 @@
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
   </target>
 
-  <target name="dist" depends="distbin,distsrc">
+  <target name="build" depends="jar">
+    <copy file="${srcmisc}/oxdoc"           todir="${bin}" />
+    <copy file="${srcmisc}/oxdoc.bat"       todir="${bin}" />
   </target>
 
 
-  <target name="distbin" depends="jar,distsrc">
-    <mkdir dir="${distbin}"/>
-    <mkdir dir="${zips}"/>
+  <target name="dist" depends="pkg-bin,pkg-src">
+  </target>
 
-    <copy file="README" todir="${dist}"/>
-    <copy file="LICENSE" todir="${dist}"/>
-    <copy file="${srcmisc}/oxdoc.xml" todir="${distbin}"/>
-    <copy file="${srcmisc}/oxdoc" todir="${distbin}"  />
-    <copy file="${srcmisc}/oxdoc.bat" todir="${distbin}"  />
-    <copy file="${bin}/oxdoc.jar" todir="${distbin}"/>
+  <target name="pkg-bin" depends="jar">
+    <copy file="README"                     todir="${pkg-bin}" />
+    <copy file="LICENSE"                    todir="${pkg-bin}" />
+    <copy file="${srcmisc}/oxdoc.xml"       todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc"           todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdoc.bat"       todir="${pkg-bin}/bin" />
+    <copy file="${bin}/oxdoc.jar"           todir="${pkg-bin}/bin" />
+    <copy todir="${pkg-bin}"> <fileset dir="${dist}" /> </copy>
 
-    <zip destfile="${distbinzip}.zip" basedir="${dist}" />
-    <tar destfile="${distbinzip}.tgz" basedir="${dist}" compression="gzip" />
+    <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
+    <tar destfile="${pkg-bin}.tgz" basedir="${pkg-bin}" compression="gzip" />
   </target>
 
 
-  <target name="distsrc" depends="doc">
-    <mkdir dir="${zips}"/>
-    <zip destfile="${distsrczip}.zip">
-      <zipfileset dir="${src}" prefix="src/" defaultexcludes="yes" excludes="parser/**" />
-      <zipfileset dir="${docs}" prefix="docs/" />
-      <zipfileset dir="./" includes="build.xml,oxdoc.xml.template,build.properties.template" />
-    </zip>
-    <tar destfile="${distsrczip}.tgz" basedir="./" compression="gzip">
-      <tarfileset dir="${src}" prefix="src/" defaultexcludes="yes" excludes="parser/**" />
-      <tarfileset dir="${docs}" prefix="docs/" />
-      <tarfileset dir="./" includes="build.xml,oxdoc.xml.template,build.properties.template" />
-    </tar>
+  <target name="pkg-src" depends="">
+    <copy file="README"                     todir="${pkg-src}" />
+    <copy file="LICENSE"                    todir="${pkg-src}" />
+    <copy file="build.xml"                  todir="${pkg-src}" />
+    <copy file="build.properties.template"  todir="${pkg-src}" />
+    <copy todir="${pkg-src}/src">
+       <fileset dir="${src}" defaultexcludes="yes" excludes="parser/**" />
+    </copy>
+    <copy todir="${pkg-src}/dist"> <fileset dir="${dist}" /> </copy>
+
+    <zip destfile="${pkg-src}.zip" basedir="${pkg-src}" />
+    <tar destfile="${pkg-src}.tgz" basedir="${pkg-src}" compression="gzip" />
   </target>
 
   
