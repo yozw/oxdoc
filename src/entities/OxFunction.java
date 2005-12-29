@@ -37,4 +37,8 @@ public class OxFunction extends OxEntity {
     public String displayName() {
 	return name();
     }
+
+    public String toString() {
+	return "<OxFunction " + name() + ">";
+    }
 }

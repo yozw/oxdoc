@@ -62,4 +62,8 @@ public class OxFile extends OxEntity {
     public String url() {
 	return name() + ".html";
     }
+
+    public String toString() {
+	return "<OxFile " + name() + ">";
+    }
 }

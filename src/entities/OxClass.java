@@ -67,4 +67,8 @@ public class OxClass extends OxEntity {
     public String url() {
 	return parentFile().url();
     }
+
+    public String toString() {
+	return "<OxClass " + name() + ">";
+    }
 }

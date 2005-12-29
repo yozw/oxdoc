@@ -41,14 +41,23 @@ public class OxMethod extends OxFunction {
 	return pts[1];
     }
 
-    public String description() {
-	if (_comment.isEmpty() && parentClass() != null && parentClass().superClass() != null)  {
-	    OxMethod superMethod = parentClass().superClass().methodByName(this.displayName());
-System.out.println(this.displayName());
-	    if (superMethod != null)
-	       return superMethod.description();
-        }
-	return TextProcessor.process(_comment.description());
+    public BaseComment comment() {
+	BaseComment _comment = super.comment();
+
+	if (_comment.isEmpty() && superMethod() != null) 
+	    return superMethod().comment();
+
+	return _comment;
+    }
+
+    public OxMethod superMethod() {
+	if (parentClass() == null || parentClass().superClass() == null)
+	    return null;
+	return (OxMethod) parentClass().superClass().methodByName(this.displayName());
+    }
+
+    public String toString() {
+	return "<OxMethod " + name() + ">";
     }
 
 }
