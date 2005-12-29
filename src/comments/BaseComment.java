@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 public class BaseComment {
 
+    private String             _text = "";
     private String             _description = "";
     private CommentTextBlock   _longdescription = new CommentTextBlock();
     private CommentTextBlock   _comments = new CommentTextBlock();
@@ -56,6 +57,7 @@ public class BaseComment {
 	if (!text.startsWith("/**") || !text.endsWith("**/"))
 	    return;
 	text = text.substring(3, text.length() - 3).trim();
+	_text = text;
 
 	String[] sections = text.split("@");
 
@@ -93,4 +95,7 @@ public class BaseComment {
 
     /** The to do list of the entity **/
     public CommentList todo() { return _todo; }
+
+    /** Checks whether the comment is empty **/
+    public boolean isEmpty() { return _text.trim().length() == 0; }
 }

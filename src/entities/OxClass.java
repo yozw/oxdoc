@@ -24,18 +24,18 @@ public class OxClass extends OxEntity {
     public String Declaration;
     private OxEntityList _methods = new OxEntityList();
     private OxFile _parentFile = null;
-    private String _parentClassName = null;
+    private String _superClassName = null;
 		
     OxClass(String name, OxFile parentFile) {
 	super(name, new ClassComment());
 	_parentFile = parentFile;
     }
 
-    OxClass(String name, String parentClassName, OxFile parentFile) {
+    OxClass(String name, String superClassName, OxFile parentFile) {
 	super(name, new ClassComment());
 	_parentFile = parentFile;
 			setIconType(FileManager.CLASS);
-	_parentClassName = parentClassName;
+	_superClassName = superClassName;
     }
 
     public OxMethod addMethod(String name) {
@@ -46,18 +46,22 @@ public class OxClass extends OxEntity {
 	return _methods.sortedList();
     }
 
+    public OxMethod methodByName(String s) {
+	return (OxMethod) _methods.get(name() + "::" + s);
+    }
+
     public OxFile parentFile() {
 	return _parentFile;
     }
 
-    public String parentClassName() {
-	return _parentClassName;
+    public String superClassName() {
+	return _superClassName;
     }
 
-    public OxClass parentClass() {
-	if (_parentClassName == null)
+    public OxClass superClass() {
+	if (_superClassName == null)
 	    return null;
-	return (OxClass) parentFile().project().getSymbol(_parentClassName);
+	return (OxClass) parentFile().project().getSymbol(_superClassName);
     }
 
     public String url() {

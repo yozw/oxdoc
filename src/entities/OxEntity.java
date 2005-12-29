@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 public class OxEntity {
     private String name;
     protected OxFile _parentFile = null;
-    private BaseComment _comment = null;
+    protected BaseComment _comment = null;
 		private int _iconType = FileManager.NONE;
 
     public OxEntity(String name, BaseComment comment) {

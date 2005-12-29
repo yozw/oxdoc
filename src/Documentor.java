@@ -111,24 +111,24 @@ public class Documentor {
 	String inheritedMethods = "";
 	String inheritanceText = "";
 
-	if ((oxclass != null) && (oxclass.parentClassName() != null)) {
-	    OxClass pclass = oxclass;
+	if ((oxclass != null) && (oxclass.superClassName() != null)) {
+	    OxClass sclass = oxclass;
 
 	    while (true) {
-		String parentClassName = pclass.parentClassName();
-		if (parentClassName == null)
+		String superClassName = sclass.superClassName();
+		if (superClassName == null)
 		    break;
 
-		String link = oxdoc.project().linkToSymbol(parentClassName);
+		String link = oxdoc.project().linkToSymbol(superClassName);
 
 		inheritanceText += " : " + link;
 					
-		OxEntity entity = oxdoc.project().getSymbol(parentClassName);
+		OxEntity entity = oxdoc.project().getSymbol(superClassName);
 		if ((entity == null) || !(entity instanceof OxClass))
 		    break;
-		pclass = (OxClass) entity;
+		sclass = (OxClass) entity;
 
-		ArrayList methods = pclass.methods();
+		ArrayList methods = sclass.methods();
 		if (methods.size() > 0) {
 		    inheritedMethods += "<dt>Inherited methods from " + link + ":</dt><dd>\n";
 		    for (int i = 0; i < methods.size(); i++) {

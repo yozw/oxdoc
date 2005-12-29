@@ -40,4 +40,15 @@ public class OxMethod extends OxFunction {
 	String[] pts = name().split("::");
 	return pts[1];
     }
+
+    public String description() {
+	if (_comment.isEmpty() && parentClass() != null && parentClass().superClass() != null)  {
+	    OxMethod superMethod = parentClass().superClass().methodByName(this.displayName());
+System.out.println(this.displayName());
+	    if (superMethod != null)
+	       return superMethod.description();
+        }
+	return TextProcessor.process(_comment.description());
+    }
+
 }
