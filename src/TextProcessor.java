@@ -22,8 +22,23 @@ import java.text.*;
 import java.util.regex.*;
 
 public class TextProcessor {
+    private static boolean isEmptyLine(String S) {
+        return (S.trim().length() == 0);
+    }
+
     public static String process(String text) {
-	return filterReferences(filterLatexExpressions(text));
+        String output = filterReferences(filterLatexExpressions(text));
+
+        String[] lines = output.split("(?m)^");
+
+        output = "";
+        for (int i = 0; i < lines.length; i++) {
+           if ((i>0) && (i<lines.length-1) && isEmptyLine(lines[i]) && !isEmptyLine(lines[i-1]) && !isEmptyLine(lines[i+1]))
+              output += "<P/>\n";
+           else
+              output += lines[i];
+        }
+        return output;
     }
 
     private static String filterReferences(String text) {
