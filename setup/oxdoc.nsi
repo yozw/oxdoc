@@ -7,7 +7,7 @@
 ;General
 
   ;Name and file
-  Name "oxdoc"
+  Name "oxdoc 0.95alpha"
   OutFile "setup.exe"
 
   ;Default installation folder
@@ -24,11 +24,13 @@
 ;--------------------------------
 ;Pages
 
+  !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "..\license"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
   Page custom LatexDir ValidateLatexDir
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
   
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
@@ -68,8 +70,10 @@ Section "Program files" SecProgram
 
   SetOutPath "$INSTDIR"
   FileOpen $9 oxdoc.bat w ;Opens a Empty File an fills it
-  FileWrite $9 "@java -classpath $\"$INSTDIR\bin$\" oxdoc.jar oxdoc %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar$\" oxdoc %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
   FileClose $9 ;Closes the filled file 
+
+  CopyFiles `oxdoc.bat` `$WINDIR`
 
   SetOutPath "$INSTDIR\bin"
   FileOpen $9 oxdoc.xml w ;Opens a Empty File an fills it
@@ -128,7 +132,7 @@ Function .onInit
 FunctionEnd
 
 LangString TEXT_IO_TITLE ${LANG_ENGLISH} "Latex folder"
-LangString TEXT_IO_SUBTITLE ${LANG_ENGLISH} "Please select the folder in which latex.exe and dvipng.exe reside"
+LangString TEXT_IO_SUBTITLE ${LANG_ENGLISH} "Select the folder in which your Latex installation resides."
 
 Function LatexDir
 
@@ -148,17 +152,16 @@ Function ValidateLatexDir
   Exch $EXEDIR  # restore original dir var.                            Stack: $0(without backslash)
   Pop $R0       # and pop the directory without the backslash.         Stack: <clean> 
 
-  IfFileExists "$R0\latex.exe" Okay1
-  MessageBox MB_ICONEXCLAMATION|MB_OK "Latex executable $R0\latex.exe not found. Please select the folder that contains latex.exe and dvipng.exe."
+  IfFileExists "$R0\latex.exe" 0 NotFound
+  IfFileExists "$R0\dvipng.exe" 0 NotFound
+  Goto Done
+
+NotFound:
+
+  MessageBox MB_ICONEXCLAMATION|MB_OKCANCEL "Latex executable $R0\latex.exe and/or $R0\dvipng.exe not found. Click OK to install oxdoc without Latex support (you can still enable Latex support later by editing oxdoc.xml) or click Cancel to select the folder that contains latex.exe and dvipng.exe." IDOK Done
   Abort
 
-Okay1:
-
-  IfFileExists "$R0\dvipng.exe" Okay2
-  MessageBox MB_ICONEXCLAMATION|MB_OK "Latex executable $R0\dvipng.exe not found. Please select the folder that contains latex.exe and dvipng.exe."
-  Abort
-
-Okay2:
+Done:
 
 FunctionEnd
 

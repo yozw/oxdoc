@@ -1,2 +1,2 @@
 @echo off   
-w:\nsis\makensis.exe oxdoc.nsi
+"c:\program files\nsis\makensis.exe" oxdoc.nsi
