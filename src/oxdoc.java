@@ -26,11 +26,12 @@ public class oxdoc {
     private static OxProject _project = new OxProject();
     private static ArrayList files = new ArrayList();
 
+	public static LogFile Logfile = null;
     public static String ProductName = "oxdoc";
     public static String Version = Constants.VERSION;
     public static String Url = "http://oxdoc.sourceforge.net";
     public static String CopyrightNotice = 
-        "(c) Copyright 2005 by Y. Zwols [yorizwols@users.sourceforge.net]";
+        "(c) Copyright 2005-2006 by Y. Zwols [yorizwols@users.sourceforge.net]";
     public static String LicenseNotice = 
         "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n" +
  	"You are welcome to redistribute it under certain conditions.\n" +
@@ -41,11 +42,16 @@ public class oxdoc {
     }
 	
     public static void warning(String msg) {
-	System.out.println("Warning: " + msg);
+	message("Warning: " + msg);
     }
 
     public static void message(String msg) {
-	System.out.println(msg);
+		try {
+			System.out.println(msg);
+			if (Logfile != null)
+				Logfile.writeln(msg);
+		}
+		catch (IOException E) { }
     }
 
     public static int parseFiles() throws Exception {
@@ -56,18 +62,18 @@ public class oxdoc {
 	    if (filename.length() == 0)
 		continue;
 
-	    System.out.println("Processing file " + filename + "...");
+	    message("Processing file " + filename + "...");
 	    try {
 		Parser parser = new Parser(new java.io.FileInputStream(filename), project().addFile(filename), project());
 		parser.OxFileDefinition();
 		totalFiles++;
 	    }
 	    catch(ParseException e) {
-		System.out.println("Parsing of file " + filename + " failed");
-		System.out.println(e.toString());
+		message("Parsing of file " + filename + " failed");
+		message(e.toString());
 	    }
 	    catch(FileNotFoundException e) {
-		System.out.println("File not found: " + filename);
+		message("File not found: " + filename);
 	    }
 	}
 	return totalFiles;
@@ -124,8 +130,11 @@ public class oxdoc {
 	    Config.validate();
 
 	    // execute parsing and document generation
-	    if (parseFiles() > 0)
-		Documentor.generateDocs();
+		Logfile = new LogFile();
+	    if (parseFiles() > 0) {
+			Documentor.generateDocs();
+			Logfile.close();
+		}
 	}
 	catch(Exception e){
    	    System.out.println(e.getMessage());

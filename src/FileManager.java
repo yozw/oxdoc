@@ -91,7 +91,7 @@ public class FileManager {
 
     public static String appDirFile(String fileName) {
 	File appDir = getApplicationDirectory(oxdoc.class);
-	return appDir.toString() + File.separator + fileName;
+	return appDir.toString().replaceAll("%20", " ") + File.separator + fileName;
     }
 
 

@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.90alpha"/>
+  <property name="version" value="0.95alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
@@ -66,6 +66,7 @@
   <target name="jar" depends="compile">
     <mkdir dir="${bin}"/>
     <copy file="${srcmisc}/oxdoc.css" todir="${build}" />
+    <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}" />
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
   </target>
 
@@ -73,7 +74,6 @@
     <copy file="${srcmisc}/oxdoc"           todir="${bin}" />
     <copy file="${srcmisc}/oxdoc.bat"       todir="${bin}" />
   </target>
-
 
   <target name="dist" depends="pkg-bin,pkg-src">
   </target>

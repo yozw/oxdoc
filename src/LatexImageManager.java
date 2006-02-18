@@ -194,10 +194,17 @@ public class LatexImageManager extends ArrayList {
 	Runtime run = Runtime.getRuntime();
 	try {
 	    Process pp = run.exec(filename + " " + parameters);
+		oxdoc.Logfile.writeln("");
+	    oxdoc.Logfile.writeStream(pp.getInputStream());  pp.getInputStream().close();
+		oxdoc.Logfile.writeln("");
+	    oxdoc.Logfile.writeStream(pp.getErrorStream(), true);  pp.getErrorStream().close();
+		oxdoc.Logfile.writeln("");
 	    pp.waitFor();
 	} catch (InterruptedException E) {
 	    System.out.println("Execution interrupted");
 	    System.exit(1);
-	}
+	} catch (IOException E) {
+	    System.out.println("Input/output error");
     }
+	}
 }

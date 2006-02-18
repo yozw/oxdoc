@@ -198,7 +198,7 @@ void FunctionDefinition() :
 	  {
 	  	 OxClass oxClass = file.getClass(classname.image);
 		 if (oxClass == null) {
-		    System.out.println("WARNING: Class " + classname.image + " was not yet defined.");
+		    oxdoc.warning("Class " + classname.image + " was not yet defined.");
 			oxClass = file.addClass(classname.image);
 		 }
 		 String methodName = classname.image + "::" + methodPrefix + name.image;

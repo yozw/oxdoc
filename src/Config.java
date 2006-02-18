@@ -34,7 +34,8 @@ public class Config {
     public static String  ImagePath   = "images/";
     public static String  ProjectName = "Project";
     public static String  WindowTitle = "";
-    public static boolean EnableLatex = true;
+	public static MathProcessor MathProcessor = null;
+//    public static boolean EnableLatex = true;
 	public static boolean EnableIcons = false;
     // color in the form "rgb <r> <g> <b>", or null for transparent
     public static String  ImageBgColor= "rgb 1.0 1.0 1.0";   
@@ -43,12 +44,10 @@ public class Config {
     public static ArrayList LatexPackages = new ArrayList();
 
     public static boolean setSimpleOption(String name) {
-		if (name.equals("nolatex")) setOption("enablelatex", "0");
 		if (name.equals("icons"))   setOption("enableicons", "1");
-	else
-	    return false;
-
-	return true;
+		else
+	    	return false;
+		return true;
     }
  
     public static String htmlColorToLatex(String color) {
@@ -71,6 +70,13 @@ public class Config {
         }
     }
 
+	public static MathProcessor toMathProcessor(String value) throws Exception {
+		if (value.equals("latex"))  return new MathProcessorLatex();
+		if (value.equals("mathml")) return new MathProcessorMathML();
+		if (value.equals("plain"))  return new MathProcessor();
+        throw new Exception("Formula specification " + value + " invalid. Ignored.");
+	}
+
     public static boolean setOption(String name, String value) {
 	try {
 	    if (name.equals("latex"))             Latex = FileManager.nativeFileName(value);
@@ -91,8 +97,8 @@ public class Config {
 		for (int i = 0; i < packages.length; i++)
 		    LatexPackages.add(packages[i]);
 	    }
-	    else if (name.equals("enablelatex"))  EnableLatex = toBoolean(value);
-			else if (name.equals("enableicons")) EnableIcons = toBoolean(value);
+	    else if (name.equals("formulas"))     MathProcessor = toMathProcessor(value);
+		else if (name.equals("enableicons"))  EnableIcons = toBoolean(value);
 	    else if (name.equals("projectname"))  ProjectName = value;
 	    else if (name.equals("windowtitle"))  WindowTitle = value;
 	    else return false;
@@ -108,7 +114,7 @@ public class Config {
 	System.out.println("    -imagebgcolor <color>  Provides the path to the LaTeX executable");
 	System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
 	System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
-		System.out.println("    -icons                 Enables icons");
+	System.out.println("    -icons                 Enables icons");
 	System.out.println("    -nolatex               Disables LaTeX support. Formulas will be");
 	System.out.println("                           inserted literally");
 	System.out.println("    -outputdir <dir>       Specifies the output directory");
@@ -118,19 +124,21 @@ public class Config {
 	System.out.println("    -windowtitle \"title\"   Specifies a browser title");
     }
 
-    public static void validate() {
-	// check whether LaTeX executable exists
-	if ( EnableLatex && !(new File(Latex)).exists() ) {
-	    oxdoc.warning("LaTeX executable not found. LaTeX support disabled");
-	    EnableLatex = false;
-	    if (TempDir == null) TempDir = ".";
+	public static void validate() {
+		if (MathProcessor == null) {
+			// auto select Latex if possible, or else plain
+			if (MathProcessorLatex.Supported())
+				MathProcessor = new MathProcessorLatex();
+			else
+				MathProcessor = new MathProcessor();
+		}
+
+		// if the selected math processor is not supported, choose plain
+		if (!MathProcessor.Supported())
+			MathProcessor = new MathProcessor();
+
+		MathProcessor.Start();
 	}
-	// check whether dvipng executable exists
-	if ( EnableLatex && !(new File(Dvipng)).exists() ) {
-	    oxdoc.warning("Dvipng executable not found. LaTeX support disabled");
-	    EnableLatex = false;
-	}
-    }
 
     private static boolean toBoolean(String value) {
 	return (value.equals("1") || value.equals("yes"));

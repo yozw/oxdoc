@@ -186,7 +186,7 @@ public class Documentor {
 				output.writeln("\n<!-- Method " + method.displayName() + " --!>");
 
 				Object[] args = {anchorName, method.displayName(), method.largeIcon()};
-				output.writeln(MessageFormat.format("<a name=\"{0}\"><h3>{2}{1}</h3></a>", args));
+				output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3>{2}{1}</h3>", args));
 
 	    output.writeln("<span class=\"declaration\">" + method.declaration() + "</span>");
 
