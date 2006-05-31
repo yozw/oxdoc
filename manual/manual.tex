@@ -1,0 +1,339 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+
+\newcommand\oxdoc{{\tt oxdoc}}
+\newcommand\oxdocxml{{\tt oxdoc.xml}}
+\newcommand\dvipng{{\tt dvipng}}
+\newcommand\bs{{\tt\char`\\}}
+\begin{document}
+
+
+\title{User's Manual for \oxdoc}
+\author{Y. Zwols [{\tt yori@1stsign.net}]}
+\maketitle
+
+\section{Introduction}
+
+\oxdoc~is a tool for generating API documentation in 
+HTML format from comments in ox source code. It is inspired by
+Sun Microsystems' Javadoc.
+
+
+
+
+
+
+
+\section{Installation}
+Installation is rather easy. Unzip the package {\tt oxdoc.zip} into a
+suitable folder, e.g. {\tt c:\bs program files\bs oxdoc}. Next, edit the file
+{\tt oxdoc.bat} and alter the path variable in this file. For example,
+you may want change the path definition into:
+
+\begin{quote}
+\tt set oxdoc=c:\bs program files\bs oxdoc
+\end{quote}
+
+Also, it may be helpful to copy the {\tt oxdoc.bat} file into a
+folder in your path, e.g. {\tt c:\bs windows}. This way, it is possible to
+run \oxdoc~from any folder in the command prompt.
+
+Finally, you may want to edit \oxdocxml~in the {\tt bin}
+directory. This file contains general settings for \oxdoc.
+See the Configuration section for more information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Using \oxdoc}
+
+\subsection{Running \oxdoc}
+Using \oxdoc~is rather easy. Generating documentation for an ox project
+requires running \oxdoc~and specifying the names of the files you
+want to generate documentation from. For example, suppose you have a number
+of ox files in a folder. From there, run 
+\begin{quote}
+\tt oxdoc *.ox
+\end{quote}
+
+from the command prompt in that folder. \oxdoc~generates a bunch
+of HTML files, of which {\tt default.html} is the project home file. It also
+creates a new style sheet file {\tt oxdoc.css}.
+
+It is advisable to specify an output directory for your project. This can
+be done by creating a new \oxdocxml~file in your project directory. See 
+Configuration for more information on that.
+
+\subsection{Writing documentation}
+Now you know how to run \oxdoc, it's time to write some comments
+in your code. Documentation comments consist of the normal ox comments,
+but instead of using {\tt /*} and {\tt */}, we use
+{\tt /**} and {\tt **/}. Documentation comments must be placed 
+directly above class definitions and function definitions. For example:
+
+\begin{quote}
+\begin{verbatim}
+/** This file provides the class `Lumberjack`, an abstract representation
+of a lumber jack **/
+
+/** The Lumberjack class represents a lumber jack.  A lumber jack can sleep
+by using the `Lumberjack::sleep` method.
+
+@example <pre>
+decl L = new Lumberjack();
+L.sleep(5);
+</pre>
+
+@author Y. Zwols **/
+class Lumberjack {
+   decl wearsWomensClothes;
+   isOk();
+   sleep(const hours);
+};
+
+/** Checks whether this lumber jack is okay
+   @returns <tt>TRUE</tt> if this lumber jack is okay, <TT>FALSE</TT> if not.
+   @comments In the current implementation, lumber jacks are okay if and only
+   if they wear women's clothing.
+   @see Lumberjack **/
+Lumberjack::isOk() {
+   if (this.wearsWomensClothes) 
+      return TRUE;
+   else
+      return FALSE;
+}
+
+/** Make the lumber jack sleep for a specified number of hours. A message
+is printed to show that he has slept.
+   @param hours Number of hours to sleep. Has to be integer.
+   @comments The lumber jack cannot sleep more than 24 hours a day. **/
+Lumberjack::sleep(const hours) {
+   println("The lumber jack is asleep");
+   println("(", hours, " hours later...)");
+   println("The lumber jack wakes up");
+}
+\end{verbatim}
+\end{quote}
+
+This example shows most of the features. Every documentation block is written
+between {\tt /**} and {\tt **/} signs; HTML tags can be used, e.g. to add
+markup, or include images. Also, documentation blocks are divided into small
+sections by {\tt @} commands. For example, parameters can be described in the {\tt @param}
+section, and extra comments are given in the {\tt @comments} section. 
+
+Also, the first sentence of the comment block is taken as a summary of the
+documentation block.  This first sentence appears in e.g. the project home
+page and the methods table.  \oxdoc~recognizes the first sentence by
+scanning for a period followed by a white space.  This may have some undesired
+effects when a period in the first sentence doesn't indicate the end of a
+sentence, e.g. in the sentence 
+\begin{quote}
+\tt This class implements Dr. John's algorithm. It solves linear equations.
+\end{quote}
+Here, the part {\tt This class implements Dr.} will be taken as a summary.
+This can be avoided by placing {\tt \&nbsp;} (a non-breaking space)
+just after {\tt Dr.}:
+\begin{quote}
+\tt This class implements Dr.\&nbsp;John's algorithm. It solves linear equations.
+\end{quote}
+
+Moreover, it is possible to include any HTML tag. This may be useful for
+inclusing of images, or adding more intricate mark up.
+
+
+\subsection{Types of documentation blocks}
+There are different types of documentation blocks.  Depending on the position of the blocks, they are
+treated differently.
+
+\begin{itemize}
+\item File documentation.  The comment block starting at the first line of a file is reserved as
+documentation corresponding to the file. \\
+Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @author}, 
+{\tt @version}.
+
+\item Class documentation.  The comment block right before a class definition is treated as
+class documentation. \\
+Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @author}, 
+{\tt @version}.
+
+\item Method/function documentation.  The comment block right before the body of a function or class method
+is treated as documentation for that function or method.
+Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @param}, {\tt @returns}.
+\end{itemize}
+
+
+Although most sections are straightforward text blocks, there are two sections with special features:
+\begin{itemize}
+\item {\tt @param} describes a parameter or argument of a function. The 
+first word after the {\tt @param} keyword is treated as the name of the 
+parameter. More than one parameter can be described by adding more {\tt @param} sections.
+\item {\tt @see} gives a cross reference. References have to 
+match the exact name of other entities. Also, references have to be
+separated by commas.
+\end{itemize}
+
+
+\section{Using \LaTeX~formulas in your documentation}
+If you have a version of \LaTeX~installed on your computer, it's
+extremely easy to add \LaTeX~formulas to your documentation\footnote{If you don't
+have \LaTeX, you can download a version for Windows from 
+{\tt http://www.miktex.org/}}.
+\oxdoc~uses a program called \dvipng~to generate PNG (Portable Network
+Graphics) files from \LaTeX~code.  The full installation of MiKTeX comes with a version
+of this programs, but other distributions may not have it readily available.  If you
+use a non-full installation of MiKTeX, make sure to select \dvipng~during the
+installation.
+
+Be sure to read the configuration chapter
+to set up \oxdoc~so it can find the programs required for 
+this ({\tt latex} and \dvipng).
+
+Once you've set up the connection with \LaTeX, adding formules is done
+by putting them between single or double dollar (\$) signs. For example:
+\begin{quote}
+\begin{verbatim}
+<pre>
+/** Calculate the OLS estimates for the model $y = X\beta$.
+ @returns The OLS estimate $\hat\beta = (X'X)^{-1}X'y$.
+ **/
+regression(X, y) {
+   return invert(X'X)*X'y;
+}
+</pre>
+\end{verbatim}
+\end{quote}
+
+Single dollar signs can be used for inline formulae, whereas double dollar signs
+can be used for equations on separate lines, analogously to \LaTeX.
+
+\textbf{Note:} \dvipng~generates partially transparent graphics files.  These files are
+currently not supported by Internet Explorer 6.0. Supposedly, this will be fixed in version 7.0.
+For the time being, I recommended using Mozilla Firefox
+to view documentation files that include formulae at this point. At some later point, I will add a
+switch to turn of transparent PNG files.
+
+\subsection{Cross-referencing}
+Making cross references within comments is done by placing a symbol between ` signs.  It is important to
+specify the whole name of the item to be referenced.  Global functions and classes are identified by
+their full names (this is case sensitive!) without arguments, and class methods are identified by the
+form {\tt classname::method}. For example, if there is a method {\tt isOk()} in the class {\tt Lumberjack},
+this method is referenced to by {\tt `Lumberjack::isOk`}.  The same holds for the {\tt @see} sections.
+Note that in {\tt @see} sections, no ` signs are to be used.
+
+
+\subsection{Customizing lay-out}
+The lay-out of \oxdoc's output can be controlled by editing the
+{\tt oxdoc.css} file in your output directory. Oxdoc creates a default
+lay-out file if it is not present, but it won't overwrite changes you make
+to that file. 
+
+
+
+
+
+
+
+
+\section{Configuration}
+
+\subsection{Location of configuration files}
+\oxdoc~is configured by means of the file \oxdocxml.
+\oxdoc~looks for this file at two locations:
+\begin{enumerate}
+\item the directory in which {\tt oxdoc.jar}
+is located (e.g. {\tt c:\bs program files\bs oxdoc\bs bin});
+\item the current working directory.
+\end{enumerate}
+
+Whenever available, settings are loaded from these files in that order.
+Parameters set in the current working directory configuration file override
+the general settings in the \oxdoc~folder.
+
+It is a good idea to put computer-specific settings in the {\tt bin}
+directory and project-specific settings in project directories. 
+
+\subsection{Lay-out of \oxdocxml}
+A configuration file looks something like this:
+
+\begin{quote}
+\begin{verbatim}
+<oxdoc>
+	<option name="latex"     value="c:\texmf\miktex\bin\latex.exe" />
+	<option name="dvipng"    value="c:\texmf\miktex\bin\dvipng.exe" />
+	<option name="tempdir"   value="c:\temp\" />
+</oxdoc>
+\end{verbatim}
+\end{quote}
+
+This file specifies values for three options. More option values can be added to
+this file as required. See Overview of available settings.
+
+\subsection{Command line configuration}
+It is also possible to specify settings through command line arguments
+by adding {\tt -parameter=value} to the command line. 
+For example,
+\begin{quote}
+\begin{verbatim}
+oxdoc -latex=c:\bin\latex.exe *.ox
+\end{verbatim}
+\end{quote}
+specifies a value for the {\tt latex} setting. The names of the
+command line parameters correspond exactly to the settings in 
+\oxdocxml.
+
+\subsection{\LaTeX~settings}
+\oxdoc~uses \LaTeX~in combination with \dvipng to generate PNG
+(Portable Network Graphics) files from formulae within comments. In order to get this
+working, you'll need a working distribution of \LaTeX~(e.g. MiKTeX
+if you're using Windows) and \dvipng (which comes with MiKTeX). It is then important
+to set the paths to the {\tt latex} and \dvipng executables. It is recommended to do this is the \oxdocxml~
+file in the {\tt bin} directory of your \oxdoc~installation.
+
+At startup, \oxdoc~checks whether it can find the executables required for \LaTeX~support. If
+it can't find one or more of these executables, it automatically turns off \LaTeX~support. In that case,
+formulae are literally written in the output. Turning off \LaTeX~support can also be done manually by
+setting the {\tt enablelatex} setting to {\tt no}.
+
+It is also possible to specify extra \LaTeX~packages to be included within formulae. This can be done
+by specifying the desired packages, separated by commas, in the option {\tt latexpackages}.
+
+
+
+\subsection{Overview of available settings}
+The following parameters can be set in a configuration file:\medskip
+
+\noindent \begin{tabular}{lp{5in}}
+\tt outputdir  & Specifies the directory in which \oxdoc~
+writes its output. Defaults to the current working directory. \medskip\\
+\tt tempdir & Specifies the directory that \oxdoc~can use for temporary files. Defaults to the current working directory.\\
+\tt projectname & Specifies the name of the project. This
+name will appear in the project home page.\medskip\\
+\tt windowtitle & Specifies the title that will appear
+in the window caption in your web browser.\medskip\\
+\tt imagepath & Specifies the directory in which \oxdoc~
+writes its images. Defaults to the specified output directory. \medskip\\
+\tt dvipng & Specifies the full path of the executable 
+\dvipng. For MiKTeX users, this can be found under the 
+{\tt miktex\bs bin} subdirectory of the MiKTeX installation path. \medskip\\
+\tt latex & Specifies the full path of the \LaTeX~compiler. 
+For MiKTeX users, this can be found under the 
+{\tt miktex\bs bin} subdirectory of the MiKTeX installation path. \medskip\\
+\tt enablelatex & Turns on or off \LaTeX~support. Possible values:
+{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found. \medskip\\
+\tt latexpackages & Specifies what \LaTeX~packages should be loaded
+for inline \LaTeX~formulas. These packages are loaded in \LaTeX~files 
+through the usual {\tt /usepackage{...}} command. Multiple 
+packages can be specified by separating them by commas.
+\end{tabular}
+
+\end{document}
