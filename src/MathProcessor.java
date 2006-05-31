@@ -1,3 +1,5 @@
+import java.io.File;
+
 /**
 
 oxdoc (c) Copyright 2005 by Y. Zwols
@@ -17,26 +19,30 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.util.*;
-import java.io.File;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
+
 public class MathProcessor {
-	
-	public String ProcessFormula(String formula, boolean isInline) {
-		return formula;
-	}
+   public OxDoc oxdoc = null;
 
-	public static boolean Supported() {
-		return true;
-	}
+   public MathProcessor(OxDoc oxdoc) {
+      this.oxdoc = oxdoc;
+   }
 
-	public String ExtraHeader() {
-		return "";
-	}
+   public String ProcessFormula(String formula, boolean isInline) {
+      return formula;
+   }
 
-	public void Start() {
-	}
+   public static boolean Supported(OxDoc oxdoc) {
+      return true;
+   }
+
+   public String ExtraHeader() {
+      return "";
+   }
+
+   public void Start() {
+   }
 }

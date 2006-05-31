@@ -1,3 +1,5 @@
+import java.io.File;
+
 /**
 
 oxdoc (c) Copyright 2005 by Y. Zwols
@@ -17,27 +19,33 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.util.*;
-import java.io.File;
+
 
 public class MathProcessorLatex extends MathProcessor {
+   public MathProcessorLatex(OxDoc oxdoc) {
+      super(oxdoc);
+   }
 
-	public String ProcessFormula(String formula, boolean isInline) {
-		String extFormula = (isInline?"\\textstyle{}":"\\displaystyle{}") + formula;
-		String filename = LatexImageManager.getFormulaFilename(extFormula);  
-		return "<img align=\"center\" src=\"" + FileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
-	}
+   public String ProcessFormula(String formula, boolean isInline) {
+      String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
+      String filename = oxdoc.latexImageManager.getFormulaFilename(extFormula);
 
-	public static boolean Supported() {
-		if ( !(new File(Config.Latex)).exists() ) {
-	    	oxdoc.warning("LaTeX executable not found. LaTeX support disabled (looking for " + Config.Latex + ")");
-			return false;
-		}
-		if ( !(new File(Config.Dvipng)).exists() ) {
-	    	oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + Config.Latex + ")");
-			return false;
-		}
-		return true;
-	}
+      return "<img align=\"center\" src=\"" + oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
+   }
+
+   public static boolean Supported(OxDoc oxdoc) {
+      if (!(new File(oxdoc.config.Latex)).exists()) {
+         oxdoc.warning("LaTeX executable not found. LaTeX support disabled (looking for " + oxdoc.config.Latex + ")");
+
+         return false;
+      }
+      if (!(new File(oxdoc.config.Dvipng)).exists()) {
+         oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + oxdoc.config.Latex + ")");
+
+         return false;
+      }
+
+      return true;
+   }
 }

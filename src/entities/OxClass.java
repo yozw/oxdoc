@@ -17,58 +17,59 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.util.*;
 
+
 public class OxClass extends OxEntity {
-    public String Declaration;
-    private OxEntityList _methods = new OxEntityList();
-    private OxFile _parentFile = null;
-    private String _superClassName = null;
-		
-    OxClass(String name, OxFile parentFile) {
-	super(name, new ClassComment());
-	_parentFile = parentFile;
-    }
+   public String Declaration;
+   private OxEntityList _methods = new OxEntityList();
+   private OxFile _parentFile = null;
+   private String _superClassName = null;
 
-    OxClass(String name, String superClassName, OxFile parentFile) {
-	super(name, new ClassComment());
-	_parentFile = parentFile;
-			setIconType(FileManager.CLASS);
-	_superClassName = superClassName;
-    }
+   OxClass(String name, OxFile parentFile) {
+      super(name, new ClassComment(parentFile.project()), parentFile);
+      _parentFile = parentFile;
+   }
 
-    public OxMethod addMethod(String name) {
-	return (OxMethod) _methods.add(new OxMethod(name, this));
-    }
+   OxClass(String name, String superClassName, OxFile parentFile) {
+      super(name, new ClassComment(parentFile.project()), parentFile);
+      _parentFile = parentFile;
+      setIconType(FileManager.CLASS);
+      _superClassName = superClassName;
+   }
 
-    public ArrayList methods() {
-	return _methods.sortedList();
-    }
+   public OxMethod addMethod(String name) {
+      return (OxMethod) _methods.add(new OxMethod(name, this));
+   }
 
-    public OxMethod methodByName(String s) {
-	return (OxMethod) _methods.get(name() + "::" + s);
-    }
+   public ArrayList methods() {
+      return _methods.sortedList();
+   }
 
-    public OxFile parentFile() {
-	return _parentFile;
-    }
+   public OxMethod methodByName(String s) {
+      return (OxMethod) _methods.get(name() + "::" + s);
+   }
 
-    public String superClassName() {
-	return _superClassName;
-    }
+   public OxFile parentFile() {
+      return _parentFile;
+   }
 
-    public OxClass superClass() {
-	if (_superClassName == null)
-	    return null;
-	return (OxClass) parentFile().project().getSymbol(_superClassName);
-    }
+   public String superClassName() {
+      return _superClassName;
+   }
 
-    public String url() {
-	return parentFile().url();
-    }
+   public OxClass superClass() {
+      if (_superClassName == null)
+         return null;
 
-    public String toString() {
-	return "<OxClass " + name() + ">";
-    }
+      return (OxClass) parentFile().project().getSymbol(_superClassName);
+   }
+
+   public String url() {
+      return parentFile().url();
+   }
+
+   public String toString() {
+      return "<OxClass " + name() + ">";
+   }
 }

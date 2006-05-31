@@ -9,6 +9,7 @@
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
   <property name="bin"     location="bin"/>
+  <property name="lib"     location="lib"/>
   <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
   <property name="docs"    location="docs"/>
@@ -59,7 +60,7 @@
          <arg value="${version}" />
      </java>
      <delete file="${build}/Constants.class"/>
-     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" />
+     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar"/>
   </target>
 
 
@@ -114,5 +115,14 @@
   
   <target name="rebuild" depends="clean,dist" />
 
+  <target name="jalopy">
+     <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" />
+     <jalopy convention="oxdoc-conv.xml">
+        <fileset dir="./" >
+          <include name="src/**/*.java" />
+          <exclude name="src/parser/*.java" />
+        </fileset>
+     </jalopy>
+  </target>
 
 </project>

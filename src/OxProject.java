@@ -17,57 +17,63 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.util.*;
 
+
 public class OxProject {
-    private OxEntityList _files   = new OxEntityList();
-    private OxEntityList _symbols = new OxEntityList();
+   private OxEntityList _files = new OxEntityList();
+   private OxEntityList _symbols = new OxEntityList();
+   public OxDoc oxdoc = null;
+   public String name = "Untitled project";
 
-    public OxFile addFile(String name) {
-	return (OxFile) _files.add(new OxFile(name, this));
-    }
+   public OxProject(OxDoc oxdoc) {
+      this.oxdoc = oxdoc;
+   }
 
-    public ArrayList files() {
-	return _files.sortedList();
-    }
+   public OxFile addFile(String name) {
+      return (OxFile) _files.add(new OxFile(name, this));
+   }
 
-    public OxEntity addSymbol(OxEntity entity) {
-	return (OxEntity) _symbols.add(entity.name(), entity);
-    }
+   public ArrayList files() {
+      return _files.sortedList();
+   }
 
-    public ArrayList symbols() {
-	return _symbols.sortedList();
-    }
+   public OxEntity addSymbol(OxEntity entity) {
+      return (OxEntity) _symbols.add(entity.name(), entity);
+   }
 
-    public ArrayList symbolsByDisplayName() {
-	return _symbols.sortedListByDisplayName();
-    }
+   public ArrayList symbols() {
+      return _symbols.sortedList();
+   }
 
-    public OxEntity getSymbol(String name) {
-	return (OxEntity) _symbols.get(name);
-    }
+   public ArrayList symbolsByDisplayName() {
+      return _symbols.sortedListByDisplayName();
+   }
 
-    public String linkToSymbol(String name) {
-	OxEntity entity = getSymbol(name);
-	if (entity == null) {
-	    oxdoc.warning("Symbol '" + name + "' referenced to, but was not found");
-	    return name;
-	}
-	else
-	    return linkToEntity(entity);
-    }
+   public OxEntity getSymbol(String name) {
+      return (OxEntity) _symbols.get(name);
+   }
 
-    public String linkToEntity(OxEntity entity) {
-	return linkToEntity(entity, false);
-    }
-		
-    public String linkToEntity(OxEntity entity, boolean useDisplayName) {
-	if (useDisplayName)
-	    return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
-	else
-	    return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
-    }
-		
+   public String linkToSymbol(String name) {
+      OxEntity entity = getSymbol(name);
+      if (entity == null) {
+         oxdoc.warning("Symbol '" + name + "' referenced to, but was not found");
 
+         return name;
+      } else
+
+         return linkToEntity(entity);
+   }
+
+   public String linkToEntity(OxEntity entity) {
+      return linkToEntity(entity, false);
+   }
+
+   public String linkToEntity(OxEntity entity, boolean useDisplayName) {
+      if (useDisplayName)
+         return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
+      else
+
+         return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
+   }
 }

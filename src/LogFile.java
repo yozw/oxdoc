@@ -17,54 +17,37 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.io.*;
-import java.util.*;
 import java.text.*;
+import java.util.*;
+
 
 public class LogFile {
+   Writer output = null;
 
-    Writer output = null;
+   // create a blank file
+   public LogFile() throws IOException {
+      File aFile = new File("oxdoc.log");
+      output = new BufferedWriter(new FileWriter(aFile));
+      writeln("Log file created at " + GetDate());
+   }
 
-    // create a blank file
-    public LogFile() throws IOException {
-		File aFile = new File("oxdoc.log");
-		output = new BufferedWriter( new FileWriter(aFile) );
-    	writeln("Log file created at " + GetDate());
-    }
-	
-	private static String GetDate() {
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
-		return sdf.format(date);
-	}
+   private static String GetDate() {
+      Date date = new Date();
+      SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 
-	public void close() throws IOException {
-		output.close();
-    }
+      return sdf.format(date);
+   }
 
-    public void write(Object s) throws IOException {
-		output.write(s.toString());
-    }
+   public void close() throws IOException {
+      output.close();
+   }
 
-    public void writeln(Object s) throws IOException {
-		output.write(s.toString() + "\n");
-    }
+   public void write(Object s) throws IOException {
+      output.write(s.toString());
+   }
 
-	public void writeStream(InputStream inputStream) throws IOException {
-		writeStream(inputStream, false);
-	}
-	
-	public void writeStream(InputStream inputStream, boolean echo) throws IOException {
-		BufferedReader reader = new BufferedReader( new InputStreamReader(inputStream) );
-
-		while (true) {
-	    	String data = reader.readLine();
-	    	if (data == null)
-				break;
-			System.out.println("> " + data);
-	    	writeln("> " + data);
-		}
-		reader.close();
-	}
+   public void writeln(Object s) throws IOException {
+      output.write(s.toString() + "\n");
+   }
 }

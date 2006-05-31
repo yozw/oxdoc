@@ -17,17 +17,18 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class CommentList extends BaseCommentBlock {
-		
-    protected String renderHTML() {
-	String out = "<ul>";
+   public CommentList(OxProject project) {
+      super(project);
+   }
 
-	for (int i = 0; i < size(); i++)
-	    out += "<li>" + ((String)get(i)).trim() + "\n";
-	out += "</li>";
-				
-	return out;
-    }
+   protected String renderHTML() {
+      String out = "<ul>";
 
+      for (int i = 0; i < size(); i++)
+         out += "<li>" + ((String) get(i)).trim() + "\n";
+      out += "</li>";
+
+      return out;
+   }
 }

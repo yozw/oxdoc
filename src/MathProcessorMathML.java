@@ -1,3 +1,5 @@
+import java.io.*;
+
 /**
 
 oxdoc (c) Copyright 2005 by Y. Zwols
@@ -17,49 +19,51 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 import java.util.*;
-import java.io.*;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
+
 public class MathProcessorMathML extends MathProcessor {
+   public MathProcessorMathML(OxDoc oxdoc) {
+      super(oxdoc);
+   }
 
-	public String ProcessFormula(String formula, boolean isInline) {
-		return "\\$" + formula + "\\$";
-	}
-	public String ExtraHeader() {
-		return "<script type=\"text/javascript\" src=\"ASCIIMathML.js\"></script>" +
-		       "<script>mathcolor=\"Black\"</script>";
-	}
+   public String ProcessFormula(String formula, boolean isInline) {
+      return "\\$" + formula + "\\$";
+   }
 
-	public void Start() {
-		try {
-			if (OutputFile.exists("ASCIIMathML.js"))
-	    		return;
+   public String ExtraHeader() {
+      return "<script type=\"text/javascript\" src=\"ASCIIMathML.js\"></script>" + "<script>mathcolor=\"Black\"</script>";
+   }
 
-			InputStream resourceFile = oxdoc.class.getResourceAsStream("ASCIIMathML.js");
-			if (resourceFile == null) {
-	    		oxdoc.warning("ASCIIMathML.js resource was not found.");
-	    		return;
-			}
+   public void Start() {
+      try {
+         if (oxdoc.fileManager.outputFileExists("ASCIIMathML.js"))
+            return;
 
-			OutputFile output = new OutputFile("ASCIIMathML.js");
-			BufferedReader jsReader = new BufferedReader( new InputStreamReader(resourceFile) );
+         InputStream resourceFile = OxDoc.class.getResourceAsStream("ASCIIMathML.js");
+         if (resourceFile == null) {
+            oxdoc.warning("ASCIIMathML.js resource was not found.");
 
-			while (true) {
-	    		int data = jsReader.read();
-	    		if (data < 0)
-					break;
-	    		output.writeChar(data);
-			}
-			jsReader.close();
-			output.close();
+            return;
+         }
 
-			oxdoc.message("Copied ASCIIMathML.js");
-		}
-		catch (Exception E) {
-			oxdoc.message(E.getMessage());
-		}
-    }
+         OutputFile output = new OutputFile("ASCIIMathML.js", oxdoc);
+         BufferedReader jsReader = new BufferedReader(new InputStreamReader(resourceFile));
+
+         while (true) {
+            int data = jsReader.read();
+            if (data < 0)
+               break;
+            output.writeChar(data);
+         }
+         jsReader.close();
+         output.close();
+
+         oxdoc.message("Copied ASCIIMathML.js");
+      } catch (Exception E) {
+         oxdoc.message(E.getMessage());
+      }
+   }
 }

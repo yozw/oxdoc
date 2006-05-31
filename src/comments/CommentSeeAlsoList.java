@@ -17,24 +17,27 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class CommentSeeAlsoList extends BaseCommentBlock {
+   public CommentSeeAlsoList(OxProject project) {
+      super(project);
+   }
 
-    public boolean add(Object o) {
-	String[] references = o.toString().split(",");
-	for (int j = 0; j < references.length; j++)
-	    super.add(references[j].trim());
-	return true;
-    }
+   public boolean add(Object o) {
+      String[] references = o.toString().split(",");
+      for (int j = 0; j < references.length; j++)
+         super.add(references[j].trim());
 
-    protected String renderHTML() {
-	String out = "";
-	for (int j = 0; j < size(); j++) {
-	    if (j > 0)
-		out += ", ";
-	    out += oxdoc.project().linkToSymbol(get(j).toString());
-	}
-	return out;
-    }
-		
+      return true;
+   }
+
+   protected String renderHTML() {
+      String out = "";
+      for (int j = 0; j < size(); j++) {
+         if (j > 0)
+            out += ", ";
+         out += project.linkToSymbol(get(j).toString());
+      }
+
+      return out;
+   }
 }

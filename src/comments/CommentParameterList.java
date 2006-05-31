@@ -17,26 +17,29 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class CommentParameterList extends BaseCommentBlock {
+   public CommentParameterList(OxProject project) {
+      super(project);
+   }
 
-    protected String renderHTML() {
-	if (size() == 0) return "";
+   protected String renderHTML() {
+      if (size() == 0)
+         return "";
 
-	String out = "<!-- parameter table --!>\n";
-	out += "<table class=\"parameter_table\">\n";
+      String out = "<!-- parameter table --!>\n";
+      out += "<table class=\"parameter_table\">\n";
 
-	for (int i = 0; i < size(); i++) {
-	    String[] params = ((String) get(i)).split("[\t ]", 2);
+      for (int i = 0; i < size(); i++) {
+         String[] params = ((String) get(i)).split("[\t ]", 2);
 
-	    out += "<tr>\n";
-	    out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
-	    if (params.length > 1)
-		out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
-	    out += "</tr>\n";
-	}
-	out += "</table>\n";
-	return out;
-    }
-		
+         out += "<tr>\n";
+         out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
+         if (params.length > 1)
+            out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
+         out += "</tr>\n";
+      }
+      out += "</table>\n";
+
+      return out;
+   }
 }

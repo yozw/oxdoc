@@ -52,6 +52,7 @@ Section "Program files" SecProgram
 
   SetOverwrite on
   File ..\bin\oxdoc.jar
+  File ..\lib\jregex.jar
 
   SetOutPath "$INSTDIR\css"
   File ..\css\*
@@ -68,9 +69,15 @@ Section "Program files" SecProgram
   Exch $EXEDIR  # restore original dir var.                            Stack: $0(without backslash)
   Pop $R0       # and pop the directory without the backslash.         Stack: <clean> 
 
+  WriteRegStr HKCU "Software\oxdoc" "latex" $R0
+
   SetOutPath "$INSTDIR"
   FileOpen $9 oxdoc.bat w ;Opens a Empty File an fills it
-  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar$\" oxdoc %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdoc %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  FileClose $9 ;Closes the filled file 
+
+  FileOpen $9 oxdocgui.bat w ;Opens a Empty File an fills it
+  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
   FileClose $9 ;Closes the filled file 
 
   CopyFiles `oxdoc.bat` `$WINDIR`
@@ -82,6 +89,11 @@ Section "Program files" SecProgram
   FileWrite $9 "<option name=$\"dvipng$\" value=$\"$R0\dvipng.exe$\" />$\r$\n"
   FileWrite $9 "</oxdoc>$\r$\n"
   FileClose $9 ;Closes the filled file 
+
+  CreateDirectory "$SMPROGRAMS\oxdoc"
+  CreateShortCut "$SMPROGRAMS\oxdoc\oxdoc Gui.lnk" "javaw.exe" "-classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  CreateShortCut "$SMPROGRAMS\oxdoc\Manual.lnk" "$INSTDIR\manual\manual.pdf" 
+  CreateShortCut "$SMPROGRAMS\oxdoc\Uninstall oxdoc.lnk" "$INSTDIR\uninstall.exe" 
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -102,7 +114,7 @@ Section "Manual" SecManual
   SetOutPath "$INSTDIR\manual"
 
   SetOverwrite on
-  File ..\manual\*
+  File ..\manual\manual.pdf
 
 SectionEnd
 
@@ -137,6 +149,14 @@ LangString TEXT_IO_SUBTITLE ${LANG_ENGLISH} "Select the folder in which your Lat
 Function LatexDir
 
   !insertmacro MUI_HEADER_TEXT "$(TEXT_IO_TITLE)" "$(TEXT_IO_SUBTITLE)"
+
+  Push $0
+  ReadRegStr $0 HKCU "Software\oxdoc" "latex"
+  StrCmp $0 "" done
+  !insertmacro MUI_INSTALLOPTIONS_WRITE	"latexdir.ini" "Field 2" "State" $0
+
+done:
+  Pop $0
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "latexdir.ini"
 
 FunctionEnd
@@ -171,6 +191,7 @@ FunctionEnd
 Section "Uninstall"
 
   Delete "$INSTDIR\oxdoc.bat"
+  Delete "$INSTDIR\oxdocgui.bat"
   Delete "$INSTDIR\bin\*"
   Delete "$INSTDIR\css\*"
   Delete "$INSTDIR\example\*"
@@ -178,12 +199,18 @@ Section "Uninstall"
 
   Delete "$INSTDIR\Uninstall.exe"
 
+
   RMDir "$INSTDIR\bin"
   RMDir "$INSTDIR\css"
   RMDir "$INSTDIR\example"
   RMDir "$INSTDIR\manual"
   RMDir "$INSTDIR"
 
-  DeleteRegKey /ifempty HKCU "Software\oxdoc"
+
+  Delete "$SMPROGRAMS\oxdoc\*"
+  RMDir "$SMPROGRAMS\oxdoc"
+
+
+  DeleteRegKey HKCU "Software\oxdoc"
 
 SectionEnd

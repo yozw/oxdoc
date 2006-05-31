@@ -17,16 +17,17 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class CommentTextBlock extends BaseCommentBlock {
-		
-    protected String renderHTML() {
-	String out = "";
+   public CommentTextBlock(OxProject project) {
+      super(project);
+   }
 
-	for (int i = 0; i < size(); i++)
-	    out += ((String)get(i)).trim() + "\n";
-				
-	return out;
-    }
+   protected String renderHTML() {
+      String out = "";
 
+      for (int i = 0; i < size(); i++)
+         out += ((String) get(i)).trim() + "\n";
+
+      return out;
+   }
 }

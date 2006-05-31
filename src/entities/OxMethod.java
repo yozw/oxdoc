@@ -17,47 +17,47 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class OxMethod extends OxFunction {
-    public String Declaration;
-    private OxClass _class = null;
+   public String Declaration;
+   private OxClass _class = null;
 
-    OxMethod(String name, OxClass oxclass) {
-	super(name, oxclass.parentFile());
-			setIconType(FileManager.METHOD);
-	_class = oxclass;
-    }
+   OxMethod(String name, OxClass oxclass) {
+      super(name, oxclass.parentFile());
+      setIconType(FileManager.METHOD);
+      _class = oxclass;
+   }
 
-    public OxClass parentClass() {
-	return _class;
-    }
+   public OxClass parentClass() {
+      return _class;
+   }
 
-    public String url() {
-	return parentFileUrl() + "#" + _class.name() + "___" + displayName();
-    }
+   public String url() {
+      return parentFileUrl() + "#" + _class.name() + "___" + displayName();
+   }
 
-    public String displayName() {
-	String[] pts = name().split("::");
-	return pts[1];
-    }
+   public String displayName() {
+      String[] pts = name().split("::");
 
-    public BaseComment comment() {
-	BaseComment _comment = super.comment();
+      return pts[1];
+   }
 
-	if (_comment.isEmpty() && superMethod() != null) 
-	    return superMethod().comment();
+   public BaseComment comment() {
+      BaseComment _comment = super.comment();
 
-	return _comment;
-    }
+      if (_comment.isEmpty() && superMethod() != null)
+         return superMethod().comment();
 
-    public OxMethod superMethod() {
-	if (parentClass() == null || parentClass().superClass() == null)
-	    return null;
-	return (OxMethod) parentClass().superClass().methodByName(this.displayName());
-    }
+      return _comment;
+   }
 
-    public String toString() {
-	return "<OxMethod " + name() + ">";
-    }
+   public OxMethod superMethod() {
+      if (parentClass() == null || parentClass().superClass() == null)
+         return null;
 
+      return (OxMethod) parentClass().superClass().methodByName(this.displayName());
+   }
+
+   public String toString() {
+      return "<OxMethod " + name() + ">";
+   }
 }

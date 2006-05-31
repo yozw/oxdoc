@@ -27,10 +27,12 @@ import java.io.*;
 
 	private OxFile file = null;
 	private OxProject project = null;
+	private OxDoc oxdoc = null;
 
-  	public Parser(java.io.InputStream stream, OxFile file, OxProject project) {
+  	public Parser(java.io.InputStream stream, OxDoc oxdoc, OxFile file, OxProject project) {
      		this(stream, null);
 		this.file = file; 
+		this.oxdoc = oxdoc;
 		this.project = project;
   	}
 

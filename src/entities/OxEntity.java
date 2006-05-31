@@ -17,77 +17,85 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-
 public class OxEntity {
-    private String name;
-    protected OxFile _parentFile = null;
-    private BaseComment _comment = null;
-		private int _iconType = FileManager.NONE;
+   private String name;
+   protected OxFile _parentFile = null;
+   private BaseComment _comment = null;
+   private int _iconType = FileManager.NONE;
+   private OxProject _project;
 
-    public OxEntity(String name, BaseComment comment) {
-	this.name = name;
-	_comment = comment;
-    }
+   public OxEntity(String name, BaseComment comment, OxProject project) {
+      this.name = name;
+      _project = project;
+      _comment = comment;
+   }
 
-    public OxEntity(String name, BaseComment comment, OxFile parentFile) {
-	this.name = name;
-	_comment = comment;
-	_parentFile = parentFile;
-    }
+   public OxEntity(String name, BaseComment comment, OxFile parentFile) {
+      this.name = name;
+      _project = parentFile.project();
+      _comment = comment;
+      _parentFile = parentFile;
+   }
 
-    public String name() {
-	return this.name;
-    }
+   public OxProject project() {
+      return _project;
+   }
 
-		public int iconType() {
-			return _iconType;
-		}
+   public String name() {
+      return this.name;
+   }
 
-		public String smallIcon() {
-			return FileManager.smallIcon(_iconType);
-		}
+   public int iconType() {
+      return _iconType;
+   }
 
-		public String largeIcon() {
-			return FileManager.largeIcon(_iconType);
-		}
+   public String smallIcon() {
+      return project().oxdoc.fileManager.smallIcon(_iconType);
+   }
 
-		protected void setIconType(int iconType) {
-			_iconType = iconType;
-		}
+   public String largeIcon() {
+      return project().oxdoc.fileManager.largeIcon(_iconType);
+   }
 
-    public String description() {
-	return TextProcessor.process(comment().description());
-    }
+   protected void setIconType(int iconType) {
+      _iconType = iconType;
+   }
 
-    protected String parentFileUrl() {
-	return (_parentFile == null)?"":_parentFile.url();
-    }
+   public String description() {
+      return project().oxdoc.textProcessor.process(comment().description());
+   }
 
-    public BaseComment setComment(String comment) throws ParseException {
-	_comment.setText(comment);
-	return _comment;
-    }
+   protected String parentFileUrl() {
+      return (_parentFile == null) ? "" : _parentFile.url();
+   }
 
-    public BaseComment comment() {
-	return _comment;
-    }
-		
-    public String url() {
-	return ""; 
-    }
+   public BaseComment setComment(String comment) throws ParseException {
+      _comment.setText(comment);
 
-    public String displayName() {
-	return name;
-    }
+      return _comment;
+   }
 
-    public String link() {
-	if (url().length() == 0)
-	    return displayName();
-	else
-	    return "<a href=\"" + url() + "\">" + displayName() + "</a>";
-    }
+   public BaseComment comment() {
+      return _comment;
+   }
 
-    public String toString() {
-	return "<OxEntity " + name() + ">";
-    }
+   public String url() {
+      return "";
+   }
+
+   public String displayName() {
+      return name;
+   }
+
+   public String link() {
+      if (url().length() == 0)
+         return displayName();
+      else
+
+         return "<a href=\"" + url() + "\">" + displayName() + "</a>";
+   }
+
+   public String toString() {
+      return "<OxEntity " + name() + ">";
+   }
 }
