@@ -6,11 +6,17 @@ import javax.swing.*;
 
 
 public class OxDocGui {
+
+   private static final boolean fancyLook = false;
+
    public static void main(String[] args) {
       javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                try {
-                  UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                  if (fancyLook)
+				         JFrame.setDefaultLookAndFeelDecorated(true);
+                  else
+                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                } catch (Exception e) {
                }
 

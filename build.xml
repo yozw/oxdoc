@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.95alpha"/>
+  <property name="version" value="0.97alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>

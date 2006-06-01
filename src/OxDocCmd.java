@@ -44,7 +44,7 @@ public class OxDocCmd implements Logger {
             continue;
 
          try {
-            oxdoc.addFile(filename);
+            oxdoc.addFiles(filename);
             totalFiles++;
          } catch (ParseException e) {
             oxdoc.message("Parsing of file " + filename + " failed");

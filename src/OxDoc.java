@@ -52,16 +52,12 @@ public class OxDoc {
    }
 
    public void addFiles(String filespec) throws Exception {
-      PathPattern pp = new PathPattern(filespec);
+      PathPattern pp = new PathPattern(new File(filespec).getAbsolutePath());
       Enumeration e = pp.enumerateFiles();
       while (e.hasMoreElements()) {
          File f = (File) e.nextElement();
          addFile(f);
       }
-   }
-
-   public void addFile(String filename) throws Exception {
-      addFile(new File(filename));
    }
 
    public void addFile(File file) throws Exception {
