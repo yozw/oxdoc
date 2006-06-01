@@ -73,11 +73,11 @@ Section "Program files" SecProgram
 
   SetOutPath "$INSTDIR"
   FileOpen $9 oxdoc.bat w ;Opens a Empty File an fills it
-  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdoc %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" OxDocCmd %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
   FileClose $9 ;Closes the filled file 
 
   FileOpen $9 oxdocgui.bat w ;Opens a Empty File an fills it
-  FileWrite $9 "@java -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  FileWrite $9 "@start /b javaw -classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" OxDocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
   FileClose $9 ;Closes the filled file 
 
   CopyFiles `oxdoc.bat` `$WINDIR`
