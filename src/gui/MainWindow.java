@@ -9,7 +9,7 @@ public class MainWindow implements ActionListener {
    private final String actionRun = "run";
    private final String actionExit = "exit";
    private final String actionSaveBatch = "batch";
-   private JFrame frame;
+   private static JFrame frame;
    private JTextField editWorkDirectory;
    private JTextField editFilenames;
    private JTextField editOutputDir;
@@ -21,6 +21,7 @@ public class MainWindow implements ActionListener {
    public MainWindow() {
       //Create and set up the window.
       frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION);
+      frame.setResizable(false);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
       JPanel mainPanel = new JPanel();  
@@ -142,7 +143,7 @@ public class MainWindow implements ActionListener {
       return spec.substring(idx + 1, spec.length());
    }
 
-   public void showException(Exception E) {
+   public static void showException(Exception E) {
       JOptionPane.showMessageDialog(frame, E.getMessage());
    }
 
@@ -198,7 +199,6 @@ public class MainWindow implements ActionListener {
             public void run() {
                try {
                   System.setProperty("user.dir", workingDir());
-                  cmd.writeMessage("Directory changed to " + workingDir(), 0);
 
                   OxDoc oxdoc = new OxDoc(cmd);
 
@@ -213,6 +213,7 @@ public class MainWindow implements ActionListener {
                } catch (Exception E) {
                   cmd.writeMessage("\nExecution failed: \n" + E.getMessage(), 0);
                }
+		         cmd.enableButtons(true);
             }
          };
 
