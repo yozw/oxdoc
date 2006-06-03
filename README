@@ -29,9 +29,11 @@ Linux
 * Alternatively, you can place oxdoc and oxdoc.jar in a directory in your path,
   e.g. ~/bin  or  /usr/local/bin
 
-Installation instructions (source code)
+
+
+Compilation instructions (source code)
 ---------------------------------------
 
 * Install JavaCC
-* Copy build.properties.template to build.properties edit it
+* Copy build.properties.template to build.properties and edit it
 * Run 'ant jar'

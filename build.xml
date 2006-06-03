@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.97alpha"/>
+  <property name="version" value="0.975alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
@@ -60,7 +60,7 @@
          <arg value="${version}" />
      </java>
      <delete file="${build}/Constants.class"/>
-     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar"/>
+     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar" />
   </target>
 
 
@@ -84,32 +84,41 @@
     <copy file="LICENSE"                    todir="${target}" />
     <copy todir="${target}/css">     <fileset dir="css" />     </copy>
     <copy todir="${target}/example"> <fileset dir="example" /> </copy>
-    <copy todir="${target}/manual">  <fileset dir="manual" />  </copy>  
   </target>
 
   <target name="pkg-bin" depends="jar">
     <antcall target="prepare-pkg"><param name="target" value="${pkg-bin}"/></antcall>
+    <copy file="manual/manual.pdf"            todir="${pkg-bin}/manual" />
     <copy file="${srcmisc}/oxdoc.xml.linux"   todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc.xml.windows" todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc"             todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdocgui"          todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc.bat"         todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/oxdocgui.bat"      todir="${pkg-bin}/bin" />
     <copy file="${bin}/oxdoc.jar"             todir="${pkg-bin}/bin" />
+    <copy file="${lib}/jregex.jar"            todir="${pkg-bin}/bin" />
 
     <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
-    <tar destfile="${pkg-bin}.tgz" basedir="${pkg-bin}" compression="gzip" />
+    <tar destfile="${pkg-bin}.tar.gz" basedir="${pkg-bin}" compression="gzip" />
   </target>
 
 
   <target name="pkg-src" depends="">
     <antcall target="prepare-pkg"><param name="target" value="${pkg-src}"/></antcall>
     <copy file="build.xml"                  todir="${pkg-src}" />
+    <copy file="oxdoc-conv.xml"             todir="${pkg-src}" />
     <copy file="build.properties.template"  todir="${pkg-src}" />
     <copy todir="${pkg-src}/src">
-       <fileset dir="${src}" defaultexcludes="yes" excludes="parser/**" />
+       <fileset dir="${src}" defaultexcludes="yes" excludes="parser/**,*.bak" />
     </copy>
+    <copy todir="${pkg-src}/manual">  
+       <fileset dir="manual" defaultexcludes="yes" includes="*.tex,manual.pdf" />
+    </copy>
+    <copy todir="${pkg-src}/setup">  <fileset dir="setup" defaultexcludes="yes" /> </copy>
+    <copy todir="${pkg-src}/lib">    <fileset dir="lib" defaultexcludes="yes" />   </copy>
 
     <zip destfile="${pkg-src}.zip" basedir="${pkg-src}" />
-    <tar destfile="${pkg-src}.tgz" basedir="${pkg-src}" compression="gzip" />
+    <tar destfile="${pkg-src}.tar.gz" basedir="${pkg-src}" compression="gzip" />
   </target>
 
   

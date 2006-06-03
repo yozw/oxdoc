@@ -7,7 +7,7 @@
 ;General
 
   ;Name and file
-  Name "oxdoc 0.95alpha"
+  Name "oxdoc 0.975alpha"
   OutFile "setup.exe"
 
   ;Default installation folder

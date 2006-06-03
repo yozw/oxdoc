@@ -60,12 +60,18 @@ public class BaseComment {
    private static String extractShortDescription(String text) {
       text = text + " ";
 
-      int i = text.indexOf(". ");
-      if (i == -1)
-         return text;
-      else
+      int i = -1;
+      while ((i = text.indexOf(".", i+1)) != -1)
+      {
+         // short description ends with space followed by whitespace, cr, lf, or tab
+         if (i == text.length()) 
+            return text;
+         char nextChar = text.charAt(i+1);
+         if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r') || (nextChar == '\t')) 
+            return text.substring(0, i + 1);
+      }
 
-         return text.substring(0, i + 1);
+      return text;
    }
 
    /** Feeds an input comment block as a string and parses it. It interprets @<section name> blocks and
