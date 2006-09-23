@@ -38,9 +38,7 @@ public class OxDoc {
 
    public OxDoc(Logger logger) {
       this.logger = logger;
-      message(ProductName + " " + Version + " [" + Constants.COMPILETIME + "]");
-      message(CopyrightNotice);
-      message("\n\n" + LicenseNotice);
+      message(aboutText());
    }
 
    public OxDoc() {
@@ -49,6 +47,11 @@ public class OxDoc {
                System.out.println(message);
             }
          });
+   }
+
+   public static String aboutText() {
+      return ProductName + " " + Version + " [" + Constants.COMPILETIME + "]\n" +
+             CopyrightNotice + "\n\n" + LicenseNotice;
    }
 
    public void addFiles(String filespec) throws Exception {
@@ -63,7 +66,15 @@ public class OxDoc {
    public void addFile(File file) throws Exception {
       message("Reading file " + file);
 
-      Parser parser = new Parser(new java.io.FileInputStream(file), this, project.addFile(file.getName()), project);
+      ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
+      OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
+
+      Preprocessor p = new Preprocessor(this, bufferWriter);
+      p.ProcessFile(file);
+
+      ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
+
+      Parser parser = new Parser(bufferIn, this, project.addFile(file.getName()), project);
       parser.OxFileDefinition();
    }
 

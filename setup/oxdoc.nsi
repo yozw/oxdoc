@@ -91,7 +91,7 @@ Section "Program files" SecProgram
   FileClose $9 ;Closes the filled file 
 
   CreateDirectory "$SMPROGRAMS\oxdoc"
-  CreateShortCut "$SMPROGRAMS\oxdoc\oxdoc Gui.lnk" "javaw.exe" "-classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" oxdocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
+  CreateShortCut "$SMPROGRAMS\oxdoc\oxdoc Gui.lnk" "javaw.exe" "-classpath $\"$INSTDIR\bin\oxdoc.jar;$INSTDIR\bin\jregex.jar$\" OxDocGui %1 %2 %3 %4 %5 %6 %7 %8 %9$\r$\n"
   CreateShortCut "$SMPROGRAMS\oxdoc\Manual.lnk" "$INSTDIR\manual\manual.pdf" 
   CreateShortCut "$SMPROGRAMS\oxdoc\Uninstall oxdoc.lnk" "$INSTDIR\uninstall.exe" 
 
@@ -124,7 +124,7 @@ SectionEnd
   ;Language strings
   LangString DESC_SecProgram ${LANG_ENGLISH} "oxdoc program files"
   LangString DESC_SecExamples ${LANG_ENGLISH} "Some examples"
-  LangString DESC_SecManual ${LANG_ENGLISH} "Manual in HTML format"
+  LangString DESC_SecManual ${LANG_ENGLISH} "Manual in PDF format"
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN

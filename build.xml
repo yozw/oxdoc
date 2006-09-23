@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.975alpha"/>
+  <property name="version" value="0.98alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
@@ -19,6 +19,7 @@
   <property name="pkg-bin" value="${zips}/oxdoc-${version}-bin" />
   <property name="pkg-src" value="${zips}/oxdoc-${version}-src" />
 
+  <defaultexcludes add="**/*.bak"/>
 
   <target name="clean">
     <delete file="${bin}/oxdoc.jar"/>

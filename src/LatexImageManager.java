@@ -228,13 +228,20 @@ public class LatexImageManager extends ArrayList {
       try {
          Process pp = run.exec(filename + " " + parameters);
          oxdoc.message("");
-         oxdoc.messageStream(pp.getInputStream());
-         pp.getInputStream().close();
-         oxdoc.message("");
-         oxdoc.messageStream(pp.getErrorStream());
-         pp.getErrorStream().close();
-         oxdoc.message("");
+
+         StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), oxdoc, false);
+         StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), oxdoc, true);
+
+         errorGobbler.start();
+         outputGobbler.start();         
+
          pp.waitFor();
+
+         if (errorGobbler.length() > 0) {
+            oxdoc.message("");
+            oxdoc.message(errorGobbler.getText());
+         }
+
       } catch (InterruptedException E) {
          System.out.println("Execution interrupted");
          System.exit(1);

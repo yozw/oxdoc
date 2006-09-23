@@ -1,6 +1,21 @@
-\documentclass{article}
+\documentclass[11pt]{article}
 
 \usepackage{fullpage}
+\usepackage[sf,bf]{titlesec}
+\usepackage{listings}
+\usepackage{color} 
+\usepackage{times}
+
+\definecolor{CommentColor}{rgb}{0.0,0.5,0.0}
+\lstset{language=C,
+    basicstyle=\footnotesize\normalfont\ttfamily,
+    morekeywords={decl,new,import},
+    keywordstyle=\bfseries\color{blue},
+    commentstyle=\color{CommentColor},
+    stringstyle=\color{red},
+    numbers=left,
+    emph={SURF},
+    emphstyle=\color{blue}} 
 
 \newcommand\oxdoc{{\tt oxdoc}}
 \newcommand\oxdocxml{{\tt oxdoc.xml}}
@@ -8,40 +23,99 @@
 \newcommand\bs{{\tt\char`\\}}
 \begin{document}
 
-
-\title{User's Manual for \oxdoc}
-\author{Y. Zwols [{\tt yori@1stsign.net}]}
-\maketitle
-
-\section{Introduction}
-
-\oxdoc~is a tool for generating API documentation in 
-HTML format from comments in ox source code. It is inspired by
-Sun Microsystems' Javadoc.
-
-
-
-
-
-
-
-\section{Installation}
-Installation is rather easy. Unzip the package {\tt oxdoc.zip} into a
-suitable folder, e.g. {\tt c:\bs program files\bs oxdoc}. Next, edit the file
-{\tt oxdoc.bat} and alter the path variable in this file. For example,
-you may want change the path definition into:
+\title{\bf User's Manual for {\tt \textbf{oxdoc}}}
+\author{Y. Zwols [{\tt yorizwols@users.sourceforge.net}]}
+\maketitle\bigskip
 
 \begin{quote}
-\tt set oxdoc=c:\bs program files\bs oxdoc
+\small\oxdoc~is a small software package generating documentation in 
+HTML format from comments in ox source code. It is inspired by
+Sun Microsystems' Javadoc. 
+To use \oxdoc, the user needs to write comments in ox sourcecode
+in a special format 
+and run the \oxdoc~application to extract these comments and
+generate a comprehensive HTML (web page) document of the available 
+functions and classes in the original code. \bigskip
+
+\oxdoc~is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+See the LICENSE file for distribution details.
 \end{quote}
 
-Also, it may be helpful to copy the {\tt oxdoc.bat} file into a
-folder in your path, e.g. {\tt c:\bs windows}. This way, it is possible to
-run \oxdoc~from any folder in the command prompt.
 
-Finally, you may want to edit \oxdocxml~in the {\tt bin}
-directory. This file contains general settings for \oxdoc.
+
+\newpage\section{Installation}
+
+\subsection{Prerequisites}
+Since \oxdoc~was written in Java, you should have Java installed on your computer.  
+The Java Runtime Environment (JRE) can be downloaded from {\tt www.java.com/getjava}.
+The fact that \oxdoc~is a Java program means that it can in principle be used on 
+any operating system, including Windows and Linux. In this section, the installation
+process for the Windows 2000 or XP operating systems will be described. 
+For Linux and other operating systems, we will describe the manual installation 
+process which is slightly more complicated.
+
+In order to use \LaTeX~generated formulas, a copy of \LaTeX~is required as well.
+A free Windows distribution called MiKTeX can be downloaded from {\tt http://www.miktex.org/}.
+
+\oxdoc~uses a program called \dvipng~to generate PNG (Portable Network
+Graphics) files from \LaTeX~code.  The full installation of MiKTeX comes with a version
+of this programs, but other distributions may not have it readily available.  If you
+use a non-full installation of MiKTeX, make sure to select \dvipng~during the
+installation.
+
+\subsection{Installation on Windows 2000/XP using the Setup program}
+In order to install \oxdoc, download {\tt setup-0.975alpha.exe} file from
+the SourceForge website, run it, and follow the instructions.  
+In order to use \LaTeX~formulas, make sure to specify the location of MiKTeX
+(or any other \LaTeX~distribution).
+The setup program automatically creates a program group in the start menu from
+which the \oxdoc~graphical user interface is available. 
+
+\subsection{Manual installation on Windows}
+Follow the following steps to manually install \oxdoc:
+\begin{enumerate}
+\item Unzip the package {\tt oxdoc-xxx-bin.zip} into a
+suitable folder. For example, {\tt c:\bs program files\bs oxdoc}.
+\item Edit the file
+{\tt oxdoc.bat} and alter the {\tt oxdoc} variable in this file. This file looks
+as follows:
+
+\begin{quote}
+\small \begin{verbatim}
+@echo off
+set oxdoc=c:\program files\oxdoc
+java -classpath "%oxdoc%\bin\oxdoc.jar;%oxdoc%\bin\jregex.jar"  ...
+        OxDocCmd %*
+\end{verbatim}
+\end{quote}
+
+The second line in this file has to point to the directory in which the \oxdoc~files
+have been unzipped. The same holds for the file {\tt oxdocgui.bat}. 
+
+\item Optionally, copy the files {\tt oxdoc.bat} and {\tt oxdocgui.bat} into a
+folder in the Windows search path, e.g. {\tt c:\bs windows}. This way, it is possible to
+run \oxdoc~from any folder in the command prompt. 
+
+\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
 See the Configuration section for more information.
+\end{enumerate}
+
+To test whether \oxdoc~works, run the batch file {\tt oxdoc.bat} from the command line.  It should 
+display a short description of the program options.
+
+\subsection{Manual installation on Linux}
+Follow the following steps to manually install \oxdoc:
+\begin{enumerate}
+\item Unzip the package {\tt oxdoc-xxx-bin.tar.gz} into a
+suitable folder. For example, the \oxdoc~folder in your user directory.
+
+\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
+See the Configuration section for more information.
+\end{enumerate}
+
+To test whether \oxdoc~works, run the script file {\tt oxdoc} from the {\tt bin} directory.  It should 
+display a short description of the program options.
 
 
 
@@ -52,10 +126,10 @@ See the Configuration section for more information.
 
 
 
-
-
-
-\section{Using \oxdoc}
+\newpage\section{Using \oxdoc}
+Although \oxdoc~is a command line utility at its core, the easiest way to work with it is to use
+the graphical user interface (GUI).  If you installed \oxdoc~using the setup program in Windows, 
+this interface can be accessed from the Start menu. 
 
 \subsection{Running \oxdoc}
 Using \oxdoc~is rather easy. Generating documentation for an ox project
@@ -66,7 +140,7 @@ of ox files in a folder. From there, run
 \tt oxdoc *.ox
 \end{quote}
 
-from the command prompt in that folder. \oxdoc~generates a bunch
+from the command prompt in that folder. \oxdoc~generates a set
 of HTML files, of which {\tt default.html} is the project home file. It also
 creates a new style sheet file {\tt oxdoc.css}.
 
@@ -81,49 +155,56 @@ but instead of using {\tt /*} and {\tt */}, we use
 {\tt /**} and {\tt **/}. Documentation comments must be placed 
 directly above class definitions and function definitions. For example:
 
-\begin{quote}
-\begin{verbatim}
-/** This file provides the class `Lumberjack`, an abstract representation
-of a lumber jack **/
+\begin{lstlisting}
+/** The multivariate Normal distribution $\mathcal{N}(\mu, \Sigma)$.
+An instance of a NormalDistribution class generates realizations of a random
+variable $X$ with probability density function 
+$$f(x) = |\Sigma|^{-1/2}(2\pi)^{-n/2}
+       \exp\left(-\frac{1}{2}(x-\mu)'\Sigma^{-1}(x-\mu)\right).$$
 
-/** The Lumberjack class represents a lumber jack.  A lumber jack can sleep
-by using the `Lumberjack::sleep` method.
+@author Y. Zwols
 
-@example <pre>
-decl L = new Lumberjack();
-L.sleep(5);
+@example To generate 20 samples from a standard normal distribution, 
+the following code can be used:
+<pre>
+decl Dist = new NormalDistribution(0, 1);
+decl Z = Dist.Generate(20);
 </pre>
-
-@author Y. Zwols **/
-class Lumberjack {
-   decl wearsWomensClothes;
-   isOk();
-   sleep(const hours);
-};
-
-/** Checks whether this lumber jack is okay
-   @returns <tt>TRUE</tt> if this lumber jack is okay, <TT>FALSE</TT> if not.
-   @comments In the current implementation, lumber jacks are okay if and only
-   if they wear women's clothing.
-   @see Lumberjack **/
-Lumberjack::isOk() {
-   if (this.wearsWomensClothes) 
-      return TRUE;
-   else
-      return FALSE;
+**/
+class NormalDistribution {
+   decl m_vMu, m_mSigma;
+   NormalDistribution(const vMu, const mSigma);
+   virtual Generate(const cT);
+   virtual Dim();
 }
 
-/** Make the lumber jack sleep for a specified number of hours. A message
-is printed to show that he has slept.
-   @param hours Number of hours to sleep. Has to be integer.
-   @comments The lumber jack cannot sleep more than 24 hours a day. **/
-Lumberjack::sleep(const hours) {
-   println("The lumber jack is asleep");
-   println("(", hours, " hours later...)");
-   println("The lumber jack wakes up");
+/** Create a new instance of the NormalDistribution class with parameters $\mu$
+and $\Sigma$.
+@param vMu The mean $\mu$ of the normal distribution
+@param mSigma The variance/covariance matrix
+@comments The dimension of the multivariate normal distribution is deduced
+from the dimensions of the arguments. **/
+NormalDistribution::NormalDistribution(const vMu, const mSigma) {
+   expectMatrix("vMu", vMu, rows(vMu), 1);
+   expectMatrix("mSigma", mSigma, rows(vMu), rows(vMu));
+   m_vMu = vMu;
+   m_mSigma = mSigma;
 }
-\end{verbatim}
-\end{quote}
+
+/** Generate a vector of realizations. The length of the sample is given
+by the argument cT.
+@param cT Number of samples 
+**/
+NormalDistribution::Generate(const cT) {
+   return rann(cT, Dim());
+}
+
+/** The dimension of the multivariate normal distribution.
+@comments This is deduced from the arguments given to the constructor. **/
+NormalDistribution::Dim() {
+   return rows(m_vMu);
+}
+\end{lstlisting}
 
 This example shows most of the features. Every documentation block is written
 between {\tt /**} and {\tt **/} signs; HTML tags can be used, e.g. to add
@@ -138,13 +219,17 @@ scanning for a period followed by a white space.  This may have some undesired
 effects when a period in the first sentence doesn't indicate the end of a
 sentence, e.g. in the sentence 
 \begin{quote}
-\tt This class implements Dr. John's algorithm. It solves linear equations.
+\small\begin{verbatim}
+This class implements Dr. John's method. It solves linear equations.
+\end{verbatim}
 \end{quote}
 Here, the part {\tt This class implements Dr.} will be taken as a summary.
 This can be avoided by placing {\tt \&nbsp;} (a non-breaking space)
 just after {\tt Dr.}:
 \begin{quote}
-\tt This class implements Dr.\&nbsp;John's algorithm. It solves linear equations.
+\small\begin{verbatim}
+This class implements Dr.\&nbsp;John's method. It solves linear equations.
+\end{verbatim}
 \end{quote}
 
 Moreover, it is possible to include any HTML tag. This may be useful for
@@ -153,55 +238,40 @@ inclusing of images, or adding more intricate mark up.
 
 \subsection{Types of documentation blocks}
 There are different types of documentation blocks.  Depending on the position of the blocks, they are
-treated differently.
+treated differently.  The following blocks are available:
 
 \begin{itemize}
-\item File documentation.  The comment block starting at the first line of a file is reserved as
-documentation corresponding to the file. \\
-Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @author}, 
-{\tt @version}.
+\item {\tt @author} specifies the author of the file. For  usage, see the listing above.
 
-\item Class documentation.  The comment block right before a class definition is treated as
-class documentation. \\
-Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @author}, 
-{\tt @version}.
+\item {\tt @comments} gives comments. For usage, see the listing above.
 
-\item Method/function documentation.  The comment block right before the body of a function or class method
-is treated as documentation for that function or method.
-Allowed sections: {\tt @see}, {\tt @example}, {\tt @comments}, {\tt @param}, {\tt @returns}.
-\end{itemize}
+\item {\tt @example} gives an example. For usage, see the listing above.
 
-
-Although most sections are straightforward text blocks, there are two sections with special features:
-\begin{itemize}
 \item {\tt @param} describes a parameter or argument of a function. The 
 first word after the {\tt @param} keyword is treated as the name of the 
 parameter. More than one parameter can be described by adding more {\tt @param} sections.
-\item {\tt @see} gives a cross reference. References have to 
-match the exact name of other entities. Also, references have to be
+
+\item {\tt @returns} describes the return value.
+
+\item {\tt @see} gives cross references. References have to 
+match the exact name of other entities. Multiple references have to be
 separated by commas.
+\begin{lstlisting}
+/** Abstract distribution class
+    @see NormalDistribution, UniformDistribution **/
+class Distribution { 
+   ...
+}
+\end{lstlisting}
+
 \end{itemize}
 
 
-\section{Using \LaTeX~formulas in your documentation}
-If you have a version of \LaTeX~installed on your computer, it's
-extremely easy to add \LaTeX~formulas to your documentation\footnote{If you don't
-have \LaTeX, you can download a version for Windows from 
-{\tt http://www.miktex.org/}}.
-\oxdoc~uses a program called \dvipng~to generate PNG (Portable Network
-Graphics) files from \LaTeX~code.  The full installation of MiKTeX comes with a version
-of this programs, but other distributions may not have it readily available.  If you
-use a non-full installation of MiKTeX, make sure to select \dvipng~during the
-installation.
 
-Be sure to read the configuration chapter
-to set up \oxdoc~so it can find the programs required for 
-this ({\tt latex} and \dvipng).
-
-Once you've set up the connection with \LaTeX, adding formules is done
-by putting them between single or double dollar (\$) signs. For example:
-\begin{quote}
-\begin{verbatim}
+\subsection{Using \LaTeX~formulas}
+Formulas can be inserted by writing them between single or double dollar (\$) signs. 
+For example:
+\begin{lstlisting}
 <pre>
 /** Calculate the OLS estimates for the model $y = X\beta$.
  @returns The OLS estimate $\hat\beta = (X'X)^{-1}X'y$.
@@ -210,17 +280,25 @@ regression(X, y) {
    return invert(X'X)*X'y;
 }
 </pre>
-\end{verbatim}
-\end{quote}
+\end{lstlisting}
 
-Single dollar signs can be used for inline formulae, whereas double dollar signs
-can be used for equations on separate lines, analogously to \LaTeX.
+Single dollar signs are used for inline formulae, whereas double dollar signs
+are used for equations on separate lines, analogously to \LaTeX.  They 
+are implemented as {\tt align*} environments.
 
-\textbf{Note:} \dvipng~generates partially transparent graphics files.  These files are
-currently not supported by Internet Explorer 6.0. Supposedly, this will be fixed in version 7.0.
-For the time being, I recommended using Mozilla Firefox
-to view documentation files that include formulae at this point. At some later point, I will add a
-switch to turn of transparent PNG files.
+The way \oxdoc~processes these formulas can be changed.  There are three options:
+\begin{enumerate}
+\item Plain.  The formulas are copied as-is into the HTML text.  This is not
+recommended.
+
+\item \LaTeX.  This uses the \LaTeX~installation on the computer. If you
+didn't install \oxdoc~using the setup program, you should specify the
+location of {\tt latex} and {\tt dvipng} in \oxdocxml (see also the configuration
+section).
+
+
+\item MathML.  
+\end{enumerate}
 
 \subsection{Cross-referencing}
 Making cross references within comments is done by placing a symbol between ` signs.  It is important to
@@ -228,7 +306,7 @@ specify the whole name of the item to be referenced.  Global functions and class
 their full names (this is case sensitive!) without arguments, and class methods are identified by the
 form {\tt classname::method}. For example, if there is a method {\tt isOk()} in the class {\tt Lumberjack},
 this method is referenced to by {\tt `Lumberjack::isOk`}.  The same holds for the {\tt @see} sections.
-Note that in {\tt @see} sections, no ` signs are to be used.
+Note that in {\tt @see} sections, no ` signs should be used.
 
 
 \subsection{Customizing lay-out}
@@ -244,7 +322,10 @@ to that file.
 
 
 
-\section{Configuration}
+
+
+
+\newpage\section{Configuration}
 
 \subsection{Location of configuration files}
 \oxdoc~is configured by means of the file \oxdocxml.
@@ -266,7 +347,7 @@ directory and project-specific settings in project directories.
 A configuration file looks something like this:
 
 \begin{quote}
-\begin{verbatim}
+\small\begin{verbatim}
 <oxdoc>
 	<option name="latex"     value="c:\texmf\miktex\bin\latex.exe" />
 	<option name="dvipng"    value="c:\texmf\miktex\bin\dvipng.exe" />
@@ -283,7 +364,7 @@ It is also possible to specify settings through command line arguments
 by adding {\tt -parameter=value} to the command line. 
 For example,
 \begin{quote}
-\begin{verbatim}
+\small\begin{verbatim}
 oxdoc -latex=c:\bin\latex.exe *.ox
 \end{verbatim}
 \end{quote}
@@ -295,7 +376,7 @@ command line parameters correspond exactly to the settings in
 \oxdoc~uses \LaTeX~in combination with \dvipng to generate PNG
 (Portable Network Graphics) files from formulae within comments. In order to get this
 working, you'll need a working distribution of \LaTeX~(e.g. MiKTeX
-if you're using Windows) and \dvipng (which comes with MiKTeX). It is then important
+if you're using Windows) and \dvipng~(which comes with MiKTeX). It is then important
 to set the paths to the {\tt latex} and \dvipng executables. It is recommended to do this is the \oxdocxml~
 file in the {\tt bin} directory of your \oxdoc~installation.
 
@@ -312,7 +393,7 @@ by specifying the desired packages, separated by commas, in the option {\tt late
 \subsection{Overview of available settings}
 The following parameters can be set in a configuration file:\medskip
 
-\noindent \begin{tabular}{lp{5in}}
+\noindent \begin{tabular}{lp{4.95in}}
 \tt outputdir  & Specifies the directory in which \oxdoc~
 writes its output. Defaults to the current working directory. \medskip\\
 \tt tempdir & Specifies the directory that \oxdoc~can use for temporary files. Defaults to the current working directory.\\

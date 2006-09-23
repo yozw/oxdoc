@@ -6,9 +6,7 @@ import javax.swing.*;
 
 
 public class MainWindow implements ActionListener {
-   private final String actionRun = "run";
-   private final String actionExit = "exit";
-   private final String actionSaveBatch = "batch";
+   private final String actionRun = "run", actionExit = "exit", actionSaveBatch = "batch", actionAbout = "about";
    private static JFrame frame;
    private JTextField editWorkDirectory;
    private JTextField editFilenames;
@@ -102,11 +100,17 @@ public class MainWindow implements ActionListener {
       runButton.setActionCommand(actionRun);
       runButton.addActionListener(this);
 
-      JButton batchButton = new JButton("Save batch file");
+      JButton batchButton = new JButton("Save batch file...");
       batchButton.setActionCommand(actionSaveBatch);
       batchButton.addActionListener(this);
 
+      JButton aboutButton = new JButton("About...");
+      aboutButton.setActionCommand(actionAbout);
+      aboutButton.addActionListener(this);
+
       buttonPanel.add(Box.createHorizontalGlue());
+      buttonPanel.add(aboutButton);
+      buttonPanel.add(Box.createRigidArea(new Dimension(8, 0)));
       buttonPanel.add(batchButton);
       buttonPanel.add(Box.createRigidArea(new Dimension(8, 0)));
       buttonPanel.add(exitButton);
@@ -125,6 +129,8 @@ public class MainWindow implements ActionListener {
          runOxdoc();
       if (e.getActionCommand().equals(actionSaveBatch))
          runSaveBatch();
+      if (e.getActionCommand().equals(actionAbout))
+         showAbout();
    }
 
    private String extractPathName(String spec) {
@@ -145,6 +151,10 @@ public class MainWindow implements ActionListener {
 
    public static void showException(Exception E) {
       JOptionPane.showMessageDialog(frame, E.getMessage());
+   }
+
+   public static void showAbout() {
+      JOptionPane.showMessageDialog(frame, OxDoc.aboutText());
    }
 
    public void runSaveBatch() {
