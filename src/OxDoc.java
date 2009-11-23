@@ -1,8 +1,6 @@
-import java.io.*;
-
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols
+oxdoc (c) Copyright 2005-2009 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -19,15 +17,16 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
+
 import java.util.*;
 import jregex.util.io.*;
-
+import java.io.*;
 
 public class OxDoc {
    public static final String ProductName = "oxdoc";
    public static final String Version = Constants.VERSION;
    public static final String Url = "http://oxdoc.sourceforge.net";
-   public static final String CopyrightNotice = "(c) Copyright 2005-2006 by Y. Zwols [yorizwols@users.sourceforge.net]";
+   public static final String CopyrightNotice = "(c) Copyright 2005-2009 by Y. Zwols [yorizwols@users.sourceforge.net]";
    public static final String LicenseNotice = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n" + "You are welcome to redistribute it under certain conditions.\n" + "See the LICENSE file for distribution details.\n";
    public OxProject project = new OxProject(this);
    public Config config = new Config(this);

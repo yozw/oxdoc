@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols [yori@brown.edu]
+oxdoc (c) Copyright 2005-2009 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -69,6 +69,7 @@ TOKEN : {
 	<DECL: "decl"> |
 	<DFLT: "default"> |
 	<SWITCH: "switch"> |
+	<SWITCHSINGLE: "switch_single"> |  /** Token added by C. Ferrall **/
 	<RETURN: "return"> |
 	<STATIC: "static"> |
 	<WHILE: "while"> |
@@ -87,7 +88,11 @@ TOKEN : {
 	<ENUM: "enum"> |
 	<FOR: "for"> |
 	<IF: "if"> |
-	<DO: "do">
+	<DO: "do"> |
+    <PUBLIC: "public"> | /** Three tokens added by C. Ferrall **/
+    <STRUCT: "struct"> |
+    <PROTECTED: "protected"> |
+	<PRIVATE: "private">
 }
 
 TOKEN : {
@@ -108,9 +113,12 @@ void OxFileDefinition() : {}
 				file.setComment(tmp_t.image);
 		}
 	}
-	
+/** C. Ferrall changed + to * so that a file with no declarations 
+    does not generate an error.  For example, a header file with only #includes
+    Seemed to fix the problem ... not sure if it has bad side effects
+**/
 	( NamespaceDeclaration() |
-	  NamespaceDefinition() )+
+	  NamespaceDefinition() )*
 }
 
 void NamespaceDefinition() : {}
@@ -120,6 +128,7 @@ void NamespaceDefinition() : {}
 	  ExternFunctionDeclaration() |
 	  LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() |
 	  ClassDefinition() |
+      StructDefinition() |
 	  DeclarationStatement() )
 }
 
@@ -130,7 +139,9 @@ void NamespaceDeclaration() : {}
 
 void DeclarationStatement() : {}
 {
-	Declaration() ";"
+/** C Ferrall modified this so that an ending ";" is optional for enum's
+**/
+	Declaration() ";" | EnumDeclaration()
 }
 
 
@@ -152,9 +163,36 @@ void ClassDefinition() :
 	} [";"]
 }
 
+/** C. Ferrall copied ClassDefintion to allow for struct.  
+    Would be better to parse the token:  <CLASS> | <STRUCT> but this did not
+    work when I tried the obvious thing (never used Java before).
+**/
+void StructDefinition() : 
+{ Token name, structtoken, parentclassname = null; }
+{
+	structtoken = <STRUCT>  name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
+	"{" ClassBody() "}"
+	{
+	  OxClass newClass;
+	  if (parentclassname == null)
+	  	 newClass = file.addClass(name.image);
+	  else
+	  	 newClass = file.addClass(name.image, parentclassname.image);
+	  if (structtoken.specialToken != null)
+         if (structtoken.specialToken.beginLine != 1)
+         newClass.setComment(structtoken.specialToken.image);
+	  project.addSymbol(newClass);
+	} [";"]
+}
+
+/**  C. Ferrall added EnumDeclaration (now allowed inside class/struct)
+**/
 void ClassBody() : {}
 {
-	( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() ) )*
+	( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )*
+    [ <PUBLIC> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
+    [ <PROTECTED> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
+    [ <PRIVATE> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
 }
 
 void MethodDeclaration() : {}
@@ -162,14 +200,23 @@ void MethodDeclaration() : {}
 	[<VIRTUAL>] [<STATIC>] ["~"] <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
 }
 
+/** C. Ferrall switch STATIC and CONST to the order required by Ox
+**/
 void MemberDeclaration() : {}
 {
-	[<CONST>] [<STATIC>] <DECL> VariableDeclaration() (","  VariableDeclaration() )* ";"
+	 [<STATIC>] [<CONST>] <DECL> VariableDeclaration() (","  VariableDeclaration() )* ";"
 }
 
+/** C. Ferrall added the optional ";" 
+    And added option of = integer, created EnumElement
+**/
+void EnumElement() : {}
+{
+  <IDENTIFIER> ["=" ["+"|"-"] <INTEGER_LITERAL>]
+}
 void EnumDeclaration() : {}
 {
-	<ENUM> "{" [<IDENTIFIER> ("," <IDENTIFIER>)*] "}"
+	<ENUM> "{" EnumElement()  ("," EnumElement())* "}" [";"]
 }
 
 void ExternFunctionDeclaration() : {}
@@ -277,14 +324,31 @@ void VariableDeclaration() : {}
 
 void Declaration() : {}
 {
-	[<EXTERN>] [<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
-| EnumDeclaration() 	
+	[<EXTERN>] [<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*  	
 }
 
+/** Added by C. Ferrall to parse swithces
+**/
+void CaseStatement() : {}
+{
+    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <IDENTIFIER>) 
+            ":" (Statement())*
+}
+
+void DfltStatement() : {}
+{
+    <DFLT> ":" (Statement())*
+}
+
+/** Modified by C. Ferrall to handle cases and switch_single
+**/
 void SelectionStatement() : {}
 {
 	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
-	  <SWITCH> "(" Expression() ")" Statement() )
+	  <SWITCH> "(" Expression() ")" 
+                "{" (CaseStatement())* [DfltStatement()] "}" |
+	  <SWITCHSINGLE> "(" Expression() ")" 
+                "{" (CaseStatement())* [DfltStatement()] "}"  )
 }
 
 void IterationStatement() : {}

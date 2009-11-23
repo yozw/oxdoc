@@ -1,7 +1,7 @@
 # Build properties for oxdoc
 
 #-- for Linux (uncomment and edit)
-# javacc=/usr/local/javacc/
+javacc=/usr/share/java
 
 #-- for Windows (uncomment and edit)
 # javacc=c:/program files/javacc4/

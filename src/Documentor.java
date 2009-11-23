@@ -1,9 +1,6 @@
-import java.io.*;
-import java.text.*;
-
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols
+oxdoc (c) Copyright 2005-2009 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -20,7 +17,10 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
+
 import java.util.*;
+import java.io.*;
+import java.text.*;
 
 
 public class Documentor {
