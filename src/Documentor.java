@@ -32,7 +32,7 @@ public class Documentor {
       this.project = oxdoc.project;
    }
 
-   public void generateDocs() throws IOException {
+   public void generateDocs() throws Exception {
       project.name = oxdoc.config.ProjectName;
 
       ArrayList files = project.files();
@@ -49,7 +49,7 @@ public class Documentor {
       oxdoc.latexImageManager.makeLatexFiles();
    }
 
-   private void generateStartPage(String fileName) throws IOException {
+   private void generateStartPage(String fileName) throws Exception {
       OutputFile output = new OutputFile(fileName, project.name + " project home", FileManager.PROJECT, oxdoc);
       ArrayList files = project.files();
       output.writeln("<h2>" + project.name + " files</h2>");
@@ -63,7 +63,7 @@ public class Documentor {
       output.close();
    }
 
-   private void generateIndex(String fileName) throws IOException {
+   private void generateIndex(String fileName) throws Exception {
       OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, oxdoc);
       output.writeln("<table class=\"index\">");
 
@@ -88,7 +88,7 @@ public class Documentor {
       output.close();
    }
 
-   private void generateDoc(OxFile oxFile, String fileName) throws IOException {
+   private void generateDoc(OxFile oxFile, String fileName) throws Exception {
       OutputFile output = new OutputFile(fileName, oxFile.name(), oxFile.iconType(), oxdoc);
       try {
          output.writeln(oxFile.comment());
@@ -96,14 +96,14 @@ public class Documentor {
          ArrayList classes = oxFile.classes();
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
-            generateClassHeaderDocs(output, oxclass, oxclass.methods());
+            generateClassHeaderDocs(output, oxclass, oxclass.members());
          }
          if (oxFile.functions().size() > 0)
             generateClassHeaderDocs(output, null, oxFile.functions());
 
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
-            generateClassDetailDocs(output, oxclass, oxclass.methods());
+            generateClassDetailDocs(output, oxclass, oxclass.members());
          }
          if (oxFile.functions().size() > 0)
             generateClassDetailDocs(output, null, oxFile.functions());
@@ -113,12 +113,13 @@ public class Documentor {
       }
    }
 
-   private void generateClassHeaderDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
+   private void generateClassHeaderDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
       String sectionName = (oxclass != null) ? oxclass.name() : "Global functions";
       String classPrefix = (oxclass != null) ? oxclass.name() : "";
       int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.NONE;
 
       String inheritedMethods = "";
+      String inheritedFields = "";
       String inheritanceText = "";
 
       if ((oxclass != null) && (oxclass.superClassName() != null)) {
@@ -138,17 +139,41 @@ public class Documentor {
                break;
             sclass = (OxClass) entity;
 
-            ArrayList methods = sclass.methods();
-            if (methods.size() > 0) {
-               inheritedMethods += "<dt>Inherited methods from " + link + ":</dt><dd>\n";
-               for (int i = 0; i < methods.size(); i++) {
-                  OxFunction method = (OxFunction) methods.get(i);
-                  if (i > 0)
-                     inheritedMethods += ", ";
-                  inheritedMethods += method.link();
-               }
-               inheritedMethods += "</dd>\n";
-            }
+            ArrayList members = sclass.members();
+			int inheritedMethodCount = 0, inheritedFieldCount = 0;
+
+            inheritedMethods += "<dt>Inherited methods from " + link + ":</dt><dd>\n";
+            inheritedFields  += "<dt>Inherited fields from " + link + ":</dt><dd>\n";
+            for (int i = 0; i < members.size(); i++) {
+			    OxEntity member = (OxEntity) members.get(i);
+				if (member instanceof OxMethod)
+				{
+					if (inheritedMethodCount > 0)
+                   		inheritedMethods += ", ";
+					inheritedMethods += member.link();
+					inheritedMethodCount++;
+				}
+				else
+				if (member instanceof OxField)
+				{
+				    if (!oxdoc.config.ShowInternals)
+						if ( ((OxField) member).visibility() != OxClass.Visibility.Public)
+							continue;
+					if ( ((OxField) member).visibility() == OxClass.Visibility.Private)
+						continue;
+
+					if (inheritedFieldCount > 0)
+                   		inheritedFields += ", ";
+					inheritedFields += member.link();
+					inheritedFieldCount++;
+				}
+				else throw new Exception("Class member has unexpected class: " + member);
+             }
+             inheritedMethods += "</dd>\n";
+             inheritedFields += "</dd>\n";
+
+			 if (inheritedFieldCount == 0) inheritedFields = "";
+			 if (inheritedMethodCount == 0) inheritedMethods = "";
          }
       }
 
@@ -159,47 +184,84 @@ public class Documentor {
       if (oxclass != null)
          output.writeln(oxclass.comment());
 
-      if (methodList.size() > 0) {
-         output.writeln("\n<!-- Methods of " + sectionName + " --!>");
+      if (memberList.size() > 0) {
+         output.writeln("\n<!-- Members of " + sectionName + " --!>");
          output.writeln("<table class=\"method_table\">");
-         output.writeln("<tr><td colspan=\"2\" class=\"header\" valign=\"top\">Methods</td></tr>");
-         for (int i = 0; i < methodList.size(); i++) {
-            OxFunction method = (OxFunction) methodList.get(i);
-            output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
-            output.writeln(method.smallIcon() + method.link());
-            output.writeln("</td><td class=\"description\" valign=\"top\">");
-            output.write(method.description());
-            output.writeln("</td></tr>");
+
+		 String[] visLabels;
+         ArrayList[] visMembers;
+         if (oxclass != null) 
+         {
+			if (oxdoc.config.ShowInternals)
+			{
+				visLabels = new String[] {"Private fields", "Protected fields", "Public fields", "Public methods"};
+				visMembers = new ArrayList[] {oxclass.getPrivateFields(), oxclass.getProtectedFields(), oxclass.getPublicFields(), 
+	                         oxclass.getMethods()};
+			}
+			else
+			{
+				visLabels = new String[] {"Public fields", "Public methods"};
+				visMembers = new ArrayList[] {oxclass.getPublicFields(), 
+	                         oxclass.getMethods()};
+			}
          }
-         output.writeln("</table>");
+         else
+         {
+			visLabels = new String[] {"Functions"};
+            visMembers = new ArrayList[] {oxclass.members() };
+		 }
+
+         for (int k = 0; k < visLabels.length; k++)		 
+         {
+             if (visMembers[k].size() == 0) continue;
+		     output.writeln("<tr><td colspan=\"2\" class=\"header\" valign=\"top\">" + visLabels[k] + "</td></tr>");
+		     for (int i = 0; i < visMembers[k].size(); i++) {
+		        OxEntity entity = (OxEntity) visMembers[k].get(i);
+		        output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
+		        output.writeln(entity.smallIcon() + entity.link());
+		        output.writeln("</td><td class=\"description\" valign=\"top\">");
+		        output.write(entity.description());
+		        output.writeln("</td></tr>");
+		     }
+         }
+	     output.writeln("</table>");
       }
 
       if (inheritedMethods.length() > 0)
          output.writeln("<dl class=\"inherited_methods\">" + inheritedMethods + "</dl>\n");
+      if (inheritedFields.length() > 0)
+         output.writeln("<dl class=\"inherited_fields\">" + inheritedFields + "</dl>\n");
    }
 
-   private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList methodList) throws IOException {
+   private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
       String sectionName = (oxclass != null) ? oxclass.name() : "Global functions";
-      String classPrefix = (oxclass != null) ? oxclass.name() : "";
+      String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
       int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.NONE;
 
       output.writeln("\n<!-- Details for " + sectionName + " --!>");
       output.writeln("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " details</h2>");
-      for (int i = 0; i < methodList.size(); i++) {
-         OxFunction method = (OxFunction) methodList.get(i);
-         String anchorName = ((method instanceof OxMethod) ? classPrefix + "___" : "") + method.displayName();
+      int count = 0;
+      for (int i = 0; i < memberList.size(); i++) {
+         OxEntity entity = (OxEntity) memberList.get(i);
+         String anchorName = classPrefix + entity.displayName();
 
-         if (i != 0)
+	     if (!oxdoc.config.ShowInternals)
+		    if ( (entity instanceof OxField) && (((OxField) entity).visibility() != OxClass.Visibility.Public) )
+			   continue;
+
+         if (count != 0)
             output.writeln("\n<hr>");
+         count++;
 
-         output.writeln("\n<!-- Method " + method.displayName() + " --!>");
+         output.writeln("\n<!-- Entity " + entity.displayName() + " --!>");
 
-         Object[] args = { anchorName, method.displayName(), method.largeIcon() };
+         Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
          output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3>{2}{1}</h3>", args));
 
-         output.writeln("<span class=\"declaration\">" + method.declaration() + "</span>");
+		 if (entity.declaration() != null)
+             output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
 
-         output.writeln(method.comment());
+         output.writeln(entity.comment());
       }
    }
 

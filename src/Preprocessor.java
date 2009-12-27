@@ -137,11 +137,14 @@ public class Preprocessor {
 						defines.add( ((String) params.get(0)).trim() );
 					break;
 				case INCLUDE:
+				case IMPORT:
 					if (params.size() != 1)
-						throw new IOException("#include requires 1 argument");
+						throw new IOException( ((cmd == IMPORT)?"#import":"#include") + " requires 1 argument");
 					if (active) {
 						String fileSpec = (String) params.get(0);
 						String fileName = fileSpec.substring(1, fileSpec.length() - 1);
+						if (cmd == IMPORT) 
+							fileName += ".h";
 						String basePath = file.getAbsoluteFile().getParent();
 
 						ProcessFile(new File(basePath + File.separatorChar + fileName));

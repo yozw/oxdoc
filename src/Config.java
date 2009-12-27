@@ -40,6 +40,8 @@ public class Config {
    //    public static boolean EnableLatex = true;
    public boolean EnableIcons = false;
 
+   public boolean ShowInternals = false;
+
    // color in the form "rgb <r> <g> <b>", or null for transparent
    public String ImageBgColor = "rgb 1.0 1.0 1.0";
    public String ConfigFile = "oxdoc.xml";

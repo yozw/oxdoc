@@ -28,6 +28,8 @@ import java.io.*;
 	private OxFile file = null;
 	private OxProject project = null;
 	private OxDoc oxdoc = null;
+	private OxClass currentClass = null;
+	private OxClass.Visibility currentVisibility = OxClass.Visibility.Private;
 
   	public Parser(java.io.InputStream stream, OxDoc oxdoc, OxFile file, OxProject project) {
      		this(stream, null);
@@ -128,7 +130,6 @@ void NamespaceDefinition() : {}
 	  ExternFunctionDeclaration() |
 	  LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() |
 	  ClassDefinition() |
-      StructDefinition() |
 	  DeclarationStatement() )
 }
 
@@ -144,12 +145,12 @@ void DeclarationStatement() : {}
 	Declaration() ";" | EnumDeclaration()
 }
 
-
 void ClassDefinition() :
 { Token name, classtoken, parentclassname = null; }
 {
-	classtoken = <CLASS> name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
-	"{" ClassBody() "}"
+	( classtoken = <STRUCT> { currentVisibility = OxClass.Visibility.Public; } | 
+      classtoken = <CLASS> { currentVisibility = OxClass.Visibility.Private; }  )
+	name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
 	{
 	  OxClass newClass;
 	  if (parentclassname == null)
@@ -158,53 +159,48 @@ void ClassDefinition() :
 	  	 newClass = file.addClass(name.image, parentclassname.image);
 	  if (classtoken.specialToken != null)
          if (classtoken.specialToken.beginLine != 1)
-         newClass.setComment(classtoken.specialToken.image);
+         	newClass.setComment(classtoken.specialToken.image);
 	  project.addSymbol(newClass);
-	} [";"]
-}
 
-/** C. Ferrall copied ClassDefintion to allow for struct.  
-    Would be better to parse the token:  <CLASS> | <STRUCT> but this did not
-    work when I tried the obvious thing (never used Java before).
-**/
-void StructDefinition() : 
-{ Token name, structtoken, parentclassname = null; }
-{
-	structtoken = <STRUCT>  name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
-	"{" ClassBody() "}"
-	{
-	  OxClass newClass;
-	  if (parentclassname == null)
-	  	 newClass = file.addClass(name.image);
-	  else
-	  	 newClass = file.addClass(name.image, parentclassname.image);
-	  if (structtoken.specialToken != null)
-         if (structtoken.specialToken.beginLine != 1)
-         newClass.setComment(structtoken.specialToken.image);
-	  project.addSymbol(newClass);
-	} [";"]
+      currentClass = newClass;
+	} 
+    "{" ClassBody() "}"
+    [";"]
+    { currentClass = null; }
 }
 
 /**  C. Ferrall added EnumDeclaration (now allowed inside class/struct)
 **/
 void ClassBody() : {}
 {
-	( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )*
-    [ <PUBLIC> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
-    [ <PROTECTED> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
-    [ <PRIVATE> ":" ( ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | MemberDeclaration() | EnumDeclaration()  ) )* ]
+	( 
+	  ((<PUBLIC> { currentVisibility = OxClass.Visibility.Public; } | 
+        <PROTECTED> { currentVisibility = OxClass.Visibility.Protected; } | 
+        <PRIVATE> { currentVisibility = OxClass.Visibility.Private; } ) ":")
+      |
+      ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | FieldDeclaration() | EnumDeclaration()  ) 
+    )*
 }
 
-void MethodDeclaration() : {}
+void MethodDeclaration() : { Token name; String methodPrefix = ""; }
 {
-	[<VIRTUAL>] [<STATIC>] ["~"] <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
+	[<VIRTUAL>] [<STATIC>] ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
+    {
+       String methodName = currentClass.name() + "::" + methodPrefix + name.image;
+       currentClass.addMethod(methodName);
+    }
 }
 
 /** C. Ferrall switch STATIC and CONST to the order required by Ox
 **/
-void MemberDeclaration() : {}
+void FieldDeclaration() : { Token name; ArrayList variableNames = new ArrayList(); }
 {
-	 [<STATIC>] [<CONST>] <DECL> VariableDeclaration() (","  VariableDeclaration() )* ";"
+    [<STATIC>] [<CONST>] <DECL> name = VariableDeclaration()  { variableNames.add(name); }
+		(","  VariableDeclaration() { variableNames.add(name); } )* ";"
+    {
+       for (Object varName: variableNames)
+          currentClass.addField(currentClass.name() + "::" + ( (Token) varName).image, currentVisibility);
+    }
 }
 
 /** C. Ferrall added the optional ";" 
@@ -245,13 +241,18 @@ void FunctionDefinition() :
 	  LOOKAHEAD(4)
 	  classname = <IDENTIFIER> ("::") ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER>
 	  {
+		 String methodName = methodPrefix + name.image;
+
 	  	 OxClass oxClass = file.getClass(classname.image);
 		 if (oxClass == null) {
-		    oxdoc.warning("Class " + classname.image + " was not yet defined.");
+		    oxdoc.warning("Definition of method " + methodName + " of class " + classname.image + ": class " + classname.image + " is not defined yet.");
 			oxClass = file.addClass(classname.image);
 		 }
-		 String methodName = classname.image + "::" + methodPrefix + name.image;
-	     OxMethod newMethod = oxClass.addMethod(methodName);
+	     OxMethod newMethod = oxClass.methodByName(methodName);
+         if (newMethod == null) {
+		    oxdoc.warning("Definition of method " + methodName + " of class " + classname.image + ": method is not declared yet.");
+			newMethod = oxClass.addMethod(methodName);
+         }
 	     if (classname.specialToken != null)
             if (classname.specialToken.beginLine != 1)
 		    newMethod.setComment(classname.specialToken.image);
@@ -317,9 +318,10 @@ void JumpStatement() : {}
 		  <RETURN> [ Expression() ]  )
 }
 
-void VariableDeclaration() : {}
+Token VariableDeclaration() : { Token name; }
 {
-	<IDENTIFIER> [ "=" AssignmentExpression() ]
+	name = <IDENTIFIER> [ "=" AssignmentExpression() ]
+	{ return name; }
 }
 
 void Declaration() : {}
@@ -327,7 +329,7 @@ void Declaration() : {}
 	[<EXTERN>] [<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*  	
 }
 
-/** Added by C. Ferrall to parse swithces
+/** Added by C. Ferrall to parse switches
 **/
 void CaseStatement() : {}
 {
@@ -346,9 +348,9 @@ void SelectionStatement() : {}
 {
 	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
 	  <SWITCH> "(" Expression() ")" 
-                "{" (CaseStatement())* [DfltStatement()] "}" |
+                "{" (CaseStatement() | DfltStatement())* "}" |
 	  <SWITCHSINGLE> "(" Expression() ")" 
-                "{" (CaseStatement())* [DfltStatement()] "}"  )
+                "{" (CaseStatement() | DfltStatement())* "}"  )
 }
 
 void IterationStatement() : {}
@@ -371,7 +373,7 @@ void Expression() : {}
 
 void AssignmentExpression() : {}  
 {
-	  "[" <IDENTIFIER> ("," <IDENTIFIER>)* "]" "=" AssignmentExpression() |
+	  "[" UnaryExpression() ("," UnaryExpression())* "]" "=" AssignmentExpression() |
 	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression() |
 	  LOOKAHEAD(3) ConditionalExpression()
 }

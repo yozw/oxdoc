@@ -17,21 +17,42 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-public class OxFunction extends OxEntity {
-   OxFunction(String name, OxFile parentFile) {
-      super(name, new FunctionComment(parentFile.project()), parentFile);
-      setIconType(FileManager.FUNCTION);
+public class OxField extends OxEntity {
+   public String Declaration;
+   public OxClass.Visibility _visibility;
+   private OxClass _class = null;
+
+   OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
+      super(name, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
+//      setIconType(FileManager.FIELD);
+      _visibility = visibility;
+      _class = oxclass;
+   }
+
+   public OxClass parentClass() {
+      return _class;
    }
 
    public String url() {
-      return parentFileUrl() + "#" + name();
+      return parentFileUrl() + "#" + _class.name() + "___" + displayName();
    }
 
    public String displayName() {
-      return name();
+      String[] pts = name().split("::");
+
+      return pts[1];
+   }
+
+   public String declaration() {
+      return visibility() + " decl " + name();
+   }
+
+   public OxClass.Visibility visibility() 
+   {
+      return _visibility;
    }
 
    public String toString() {
-      return "<OxFunction " + name() + ">";
+      return "<OxField " + name() + ">";
    }
 }

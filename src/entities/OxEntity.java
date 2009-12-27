@@ -23,6 +23,7 @@ public class OxEntity {
    private BaseComment _comment = null;
    private int _iconType = FileManager.NONE;
    private OxProject _project;
+   public String _declaration;
 
    public OxEntity(String name, BaseComment comment, OxProject project) {
       this.name = name;
@@ -98,4 +99,9 @@ public class OxEntity {
    public String toString() {
       return "<OxEntity " + name() + ">";
    }
+
+   public String declaration() {
+      return _declaration;
+   }
+
 }

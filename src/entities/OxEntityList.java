@@ -37,6 +37,10 @@ public class OxEntityList {
       return (OxEntity) entities.get(name);
    }
 
+   public int size() {
+	  return entities.size();
+   }
+
    public ArrayList sortedList() {
       ArrayList list = new ArrayList();
       for (Enumeration e = entities.elements(); e.hasMoreElements();)
