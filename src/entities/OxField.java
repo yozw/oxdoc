@@ -65,7 +65,7 @@ public class OxField extends OxEntity {
 
    public boolean isInternal()
    {
-      return ((FieldComment) comment()).hasInternalModifier();
+      return ((FieldComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
    }
 
 }

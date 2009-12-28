@@ -230,6 +230,7 @@ void FieldDeclaration() :
              newField.setComment(comment);
           newField.Static = Static;
           newField.Constant = Constant;
+ 		  project.addSymbol(newField);
        }
     }
 }
