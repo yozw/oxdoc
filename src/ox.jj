@@ -182,24 +182,55 @@ void ClassBody() : {}
     )*
 }
 
-void MethodDeclaration() : { Token name; String methodPrefix = ""; }
+void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false; String methodPrefix = ""; }
 {
-	[<VIRTUAL>] [<STATIC>] ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
+	[<VIRTUAL> { Virtual = true; } ] 
+    [<STATIC> { Static = true; } ] 
+    ["~" { methodPrefix = "~"; } ] 
+    name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
     {
        String methodName = currentClass.name() + "::" + methodPrefix + name.image;
-       currentClass.addMethod(methodName);
+       OxMethod newMethod = currentClass.addMethod(methodName);
+       newMethod.Virtual = Virtual;
+       newMethod.Static = Static;
     }
 }
 
 /** C. Ferrall switch STATIC and CONST to the order required by Ox
 **/
-void FieldDeclaration() : { Token name; ArrayList variableNames = new ArrayList(); }
+void FieldDeclaration() : 
+   { 
+       Token staticToken = null, 
+             constToken = null,
+             declToken = null,
+             firstToken = null; 
+       Token name; 
+       boolean Static = false, Constant = false;
+       ArrayList variableNames = new ArrayList(); 
+   }
 {
-    [<STATIC>] [<CONST>] <DECL> name = VariableDeclaration()  { variableNames.add(name); }
-		(","  VariableDeclaration() { variableNames.add(name); } )* ";"
+    [staticToken = <STATIC> { Static = true; } ] 
+    [constToken = <CONST> { Constant = true; } ] 
+    declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
+		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
     {
+       if (staticToken != null) firstToken = staticToken;
+       if ((constToken != null) && (firstToken == null)) firstToken = constToken;
+       if ((declToken != null) && (firstToken == null)) firstToken = declToken;
+
+       String comment = null;
+       if (firstToken.specialToken != null)
+          if (firstToken.specialToken.beginLine != 1)
+             comment = firstToken.specialToken.image;
+
        for (Object varName: variableNames)
-          currentClass.addField(currentClass.name() + "::" + ( (Token) varName).image, currentVisibility);
+       {
+          OxField newField = currentClass.addField(currentClass.name() + "::" + ( (Token) varName).image, currentVisibility);
+          if (comment != null)
+             newField.setComment(comment);
+          newField.Static = Static;
+          newField.Constant = Constant;
+       }
     }
 }
 

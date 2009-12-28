@@ -148,23 +148,31 @@ public class Documentor {
 			    OxEntity member = (OxEntity) members.get(i);
 				if (member instanceof OxMethod)
 				{
+                    OxMethod method = (OxMethod) member;
+
+                    if ((!oxdoc.config.ShowInternals) && method.isInternal())
+                        continue;
 					if (inheritedMethodCount > 0)
                    		inheritedMethods += ", ";
-					inheritedMethods += member.link();
+					inheritedMethods += method.link();
 					inheritedMethodCount++;
 				}
 				else
 				if (member instanceof OxField)
 				{
+                    OxField field = (OxField) member;
+
+                    if ((!oxdoc.config.ShowInternals) && field.isInternal())
+                        continue;
 				    if (!oxdoc.config.ShowInternals)
-						if ( ((OxField) member).visibility() != OxClass.Visibility.Public)
+						if (field.visibility() != OxClass.Visibility.Public)
 							continue;
-					if ( ((OxField) member).visibility() == OxClass.Visibility.Private)
+					if (field.visibility() == OxClass.Visibility.Private)
 						continue;
 
 					if (inheritedFieldCount > 0)
                    		inheritedFields += ", ";
-					inheritedFields += member.link();
+					inheritedFields += field.link();
 					inheritedFieldCount++;
 				}
 				else throw new Exception("Class member has unexpected class: " + member);
@@ -203,6 +211,19 @@ public class Documentor {
 				visLabels = new String[] {"Public fields", "Public methods"};
 				visMembers = new ArrayList[] {oxclass.getPublicFields(), 
 	                         oxclass.getMethods()};
+
+                // filter methods and fields marked as internal
+                for (int i = 0; i < visLabels.length; i++) 
+                {
+                    int k = 0;
+                    while (k < visMembers[i].size())
+                    {
+                        if ( ((OxEntity) visMembers[i].get(k)).isInternal() )
+                           visMembers[i].remove(k);
+                        else
+                           k++;
+                    } 
+                }
 			}
          }
          else
@@ -217,6 +238,7 @@ public class Documentor {
 		     output.writeln("<tr><td colspan=\"2\" class=\"header\" valign=\"top\">" + visLabels[k] + "</td></tr>");
 		     for (int i = 0; i < visMembers[k].size(); i++) {
 		        OxEntity entity = (OxEntity) visMembers[k].get(i);
+
 		        output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
 		        output.writeln(entity.smallIcon() + entity.link());
 		        output.writeln("</td><td class=\"description\" valign=\"top\">");
@@ -245,9 +267,13 @@ public class Documentor {
          OxEntity entity = (OxEntity) memberList.get(i);
          String anchorName = classPrefix + entity.displayName();
 
-	     if (!oxdoc.config.ShowInternals)
+	     if (!oxdoc.config.ShowInternals) 
+         {
+            if ( entity.isInternal() ) 
+               continue;
 		    if ( (entity instanceof OxField) && (((OxField) entity).visibility() != OxClass.Visibility.Public) )
 			   continue;
+         }
 
          if (count != 0)
             output.writeln("\n<hr>");

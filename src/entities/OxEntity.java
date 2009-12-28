@@ -104,4 +104,9 @@ public class OxEntity {
       return _declaration;
    }
 
+   public boolean isInternal()
+   {
+      return false;
+   }
+
 }

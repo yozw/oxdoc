@@ -21,27 +21,12 @@ import java.text.*;
 
 
 public class FieldComment extends BaseComment {
-   private BaseCommentBlock _params;
-   private BaseCommentBlock _returns;
+   final int MODIFIER_INTERNAL = 300;
+   private boolean _hasInternalModifier = false;
 
    public FieldComment(OxProject project) {
       super(project);
-      _params = new CommentParameterList(project);
-      _returns = new CommentTextBlock(project);
-   }
-
-   protected boolean addToSection(String name, String text) {
-      if (!super.addToSection(name, text)) {
-         if (name.compareToIgnoreCase("param") == 0)
-            _params.add(text);
-         else if (name.compareToIgnoreCase("returns") == 0)
-            _returns.add(text);
-         else
-
-            return false;
-      }
-
-      return true;
+      registerModifier("internal", MODIFIER_INTERNAL);
    }
 
    private String generateSection(String name, String classname, Object o) {
@@ -54,11 +39,16 @@ public class FieldComment extends BaseComment {
       return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
    }
 
+   protected boolean processModifier(int ModifierId) 
+   {
+      if (super.processModifier(ModifierId)) return true;
+      if (ModifierId == MODIFIER_INTERNAL) { _hasInternalModifier = true; return true; }
+      return false;
+   }
+
    public String toString() {
       String out = "<dl>\n<dd>" + longdescription() + "<dl>\n";
 
-      out += generateSection("Parameters", "parameters", params());
-      out += generateSection("Returns", "returns", returns());
       out += generateSection("Example", "example", example());
       out += generateSection("Comments", "comments", comments());
       out += generateSection("See also", "seealso", see());
@@ -68,11 +58,8 @@ public class FieldComment extends BaseComment {
       return out;
    }
 
-   public BaseCommentBlock params() {
-      return _params;
-   }
-
-   public BaseCommentBlock returns() {
-      return _returns;
+   public boolean hasInternalModifier() 
+   {
+      return _hasInternalModifier;
    }
 }

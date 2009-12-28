@@ -17,7 +17,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
+
+import java.util.HashMap;
+
 public class BaseComment {
+   final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4;
+ 
    private String _text = "";
    private String _description = "";
    private CommentTextBlock _longdescription = null;
@@ -26,6 +31,8 @@ public class BaseComment {
    private CommentSeeAlsoList _see = null;
    private CommentList _ref = null;
    private CommentList _todo = null;
+   private HashMap _sections = new HashMap();
+   private HashMap _modifiers = new HashMap();
    public OxProject project = null;
 
    public BaseComment(OxProject project) {
@@ -36,25 +43,62 @@ public class BaseComment {
       _see = new CommentSeeAlsoList(project);
       _ref = new CommentList(project);
       _todo = new CommentList(project);
+
+      registerSection("comments", SECTION_COMMENTS);
+      registerSection("ref", SECTION_REF);
+      registerSection("example", SECTION_EXAMPLE);
+      registerSection("see", SECTION_SEE);
+   }
+
+   protected void registerSection(String name, int SectionId)
+   {
+      _sections.put(name, new Integer(SectionId));
+   }
+
+   protected void registerModifier(String name, int ModifierId)
+   {
+      _modifiers.put(name, new Integer(ModifierId));
+   }
+
+   protected int getSectionId(String name) 
+   {
+      return (Integer) _sections.get(name);
+   }
+
+   protected int getModifierId(String name) 
+   {
+      return (Integer) _modifiers.get(name);
    }
 
    /** Add a piece of text to one of the sections. Do not access this
    method directly. It is used by SetText. Override this method to add more sections.
    **/
-   protected boolean addToSection(String name, String text) {
-      if (name.compareToIgnoreCase("comments") == 0)
-         _comments.add(text);
-      else if (name.compareToIgnoreCase("ref") == 0)
-         _ref.add(text);
-      else if (name.compareToIgnoreCase("example") == 0)
-         _example.add(text);
-      else if (name.compareToIgnoreCase("see") == 0)
-         _see.add(text);
-      else
-
-         return false;
-
+   protected boolean addToSection(int SectionId, String text) 
+   {
+      switch (SectionId) 
+      {
+          case SECTION_COMMENTS: _comments.add(text); break;
+          case SECTION_REF:      _ref.add(text); break;
+          case SECTION_EXAMPLE:  _example.add(text); break;
+          case SECTION_SEE:      _see.add(text); break;
+          default: return false;
+      }
       return true;
+   }
+
+   protected boolean isSection(String name) 
+   {
+      return _sections.containsKey(name);
+   }
+
+   protected boolean isModifier(String name) 
+   {
+      return _modifiers.containsKey(name);
+   }
+
+   protected boolean processModifier(int ModifierId) 
+   {
+      return false;
    }
 
    private static String extractShortDescription(String text) {
@@ -84,17 +128,36 @@ public class BaseComment {
 
       String[] sections = text.split("@");
 
-      _description = extractShortDescription(sections[0]);
-      _longdescription.add(sections[0]);
+      String description = "";
+      int curSection = -1;
 
-      for (int i = 1; i < sections.length; i++) {
-         String[] words = sections[i].split("[\t ]", 2);
-         String sectionName = words[0];
-         String sectionText = (words.length > 1) ? words[1] : "";
+      for (int i = 0; i < sections.length; i++) {
+         String textLine;
 
-         if (!addToSection(sectionName, sectionText))
-            throw new ParseException("Comment section '@" + sectionName + "' unknown -- ignored");
+         if (i == 0) 
+            textLine = sections[0];
+         else
+         {
+            String[] words = sections[i].split("[\t\n ]", 2);
+            String commandName = words[0];
+            textLine = (words.length > 1) ? words[1] : "";
+
+            if (isModifier(commandName))
+               processModifier(getModifierId(commandName));
+            else if (isSection(commandName))
+               curSection = getSectionId(commandName);
+            else
+               textLine = "@" + commandName + " " + textLine;
+         }
+
+         if (curSection == -1)
+            description += textLine + " ";
+         else
+            addToSection(curSection, textLine);
       }
+
+      _description = extractShortDescription(description);
+      _longdescription.add(description);
    }
 
    /** Short description of the entity, i.e. the part before the first . **/

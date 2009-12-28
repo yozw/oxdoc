@@ -30,8 +30,9 @@ public class Config {
    public String LatexArg = "";
    public String Dvipng = "dvipng.exe";
    public String DvipngArg = "-Q 10 -D 110";
-   public String TempDir = ".";
    public String OutputDir = ".";
+   public String TempDir = ".";
+   public String[] IncludePaths = new String[] {};
    public String ImagePath = "images/";
    public String WindowTitle = "";
    public String ProjectName = "";
@@ -54,8 +55,9 @@ public class Config {
    public boolean setSimpleOption(String name) {
       if (name.equals("icons"))
          setOption("enableicons", "1");
+      else if (name.equals("showinternals"))
+         setOption("showinternals", "1");
       else
-
          return false;
 
       return true;
@@ -103,6 +105,8 @@ public class Config {
             TempDir = FileManager.nativePath(value);
          else if (name.equals("outputdir"))
             OutputDir = FileManager.nativePath(value);
+         else if (name.equals("include"))
+            IncludePaths = value.split(":");
          else if (name.equals("imagebgcolor")) {
             if (value.trim().equalsIgnoreCase("transparent"))
                ImageBgColor = null;
@@ -121,6 +125,8 @@ public class Config {
             MathProcessor = toMathProcessor(value);
          else if (name.equals("enableicons"))
             EnableIcons = toBoolean(value);
+         else if (name.equals("showinternals"))
+            ShowInternals = toBoolean(value);
          else if (name.equals("projectname"))
             ProjectName = value;
          else if (name.equals("windowtitle"))
@@ -140,8 +146,10 @@ public class Config {
       System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
       System.out.println("    -imagebgcolor <color>  Provides the path to the LaTeX executable");
       System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
+      System.out.println("    -include <paths>       Provides include search path");
       System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
       System.out.println("    -icons                 Enables icons");
+      System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -nolatex               Disables LaTeX support. Formulas will be");
       System.out.println("                           inserted literally");
       System.out.println("    -outputdir <dir>       Specifies the output directory");

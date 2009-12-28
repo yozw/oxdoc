@@ -8,21 +8,27 @@ public class FileComment extends BaseComment {
    private String _author = "";
    private String _version = "";
 
+   final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+
    public FileComment(OxProject project) {
       super(project);
+
+      registerSection("author", SECTION_AUTHOR);
+      registerSection("authors", SECTION_AUTHOR);
+      registerSection("version", SECTION_VERSION);
    }
 
-   protected boolean addToSection(String name, String text) {
-      if (!super.addToSection(name, text)) {
-         if (name.compareToIgnoreCase("author") == 0)
-            _author = text;
-         else if (name.compareToIgnoreCase("version") == 0)
-            _version = text;
-         else
+   protected boolean addToSection(int SectionId, String text) {
+      if (super.addToSection(SectionId, text)) 
+         return true;
 
+      switch (SectionId)
+      {
+         case SECTION_AUTHOR:  _author += text; break;
+         case SECTION_VERSION: _version += text; break;
+         default:
             return false;
       }
-
       return true;
    }
 

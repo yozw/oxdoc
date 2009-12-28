@@ -34,4 +34,9 @@ public class OxFunction extends OxEntity {
    public String toString() {
       return "<OxFunction " + name() + ">";
    }
+
+   public boolean isInternal()
+   {
+      return ((FunctionComment) comment()).hasInternalModifier();
+   }
 }

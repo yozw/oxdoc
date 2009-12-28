@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 public class OxMethod extends OxFunction {
    public String Declaration;
+   public boolean Virtual = false;
+   public boolean Static = false;
    private OxClass _class = null;
 
    OxMethod(String name, OxClass oxclass) {
@@ -39,6 +41,14 @@ public class OxMethod extends OxFunction {
       String[] pts = name().split("::");
 
       return pts[1];
+   }
+
+   public String declaration()
+   {
+      String decl = super.declaration();
+      if (Virtual) decl = "virtual " + decl;
+      if (Static) decl = "static " + decl;
+      return decl;
    }
 
    public BaseComment comment() {

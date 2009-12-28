@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 public class OxField extends OxEntity {
    public String Declaration;
    public OxClass.Visibility _visibility;
+   public boolean Static = false;
+   public boolean Constant = false;
    private OxClass _class = null;
 
    OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
@@ -44,7 +46,12 @@ public class OxField extends OxEntity {
    }
 
    public String declaration() {
-      return visibility() + " decl " + name();
+      String decl = "";
+      if (Static) decl += "static ";
+      if (Constant) decl += "const ";
+      decl += " decl " + name();
+      decl += " [" + visibility() + "]";
+      return decl;
    }
 
    public OxClass.Visibility visibility() 
@@ -55,4 +62,10 @@ public class OxField extends OxEntity {
    public String toString() {
       return "<OxField " + name() + ">";
    }
+
+   public boolean isInternal()
+   {
+      return ((FieldComment) comment()).hasInternalModifier();
+   }
+
 }

@@ -23,21 +23,30 @@ import java.text.*;
 public class FunctionComment extends BaseComment {
    private BaseCommentBlock _params;
    private BaseCommentBlock _returns;
+   private boolean _hasInternalModifier = false;
+
+   final int SECTION_PARAM = 200, SECTION_RETURNS = 201;
+   final int MODIFIER_INTERNAL = 300;
 
    public FunctionComment(OxProject project) {
       super(project);
       _params = new CommentParameterList(project);
       _returns = new CommentTextBlock(project);
+
+      registerSection("param", SECTION_PARAM);
+      registerSection("params", SECTION_PARAM);
+      registerSection("return", SECTION_RETURNS);
+      registerSection("returns", SECTION_RETURNS);
+      registerModifier("internal", MODIFIER_INTERNAL);
    }
 
-   protected boolean addToSection(String name, String text) {
-      if (!super.addToSection(name, text)) {
-         if (name.compareToIgnoreCase("param") == 0)
-            _params.add(text);
-         else if (name.compareToIgnoreCase("returns") == 0)
-            _returns.add(text);
-         else
+   protected boolean addToSection(int SectionId, String text) {
+      if (super.addToSection(SectionId, text)) return true;
 
+      switch (SectionId) {
+         case SECTION_PARAM:   _params.add(text); break;
+         case SECTION_RETURNS: _returns.add(text); break;
+         default:
             return false;
       }
 
@@ -52,6 +61,13 @@ public class FunctionComment extends BaseComment {
       Object[] args = { classname, name, text };
 
       return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
+   }
+
+   protected boolean processModifier(int ModifierId) 
+   {
+      if (super.processModifier(ModifierId)) return true;
+      if (ModifierId == MODIFIER_INTERNAL) { _hasInternalModifier = true; return true; }
+      return false;
    }
 
    public String toString() {
@@ -74,5 +90,10 @@ public class FunctionComment extends BaseComment {
 
    public BaseCommentBlock returns() {
       return _returns;
+   }
+
+   public boolean hasInternalModifier() 
+   {
+      return _hasInternalModifier;
    }
 }
