@@ -106,7 +106,7 @@ public class Config {
          else if (name.equals("outputdir"))
             OutputDir = FileManager.nativePath(value);
          else if (name.equals("include"))
-            IncludePaths = value.split(":");
+            IncludePaths = value.split(File.pathSeparator);
          else if (name.equals("imagebgcolor")) {
             if (value.trim().equalsIgnoreCase("transparent"))
                ImageBgColor = null;

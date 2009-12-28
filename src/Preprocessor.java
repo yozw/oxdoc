@@ -28,6 +28,7 @@ public class Preprocessor {
 	private OxDoc oxdoc = null;
 	private Writer outputStream;
 	private static Collection ignoredFiles = new ArrayList();
+	private static Collection ignoredFileNames = new ArrayList();
 	private static final int PLAINLINE = 0;
 	private static final int ENDIF = 1;
 	private static final int ELSE = 2;
@@ -43,14 +44,17 @@ public class Preprocessor {
 	}
 
 	public void ProcessFile(File file) throws Exception {
+       ProcessFile(file, file);
+    }
+
+	private void ProcessFile(File file, File mainFile) throws Exception {
 		BufferedReader reader = null;
 		try { 
 			reader = new BufferedReader(new FileReader(file));
 		} catch (IOException E) {
-			ignoreFile(file);
-			return;
+            throw new Exception("Could not open file " + file);
 		}
-		ProcessBlock(reader, 0, true, file);
+		ProcessBlock(reader, 0, true, file, mainFile);
 		outputStream.flush();
 	}
 
@@ -58,7 +62,11 @@ public class Preprocessor {
 		File absFile = file.getAbsoluteFile();
 		if (!ignoredFiles.contains(absFile)) {
 			ignoredFiles.add(absFile);
-			oxdoc.warning("Included file " + file.getName() + " could not be opened. File will be ignored.");
+	 	    if (!ignoredFileNames.contains(file.getName())) 
+            {
+			   ignoredFileNames.add(file.getName() );
+			   oxdoc.warning("Included file " + file.getName() + " could not be opened. File will be ignored.");
+            }
 		}
 	}
 
@@ -99,7 +107,7 @@ public class Preprocessor {
 		return listContainsString(defines, define);
 	}
 
-	private int ProcessBlock(BufferedReader is, int endMarkers, boolean active, File file) throws Exception {
+	private int ProcessBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile) throws Exception {
 
 		String line;
 		String output = "";
@@ -114,9 +122,9 @@ public class Preprocessor {
 					if (cmd == IFNDEF)
 						write = !write;
 
-					int lastCmd = ProcessBlock(is, ELSE | ENDIF, write && active, file);
+					int lastCmd = ProcessBlock(is, ELSE | ENDIF, write && active, file, mainFile);
 					if (lastCmd == ELSE) 
-						ProcessBlock(is, ENDIF, (!write) && active, file);
+						ProcessBlock(is, ENDIF, (!write) && active, file, mainFile);
 					continue;
 				case ELSE:
 					if ((endMarkers & ELSE) == 0)
@@ -141,13 +149,52 @@ public class Preprocessor {
 					if (params.size() != 1)
 						throw new IOException( ((cmd == IMPORT)?"#import":"#include") + " requires 1 argument");
 					if (active) {
+                        boolean lookInSearchPath;
 						String fileSpec = (String) params.get(0);
+                        char firstChar = fileSpec.charAt(0);
+                        char lastChar = fileSpec.charAt(fileSpec.length()-1);
+                        if ((firstChar == '"') && (lastChar == '"'))
+                            lookInSearchPath = false;
+                        else if ((firstChar == '<') && (lastChar == '>'))
+                            lookInSearchPath = true;
+                        else {
+                            oxdoc.warning("Invalid preprocessor clause: " + line);
+                            break;
+                        }
 						String fileName = fileSpec.substring(1, fileSpec.length() - 1);
 						if (cmd == IMPORT) 
 							fileName += ".h";
-						String basePath = file.getAbsoluteFile().getParent();
 
-						ProcessFile(new File(basePath + File.separatorChar + fileName));
+                        ArrayList tryFiles = new ArrayList();
+                        if (lookInSearchPath) 
+                        {
+						   for (int i = 0; i < oxdoc.config.IncludePaths.length; i++) 
+                               tryFiles.add(new File(oxdoc.config.IncludePaths[i] + File.separatorChar + fileName));
+                        }
+						
+                        String basePath = mainFile.getAbsoluteFile().getParent();
+                        tryFiles.add(new File(basePath + File.separatorChar + fileName)); 
+
+                        boolean done = false;
+						for (int i = 0; i < tryFiles.size(); i++) 
+                        {
+                           File tryFile = (File) tryFiles.get(i);
+						   if (tryFile.exists()) 
+                           {
+                               ProcessFile(tryFile, mainFile);
+                               done = true;
+                           }
+                        }
+
+                        if (!done) 
+                        {
+//                           String warning = "Could not find included file " + fileName + ". The file will be ignored.";
+//						   for (int i = 0; i < tryFiles.size(); i++) 
+//                              warning += "\nTried " + ((File) tryFiles.get(i)).toString();
+//                           oxdoc.warning(warning);
+						   for (int i = 0; i < tryFiles.size(); i++) 
+                               ignoreFile((File) tryFiles.get(i));
+                        }
 					}
 					break;
 			}
