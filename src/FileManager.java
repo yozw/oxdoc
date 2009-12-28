@@ -31,9 +31,10 @@ public class FileManager {
    public static final int CLASS = 3;
    public static final int METHOD = 4;
    public static final int FUNCTION = 5;
+   public static final int FIELD = 6;
    public static final String[] iconFiles = {
                                                "index", "project", "file",
-                                               "class", "method", "function"
+                                               "class", "method", "function", "field"
    };
    private static String _imageCache = "images.xml";
    private static String _tempTexFileBase = "__oxdoc";

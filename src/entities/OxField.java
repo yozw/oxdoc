@@ -26,7 +26,7 @@ public class OxField extends OxEntity {
 
    OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
       super(name, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
-//      setIconType(FileManager.FIELD);
+      setIconType(FileManager.FIELD);
       _visibility = visibility;
       _class = oxclass;
    }

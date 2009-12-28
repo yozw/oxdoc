@@ -98,6 +98,9 @@
     <copy file="${srcmisc}/oxdocgui.bat"      todir="${pkg-bin}/bin" />
     <copy file="${bin}/oxdoc.jar"             todir="${pkg-bin}/bin" />
     <copy file="${lib}/jregex.jar"            todir="${pkg-bin}/bin" />
+    <copy todir="${pkg-bin}/icons">  
+       <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
+    </copy>
 
     <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
     <tar destfile="${pkg-bin}.tar.gz" basedir="${pkg-bin}" compression="gzip" />
@@ -114,6 +117,9 @@
     </copy>
     <copy todir="${pkg-src}/manual">  
        <fileset dir="manual" defaultexcludes="yes" includes="*.tex,manual.pdf" />
+    </copy>
+    <copy todir="${pkg-src}/icons">  
+       <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
     <copy todir="${pkg-src}/setup">  <fileset dir="setup" defaultexcludes="yes" /> </copy>
     <copy todir="${pkg-src}/lib">    <fileset dir="lib" defaultexcludes="yes" />   </copy>

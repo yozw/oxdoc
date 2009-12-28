@@ -40,6 +40,7 @@ public class OxClass extends OxEntity {
    OxClass(String name, OxFile parentFile) {
       super(name, new ClassComment(parentFile.project()), parentFile);
       _parentFile = parentFile;
+      setIconType(FileManager.CLASS);
    }
 
    OxClass(String name, String superClassName, OxFile parentFile) {
