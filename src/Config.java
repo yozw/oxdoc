@@ -144,7 +144,7 @@ public class Config {
 
    public static void listOptions() {
       System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
-      System.out.println("    -imagebgcolor <color>  Provides the path to the LaTeX executable");
+      System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
       System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
       System.out.println("    -include <paths>       Provides include search path");
       System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");

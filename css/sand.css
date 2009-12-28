@@ -90,7 +90,10 @@ dd.example PRE {
     font-family: courier;
     font-size: 10pt;
     font-weight: normal;
-}
+    white-space:nowrap;}
+
+.file {
+    white-space:nowrap;}
 
 .description {
 }
@@ -152,4 +155,12 @@ ul.index {
 
 .index li a {
     text-decoration: none;
+}
+
+.icon {
+    vertical-align: middle;
+}
+
+.latex {
+    vertical-align: middle;
 }

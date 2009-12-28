@@ -30,7 +30,7 @@ public class MathProcessorLatex extends MathProcessor {
       String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
       String filename = oxdoc.latexImageManager.getFormulaFilename(extFormula);
 
-      return "<img align=\"center\" src=\"" + oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
+      return "<img class=\"latex\" src=\"" + oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
    }
 
    public static boolean Supported(OxDoc oxdoc) {
@@ -40,7 +40,7 @@ public class MathProcessorLatex extends MathProcessor {
          return false;
       }
       if (!(new File(oxdoc.config.Dvipng)).exists()) {
-         oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + oxdoc.config.Latex + ")");
+         oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + oxdoc.config.Dvipng + ")");
 
          return false;
       }

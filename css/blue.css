@@ -87,7 +87,10 @@ dd.example PRE {
 .declaration {
     font-family: courier;
     font-size: 10pt;
-}
+    white-space:nowrap;}
+
+.file {
+    white-space:nowrap;}
 
 .description {
 }
@@ -147,4 +150,12 @@ ul.index {
 
 .index li a {
     text-decoration: none;
+}
+
+.icon {
+    vertical-align: middle;
+}
+
+.latex {
+    vertical-align: middle;
 }

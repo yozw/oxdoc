@@ -147,7 +147,7 @@ public class FileManager {
       if (iconType < 0)
          return "";
 
-      return "<img align=\"center\" src=\"icons/" + iconFiles[iconType] + ".png\">&nbsp;";
+      return "<img class=\"icon\" src=\"icons/" + iconFiles[iconType] + ".png\">&nbsp;";
    }
 
    public String smallIcon(int iconType) {
@@ -156,6 +156,6 @@ public class FileManager {
       if (iconType < 0)
          return "";
 
-      return "<img align=\"center\" src=\"icons/" + iconFiles[iconType] + "_s.png\">&nbsp;";
+      return "<img class=\"icon\" src=\"icons/" + iconFiles[iconType] + "_s.png\">&nbsp;";
    }
 }

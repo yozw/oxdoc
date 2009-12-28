@@ -78,6 +78,7 @@ TOKEN : {
 	<NAN: ".NaN"> |
 	<INF: ".Inf"> |
 	<BREAK: "break"> |
+	<GOTO: "goto"> |
 	<NEW: "new"> | 
 	<DELETE: "delete"> | 
 	<CONST: "const"> |
@@ -330,14 +331,20 @@ void CompoundStatement() : {}
 void SimpleStatement() : {}
 {
 	LOOKAHEAD(3)
-	  Declaration() |
+      Declaration() |
 	  AssignmentExpression() ("," AssignmentExpression())* |
 	  JumpStatement() 
+}
+
+void Label() : {}
+{
+    ":" <IDENTIFIER>
 }
 
 void Statement() : {}
 {
   	LOOKAHEAD(CompoundStatement()) CompoundStatement()
+|   Label()
 |	LOOKAHEAD(SimpleStatement()) SimpleStatement() ";"
 |	IterationStatement()
 |	SelectionStatement()
@@ -345,7 +352,9 @@ void Statement() : {}
 
 void JumpStatement() : {}
 {
-	( <CONTINUE>  |
+	( 
+      <CONTINUE>  |
+      <GOTO> <IDENTIFIER> |
 	  <BREAK>  |
 		  <RETURN> [ Expression() ]  )
 }

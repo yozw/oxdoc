@@ -23,7 +23,11 @@ dd.example PRE {
 
 .declaration {
     font-family: courier;
+    white-space:nowrap;
 }
+
+.file {
+    white-space:nowrap;}
 
 .equation {
     display: block;
@@ -47,3 +51,10 @@ dd.example PRE {
     padding-top: 4px;
 }
 
+.icon {
+    vertical-align: middle;
+}
+
+.latex {
+    vertical-align: middle;
+}

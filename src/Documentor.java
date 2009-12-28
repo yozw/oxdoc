@@ -68,9 +68,9 @@ public class Documentor {
       output.writeln("<table class=\"index\">");
 
       ArrayList symbols = project.symbolsByDisplayName();
+
       for (int i = 0; i < symbols.size(); i++) {
          String description = "";
-         int iconType = -1;
          OxEntity entity = (OxEntity) symbols.get(i);
          if ((!oxdoc.config.ShowInternals) && entity.isInternal())
             continue;
