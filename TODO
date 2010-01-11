@@ -2,8 +2,9 @@ TO DO LIST for oxdoc:
 
 * add option to list enumerations defined in a class too
 * think about how to display overridden methods (see email)
-* update documentation: icons / mathML / @internal / -showinternal
-
+* update documentation: icons / mathML / @internal / -showinternal / #import 
+* Check newer version of http://www1.chapman.edu/~jipsen/mathml/asciimath.html
+  - Check license!!
 
 
 FIXED:
