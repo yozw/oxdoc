@@ -17,15 +17,15 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-public class OxField extends OxEntity {
+public class OxEnum extends OxEntity {
    public String Declaration;
    public OxClass.Visibility _visibility;
-   public boolean Static = false;
-   public boolean Constant = false;
+   private String[] _elements;
 
-   OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
+   OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
       super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
-      setIconType(FileManager.FIELD);
+      setIconType(FileManager.ENUM);
+      _elements = elements;
       _visibility = visibility;
    }
 
@@ -35,10 +35,13 @@ public class OxField extends OxEntity {
 
    public String declaration() {
       String decl = "";
-      if (Static) decl += "static ";
-      if (Constant) decl += "const ";
-      decl += " decl " + name();
-      decl += " [" + visibility() + "]";
+      decl += " enum { ";
+      for (int i = 0; i < _elements.length; i++) 
+      {
+          if (i != 0) decl += ", ";
+          decl += _elements[i];
+      }
+      decl += " } [" + visibility() + "]";
       return decl;
    }
 
@@ -48,7 +51,7 @@ public class OxField extends OxEntity {
    }
 
    public String toString() {
-      return "<OxField " + referenceName() + ">";
+      return "<OxEnum " + referenceName() + ">";
    }
 
    public boolean isInternal()

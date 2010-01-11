@@ -40,7 +40,7 @@ public class OxProject {
    }
 
    public OxEntity addSymbol(OxEntity entity) {
-      return (OxEntity) _symbols.add(entity.name(), entity);
+      return (OxEntity) _symbols.add(entity.referenceName(), entity);
    }
 
    public ArrayList symbols() {

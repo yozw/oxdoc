@@ -45,9 +45,12 @@ public class BaseComment {
       _todo = new CommentList(project);
 
       registerSection("comments", SECTION_COMMENTS);
+      registerSection("comment", SECTION_COMMENTS);
       registerSection("ref", SECTION_REF);
       registerSection("example", SECTION_EXAMPLE);
+      registerSection("examples", SECTION_EXAMPLE);
       registerSection("see", SECTION_SEE);
+      registerSection("seealso", SECTION_SEE);
    }
 
    protected void registerSection(String name, int SectionId)

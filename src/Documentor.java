@@ -77,9 +77,12 @@ public class Documentor {
          if (entity instanceof OxClass)
             description = "Class";
          else if (entity instanceof OxMethod)
-            description = "Method of " + project.linkToEntity(((OxMethod) entity).parentClass());
-         else if (entity instanceof OxFunction)
-            description = "Global function";
+         {
+            if ( ((OxMethod) entity).parentClass() != null)
+               description = "Method of " + project.linkToEntity(((OxMethod) entity).parentClass());
+            else
+               description = "Global function";
+         }
          else if (entity instanceof OxField)
             description = "Field of " + project.linkToEntity(((OxField) entity).parentClass());;
 
@@ -174,6 +177,8 @@ public class Documentor {
 					inheritedFields += field.link();
 					inheritedFieldCount++;
 				}
+                else
+                if (member instanceof OxEnum) { } 
 				else throw new Exception("Class member has unexpected class: " + member);
              }
              inheritedMethods += "</dd>\n";

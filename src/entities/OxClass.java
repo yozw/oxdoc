@@ -22,6 +22,8 @@ import java.util.*;
 
 public class OxClass extends OxEntity {
 
+   private int enumCounter = 0;
+
    public enum Visibility { 
 	Private { public String toString() { return "private"; } },
 	Protected { public String toString() { return "protected"; } },
@@ -38,13 +40,13 @@ public class OxClass extends OxEntity {
    private String _superClassName = null;
 
    OxClass(String name, OxFile parentFile) {
-      super(name, new ClassComment(parentFile.project()), parentFile);
+      super(name, null, new ClassComment(parentFile.project()), parentFile);
       _parentFile = parentFile;
       setIconType(FileManager.CLASS);
    }
 
    OxClass(String name, String superClassName, OxFile parentFile) {
-      super(name, new ClassComment(parentFile.project()), parentFile);
+      super(name, null, new ClassComment(parentFile.project()), parentFile);
       _parentFile = parentFile;
       setIconType(FileManager.CLASS);
       _superClassName = superClassName;
@@ -56,6 +58,14 @@ public class OxClass extends OxEntity {
 
    public OxField addField(String name, Visibility vis) {
       return (OxField) _members.add(new OxField(name, this, vis));
+   }
+
+   public OxEnum addEnum(ArrayList elements, Visibility vis) {
+      String[] _elements = new String[elements.size()];
+      for (int i = 0; i < elements.size(); i++)
+          _elements[i] = elements.get(i).toString();
+      enumCounter++;
+      return (OxEnum) _members.add(new OxEnum("enum" + enumCounter, _elements, this, vis));
    }
 
    public ArrayList members() {
@@ -115,11 +125,11 @@ public class OxClass extends OxEntity {
    }
 
    public OxMethod methodByName(String s) {
-      return (OxMethod) _members.get(name() + "::" + s);
+      return (OxMethod) _members.get(s);
    }
 
    public OxField fieldByName(String s) {
-      return (OxField) _members.get(name() + "::" + s);
+      return (OxField) _members.get(s);
    }
 
    public OxFile parentFile() {

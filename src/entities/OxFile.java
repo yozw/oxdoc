@@ -25,12 +25,12 @@ public class OxFile extends OxEntity {
    private OxEntityList _classes = new OxEntityList();
 
    public OxFile(String fileName, OxProject project) {
-      super(fileName, new FileComment(project), project);
+      super(fileName, null, new FileComment(project), project);
       setIconType(FileManager.FILE);
    }
 
-   public OxFunction addFunction(String name) {
-      return (OxFunction) _functions.add(new OxFunction(name, this));
+   public OxMethod addFunction(String name) {
+      return (OxMethod) _functions.add(new OxMethod(name, this));
    }
 
    public OxClass addClass(String name) {

@@ -190,8 +190,7 @@ void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false
     ["~" { methodPrefix = "~"; } ] 
     name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
     {
-       String methodName = currentClass.name() + "::" + methodPrefix + name.image;
-       OxMethod newMethod = currentClass.addMethod(methodName);
+       OxMethod newMethod = currentClass.addMethod(methodPrefix + name.image);
        newMethod.Virtual = Virtual;
        newMethod.Static = Static;
     }
@@ -226,7 +225,7 @@ void FieldDeclaration() :
 
        for (Object varName: variableNames)
        {
-          OxField newField = currentClass.addField(currentClass.name() + "::" + ( (Token) varName).image, currentVisibility);
+          OxField newField = currentClass.addField(( (Token) varName).image, currentVisibility);
           if (comment != null)
              newField.setComment(comment);
           newField.Static = Static;
@@ -239,13 +238,23 @@ void FieldDeclaration() :
 /** C. Ferrall added the optional ";" 
     And added option of = integer, created EnumElement
 **/
-void EnumElement() : {}
+Token EnumElement() : { Token name; }
 {
-  <IDENTIFIER> ["=" ["+"|"-"] <INTEGER_LITERAL>]
+  name = <IDENTIFIER> ["=" ["+"|"-"] <INTEGER_LITERAL>]
+  { return name; }
 }
-void EnumDeclaration() : {}
+
+void EnumDeclaration() : { ArrayList elements = new ArrayList(); Token enumToken, el; }
 {
-	<ENUM> "{" EnumElement()  ("," EnumElement())* "}" [";"]
+	enumToken = <ENUM> 
+    "{" 
+    el = EnumElement() { elements.add(el.image); }
+    ("," el = EnumElement() { elements.add(el.image); } )* 
+    "}" [";"]
+    {
+/*       if (currentClass != null) 
+           currentClass.addEnum(elements, currentVisibility);*/
+    }
 }
 
 void ExternFunctionDeclaration() : {}
@@ -267,7 +276,7 @@ void FunctionDeclaration() :{}
 void FunctionDefinition() :
 { Token name, classname, t1 = getToken(1), t2;
   String methodPrefix = "";
-  OxFunction func;}
+  OxMethod func;}
 {
 	[<STATIC>]
 	(
@@ -294,7 +303,7 @@ void FunctionDefinition() :
 	  }
 |	  name = <IDENTIFIER> 
 	  {
-	  	 OxFunction newFunction = file.addFunction(name.image);
+	  	 OxMethod newFunction = file.addFunction(name.image);
 	     if (name.specialToken != null)
             if (name.specialToken.beginLine != 1)
 		    newFunction.setComment(name.specialToken.image);

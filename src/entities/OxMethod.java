@@ -17,30 +17,32 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-public class OxMethod extends OxFunction {
+public class OxMethod extends OxEntity {
    public String Declaration;
    public boolean Virtual = false;
    public boolean Static = false;
-   private OxClass _class = null;
 
-   OxMethod(String name, OxClass oxclass) {
-      super(name, oxclass.parentFile());
-      setIconType(FileManager.METHOD);
-      _class = oxclass;
+   OxMethod(String name, OxFile parentFile) 
+   {
+      super(name, null, new FunctionComment(parentFile.project()), parentFile);
+
+      setIconType(FileManager.FUNCTION);
    }
 
-   public OxClass parentClass() {
-      return _class;
+   OxMethod(String name, OxClass oxclass) {
+      super(name, oxclass, new FunctionComment(oxclass.parentFile().project()), oxclass.parentFile());
+
+      if (oxclass == null)
+         setIconType(FileManager.FUNCTION);
+      else
+         setIconType(FileManager.METHOD);
    }
 
    public String url() {
-      return parentFileUrl() + "#" + _class.name() + "___" + displayName();
-   }
-
-   public String displayName() {
-      String[] pts = name().split("::");
-
-      return pts[1];
+      if (parentClass() != null)
+          return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
+      else
+          return parentFileUrl() + "#" + displayName();
    }
 
    public String declaration()
@@ -68,6 +70,6 @@ public class OxMethod extends OxFunction {
    }
 
    public String toString() {
-      return "<OxMethod " + name() + ">";
+      return "<OxMethod " + referenceName() + ">";
    }
 }

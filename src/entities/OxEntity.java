@@ -24,26 +24,39 @@ public class OxEntity {
    private int _iconType = FileManager.NONE;
    private OxProject _project;
    public String _declaration;
+   private OxClass _parentClass;
 
-   public OxEntity(String name, BaseComment comment, OxProject project) {
+   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
       this.name = name;
       _project = project;
       _comment = comment;
+      _parentClass = parentClass;
    }
 
-   public OxEntity(String name, BaseComment comment, OxFile parentFile) {
+   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
       this.name = name;
       _project = parentFile.project();
       _comment = comment;
       _parentFile = parentFile;
+      _parentClass = parentClass;
    }
 
    public OxProject project() {
       return _project;
    }
 
+   public OxClass parentClass() {
+      return _parentClass;
+   }
+
    public String name() {
       return this.name;
+   }
+
+   public String referenceName() 
+   {
+      if (_parentClass == null) return name();
+      return _parentClass.name() + "::" + name();
    }
 
    public int iconType() {

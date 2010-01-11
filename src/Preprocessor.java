@@ -58,15 +58,19 @@ public class Preprocessor {
 		outputStream.flush();
 	}
 
-	private void ignoreFile(File file) {
-		File absFile = file.getAbsoluteFile();
-		if (!ignoredFiles.contains(absFile)) {
-			ignoredFiles.add(absFile);
-	 	    if (!ignoredFileNames.contains(file.getName())) 
+	private void ignoreIncludeFiles(String fileName, ArrayList tryFiles) {
+		if (!ignoredFiles.contains(fileName)) {
+			ignoredFiles.add(fileName);
+            String warning = "Included file " + fileName + " could not be opened. File will be ignored.";
+
+            if (oxdoc.config.Verbose) 
             {
-			   ignoredFileNames.add(file.getName() );
-			   oxdoc.warning("Included file " + file.getName() + " could not be opened. File will be ignored.");
+                warning += "\n-- Looked for the following files:";
+         
+                for (int i = 0; i < tryFiles.size(); i++) 
+                    warning += "\n   " + ((File) tryFiles.get(i)).getAbsoluteFile();
             }
+            oxdoc.warning(warning);
 		}
 	}
 
@@ -144,36 +148,43 @@ public class Preprocessor {
 					if (active) 
 						defines.add( ((String) params.get(0)).trim() );
 					break;
-				case INCLUDE:
 				case IMPORT:
+					break;
+				case INCLUDE:
 					if (params.size() != 1)
 						throw new IOException( ((cmd == IMPORT)?"#import":"#include") + " requires 1 argument");
 					if (active) {
-                        boolean lookInSearchPath;
+                        boolean lookLocal;
 						String fileSpec = (String) params.get(0);
                         char firstChar = fileSpec.charAt(0);
                         char lastChar = fileSpec.charAt(fileSpec.length()-1);
                         if ((firstChar == '"') && (lastChar == '"'))
-                            lookInSearchPath = false;
+                            lookLocal = true;
                         else if ((firstChar == '<') && (lastChar == '>'))
-                            lookInSearchPath = true;
+                            lookLocal = false;
                         else {
                             oxdoc.warning("Invalid preprocessor clause: " + line);
                             break;
                         }
 						String fileName = fileSpec.substring(1, fileSpec.length() - 1);
-						if (cmd == IMPORT) 
-							fileName += ".h";
+						//if (cmd == IMPORT) 
+						//	fileName += ".h";
 
+                        // specify search paths as described in Ox Syntax guide
                         ArrayList tryFiles = new ArrayList();
-                        if (lookInSearchPath) 
+                        if (lookLocal) 
                         {
-						   for (int i = 0; i < oxdoc.config.IncludePaths.length; i++) 
-                               tryFiles.add(new File(oxdoc.config.IncludePaths[i] + File.separatorChar + fileName));
+                           // * in the directory containing the source file (if just a filename, or a filename 
+                           //   with a relative path is specified), or in the specified directory (if the filename has an absolute path); 
+                           String basePath = mainFile.getAbsoluteFile().getParent();
+                           tryFiles.add(new File(basePath + File.separatorChar + fileName)); 
                         }
-						
-                        String basePath = mainFile.getAbsoluteFile().getParent();
-                        tryFiles.add(new File(basePath + File.separatorChar + fileName)); 
+
+                        // * the directories specified on the compiler command line (if any); 
+						for (int i = 0; i < oxdoc.config.IncludePaths.length; i++) 
+                           tryFiles.add(new File(oxdoc.config.IncludePaths[i] + File.separatorChar + fileName));
+                        // * in the current directory. 
+                        tryFiles.add(new File(fileName));				
 
                         boolean done = false;
 						for (int i = 0; i < tryFiles.size(); i++) 
@@ -187,14 +198,7 @@ public class Preprocessor {
                         }
 
                         if (!done) 
-                        {
-//                           String warning = "Could not find included file " + fileName + ". The file will be ignored.";
-//						   for (int i = 0; i < tryFiles.size(); i++) 
-//                              warning += "\nTried " + ((File) tryFiles.get(i)).toString();
-//                           oxdoc.warning(warning);
-						   for (int i = 0; i < tryFiles.size(); i++) 
-                               ignoreFile((File) tryFiles.get(i));
-                        }
+                           ignoreIncludeFiles(fileName, tryFiles);
 					}
 					break;
 			}

@@ -37,6 +37,7 @@ public class Config {
    public String WindowTitle = "";
    public String ProjectName = "";
    public MathProcessor MathProcessor = null;
+   public boolean Verbose = false;
 
    //    public static boolean EnableLatex = true;
    public boolean EnableIcons = false;
@@ -57,6 +58,8 @@ public class Config {
          setOption("enableicons", "1");
       else if (name.equals("showinternals"))
          setOption("showinternals", "1");
+      else if (name.equals("verbose"))
+         setOption("verbose", "1");
       else
          return false;
 
@@ -131,8 +134,9 @@ public class Config {
             ProjectName = value;
          else if (name.equals("windowtitle"))
             WindowTitle = value;
+         else if (name.equals("verbose"))
+            Verbose = toBoolean(value);
          else
-
             return false;
       } catch (Exception E) {
          if (oxdoc != null)
