@@ -1,0 +1,26 @@
+TO DO LIST for oxdoc:
+
+* add option to list enumerations defined in a class too
+* think about how to display overridden methods (see email)
+* update documentation: icons / mathML / @internal / -showinternal
+
+
+
+FIXED:
+* #import command now includes appropriate header file
+* the following code is no longer rejected:
+   [ a[1], a[2] ] = ... 
+* members are now listed in documentation too
+* ordering of private/protected/public in class definition is not fixed anymore
+* ordering of cases in switch should not be fixed (default comes last now)
+* add option to list members/methods as internal using @internal
+* member modifiers (e.g. static functions/fields, const fields) are documented as well now 
+* icons are now of the 'icon' class in the output HTML
+* latex formulas are now of the 'latex' class in the output HTML
+* improved css files / added Chris Ferrall's css file
+* added goto statement / labels to Ox syntax
+* added option for specifying include path 
+* add icon for fields / enumerations
+* in PcLire, Lire_Object and Lire_SimsSolver have no icon in the index (fixed)
+
+
