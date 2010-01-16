@@ -62,6 +62,11 @@ public class OxMethod extends OxEntity {
       return _comment;
    }
 
+   public boolean isInternal() 
+   {
+      return ((FunctionComment) comment()).hasInternalModifier();
+   }
+
    public OxMethod superMethod() {
       if (parentClass() == null || parentClass().superClass() == null)
          return null;
