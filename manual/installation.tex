@@ -1,0 +1,82 @@
+\chapter{Installation}
+
+\section{Prerequisites}
+Since \oxdoc~was written in Java, you should have Java installed on your computer.  
+The fact that \oxdoc~is a Java program means that it can in principle be used on 
+any operating system, including Windows and Linux. In this section, the installation
+process for Windows operating systems will be described. 
+For Linux and other operating systems, we will describe the manual installation 
+process which is slightly more complicated.
+
+The Java Runtime Environment (JRE) can be downloaded from {\tt www.java.com/getjava}.
+Most Linux distributions either have Java pre-installed, or it can be installed from
+the installation repositories.
+
+In order to use \LaTeX~generated formulas, a copy of \LaTeX~is required as well.
+A free Windows distribution called MiKTeX can be downloaded from {\tt http://www.miktex.org/}.
+Alternatively, \oxdoc~can generate mathematical formulas using the JavaScript package
+MathML. Generating formulas with MathML does not require any third-party software. 
+
+\oxdoc~uses a program called \dvipng~to generate PNG (Portable Network
+Graphics) files from \LaTeX~code.  The full installation of MiKTeX comes with a version
+of this programs, but other distributions may not have it readily available.  If you
+use a non-full installation of MiKTeX, make sure to select \dvipng~during the
+installation. Most Linux distributions have \dvipng~in their installation repositories. For
+example, installing \dvipng~on Ubuntu would be done by issuing the following command in a terminal:
+\begin{quote}
+\tt sudo apt-get install dvipng
+\end{quote}
+
+\section{Installation}
+\subsection{Installation on Windows 2000/XP using the Setup program}
+In order to install \oxdoc, download {\tt setup-0.975alpha.exe} file from
+the SourceForge website, run it, and follow the instructions.  
+In order to use \LaTeX~formulas, make sure to specify the location of MiKTeX
+(or any other \LaTeX~distribution).
+The setup program automatically creates a program group in the start menu from
+which the \oxdoc~graphical user interface is available. 
+
+\subsection{Manual installation on Windows}
+Follow the following steps to manually install \oxdoc:
+\begin{enumerate}
+\item Unzip the package {\tt oxdoc-xxx-bin.zip} into a
+suitable folder. For example, {\tt c:\bs program files\bs oxdoc}.
+\item Edit the file
+{\tt oxdoc.bat} and alter the {\tt oxdoc} variable in this file. This file looks
+as follows:
+
+\begin{quote}
+\small \begin{verbatim}
+@echo off
+set oxdoc=c:\program files\oxdoc
+java -jar "%oxdoc%\bin\oxdoc.jar" %1 %2 %3 %4 %5 %6 %7 %8 %9
+\end{verbatim}
+\end{quote}
+
+The second line in this file has to point to the directory in which the \oxdoc~files
+have been unzipped. The same holds for the file {\tt oxdocgui.bat}. 
+
+\item Optionally, copy the files {\tt oxdoc.bat} and {\tt oxdocgui.bat} into a
+folder in the Windows search path, e.g. {\tt c:\bs windows}. This way, it is possible to
+run \oxdoc~from any folder in the command prompt. 
+
+\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
+See the Configuration section for more information.
+\end{enumerate}
+
+To test whether \oxdoc~works, run the batch file {\tt oxdoc.bat} from the command line.  It should 
+display a short description of the program options.
+
+\subsection{Manual installation on Linux}
+Follow the following steps to manually install \oxdoc:
+\begin{enumerate}
+\item Unzip the package {\tt oxdoc-xxx-bin.tar.gz} into a
+suitable folder. For example, the \oxdoc~folder in your user directory.
+
+\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
+See the Configuration section for more information.
+\end{enumerate}
+
+To test whether \oxdoc~works, run the script file {\tt oxdoc} from the {\tt bin} directory.  It should 
+display a short description of the program options.
+

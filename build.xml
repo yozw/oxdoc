@@ -69,7 +69,13 @@
     <mkdir dir="${bin}"/>
     <copy file="${srcmisc}/oxdoc.css" todir="${build}" />
     <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}" />
-    <jar jarfile="${bin}/oxdoc.jar" basedir="${build}" />
+    <jar jarfile="${bin}/oxdoc.jar" basedir="${build}">
+        <manifest> 
+	  	   <attribute name="Built-By" value="${user.name}" />  
+		   <attribute name="Main-Class" value="OxDocCmd" />  
+		   <attribute name="Class-Path" value="../lib/jregex.jar" />
+        </manifest> 
+    </jar>
   </target>
 
   <target name="build" depends="jar">

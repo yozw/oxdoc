@@ -1,0 +1,27 @@
+\chapter{Running \oxdoc}
+Although \oxdoc~is a command line utility at its core, the easiest way to work with it is to use
+the graphical user interface (GUI).  If you installed \oxdoc~using the setup program in Windows, 
+this interface can be accessed from the Start menu. 
+
+\section{Running \oxdoc~using the GUI}
+
+\section{Running \oxdoc~from the command-line}
+Using \oxdoc~is rather easy. Generating documentation for an ox project
+requires running \oxdoc~and specifying the names of the files you
+want to generate documentation from. For example, suppose you have a number
+of ox files in a folder. From there, run 
+\begin{quote}
+\tt oxdoc *.ox
+\end{quote}
+
+from the command prompt in that folder. \oxdoc~generates a set
+of HTML files, of which {\tt default.html} is the project home file. It also
+creates a new style sheet file {\tt oxdoc.css}.
+
+It is advisable to specify an output directory for your project. This can
+be done by creating a new \oxdocxml~file in your project directory. See 
+Configuration for more information on that.
+
+
+\subsection{Options}
+

@@ -1,0 +1,207 @@
+\chapter{Writing documentation}
+Now you know how to run \oxdoc, it's time to write some comments
+in your code. Documentation comments consist of the normal ox comments,
+but instead of using {\tt /*} and {\tt */}, we use
+{\tt /**} and {\tt **/}. The general rule is that these documentation blocks 
+must be placed directly above the definitions and function definitions. For example:
+
+
+\section{Adding documentation to files, classes, methods, fields}
+Let us explain how to write documentation using \oxdoc~is by looking at the following example:
+
+\begin{lstlisting}
+/** The multivariate Normal distribution $\mathcal{N}(\mu, \Sigma)$.
+An instance of a NormalDistribution class generates realizations of a random
+variable $X$ with probability density function 
+$$f(x) = |\Sigma|^{-1/2}(2\pi)^{-n/2}
+       \exp\left(-\frac{1}{2}(x-\mu)'\Sigma^{-1}(x-\mu)\right).$$
+
+@author Y. Zwols
+
+@example To generate 20 samples from a standard normal distribution, 
+the following code can be used:
+<pre>
+decl Dist = new NormalDistribution(0, 1);
+decl Z = Dist.Generate(20);
+</pre>
+**/
+class NormalDistribution {
+   /** This vector denotes the mean of this normal distribution object. **/
+   decl m_vMu;
+   
+   /** This matrix denotes the variance/covariance matrix of this normal distribution object. **/
+   decl m_mSigma;
+   
+   NormalDistribution(const vMu, const mSigma);
+   virtual Generate(const cT);
+   virtual Dim();
+}
+
+/** Create a new instance of the NormalDistribution class with parameters $\mu$
+and $\Sigma$.
+@param vMu The mean $\mu$ of the normal distribution
+@param mSigma The variance/covariance matrix
+@comments The dimension of the multivariate normal distribution is deduced
+from the dimensions of the arguments. **/
+NormalDistribution::NormalDistribution(const vMu, const mSigma) {
+   expectMatrix("vMu", vMu, rows(vMu), 1);
+   expectMatrix("mSigma", mSigma, rows(vMu), rows(vMu));
+   m_vMu = vMu;
+   m_mSigma = mSigma;
+}
+
+/** Generate a vector of realizations. The length of the sample is given
+by the argument cT.
+@param cT Number of samples 
+**/
+NormalDistribution::Generate(const cT) {
+   return rann(cT, Dim());
+}
+
+/** The dimension of the multivariate normal distribution.
+@comments This is deduced from the arguments given to the constructor. **/
+NormalDistribution::Dim() {
+   return rows(m_vMu);
+}
+\end{lstlisting}
+
+This example shows most of the features. Every documentation block is written
+between {\tt /**} and {\tt **/} signs; HTML tags can be used, e.g. to add
+markup, or include images. Also, documentation blocks are divided into small
+sections by {\tt @} commands. For example, parameters can be described in the {\tt @param}
+section, and extra comments are given in the {\tt @comments} section. 
+
+Also, the first sentence of the comment block is taken as a summary of the
+documentation block.  This first sentence appears in e.g. the project home
+page and the methods table.  \oxdoc~recognizes the first sentence by
+scanning for a period followed by a white space.  This may have some undesired
+effects when a period in the first sentence doesn't indicate the end of a
+sentence, e.g. in the sentence 
+\begin{quote}
+\small\begin{verbatim}
+This class implements Dr. John's method. It solves linear equations.
+\end{verbatim}
+\end{quote}
+Here, the part {\tt This class implements Dr.} will be taken as a summary.
+This can be avoided by placing {\tt \&nbsp;} (a non-breaking space)
+just after {\tt Dr.}:
+\begin{quote}
+\small\begin{verbatim}
+This class implements Dr.\&nbsp;John's method. It solves linear equations.
+\end{verbatim}
+\end{quote}
+
+Moreover, it is possible to include any HTML tag. This may be useful for
+inclusing of images, or adding more intricate mark up.
+
+\section{Documentation sections}
+There are different types of documentation sections.  
+The following sections are available:
+
+\begin{itemize}
+\item {\tt @author} specifies the author of the file. For  usage, see the listing above.
+
+\item {\tt @comments} gives comments. For usage, see the listing above.
+
+\item {\tt @example} gives an example. For usage, see the listing above.
+
+\item {\tt @param} describes a parameter or argument of a function. The 
+first word after the {\tt @param} keyword is treated as the name of the 
+parameter. More than one parameter can be described by adding more {\tt @param} sections.
+
+\item {\tt @returns} describes the return value.
+
+\item {\tt @see} gives cross references. References have to 
+match the exact name of other entities. Multiple references have to be
+separated by commas.
+\begin{lstlisting}
+/** Abstract distribution class
+    @see NormalDistribution, UniformDistribution **/
+class Distribution { 
+   ...
+}
+\end{lstlisting}
+
+\end{itemize}
+
+\section{The @internal flag}
+In some cases, you may have methods or fields that are public, but which really are not supposed to 
+be called by users. They can be hidden from the documentation by adding the @internal flag to the
+documentation. For example:
+\begin{lstlisting}
+/** Updates references. @internal **/
+MyClass::updateReferences()
+{
+  ...
+}
+\end{lstlisting}
+Whenever the @internal flag is specified in a documentation block, the corresponding 
+entry will not show up in the documentation, unless the option `-showinternals' is given
+to \oxdoc. 
+
+
+
+\section{Using \LaTeX-style formulas}
+Formulas can be inserted by writing them between single or double dollar (\$) signs. 
+For example:
+\begin{lstlisting}
+<pre>
+/** Calculate the OLS estimates for the model $y = X\beta$.
+ @returns The OLS estimate $\hat\beta = (X'X)^{-1}X'y$.
+ **/
+regression(X, y) {
+   return invert(X'X)*X'y;
+}
+</pre>
+\end{lstlisting}
+
+Single dollar signs are used for inline formulas, whereas double dollar signs
+are used for equations on separate lines, analogously to \LaTeX.  They 
+are implemented as {\tt align*} environments.
+
+The way \oxdoc~processes these formulas can be changed.  There are three options:
+\begin{enumerate}
+\item Plain.  The formulas are copied as-is into the HTML text.  This is not
+recommended, because it generally results in quite unreadable formulas.
+
+\item \LaTeX.  This uses the \LaTeX~installation on the computer. If you
+didn't install \oxdoc~using the setup program, you should specify the
+location of {\tt latex} and {\tt dvipng} in \oxdocxml (see also the configuration
+section). Choose
+
+
+\item MathML.  When using MathML, the formulas are rendering by a clever JavaScript
+program call ASCIIMathML (see {\tt http://www1.chapman.edu/~jipsen/mathml/asciimath.html}). 
+This script runs inside the browser and relies heavily on JavaScript. Although it gives
+the best-looking results, it has the drawback that it relies on the viewer's browser.
+It is, for example, not compatible with Google Chrome (yet?).
+\end{enumerate}
+
+Alternatively, you can of course ignore \oxdoc's formula features and write
+formulas directly in HTML format by using the appropriate HTML code.
+
+\section{Cross-referencing}
+Making cross references within comments is done by placing a symbol between ` signs.  It is important to
+specify the whole name of the item to be referenced.  Global functions and classes are identified by
+their full names (this is case sensitive!) without arguments, and class methods are identified by the
+form {\tt classname::method}. For example, if there is a method {\tt isOk()} in the class {\tt Lumberjack},
+this method is referenced to by {\tt `Lumberjack::isOk`}.  The same holds for the {\tt @see} sections.
+Note that in {\tt @see} sections, no ` signs should be used.
+
+
+\section{\#include versus \#import}
+In order to work with \oxdoc, it may be useful to know a little bit more about how
+\oxdoc~works. First of all, if you have ran \oxdoc~on a project before, you may have
+noticed that for every input source file \textit{filename}.ox, there is a documentation file 
+\textit{filename}.html. Thus, all the classes and functions that are declared in \textit{filename}.ox
+and \textit{all files that are included using the \#include directive}
+will be documented in \textit{filename}.html. To illustrate the implications of this, suppose that
+you have two files a.ox and b.ox, both defining certain classes, and two corresponding
+files a.h and b.h. Suppose that a.ox has an \#include directive for both a.h and b.h,
+and that b.ox has an \#include directive only for b.h.
+What will happen is that the classes defined in a.h and b.h will both end up in a.html,
+and the classes defined in b.h will appear a second time in b.html. 
+For this reason, it is important to only \#include the header file \textit{filename}.h that 
+corresponds \textit{filename}.ox. For all other modules that you want to include, you should 
+use \#import. This is consistent with the suggested usage of \#include/\#import of the Ox manual.
+
