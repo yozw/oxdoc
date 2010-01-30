@@ -55,7 +55,7 @@ public class Config {
 
    public boolean setSimpleOption(String name) {
       if (name.equals("icons"))
-         setOption("enableicons", "1");
+         setOption("icons", "1");
       else if (name.equals("showinternals"))
          setOption("showinternals", "1");
       else if (name.equals("verbose"))
@@ -126,7 +126,7 @@ public class Config {
                LatexPackages.add(packages[i]);
          } else if (name.equals("formulas"))
             MathProcessor = toMathProcessor(value);
-         else if (name.equals("enableicons"))
+         else if (name.equals("icons"))
             EnableIcons = toBoolean(value);
          else if (name.equals("showinternals"))
             ShowInternals = toBoolean(value);
@@ -147,20 +147,28 @@ public class Config {
    }
 
    public static void listOptions() {
-      System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
-      System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
-      System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
+      System.out.println("Options for input:");
       System.out.println("    -include <paths>       Provides include search path");
-      System.out.println("    -latexpackages <...>   Provides a list of packages to load in LaTeX files");
+      System.out.println("");
+      System.out.println("Options for output:");
       System.out.println("    -icons                 Enables icons");
       System.out.println("    -showinternals         Enables documentation of internal methods/fields");
-      System.out.println("    -nolatex               Disables LaTeX support. Formulas will be");
-      System.out.println("                           inserted literally");
-      System.out.println("    -outputdir <dir>       Specifies the output directory");
+      System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
+      System.out.println("                           methods are: latex, mathml, plain");
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
-      System.out.println("    -tempdir <dir>         Provides the directory in which temporary files");
-      System.out.println("                           will be written");
       System.out.println("    -windowtitle \"title\"   Specifies a browser title");
+      System.out.println("    -outputdir <dir>       Specifies the output directory");
+      System.out.println("");
+      System.out.println("Options for third-party software:");
+      System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
+      System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
+      System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
+      System.out.println("                           The color is either an HTML color code of");
+      System.out.println("                           the form #RRGGBB, or 'transparent'");
+      System.out.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
+      System.out.println("                           import using \\usepackage");
+      System.out.println("    -tempdir <dir>         Provides the directory in which temporary");
+      System.out.println("                           files will be written");
    }
 
    public void validate() {

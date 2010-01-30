@@ -1,3 +1,7 @@
+\newenvironment{options}{\par\noindent\hspace{-6pt}\begin{tabular}{p{1.5in}p{4.95in}}}{\end{tabular}}
+\newcommand{\option}[2]{\tt #1 & #2 \medskip \\}
+
+
 \chapter{Configuration}
 
 \section{Location of configuration files}
@@ -46,7 +50,7 @@ command line parameters correspond exactly to the settings in
 \oxdocxml.
 
 \subsection{\LaTeX~settings}
-\oxdoc~uses \LaTeX~in combination with \dvipng to generate PNG
+\oxdoc~uses \LaTeX~in combination with \dvipng~to generate PNG
 (Portable Network Graphics) files from formulas within comments. In order to get this
 working, you'll need a working distribution of \LaTeX~(e.g. MiKTeX
 if you're using Windows) and \dvipng~(which comes with MiKTeX). It is then important
@@ -56,36 +60,65 @@ file in the {\tt bin} directory of your \oxdoc~installation.
 At startup, \oxdoc~checks whether it can find the executables required for \LaTeX~support. If
 it can't find one or more of these executables, it automatically turns off \LaTeX~support. In that case,
 formulas are literally written in the output. Turning off \LaTeX~support can also be done manually by
-setting the {\tt enablelatex} setting to {\tt no}.
+setting the {\tt formulas} setting to {\tt plain} or to {\tt mathml}.
 
 It is also possible to specify extra \LaTeX~packages to be included within formulas. This can be done
 by specifying the desired packages, separated by commas, in the option {\tt latexpackages}.
+The specified packages will be included into every \LaTeX~formula by means of the {\tt \bs usepackage}
+command.
 
 
 
 \section{Overview of available settings}
-The following parameters can be set in a configuration file:\medskip
+The following parameters can be set on the command line or in a configuration file. 
+Specifying options on the command line 
+The yes/no options are used without argument 
+\medskip
 
-\noindent \begin{tabular}{lp{4.95in}}
-\tt outputdir  & Specifies the directory in which \oxdoc~
-writes its output. Defaults to the current working directory. \medskip\\
-\tt tempdir & Specifies the directory that \oxdoc~can use for temporary files. Defaults to the current working directory.\\
-\tt projectname & Specifies the name of the project. This
-name will appear in the project home page.\medskip\\
-\tt windowtitle & Specifies the title that will appear
-in the window caption in your web browser.\medskip\\
-\tt imagepath & Specifies the directory in which \oxdoc~
-writes its images. Defaults to the specified output directory. \medskip\\
-\tt dvipng & Specifies the full path of the executable 
+\subsection{Options for input}
+\begin{options}
+\option{include}{Turns on or off \LaTeX~support. Possible values:
+{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found.}
+\end{options}
+
+\subsection{Options for output}
+\begin{options}
+\option{formulas}{Turns on or off \LaTeX~support. Possible values:
+{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found.}
+
+\option{icons}{}
+
+\option{outputdir}{Specifies the directory in which \oxdoc~ writes its output. Defaults to the current working directory.}
+
+\option{projectname}{Specifies the name of the project. This
+name will appear in the project home page.}
+
+\option{showinternals}{}
+
+\option{windowtitle}{Specifies the title that will appear
+in the window caption in your web browser.}
+
+\end{options}
+
+\subsection{Options for third-party utilities}
+\begin{options}
+
+\option{dvipng}{Specifies the full path of the executable 
 \dvipng. For MiKTeX users, this can be found under the 
-{\tt miktex\bs bin} subdirectory of the MiKTeX installation path. \medskip\\
-\tt latex & Specifies the full path of the \LaTeX~compiler. 
+{\tt miktex\bs bin} subdirectory of the MiKTeX installation path.}
+
+\option{imagepath}{Specifies the directory in which \oxdoc~writes its images. 
+Defaults to the subdirectory `images' in the specified output directory.}
+
+\option{latex}{Specifies the full path of the \LaTeX~compiler. 
 For MiKTeX users, this can be found under the 
-{\tt miktex\bs bin} subdirectory of the MiKTeX installation path. \medskip\\
-\tt enablelatex & Turns on or off \LaTeX~support. Possible values:
-{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found. \medskip\\
-\tt latexpackages & Specifies what \LaTeX~packages should be loaded
+{\tt miktex\bs bin} subdirectory of the MiKTeX installation path.}
+
+\option{latexpackages}{Specifies what \LaTeX~packages should be loaded
 for inline \LaTeX~formulas. These packages are loaded in \LaTeX~files 
-through the usual {\tt /usepackage{...}} command. Multiple 
-packages can be specified by separating them by commas.
-\end{tabular}
+through the usual {\tt \bs usepackage\{...\}} command. Multiple 
+packages can be specified by separating them by commas.}
+
+\option{tempdir}{Specifies the directory that \oxdoc~can use for temporary files. Defaults to the current working directory.}
+
+\end{options}

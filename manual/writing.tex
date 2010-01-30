@@ -124,20 +124,7 @@ class Distribution {
 
 \end{itemize}
 
-\section{The @internal flag}
-In some cases, you may have methods or fields that are public, but which really are not supposed to 
-be called by users. They can be hidden from the documentation by adding the @internal flag to the
-documentation. For example:
-\begin{lstlisting}
-/** Updates references. @internal **/
-MyClass::updateReferences()
-{
-  ...
-}
-\end{lstlisting}
-Whenever the @internal flag is specified in a documentation block, the corresponding 
-entry will not show up in the documentation, unless the option `-showinternals' is given
-to \oxdoc. 
+
 
 
 
@@ -205,3 +192,22 @@ For this reason, it is important to only \#include the header file \textit{filen
 corresponds \textit{filename}.ox. For all other modules that you want to include, you should 
 use \#import. This is consistent with the suggested usage of \#include/\#import of the Ox manual.
 
+
+\section{Documenting the internals of the project}
+By default, \oxdoc~assumes that you are only interested in documentation about the public interface
+of your package. That is, it will only display public fields and methods of classes. 
+This behavior can be reversed by specifying the `-showinternals' option on the \oxdoc~command line. 
+This will generate documentation about \textit{all} fields and methods. 
+
+Although {\tt ox} supports private and protected fields, it does not support private and protected methods.
+However, sometimes you may want to specify that certain methods are not supposed to be called by users. This
+can be done by adding the `@internal' flag to their respective blocks.
+Methods for which the `@internal' flags is specified will be hidden from the documentation. For example:
+\begin{lstlisting}
+/** Updates references. @internal **/
+MyClass::updateReferences()
+{
+  ...
+}
+\end{lstlisting}
+Specifying the `-showinternals' option will make these methods appear again.
