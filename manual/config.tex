@@ -1,22 +1,25 @@
-\newenvironment{options}{\par\noindent\hspace{-6pt}\begin{tabular}{p{1.5in}p{4.95in}}}{\end{tabular}}
-\newcommand{\option}[2]{\tt #1 & #2 \medskip \\}
+%\newenvironment{options}{\par\noindent\hspace{-6pt}\begin{tabular}{p{1.5in}p{4.95in}}}{\end{tabular}}
+%\newcommand{\option}[2]{\tt #1 & #2 \medskip \\}
+
+\newenvironment{options}{}{}
+\newcommand{\option}[2]{\par\noindent\hspace{-6pt}\begin{tabular}{p{1.5in}p{4.95in}}\tt #1 & #2 \medskip \end{tabular}}
 
 
 \chapter{Configuration}
 
 \section{Location of configuration files}
-\oxdoc~is configured by means of the file \oxdocxml.
-\oxdoc~looks for this file at two locations:
+\oxdoc~is configured by means of the file \oxdocxml~and
+by command line parameters.
+\oxdoc~parses its parameters in the following order:
 \begin{enumerate}
-\item the directory in which {\tt oxdoc.jar}
-is located (e.g. {\tt c:\bs program files\bs oxdoc\bs bin});
-\item the current working directory.
+\item The \oxdocxml~file in the directory in which {\tt oxdoc.jar}
+is located. For example, on Windows operating systems, this file may be found 
+in {\tt c:\bs program files\bs oxdoc\bs bin}.
+\item The \oxdocxml~file in the current working directory.
+\item The command-line parameters.
 \end{enumerate}
-
-Whenever available, settings are loaded from these files in that order.
-Parameters set in the current working directory configuration file override
-the general settings in the \oxdoc~folder.
-
+This means that any parameter that is specified at some stage
+in the order above overrides that setting specified in earlier stages.
 It is a good idea to put computer-specific settings in the {\tt bin}
 directory and project-specific settings in project directories. 
 
@@ -38,16 +41,24 @@ this file as required. See Overview of available settings.
 
 \section{Command line configuration}
 It is also possible to specify settings through command line arguments
-by adding {\tt -parameter=value} to the command line. 
+by adding {\tt -parameter value} to the command line. 
 For example,
 \begin{quote}
 \small\begin{verbatim}
-oxdoc -latex=c:\bin\latex.exe *.ox
+oxdoc -latex c:\bin\latex.exe *.ox
 \end{verbatim}
 \end{quote}
 specifies a value for the {\tt latex} setting. The names of the
 command line parameters correspond exactly to the settings in 
-\oxdocxml.
+\oxdocxml. The yes/no options ({\tt -icons} and {\tt -showinternals})
+are specified without parameter. Also, if the parameter contains spaces,
+one should put the value between double quotes. For example:
+\begin{quote}
+\small\begin{verbatim}
+oxdoc -latex "c:\program files\miktex\bin\latex.exe" -formulas latex 
+      -icons -showinternals *.ox
+\end{verbatim}
+\end{quote}
 
 \subsection{\LaTeX~settings}
 \oxdoc~uses \LaTeX~in combination with \dvipng~to generate PNG
@@ -71,29 +82,31 @@ command.
 
 \section{Overview of available settings}
 The following parameters can be set on the command line or in a configuration file. 
-Specifying options on the command line 
-The yes/no options are used without argument 
-\medskip
 
 \subsection{Options for input}
 \begin{options}
-\option{include}{Turns on or off \LaTeX~support. Possible values:
-{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found.}
+\option{include}{Specifies include search path. On Windows, the paths should be separated by 
+semicolons (;). On Linux, they should be separated by colons (:). 
+}
 \end{options}
 
 \subsection{Options for output}
 \begin{options}
-\option{formulas}{Turns on or off \LaTeX~support. Possible values:
-{\tt yes}, {\tt no}. Default: {\tt yes} if the required executables can be found.}
+\option{formulas}{Chooses the way formulas are handled. Possible values: {\tt latex}, {\tt mathml}, {\tt plain}. 
+Default: {\tt latex} if the required executables can be found, {\tt plain} otherwise.}
 
-\option{icons}{}
+\option{icons}{Specifies whether the generated HTML files should contain references to icons. 
+Possible values: {\tt yes}, {\tt no}. If set to {\tt yes}, then the generated HTML files
+will contain references to icons in the {\tt icons/} folder. See Section \ref{sec:icons} on how to
+implement these icons.}
 
 \option{outputdir}{Specifies the directory in which \oxdoc~ writes its output. Defaults to the current working directory.}
 
 \option{projectname}{Specifies the name of the project. This
 name will appear in the project home page.}
 
-\option{showinternals}{}
+\option{showinternals}{Specifies whether internal methods and fields (i.e. methods and fields that are private, protected, or marked with the @internal clause) 
+are included in the documentation. Possible values: {\tt yes}, {\tt no}. See \ref{sec:showinternals}}
 
 \option{windowtitle}{Specifies the title that will appear
 in the window caption in your web browser.}
@@ -107,8 +120,17 @@ in the window caption in your web browser.}
 \dvipng. For MiKTeX users, this can be found under the 
 {\tt miktex\bs bin} subdirectory of the MiKTeX installation path.}
 
-\option{imagepath}{Specifies the directory in which \oxdoc~writes its images. 
-Defaults to the subdirectory `images' in the specified output directory.}
+\option{imagepath}{Specifies the directory in which \oxdoc~writes the images that
+represent \LaTeX~formulas. Defaults to the subdirectory `images' in the specified output directory.}
+
+\option{imagebgcolor}{The background color for LaTeX images. Possible values: either an
+HTML color in the form {\tt \#RRGGBB}, where RR, GG and BB are hexadecimal representations
+of the intensity of the red, green, and blue components, or {\tt transparent}.
+Examples: {\tt \#0000FF} for bright blue. The use of this is to make sure that the 
+background color of the \LaTeX~generated formula images coincides 
+with the background color of the HTML pages. The default, {\tt transparent}, 
+generates PNG files that have transparent backgrounds. Unfortunately, not every
+web browser supports such transparent backgrounds, hence this option.}
 
 \option{latex}{Specifies the full path of the \LaTeX~compiler. 
 For MiKTeX users, this can be found under the 

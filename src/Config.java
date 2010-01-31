@@ -148,23 +148,25 @@ public class Config {
 
    public static void listOptions() {
       System.out.println("Options for input:");
-      System.out.println("    -include <paths>       Provides include search path");
+      System.out.println("    -include \"paths\"       Provides include search path");
       System.out.println("");
       System.out.println("Options for output:");
-      System.out.println("    -icons                 Enables icons");
-      System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
       System.out.println("                           methods are: latex, mathml, plain");
+      System.out.println("    -icons                 Enables icons");
+      System.out.println("    -outputdir \"dir\"       Specifies the output directory");
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
+      System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -windowtitle \"title\"   Specifies a browser title");
-      System.out.println("    -outputdir <dir>       Specifies the output directory");
       System.out.println("");
       System.out.println("Options for third-party software:");
-      System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
       System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
       System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
       System.out.println("                           The color is either an HTML color code of");
       System.out.println("                           the form #RRGGBB, or 'transparent'");
+      System.out.println("    -imagepath <path>      The directory in which LaTeX images will be written.");
+      System.out.println("                           Default: subdirectory `images' in the output directory.");
+      System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
       System.out.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
       System.out.println("                           import using \\usepackage");
       System.out.println("    -tempdir <dir>         Provides the directory in which temporary");

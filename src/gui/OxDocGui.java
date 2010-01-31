@@ -9,7 +9,7 @@ public class OxDocGui {
 
    private static final boolean fancyLook = false;
 
-   public static void main(String[] args) {
+   public void run(String[] args) {
       javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                try {

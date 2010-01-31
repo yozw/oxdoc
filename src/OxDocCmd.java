@@ -119,7 +119,19 @@ public class OxDocCmd implements Logger {
 
    // oxdoc entry point
    public static void main(String[] args) {
-      OxDocCmd cmd = new OxDocCmd();
-      cmd.run(args, cmd);
+
+      boolean runGui = false;
+
+      if ((args.length == 1) && (args[0].compareTo("-gui") == 0))
+         runGui = true;
+
+      if (runGui)  {
+         OxDocGui gui = new OxDocGui(); 
+         gui.run(args);
+      }
+      else {
+         OxDocCmd cmd = new OxDocCmd();
+         cmd.run(args, cmd);
+      }
    }
 }

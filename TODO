@@ -7,6 +7,11 @@ TO DO LIST for oxdoc:
   - Check license!!
 
 
+* update OxDocGui: formulas radiobox, on linux: generate bash script, generate oxdoc.xml,
+  add other options.
+  
+
+
 FIXED:
 * #import command now includes appropriate header file
 * the following code is no longer rejected:
