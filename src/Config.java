@@ -30,7 +30,7 @@ public class Config {
    public String LatexArg = "";
    public String Dvipng = "dvipng.exe";
    public String DvipngArg = "-Q 10 -D 110";
-   public String OutputDir = ".";
+   public String OutputDir = "doc/";
    public String TempDir = ".";
    public String[] IncludePaths = new String[] {};
    public String ImagePath = "images/";
@@ -154,7 +154,7 @@ public class Config {
       System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
       System.out.println("                           methods are: latex, mathml, plain");
       System.out.println("    -icons                 Enables icons");
-      System.out.println("    -outputdir \"dir\"       Specifies the output directory");
+      System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
       System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -windowtitle \"title\"   Specifies a browser title");
@@ -165,7 +165,7 @@ public class Config {
       System.out.println("                           The color is either an HTML color code of");
       System.out.println("                           the form #RRGGBB, or 'transparent'");
       System.out.println("    -imagepath <path>      The directory in which LaTeX images will be written.");
-      System.out.println("                           Default: subdirectory `images' in the output directory.");
+      System.out.println("                           Default: `images" + File.separator + "' in the output directory.");
       System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
       System.out.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
       System.out.println("                           import using \\usepackage");
