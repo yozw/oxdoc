@@ -31,10 +31,6 @@ public class MainWindow implements ActionListener {
       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
       frame.getContentPane().add(mainPanel);
 
-      try {
-         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      } catch (Exception E) { }
-
       mainPanel.add(setupOptionPanel());
       mainPanel.add(setupButtonPanel());
       mainPanel.add(setupCopyright());
@@ -232,7 +228,7 @@ public class MainWindow implements ActionListener {
    }
 
    public static void showException(Exception E) {
-      JOptionPane.showMessageDialog(frame, E.getMessage());
+      JOptionPane.showMessageDialog(frame, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
    }
 
    public static void showAbout() {

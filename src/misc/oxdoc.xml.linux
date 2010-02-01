@@ -1,4 +1,0 @@
-<oxdoc>
-	<option name="latex"     value="/usr/bin/latex" />
-	<option name="dvipng"    value="/usr/bin/dvipng" />
-</oxdoc>

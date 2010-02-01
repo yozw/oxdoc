@@ -1,5 +1,5 @@
 #!/bin/sh
-JAR="`dirname $0`/oxdoc.jar;`dirname $0`/jregex.jar"
+JAR="`dirname $0`/oxdoc.jar"
 
-java -classpath "$JAR" OxDocGui "$@"
+java -jar "$JAR" --gui
 

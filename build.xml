@@ -97,11 +97,15 @@
   <target name="pkg-bin" depends="jar">
     <antcall target="prepare-pkg"><param name="target" value="${pkg-bin}"/></antcall>
     <copy file="manual/manual.pdf"            todir="${pkg-bin}/manual" />
-    <copy file="${srcmisc}/oxdoc.xml.linux"   todir="${pkg-bin}/bin" />
-    <copy file="${srcmisc}/oxdoc.xml.windows" todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdoc"             todir="${pkg-bin}/bin" />
+    <chmod file="${pkg-bin}/bin/oxdoc"        perm="+x"/>
+    <copy file="${srcmisc}/setup"             todir="${pkg-bin}/bin" />
+    <chmod file="${pkg-bin}/bin/setup"        perm="+x"/>
     <copy file="${srcmisc}/oxdocgui"          todir="${pkg-bin}/bin" />
+    <chmod file="${pkg-bin}/bin/oxdocgui"     perm="+x"/>
+
     <copy file="${srcmisc}/oxdoc.bat"         todir="${pkg-bin}/bin" />
+    <copy file="${srcmisc}/setup.bat"         todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdocgui.bat"      todir="${pkg-bin}/bin" />
     <copy file="${bin}/oxdoc.jar"             todir="${pkg-bin}/bin" />
     <copy file="${lib}/jregex.jar"            todir="${pkg-bin}/bin" />

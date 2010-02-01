@@ -46,7 +46,7 @@ public class Config {
 
    // color in the form "rgb <r> <g> <b>", or null for transparent
    public String ImageBgColor = "rgb 1.0 1.0 1.0";
-   public String ConfigFile = "oxdoc.xml";
+   public static String ConfigFile = "oxdoc.xml";
    public ArrayList LatexPackages = new ArrayList();
 
    public Config(OxDoc oxdoc) {
@@ -193,8 +193,16 @@ public class Config {
       return (value.equals("1") || value.equals("yes"));
    }
 
+   public static String userHomeConfigFile()
+   {
+      if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
+         return FileManager.appDirFile(ConfigFile);
+      else
+         return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + ConfigFile;
+   }
+
    public void load() {
-      load(FileManager.appDirFile(ConfigFile));
+      load(userHomeConfigFile());
       load(ConfigFile);
    }
 
