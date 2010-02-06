@@ -28,55 +28,92 @@ example, installing \dvipng~on Ubuntu would be done by issuing the following com
 \end{quote}
 
 \section{Installation}
-\subsection{Installation on Windows 2000/XP using the Setup program}
-In order to install \oxdoc, download {\tt setup-0.975alpha.exe} file from
-the SourceForge website, run it, and follow the instructions.  
-In order to use \LaTeX~formulas, make sure to specify the location of MiKTeX
-(or any other \LaTeX~distribution).
-The setup program automatically creates a program group in the start menu from
-which the \oxdoc~graphical user interface is available. 
-
-\subsection{Manual installation on Windows}
-Follow the following steps to manually install \oxdoc:
+\subsection{Installation on Windows 2000/XP}
+Follow the following steps to install \oxdoc:
 \begin{enumerate}
-\item Unzip the package {\tt oxdoc-xxx-bin.zip} into a
-suitable folder. For example, {\tt c:\bs program files\bs oxdoc}.
-\item Edit the file
-{\tt oxdoc.bat} and alter the {\tt oxdoc} variable in this file. This file looks
-as follows:
-
-\begin{quote}
-\small \begin{verbatim}
-@echo off
-set oxdoc=c:\program files\oxdoc
-java -jar "%oxdoc%\bin\oxdoc.jar" %1 %2 %3 %4 %5 %6 %7 %8 %9
-\end{verbatim}
+\item Download the latest binary zip file ({\tt oxdoc-xxxx-bin.zip}) from
+the SourceForge website \\({\tt http://oxdoc.sourceforge.net}). 
+\item Unzip this file in a convenient directory
+(for example in {\tt C:\bs Program Files\bs oxdoc}). 
+\item Run the set up program. This program can be found in the subdirectory {\tt oxdoc\bs bin}
+in the directory in which you installed \oxdoc. Double-click on {\tt setup.bat} to start it.
+You will see the following setup screen:
+\begin{center}
+\includegraphics[scale=0.5]{setup_win.png}
+\end{center}
+\item Make sure to specify the location of the {\tt latex.exe} and {\tt dvipng.exe} files
+of your MiKTeX installation (or any other \LaTeX~distribution). 
+\item Click `Write configuration' to save the options to the main \oxdoc~configuration file
+(i.e. a file named \oxdocxml~that is located in the `{\tt bin}' subdirectory of the \oxdoc~intallation.)
+\item (Optional) You may also want to add the \oxdoc~directory to your search path, so that \oxdoc~can
+be run from any working directory. To do so, right-click on the `My Computer' icon
+on your desktop, and choose `Properties'. Under the tab `Advanced', click on the
+button `Environment Variables'. Edit the variable `Path' which can be found under System 
+variables by adding a semi-colon followed by the path to the {\tt bin} subdirectory 
+of your \oxdoc~installation. For example, your path may now look like:
+\begin{quote}\tt
+	\%systemroot\%\bs system32;\%systemroot\%;C:\bs program files\bs oxdoc\bs bin
 \end{quote}
-
-The second line in this file has to point to the directory in which the \oxdoc~files
-have been unzipped. The same holds for the file {\tt oxdocgui.bat}. 
-
-\item Optionally, copy the files {\tt oxdoc.bat} and {\tt oxdocgui.bat} into a
-folder in the Windows search path, e.g. {\tt c:\bs windows}. This way, it is possible to
-run \oxdoc~from any folder in the command prompt. 
-
-\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
-See the Configuration section for more information.
+Click OK a couple of times to commit the changes. Notice that the changes will not
+affect only newly opened command line windows, so that all already opened command line
+windows will not notice the changes.
 \end{enumerate}
 
-To test whether \oxdoc~works, run the batch file {\tt oxdoc.bat} from the command line.  It should 
+You are now ready to use \oxdoc. In the subdirectory {\tt oxdoc\bs bin}
+you can find the \oxdoc~graphical user interface that helps you get started
+with running \oxdoc. 
+To test whether \oxdoc~works, run the batch file {\tt oxdoc.bat} from the command line
+by just typing `{\tt oxdoc}'.  It should 
 display a short description of the program options.
 
-\subsection{Manual installation on Linux}
-Follow the following steps to manually install \oxdoc:
+
+
+
+
+
+\subsection{Installation on Linux}
+Follow the following steps to install \oxdoc:
 \begin{enumerate}
-\item Unzip the package {\tt oxdoc-xxx-bin.tar.gz} into a
-suitable folder. For example, the \oxdoc~folder in your user directory.
-
-\item Edit \oxdocxml~in the {\tt bin} directory. This file contains general settings for \oxdoc.
-See the Configuration section for more information.
+\item Download the latest binary .tar.gz file ({\tt oxdoc-xxxx-bin.tar.gz}) from
+the SourceForge website \\({\tt http://oxdoc.sourceforge.net}). 
+\item If you want to use \LaTeX~generated formulas, make sure that you have a working
+version of \LaTeX~and of dvipng. The latter is available in the standard repositories of most Linux distributions.
+For example, in Ubuntu, you may install dvipng by typing:
+\begin{quote}
+\tt sudo apt-get install dvipng
+\end{quote}
+\item Extract the files from this compressed file into a convenient directory
+(for example in {\tt /opt}). For example, type the following in a terminal:
+\begin{quote} \tt
+cd /opt\\
+tar xvfz ~/Desktop/oxdoc-0.99alpha-bin.tar.gz
+\end{quote}
+\item Run the set up program. This program can be found in the subdirectory {\tt oxdoc/bin}
+in the directory in which you installed \oxdoc. So for example, type:
+\begin{quote} \tt
+/opt/oxdoc/bin/setup
+\end{quote}
+You will see the following setup screen:
+\begin{center}
+\includegraphics[scale=0.5]{setup_linux.png}
+\end{center}
+\item Make sure to specify the location of the {\tt latex} and {\tt dvipng} files
+of your \LaTeX~installation.s
+\item Click `Write configuration' to save the options to the main \oxdoc~configuration file
+(i.e. a file named \oxdocxml~that is located in the `.oxdoc' subdirectory of your home directory.
 \end{enumerate}
 
-To test whether \oxdoc~works, run the script file {\tt oxdoc} from the {\tt bin} directory.  It should 
-display a short description of the program options.
+You are now ready to use \oxdoc. In the subdirectory {\tt bin}
+you can find the \oxdoc~graphical user interface that helps you get started
+with running \oxdoc. You may run it by typing:
+\begin{quote}\tt
+/opt/bin/oxdocgui
+\end{quote}
+You may run the command line (recommended) version of \oxdoc~by typing:
+\begin{quote}\tt
+/opt/bin/oxdoc
+\end{quote}
+It should display a short description of the program options.
+
+
 
