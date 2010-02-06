@@ -142,7 +142,6 @@
     <copy todir="${pkg-src}/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
-    <copy todir="${pkg-src}/setup">  <fileset dir="setup" defaultexcludes="yes" /> </copy>
     <copy todir="${pkg-src}/lib">    <fileset dir="lib" defaultexcludes="yes" />   </copy>
 
     <zip destfile="${pkg-src}.zip" basedir="${pkg-src}">
