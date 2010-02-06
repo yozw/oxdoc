@@ -98,11 +98,8 @@
     <antcall target="prepare-pkg"><param name="target" value="${pkg-bin}"/></antcall>
     <copy file="manual/manual.pdf"            todir="${pkg-bin}/manual" />
     <copy file="${srcmisc}/oxdoc"             todir="${pkg-bin}/bin" />
-    <chmod file="${pkg-bin}/bin/oxdoc"        perm="+x"/>
     <copy file="${srcmisc}/setup"             todir="${pkg-bin}/bin" />
-    <chmod file="${pkg-bin}/bin/setup"        perm="+x"/>
     <copy file="${srcmisc}/oxdocgui"          todir="${pkg-bin}/bin" />
-    <chmod file="${pkg-bin}/bin/oxdocgui"     perm="+x"/>
 
     <copy file="${srcmisc}/oxdoc.bat"         todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/setup.bat"         todir="${pkg-bin}/bin" />
@@ -113,8 +110,21 @@
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
 
-    <zip destfile="${pkg-bin}.zip" basedir="${pkg-bin}" />
-    <tar destfile="${pkg-bin}.tar.gz" basedir="${pkg-bin}" compression="gzip" />
+    <zip destfile="${pkg-bin}.zip">
+        <zipfileset dir="${pkg-bin}" prefix="oxdoc/" />
+    </zip>
+    <tar destfile="${pkg-bin}.tar.gz" compression="gzip">
+        <tarfileset dir="${pkg-bin}" prefix="oxdoc/">
+           <exclude name="bin/oxdoc"/>
+           <exclude name="bin/setup"/>
+           <exclude name="bin/oxdocgui"/>
+		</tarfileset>
+        <tarfileset dir="${pkg-bin}" prefix="oxdoc/" filemode="755">
+           <include name="bin/oxdoc"/>
+           <include name="bin/setup"/>
+           <include name="bin/oxdocgui"/>
+        </tarfileset>
+    </tar>
   </target>
 
 
@@ -135,8 +145,12 @@
     <copy todir="${pkg-src}/setup">  <fileset dir="setup" defaultexcludes="yes" /> </copy>
     <copy todir="${pkg-src}/lib">    <fileset dir="lib" defaultexcludes="yes" />   </copy>
 
-    <zip destfile="${pkg-src}.zip" basedir="${pkg-src}" />
-    <tar destfile="${pkg-src}.tar.gz" basedir="${pkg-src}" compression="gzip" />
+    <zip destfile="${pkg-src}.zip" basedir="${pkg-src}">
+        <zipfileset dir="${pkg-src}" prefix="oxdoc/" />
+    </zip>
+    <tar destfile="${pkg-src}.tar.gz" basedir="${pkg-src}" compression="gzip">
+        <tarfileset dir="${pkg-src}" prefix="oxdoc/" />
+    </tar>
   </target>
 
   

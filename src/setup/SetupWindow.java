@@ -96,8 +96,8 @@ public class SetupWindow implements ActionListener {
       JLabel labelDvipng = new JLabel("Location of " + dvipngExecutable() + ":");
       JLabel labelFormulas = new JLabel("Default setting for formula generation:");
 
-      editLatex = new JTextField(30);
-      editDvipng = new JTextField(30);
+      editLatex = new JTextField(20);
+      editDvipng = new JTextField(20);
       radioLatex = new JRadioButton("LaTeX", true);
       radioMathML = new JRadioButton("MathML", false);
       radioPlainText = new JRadioButton("Plain text", false);

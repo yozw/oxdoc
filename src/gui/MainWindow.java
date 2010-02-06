@@ -5,7 +5,7 @@ import java.util.*;
 import javax.swing.*;
 
 public class MainWindow implements ActionListener {
-   private final String actionRun = "run", actionExit = "exit", actionSaveBatch = "batch", actionSaveBash = "bash", actionAbout = "about";
+   private final String actionRun = "run", actionExit = "exit", actionSaveBatch = "batch", actionSaveBash = "bash", actionSaveXml = "xml", actionAbout = "about";
    private static JFrame frame;
    private JTextField editWorkDirectory;
    private JTextField editFilenames;
@@ -18,6 +18,7 @@ public class MainWindow implements ActionListener {
    private JRadioButton radioPlainText;
    private JCheckBox chkShowInternals;
    private JCheckBox chkEnableIcons;
+   private StatusBar statusBar;
    private JButton runButton;
 
    public MainWindow() {
@@ -29,14 +30,16 @@ public class MainWindow implements ActionListener {
       JPanel mainPanel = new JPanel();  
       mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-      frame.getContentPane().add(mainPanel);
 
       mainPanel.add(setupOptionPanel());
       mainPanel.add(setupButtonPanel());
-      mainPanel.add(setupCopyright());
       frame.setJMenuBar(createMenuBar());
 
       //Display the window.
+      frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+      statusBar = new StatusBar();
+      setStatus(OxDoc.CopyrightNotice);
+      frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
       frame.pack();
 
       Dimension dim = frame.getToolkit().getScreenSize();
@@ -46,8 +49,12 @@ public class MainWindow implements ActionListener {
 
    private JComponent setupCopyright() {
       JLabel copyrightLabel = new JLabel();
-      copyrightLabel.setText(OxDoc.CopyrightNotice);
       return copyrightLabel;
+   }
+
+   private void setStatus(String text)
+   {
+      statusBar.setText(text);
    }
 
    private GridBagConstraints gridBagConstraints(int x, int y)
@@ -171,7 +178,7 @@ public class MainWindow implements ActionListener {
       }
     
       JMenuItem oxdocXmlItem = new JMenuItem("Save options to oxdoc.xml file...");
-      oxdocXmlItem.setActionCommand(actionSaveBash);
+      oxdocXmlItem.setActionCommand(actionSaveXml);
       oxdocXmlItem.addActionListener(this);
       fileMenu.add(oxdocXmlItem);
 
@@ -207,6 +214,8 @@ public class MainWindow implements ActionListener {
          runSaveBatch();
       else if (e.getActionCommand().equals(actionSaveBash))
          runSaveBash();
+      else if (e.getActionCommand().equals(actionSaveXml))
+         runSaveXml();
       else if (e.getActionCommand().equals(actionAbout))
          showAbout();
    }
@@ -262,33 +271,95 @@ public class MainWindow implements ActionListener {
    }
 
    public void runSaveBash() {
-      JFileChooser fc = new JFileChooser(new File(workingDir()));
-      fc.setSelectedFile(new File("makedoc"));
-      if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION)
+  	  File file = runSaveAsDialog("makedoc");
+	  if (file == null) return;
+
          try {
-            Writer output = new BufferedWriter(new FileWriter(fc.getSelectedFile()));
+            Writer output = new BufferedWriter(new FileWriter(file));
             String args = generateOxdocArguments();
             output.write("#!/bin/bash\n");
             output.write("cd " + workingDir() + "\n");
             output.write("oxdoc " + args + "\n");
             output.close();
-            Runtime.getRuntime().exec("chmod +x " + fc.getSelectedFile());
+            Runtime.getRuntime().exec("chmod +x " + file);
+            setStatus("Succesfully wrote the file " + file);
          } catch (Exception E) {
             showException(E);
          }
    }
 
-   public void runSaveBatch() {
+   public File runSaveAsDialog(String fileName)
+   {
       JFileChooser fc = new JFileChooser(new File(workingDir()));
-      fc.setSelectedFile(new File("makedoc.bat"));
-      if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION)
+      fc.setSelectedFile(new File(fileName));
+
+      while (true)
+      {
+          int result = fc.showSaveDialog(frame);
+          if (result != JFileChooser.APPROVE_OPTION)
+             return null;
+
+          File file = fc.getSelectedFile();
+          if (!file.exists()) 
+			 return file;
+
+          int overwriteResult = JOptionPane.showConfirmDialog(frame,
+			"The file " + file + " already exists. Do you want to overwrite the existing file?", "Save file",
+			JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+		  if (overwriteResult == JOptionPane.YES_OPTION)
+		     return file;
+		  if (overwriteResult == JOptionPane.CANCEL_OPTION)
+             return null;
+      }
+   }
+
+   public void runSaveXml() {
+	File file = runSaveAsDialog("oxdoc.xml");
+	if (file == null) return;
+
+	try {
+		Writer output = new BufferedWriter(new FileWriter(file));
+		String args = generateOxdocArguments();
+		output.write("<oxdoc>\n");
+		output.write("<!-- This file was generated by oxdocgui -->\n");
+		output.write("   <option outputdir=\"" + outputDir() + "\"/>\n");
+		output.write("   <option projectname=\"" + projectName() + "\"/>\n");
+		output.write("   <option windowtitle=\"" + windowTitle() + "\"/>\n");
+		output.write("   <option include=\"" + includePaths() + "\"/>\n");
+		if (radioLatex.isSelected())
+		  	output.write("   <option formulas=\"latex\"/>\n");
+		else if (radioMathML.isSelected())
+		  	output.write("   <option formulas=\"mathml\"/>\n");
+		else if (radioPlainText.isSelected())
+		  	output.write("   <option formulas=\"plain\"/>\n");
+		if (chkEnableIcons.isSelected())
+		  	output.write("   <option icons=\"on\"/>\n");
+		else
+		  	output.write("   <option icons=\"off\"/>\n");
+		if (chkShowInternals.isSelected())
+		  	output.write("   <option showinternals=\"on\"/>\n");
+		else
+		  	output.write("   <option showinternals=\"off\"/>\n");
+		output.write("</oxdoc>\n");
+		output.close();
+        setStatus("Succesfully wrote the file " + file);
+	} catch (Exception E) {
+		showException(E);
+	}
+   }
+
+   public void runSaveBatch() {
+  	  File file = runSaveAsDialog("makedoc.bat");
+	  if (file == null) return;
+
          try {
-            Writer output = new BufferedWriter(new FileWriter(fc.getSelectedFile()));
+            Writer output = new BufferedWriter(new FileWriter(file));
             String args = generateOxdocArguments();
             output.write("@echo off\n");
             output.write("cd \"" + workingDir() + "\"\n");
             output.write("call oxdoc " + args + "\n");
             output.close();
+            setStatus("Succesfully wrote the file " + file);
          } catch (Exception E) {
             showException(E);
          }
