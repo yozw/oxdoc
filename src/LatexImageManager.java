@@ -192,13 +192,14 @@ public class LatexImageManager extends ArrayList {
       output.write("\\end{document}\n");
       output.close();
 
-      String latexParams = "{0} -aux-directory={1} -output-directory={1} -interaction=batchmode {2}";
-      Object[] args = {
-                         oxdoc.config.LatexArg, oxdoc.fileManager.tempDir(),
-                         oxdoc.fileManager.tempFile("__oxdoc.tex")
-      };
+      String latexParams = oxdoc.config.LatexArg + " -interaction=batchmode";
 
-      run(oxdoc.config.Latex, MessageFormat.format(latexParams, args));
+      File tempDir = new File(oxdoc.fileManager.tempDir());
+      File curDir  = new File(".");
+      if (!tempDir.equals(curDir))
+         latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}", oxdoc.fileManager.tempDir());
+
+      run(oxdoc.config.Latex, latexParams + " " + oxdoc.fileManager.tempFile("__oxdoc.tex"));
 
       String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
       if (oxdoc.config.ImageBgColor == null)

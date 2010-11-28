@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="0.99alpha"/>
+  <property name="version" value="0.991alpha"/>
 
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
@@ -56,12 +56,13 @@
 
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
-     <javac srcdir="${src}/writeconstants" destdir="${build}" nowarn="on" debug="${debug}" />
+     <javac srcdir="${src}/writeconstants" destdir="${build}" nowarn="on" debug="${debug}" includeantruntime="off" />
      <java classname="WriteConstants" classpath="${build}" output="${parser}/Constants.java">
          <arg value="${version}" />
      </java>
+     <delete file="${build}/OxDoc.class"/>
      <delete file="${build}/Constants.class"/>
-     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar" />
+     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar" includeantruntime="off"  />
   </target>
 
 

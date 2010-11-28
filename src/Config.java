@@ -98,6 +98,15 @@ public class Config {
       throw new Exception("Formula specification " + value + " invalid. Ignored.");
    }
 
+   String[] concat(String[] A, String[] B) {
+      String[] C= new String[A.length+B.length];
+      System.arraycopy(A, 0, C, 0, A.length);
+      System.arraycopy(B, 0, C, A.length, B.length);
+
+      return C;
+   }
+
+
    public boolean setOption(String name, String value) {
       try {
          if (name.equals("latex"))
@@ -109,7 +118,7 @@ public class Config {
          else if (name.equals("outputdir"))
             OutputDir = FileManager.nativePath(value);
          else if (name.equals("include"))
-            IncludePaths = value.split(File.pathSeparator);
+            IncludePaths = concat(value.split(File.pathSeparator), IncludePaths);
          else if (name.equals("imagebgcolor")) {
             if (value.trim().equalsIgnoreCase("transparent"))
                ImageBgColor = null;

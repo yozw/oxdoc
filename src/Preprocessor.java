@@ -111,6 +111,24 @@ public class Preprocessor {
 		return listContainsString(defines, define);
 	}
 
+    private String preprocessLine(String line)
+	{
+/*		// try to recognize character constants 
+		// and replace them by string constants ...
+
+		// replace single characters
+		line = line.replaceAll("'([^'])'", "\"$1\"");
+
+		// replace escape character \n, \t, \b, \r, \f
+		line = line.replaceAll("'(\\\\[a,b,f,n,r,t,b])'", "\"$1\"");
+
+		// replace escape character \n, \t, \b, \r, \f
+		line = line.replaceAll("'(\\\\x[0-9,A-F]+)'", "\"$1\"");*/
+
+		return line;
+	}
+
+
 	private int ProcessBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile) throws Exception {
 
 		String line;
@@ -118,6 +136,7 @@ public class Preprocessor {
 		ArrayList params = new ArrayList();
 		while ((line = is.readLine()) != null) {
 
+            line = preprocessLine(line);
 			int cmd = getCommand(line, params);
 			switch (cmd) {
 				case IFDEF:
@@ -190,10 +209,12 @@ public class Preprocessor {
 						for (int i = 0; i < tryFiles.size(); i++) 
                         {
                            File tryFile = (File) tryFiles.get(i);
+						   // System.out.println("DEBUG INFO: Trying file " + tryFile);
 						   if (tryFile.exists()) 
                            {
                                ProcessFile(tryFile, mainFile);
                                done = true;
+                               break;
                            }
                         }
 

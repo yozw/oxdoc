@@ -11,7 +11,7 @@ set oxdocjar=%~dp0oxdoc.jar
 rem ---------------- Do not edit the code below ------------------ 
 if not exist "%oxdocjar%" goto oxdoc_jar_not_found
 
-java -jar "%oxdocjar%" %1 %2 %3 %4 %5 %6 %7 %8 %9
+java -jar "%oxdocjar%" %*
 goto end
 
 :oxdoc_jar_not_found
