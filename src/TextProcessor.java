@@ -64,6 +64,7 @@ public class TextProcessor {
    }
 
    private String filterLatexExpressions(String text) {
+      System.out.println(text);
       String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
       Pattern p = Pattern.compile(pattern);
       Matcher m = p.matcher(text);
@@ -82,9 +83,10 @@ public class TextProcessor {
 
          Object[] args = { isInline ? "expression" : "equation", replacement };
          replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);
-         m.appendReplacement(myStringBuffer, replacement);
+         m.appendReplacement(myStringBuffer, Matcher.quoteReplacement(replacement));
       }
 
       return m.appendTail(myStringBuffer).toString();
    }
 }
+

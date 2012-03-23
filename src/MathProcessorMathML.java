@@ -30,7 +30,7 @@ public class MathProcessorMathML extends MathProcessor {
    }
 
    public String ProcessFormula(String formula, boolean isInline) {
-      return "\\$" + formula + "\\$";
+      return "$" + formula + "$";
    }
 
    public String ExtraHeader() {

@@ -96,6 +96,8 @@ public class Config {
          return new MathProcessorLatex(oxdoc);
       if (value.equals("mathml"))
          return new MathProcessorMathML(oxdoc);
+      if (value.equals("mathjax"))
+         return new MathProcessorMathjax(oxdoc);
       if (value.equals("plain"))
          return new MathProcessor(oxdoc);
       throw new Exception("Formula specification " + value + " invalid. Ignored.");
@@ -166,7 +168,7 @@ public class Config {
       System.out.println("");
       System.out.println("Options for output:");
       System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
-      System.out.println("                           methods are: latex, mathml, plain");
+      System.out.println("                           methods are: latex, mathml, mathjax, plain");
       System.out.println("    -icons                 Enables icons");
       System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
       System.out.println("    -projectname \"name\"    Specifies the name of the project");

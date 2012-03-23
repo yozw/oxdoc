@@ -33,7 +33,7 @@
   <target name="parser">
      <mkdir dir="${parser}"/>
      <javacc target="${src}/ox.jj" outputdirectory="${parser}"
-      javacchome="${javacc}"
+      javacchome="/usr/share/java"
       debuglookahead="false"
       debugparser="false"
       static="false" />
