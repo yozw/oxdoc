@@ -37,6 +37,11 @@ public class MathProcessorMathML extends MathProcessor {
       return "<script type=\"text/javascript\" src=\"ASCIIMathML.js\"></script>" + "<script>mathcolor=\"Black\"</script>";
    }
 
+   public String ExtraFooter() {
+      return "Math typesetting by <a href=\"http://www1.chapman.edu/~jipsen/mathml/asciimath.html\">ASCIIMathML</a>";
+   }
+
+
    public void Start() {
       oxdoc.fileManager.copyFromResourceIfNotExists("ASCIIMathML.js");
    }

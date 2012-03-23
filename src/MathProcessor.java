@@ -43,6 +43,10 @@ public class MathProcessor {
       return "";
    }
 
+   public String ExtraFooter() {
+      return "";
+   }
+
    public void Start() {
    }
 }

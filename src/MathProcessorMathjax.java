@@ -39,4 +39,9 @@ public class MathProcessorMathjax extends MathProcessor {
    public String ExtraHeader() {
       return "<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
    }
+
+   public String ExtraFooter() {
+      return "Math typesetting by <a href=\"http://www.mathjax.org/\">Mathjax</a>";
+   }
+
 }

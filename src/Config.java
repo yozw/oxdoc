@@ -41,7 +41,7 @@ public class Config {
    public boolean UpLevel = false;
 
    //    public static boolean EnableLatex = true;
-   public boolean EnableIcons = false;
+   public boolean EnableIcons = true;
 
    public boolean ShowInternals = false;
 
@@ -57,6 +57,8 @@ public class Config {
    public boolean setSimpleOption(String name) {
       if (name.equals("icons"))
          setOption("icons", "1");
+      else if (name.equals("noicons"))
+         setOption("icons", "0");
       else if (name.equals("showinternals"))
          setOption("showinternals", "1");
       else if (name.equals("verbose"))
@@ -168,8 +170,9 @@ public class Config {
       System.out.println("");
       System.out.println("Options for output:");
       System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
-      System.out.println("                           methods are: latex, mathml, mathjax, plain");
-      System.out.println("    -icons                 Enables icons");
+      System.out.println("                           methods are: latex, mathml, mathjax, plain [default=mathjax]");
+      System.out.println("    -icons                 Enables icons [default]");
+      System.out.println("    -noico                 Disables icons");
       System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
       System.out.println("    -showinternals         Enables documentation of internal methods/fields");
@@ -193,10 +196,11 @@ public class Config {
    public void validate() {
       if (MathProcessor == null) {
          // auto select Latex if possible, or else plain
-         if (MathProcessorLatex.Supported(oxdoc))
+         MathProcessor = new MathProcessorMathjax(oxdoc);
+/*         if (MathProcessorLatex.Supported(oxdoc))
             MathProcessor = new MathProcessorLatex(oxdoc);
          else
-            MathProcessor = new MathProcessor(oxdoc);
+            MathProcessor = new MathProcessor(oxdoc);*/
       }
 
       // if the selected math processor is not supported, choose plain
