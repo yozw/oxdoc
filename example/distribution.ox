@@ -1,6 +1,7 @@
 /** Provides the `Distribution` class, representing an abstract random
 distribution
 @author Y. Zwols
+@sortkey ZZZZ
 **/
 
 #ifndef __PCLIRE_DISTRIBUTION__
@@ -29,7 +30,9 @@ Distribution::Dim() {
 }
 
 /** Checks whether a certain object is a distribution.
-@returns TRUE or FALSE **/
+@returns TRUE or FALSE 
+@sortkey aaa 
+**/
 Distribution::isDistribution(oObject) {
 	 return isclass(oObject, "Distribution");
 }

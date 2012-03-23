@@ -21,10 +21,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 import java.util.HashMap;
 
 public class BaseComment {
-   final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4;
+   final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;
  
    private String _text = "";
    private String _description = "";
+   private String _sortKey = null;
    private CommentTextBlock _longdescription = null;
    private CommentTextBlock _comments = null;
    private CommentTextBlock _example = null;
@@ -51,6 +52,7 @@ public class BaseComment {
       registerSection("examples", SECTION_EXAMPLE);
       registerSection("see", SECTION_SEE);
       registerSection("seealso", SECTION_SEE);
+      registerSection("sortkey", SECTION_SORTKEY);
    }
 
    protected void registerSection(String name, int SectionId)
@@ -84,6 +86,7 @@ public class BaseComment {
           case SECTION_REF:      _ref.add(text); break;
           case SECTION_EXAMPLE:  _example.add(text); break;
           case SECTION_SEE:      _see.add(text); break;
+          case SECTION_SORTKEY:  _sortKey = text; break;
           default: return false;
       }
       return true;
@@ -196,6 +199,11 @@ public class BaseComment {
    /** The to do list of the entity **/
    public CommentList todo() {
       return _todo;
+   }
+
+   /** The sort key of this entity; returns null if not set. **/
+   public String sortKey() {
+      return _sortKey;
    }
 
    /** Checks whether the comment is empty **/

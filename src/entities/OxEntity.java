@@ -122,4 +122,10 @@ public class OxEntity {
       return false;
    }
 
+   public String sortKey() 
+   {
+      String sortKey = comment().sortKey();
+      return (sortKey != null) ? sortKey : name();
+   } 
+
 }

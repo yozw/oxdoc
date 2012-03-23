@@ -50,7 +50,7 @@ public class OxEntityList {
                OxEntity e1 = (OxEntity) o1;
                OxEntity e2 = (OxEntity) o2;
 
-               return e1.name().toUpperCase().compareTo(e2.name().toUpperCase());
+               return e1.sortKey().toUpperCase().compareTo(e2.sortKey().toUpperCase());
             }
          });
 
@@ -67,7 +67,9 @@ public class OxEntityList {
                OxEntity e1 = (OxEntity) o1;
                OxEntity e2 = (OxEntity) o2;
 
-               return e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase());
+               // we don't care about display name anymore, I think: maybe get rid of functionality?
+               return e1.sortKey().toUpperCase().compareTo(e2.sortKey().toUpperCase());
+//               return e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase());
             }
          });
 

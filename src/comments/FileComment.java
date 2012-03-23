@@ -6,7 +6,8 @@ import java.util.regex.*;
 
 public class FileComment extends BaseComment {
    private String _author = "";
-   private String _version = "";
+   private String _version = ""; 
+   private String _sortkey = null;
 
    final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
@@ -26,6 +27,7 @@ public class FileComment extends BaseComment {
       {
          case SECTION_AUTHOR:  _author += text; break;
          case SECTION_VERSION: _version += text; break;
+         case SECTION_SORTKEY: _sortkey = text; break;
          default:
             return false;
       }
