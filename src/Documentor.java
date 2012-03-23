@@ -100,6 +100,9 @@ public class Documentor {
       try {
          output.writeln(oxFile.comment());
 
+         if (oxFile.enums().size() > 0){
+            generateEnumDocs(output, oxFile.enums());
+            }
          ArrayList classes = oxFile.classes();
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
@@ -114,6 +117,7 @@ public class Documentor {
          }
          if (oxFile.functions().size() > 0)
             generateClassDetailDocs(output, null, oxFile.functions());
+            
       } finally {
          if (output != null)
             output.close();
@@ -128,6 +132,7 @@ public class Documentor {
       String inheritedMethods = "";
       String inheritedFields = "";
       String inheritanceText = "";
+      String Enums = "";
 
       if ((oxclass != null) && (oxclass.superClassName() != null)) {
          OxClass sclass = oxclass;
@@ -147,10 +152,11 @@ public class Documentor {
             sclass = (OxClass) entity;
 
             ArrayList members = sclass.members();
-			int inheritedMethodCount = 0, inheritedFieldCount = 0;
+			int inheritedMethodCount = 0, inheritedFieldCount = 0, EnumsCount  = 0;
 
             inheritedMethods += "<dt>Inherited methods from " + link + ":</dt><dd>\n";
             inheritedFields  += "<dt>Inherited fields from " + link + ":</dt><dd>\n";
+            Enums += "<dt>Enumerations :</dt><dd>\n";
             for (int i = 0; i < members.size(); i++) {
 			    OxEntity member = (OxEntity) members.get(i);
                 if ((!oxdoc.config.ShowInternals) && member.isInternal())
@@ -178,18 +184,24 @@ public class Documentor {
 					inheritedFieldCount++;
 				}
                 else
-                if (member instanceof OxEnum) { } 
+                if (member instanceof OxEnum) 
+                    { 
+                    Enums += member.declaration();
+					EnumsCount++;
+                    } 
 				else throw new Exception("Class member has unexpected class: " + member);
              }
              inheritedMethods += "</dd>\n";
              inheritedFields += "</dd>\n";
+             Enums += "</dd>\n";
 
 			 if (inheritedFieldCount == 0) inheritedFields = "";
 			 if (inheritedMethodCount == 0) inheritedMethods = "";
+			 if (EnumsCount == 0) Enums = "";
          }
       }
 
-      output.writeln("\n<!-- " + sectionName + " --!>");
+      output.writeln("\n<!-- " + sectionName + " --!><a name=\"" + sectionName+"\"> </a>"); /** Modified by CF to include anchor **/
       output.write("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " " + inheritanceText);
       output.writeln("</h2>");
 
@@ -204,9 +216,9 @@ public class Documentor {
          ArrayList[] visMembers;
          if (oxclass != null) 
          {
-			visLabels = new String[] {"Private fields", "Protected fields", "Public fields", "Public methods"};
+			visLabels = new String[] {"Private fields", "Protected fields", "Public fields", "Public methods", "Enumerations"};
 			visMembers = new ArrayList[] {oxclass.getPrivateFields(), oxclass.getProtectedFields(), oxclass.getPublicFields(), 
-	                         oxclass.getMethods()};
+	                         oxclass.getMethods(),oxclass.getEnums()};
          }
          else
          {
@@ -251,6 +263,8 @@ public class Documentor {
          output.writeln("<dl class=\"inherited_methods\">" + inheritedMethods + "</dl>\n");
       if (inheritedFields.length() > 0)
          output.writeln("<dl class=\"inherited_fields\">" + inheritedFields + "</dl>\n");
+      if (Enums.length() > 0)
+         output.writeln("<dl class=\"inherited_fields\">" + Enums + "</dl>\n");
    }
 
    private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
@@ -283,6 +297,39 @@ public class Documentor {
          output.writeln(entity.comment());
       }
    }
+
+   private void generateEnumDocs(OutputFile output, ArrayList memberList) throws Exception {
+      String sectionName = "Enumerations";
+      String classPrefix = "";
+      int iconType = FileManager.NONE;
+
+      output.writeln("\n<!-- " + sectionName + " --!>");
+      output.writeln("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " details</h2>");
+      int count = 0;
+      for (int i = 0; i < memberList.size(); i++) {
+         OxEntity entity = (OxEntity) memberList.get(i);
+         String anchorName = classPrefix + entity.displayName();
+
+	     if ((!oxdoc.config.ShowInternals) && (entity.isInternal())) 
+            continue;
+
+         if (count != 0)
+            output.writeln("\n<hr>");
+         count++;
+
+         output.writeln("\n<!-- Enum " + entity.displayName() + " --!>");
+
+         Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
+         output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3>{2}{1}</h3>", args));
+
+		 if (entity.declaration() != null)
+             output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
+
+         output.writeln(entity.comment());
+      }
+   }
+
+
 
    private void writeCss() throws IOException {
       if (oxdoc.fileManager.outputFileExists("oxdoc.css"))

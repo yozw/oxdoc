@@ -73,7 +73,8 @@ public class OutputFile {
       writeln("</head>");
       writeln("<body>");
       writeln("<div class=\"header\">");
-      writeln("[ " + oxdoc.fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
+      writeln("[ " + oxdoc.fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"..\\default.html\">Up Level</a>"); /** Added by CF **/
+      writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
       writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.INDEX) + "<a href=\"index.html\">Index</a> ]</div>");
       writeln("<h1>" + oxdoc.fileManager.largeIcon(iconType) + title + "</h1>");
    }
