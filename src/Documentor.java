@@ -99,7 +99,9 @@ public class Documentor {
             OxClass oxclass = (OxClass) classes.get(i);
             generateClassHeaderDocs(output, oxclass);
          }
-         generateClassHeaderDocs(output, oxFile);
+
+         if (oxFile.functions().size() + oxFile.enums().size() > 0)
+            generateClassHeaderDocs(output, oxFile);
 
 
          for (int i = 0; i < classes.size(); i++) {

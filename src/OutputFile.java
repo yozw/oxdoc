@@ -69,7 +69,7 @@ public class OutputFile {
       writeln("<head>");
       writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
       writeln(oxdoc.config.MathProcessor.ExtraHeader());
-      writeln("<title>" + title + " - " + oxdoc.config.WindowTitle + "</title>");
+      writeln("<title>" + title + ( (oxdoc.config.WindowTitle.length() > 0) ? " - " + oxdoc.config.WindowTitle : "") + "</title>");
       writeln("</head>");
       writeln("<body>");
       writeln("<div class=\"header\">");

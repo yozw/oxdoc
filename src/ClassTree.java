@@ -79,7 +79,7 @@ class ClassTree {
              text.append("<li>");
           else
              text.append("<li class=\"last\">");
-          text.append(project.linkToEntity(child.oxClass) + " " + child.oxClass.description() + "\n");
+          text.append("<span class=\"label\">" + project.linkToEntity(child.oxClass) + "</span> " + child.oxClass.description() + "\n");
           addChildrenToHtmlList(text, child);
        }
        text.append("</ul>\n");
