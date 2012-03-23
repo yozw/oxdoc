@@ -124,6 +124,16 @@ public class OxClass extends OxEntity {
       });
    }
 
+   public ArrayList getEnums() {
+
+	  return filterMembers( new MemberFilter() { 
+            public boolean keepItem(OxEntity entity) 
+            {
+                return (entity instanceof OxEnum);
+            }
+      });
+   }
+
    public OxMethod methodByName(String s) {
       return (OxMethod) _members.get(s);
    }
@@ -148,7 +158,7 @@ public class OxClass extends OxEntity {
    }
 
    public String url() {
-      return parentFile().url();
+      return parentFile().url() + "#" + name(); /** Modfied by CF **/
    }
 
    public String toString() {

@@ -23,11 +23,21 @@ public class OxEnum extends OxEntity {
    private String[] _elements;
 
    OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
-      super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
+      super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile()); 
       setIconType(FileManager.ENUM);
       _elements = elements;
       _visibility = visibility;
    }
+
+
+   OxEnum(String name, String[] elements, OxFile oxfile, OxClass.Visibility visibility) {
+      super(name, null, new FieldComment(oxfile.project()), oxfile);  
+      
+      setIconType(FileManager.ENUM);
+      _elements = elements;
+      _visibility = visibility;
+   }
+
 
    public String url() {
       return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();

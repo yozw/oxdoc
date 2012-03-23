@@ -23,7 +23,9 @@ import java.util.*;
 public class OxFile extends OxEntity {
    private OxEntityList _functions = new OxEntityList();
    private OxEntityList _classes = new OxEntityList();
-
+   private OxEntityList _enums = new OxEntityList();  /** added by CF **/
+   private int enumCounter = 0;
+    
    public OxFile(String fileName, OxProject project) {
       super(fileName, null, new FileComment(project), project);
       setIconType(FileManager.FILE);
@@ -32,6 +34,14 @@ public class OxFile extends OxEntity {
    public OxMethod addFunction(String name) {
       return (OxMethod) _functions.add(new OxMethod(name, this));
    }
+
+   public OxEnum addEnum(String name,ArrayList elements,OxClass.Visibility vis) {
+      String[] _elements = new String[elements.size()];
+      for (int i = 0; i < elements.size(); i++) 
+          _elements[i] = elements.get(i).toString(); 
+      enumCounter++;
+      return (OxEnum) _enums.add(new OxEnum("enum" + enumCounter, _elements, this, vis)); 
+   } 
 
    public OxClass addClass(String name) {
       return (OxClass) _classes.add(new OxClass(name, this));
@@ -47,6 +57,10 @@ public class OxFile extends OxEntity {
 
    public ArrayList functions() {
       return _functions.sortedList();
+   }
+
+   public ArrayList enums() {
+      return _enums.sortedList();
    }
 
    public ArrayList classes() {

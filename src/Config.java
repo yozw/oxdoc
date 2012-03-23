@@ -38,6 +38,7 @@ public class Config {
    public String ProjectName = "";
    public MathProcessor MathProcessor = null;
    public boolean Verbose = false;
+   public boolean UpLevel = false;
 
    //    public static boolean EnableLatex = true;
    public boolean EnableIcons = false;
@@ -59,6 +60,8 @@ public class Config {
       else if (name.equals("showinternals"))
          setOption("showinternals", "1");
       else if (name.equals("verbose"))
+         setOption("verbose", "1");
+      else if (name.equals("uplevel"))
          setOption("verbose", "1");
       else
          return false;
@@ -145,6 +148,8 @@ public class Config {
             WindowTitle = value;
          else if (name.equals("verbose"))
             Verbose = toBoolean(value);
+         else if (name.equals("uplevel"))
+            UpLevel = toBoolean(value);
          else
             return false;
       } catch (Exception E) {
@@ -167,6 +172,7 @@ public class Config {
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
       System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -windowtitle \"title\"   Specifies a browser title");
+      System.out.println("    -uplevel               Adds a link \"Up level\" in the header of every HTML file");
       System.out.println("");
       System.out.println("Options for third-party software:");
       System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
