@@ -60,12 +60,16 @@ public class OxClass extends OxEntity {
       return (OxField) _members.add(new OxField(name, this, vis));
    }
 
-   public OxEnum addEnum(ArrayList elements, Visibility vis) {
+   public OxEnum addEnum(String alternativeName, ArrayList elements, Visibility vis) {
+      if ((alternativeName == null) || (alternativeName.length() == 0)) 
+      {
+          enumCounter++;
+          alternativeName = "Anonymous enum " + enumCounter;
+      }
       String[] _elements = new String[elements.size()];
       for (int i = 0; i < elements.size(); i++)
           _elements[i] = elements.get(i).toString();
-      enumCounter++;
-      return (OxEnum) _members.add(new OxEnum("enum" + enumCounter, _elements, this, vis));
+      return (OxEnum) _members.add(new OxEnum(alternativeName, _elements, this, vis));
    }
 
    public ArrayList members() {

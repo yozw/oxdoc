@@ -35,13 +35,17 @@ public class OxFile extends OxEntity {
       return (OxMethod) _functions.add(new OxMethod(name, this));
    }
 
-   public OxEnum addEnum(String name,ArrayList elements,OxClass.Visibility vis) {
+   public OxEnum addEnum(String alternativeName, ArrayList elements) {
+      if ((alternativeName == null) || (alternativeName.length() == 0)) 
+      {
+          enumCounter++;
+          alternativeName = "Anonymous enum " + enumCounter;
+      }
       String[] _elements = new String[elements.size()];
-      for (int i = 0; i < elements.size(); i++) 
-          _elements[i] = elements.get(i).toString(); 
-      enumCounter++;
-      return (OxEnum) _enums.add(new OxEnum("enum" + enumCounter, _elements, this, vis)); 
-   } 
+      for (int i = 0; i < elements.size(); i++)
+          _elements[i] = elements.get(i).toString();
+      return (OxEnum) _enums.add(new OxEnum(alternativeName, _elements, this));
+   }
 
    public OxClass addClass(String name) {
       return (OxClass) _classes.add(new OxClass(name, this));

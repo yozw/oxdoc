@@ -240,7 +240,7 @@ void FieldDeclaration() :
 **/
 Token EnumElement() : { Token name; }
 {
-  name = <IDENTIFIER> ["=" ["+"|"-"] <INTEGER_LITERAL>]
+  name = <IDENTIFIER> ["=" AssignmentExpression() ]
   { return name; }
 }
 
@@ -252,8 +252,25 @@ void EnumDeclaration() : { ArrayList elements = new ArrayList(); Token enumToken
     ("," el = EnumElement() { elements.add(el.image); } )* 
     "}" [";"]
     {
-/*       if (currentClass != null) 
-           currentClass.addEnum(elements, currentVisibility);*/
+       String comment = null;
+       String alternativeName = null;
+       if (enumToken.specialToken != null)
+       {
+          comment = enumToken.specialToken.image;
+          // trick to obtain alternative name 
+          EnumComment ec = new EnumComment(project);
+          ec.setText(comment);
+          alternativeName = ec.alternativeName();
+       }
+
+       OxEnum newEnum = null;
+       if (currentClass == null) 
+          newEnum = file.addEnum(alternativeName, elements);
+       else
+          newEnum = currentClass.addEnum(alternativeName, elements, currentVisibility);
+
+       if (comment != null)
+          newEnum.setComment(comment);
     }
 }
 

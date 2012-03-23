@@ -94,16 +94,13 @@ public class Documentor {
       try {
          output.writeln(oxFile.comment());
 
-         if (oxFile.enums().size() > 0){
-            generateEnumDocs(output, oxFile.enums());
-            }
          ArrayList classes = oxFile.classes();
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
-            generateClassHeaderDocs(output, oxclass, oxclass.members());
+            generateClassHeaderDocs(output, oxclass);
          }
-         if (oxFile.functions().size() > 0)
-            generateClassHeaderDocs(output, null, oxFile.functions());
+         generateClassHeaderDocs(output, oxFile);
+
 
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
@@ -111,6 +108,9 @@ public class Documentor {
          }
          if (oxFile.functions().size() > 0)
             generateClassDetailDocs(output, null, oxFile.functions());
+         if (oxFile.functions().size() > 0)
+            generateEnumDocs(output, oxFile.enums());
+            
             
       } finally {
          if (output != null)
@@ -118,15 +118,20 @@ public class Documentor {
       }
    }
 
-   private void generateClassHeaderDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
-      String sectionName = (oxclass != null) ? oxclass.name() : "Global functions";
+   // generate header docs. Entity should be either OxClass or OxFile type
+   private void generateClassHeaderDocs(OutputFile output, OxEntity containerEntity) throws Exception {
+      OxClass oxclass = (containerEntity instanceof OxClass) ? (OxClass) containerEntity : null;
+      OxFile  oxfile = (containerEntity instanceof OxFile) ? (OxFile) containerEntity : null;
+
+      String sectionName = (oxclass != null) ? oxclass.name() : "Global";
       String classPrefix = (oxclass != null) ? oxclass.name() : "";
-      int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.NONE;
+      int iconType = (containerEntity instanceof OxClass) ? FileManager.CLASS : FileManager.NONE;
 
       String inheritedMethods = "";
       String inheritedFields = "";
       String inheritanceText = "";
       String Enums = "";
+
 
       if ((oxclass != null) && (oxclass.superClassName() != null)) {
          OxClass sclass = oxclass;
@@ -202,10 +207,6 @@ public class Documentor {
       if (oxclass != null)
          output.writeln(oxclass.comment());
 
-      if (memberList.size() > 0) {
-         output.writeln("\n<!-- Members of " + sectionName + " --!>");
-         output.writeln("<table class=\"method_table\">");
-
 		 String[] visLabels;
          ArrayList[] visMembers;
          if (oxclass != null) 
@@ -216,8 +217,8 @@ public class Documentor {
          }
          else
          {
-			visLabels = new String[] {"Functions"};
-            visMembers = new ArrayList[] {memberList };
+			visLabels = new String[] {"Functions", "Enumerations"};
+            visMembers = new ArrayList[] {oxfile.functions(), oxfile.enums() };
 		 }
 
          if (!oxdoc.config.ShowInternals)
@@ -235,6 +236,15 @@ public class Documentor {
                 } 
              }
 		 }
+
+   int totalMembers = 0;
+   for (int i = 0; i < visLabels.length; i++) 
+      totalMembers += visMembers[i].size();
+
+   if (totalMembers > 0) {
+     
+         output.writeln("\n<!-- Members of " + sectionName + " --!>");
+         output.writeln("<table class=\"method_table\">");
 
          for (int k = 0; k < visLabels.length; k++)		 
          {
