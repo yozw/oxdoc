@@ -71,43 +71,10 @@ public class Documentor {
 
    private void generateIndex(String fileName) throws Exception {
       OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, oxdoc);
-      output.writeln("<table class=\"index\">");
 
-      ArrayList symbols = project.symbolsByDisplayName();
+      SymbolIndex index = new SymbolIndex(oxdoc, classTree);
 
-      for (int i = 0; i < symbols.size(); i++) {
-         String description = "";
-         OxEntity entity = (OxEntity) symbols.get(i);
-         if ((!oxdoc.config.ShowInternals) && entity.isInternal())
-            continue;
-         if (entity instanceof OxClass)
-            description = "Class";
-         else if (entity instanceof OxMethod)
-         {
-            if ( ((OxMethod) entity).parentClass() != null)
-            { 
-               OxMethod method = (OxMethod) entity;
-               OxClass  parentClass = method.parentClass();
-               String type = "Method";
-               if (method.name().compareTo(parentClass.name()) == 0)
-                   type = "Constructor";
-               else if (method.name().compareTo("~" + parentClass.name()) == 0)
-                   type = "Destructor";
-
-               description = type + " of " + project.linkToEntity(method, parentClass.name());
-            }
-            else
-               description = "Global function";
-         }
-         else if (entity instanceof OxField)
-            description = "Field of " + project.linkToEntity(((OxField) entity).parentClass());;
-
-         output.write((i % 2 == 0) ? "<tr class=\"even_row\">" : "<tr class=\"odd_row\">");
-         output.write("<td class=\"declaration\" valign=\"top\">" + entity.smallIcon() + project.linkToEntity(entity, true) + "</td>");
-         output.write("<td class=\"description\" valign=\"top\">" + description + "</td>");
-         output.writeln("</tr>");
-      }
-      output.writeln("</table>");
+      index.write(output);
       output.close();
    }
 

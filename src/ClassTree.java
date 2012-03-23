@@ -26,6 +26,7 @@ class ClassTree {
        OxClass oxClass = null;
        Node parent = null;
        ArrayList children = new ArrayList();
+       int depth = 0;
    }
 
    private OxProject project = null;
@@ -62,6 +63,8 @@ class ClassTree {
            classNode.parent = parentNode;
            parentNode.children.add(classNode);
        }
+
+       updateDepths();
    }
 
    private void addChildrenToHtmlList(StringBuffer text, Node node)
@@ -80,6 +83,27 @@ class ClassTree {
           addChildrenToHtmlList(text, child);
        }
        text.append("</ul>\n");
+   }
+
+   private void updateDepths()
+   {
+       updateDepths(rootNode, 0);
+   }
+
+   private void updateDepths(Node node, int depth)
+   {
+       node.depth = depth;
+       for (int i = 0; i < node.children.size(); i++)
+       {
+          Node child = (Node) node.children.get(i);
+          updateDepths(child, depth + 1);
+       } 
+   }
+
+   public int getClassDepth(OxClass oxClass)
+   {
+       Node node = (Node) nodes.get(oxClass);
+       return node.depth;
    }
 
    public String toHtmlList()
