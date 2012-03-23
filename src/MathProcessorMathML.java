@@ -38,32 +38,6 @@ public class MathProcessorMathML extends MathProcessor {
    }
 
    public void Start() {
-      try {
-         if (oxdoc.fileManager.outputFileExists("ASCIIMathML.js"))
-            return;
-
-         InputStream resourceFile = OxDoc.class.getResourceAsStream("ASCIIMathML.js");
-         if (resourceFile == null) {
-            oxdoc.warning("ASCIIMathML.js resource was not found.");
-
-            return;
-         }
-
-         OutputFile output = new OutputFile("ASCIIMathML.js", oxdoc);
-         BufferedReader jsReader = new BufferedReader(new InputStreamReader(resourceFile));
-
-         while (true) {
-            int data = jsReader.read();
-            if (data < 0)
-               break;
-            output.writeChar(data);
-         }
-         jsReader.close();
-         output.close();
-
-         oxdoc.message("Copied ASCIIMathML.js");
-      } catch (Exception E) {
-         oxdoc.message(E.getMessage());
-      }
+      oxdoc.fileManager.copyFromResourceIfNotExists("ASCIIMathML.js");
    }
 }

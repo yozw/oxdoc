@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **/
 
 import java.io.*;
+import java.util.*;
 import java.net.*;
 import java.security.*;
 
@@ -32,14 +33,20 @@ public class FileManager {
    public static final int METHOD = 4;
    public static final int FUNCTION = 5;
    public static final int FIELD = 6;
-   public static final int ENUM = 6;
+   public static final int ENUM = 7;
+   public static final int UPLEVEL = 8;
+   public static final int HIERARCHY = 9;
    public static final String[] iconFiles = {
-                                               "index", "project", "file",
-                                               "class", "method", "function", "field", "enum"
+          "index", "project", "file", "class", "method", 
+          "function", "field", "enum", "uplevel", "hierarchy"
    };
    private static String _imageCache = "images.xml";
    private static String _tempTexFileBase = "__oxdoc";
    public OxDoc oxdoc = null;
+
+   // for speed reasons, register which resource we've tried to write so far
+   // key: String (filename + "||" + resourcename), value: integer (0 = success)
+   Hashtable resourceResults = new Hashtable();   
 
    public FileManager(OxDoc oxdoc) {
       this.oxdoc = oxdoc;
@@ -149,7 +156,10 @@ public class FileManager {
       if (iconType < 0)
          return "";
 
-      return "<img class=\"icon\" src=\"icons/" + iconFiles[iconType] + ".png\">&nbsp;";
+      String fileName = "icons/" + iconFiles[iconType] + ".png";
+      copyFromResourceIfNotExists(fileName);
+
+      return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
    }
 
    public String smallIcon(int iconType) {
@@ -158,6 +168,61 @@ public class FileManager {
       if (iconType < 0)
          return "";
 
-      return "<img class=\"icon\" src=\"icons/" + iconFiles[iconType] + "_s.png\">&nbsp;";
+      String fileName = "icons/" + iconFiles[iconType] + "_s.png";
+      copyFromResourceIfNotExists(fileName);
+
+      return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
    }
+
+   public boolean copyFromResourceIfNotExists(String fileName)
+   {
+      return copyFromResourceIfNotExists(fileName, fileName);
+   }
+
+   // this is a cached version of _copyFromResourceIfNotExists
+   public boolean copyFromResourceIfNotExists(String fileName, String resourceName)
+   {
+      // check if we've requested this resource before
+      String key = fileName + "||" + resourceName;
+      if (resourceResults.containsKey(key))
+         return ((Boolean) resourceResults.get(key)).booleanValue();
+
+      boolean result = _copyFromResourceIfNotExists(fileName, resourceName);
+      resourceResults.put(key, new Boolean(result));
+      return result;
+   }
+
+   private boolean _copyFromResourceIfNotExists(String fileName, String resourceName)
+   {
+      try {
+         if (oxdoc.fileManager.outputFileExists(fileName))
+            return true;
+
+         InputStream resourceFile = OxDoc.class.getResourceAsStream(resourceName);
+         if (resourceFile == null) {
+            oxdoc.warning("Resource '" + resourceName + "' does not exist.");
+            return false;
+         }
+
+         BinaryOutputFile output = new BinaryOutputFile(fileName, oxdoc);
+
+         byte[] buffer = new byte[4096];
+
+         while (true) {
+            int bytesRead = resourceFile.read(buffer, 0, buffer.length);
+            if (bytesRead < 0)
+               break;
+            output.write(buffer, bytesRead);
+         }
+         resourceFile.close();
+         output.close();
+
+         oxdoc.message("Succesfully wrote " + fileName);
+      } catch (Exception E) {
+         oxdoc.message(E.getMessage());
+         return false;
+      }
+      return true;
+   }
+
 }

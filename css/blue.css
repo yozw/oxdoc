@@ -87,10 +87,12 @@ dd.example PRE {
 .declaration {
     font-family: courier;
     font-size: 10pt;
-    white-space:nowrap;}
+    white-space:nowrap;
+}
 
 .file {
-    white-space:nowrap;}
+    white-space:nowrap;
+}
 
 .description {
 }
@@ -158,5 +160,33 @@ ul.index {
 
 .latex {
     vertical-align: middle;
+}
+
+div.tree ul, div.tree ul ul {
+  list-style-type: none;
+  background: url(icons/tree_v.png) repeat-y;
+  margin: 0;
+  padding: 0;
+}
+   
+div.tree ul {
+  margin-left: 10px;
+}
+
+div.tree ul li {
+  margin: 0;
+  padding: 0 12px;
+  line-height: 20px;
+  background: url(icons/tree_n.png) no-repeat;
+  color: #369;
+  font-weight: bold;
+}
+
+div.tree ul li.last {
+  background: #fff url(icons/tree_l.png) no-repeat;
+}
+
+img.icon {
+  vertical-align: middle;
 }
 

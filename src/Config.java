@@ -62,7 +62,7 @@ public class Config {
       else if (name.equals("verbose"))
          setOption("verbose", "1");
       else if (name.equals("uplevel"))
-         setOption("verbose", "1");
+         setOption("uplevel", "1");
       else
          return false;
 

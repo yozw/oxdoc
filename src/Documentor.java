@@ -26,6 +26,7 @@ import java.text.*;
 public class Documentor {
    private OxProject project = null;
    private OxDoc oxdoc = null;
+   private ClassTree classTree = null;
 
    public Documentor(OxDoc oxdoc) {
       this.oxdoc = oxdoc;
@@ -40,9 +41,11 @@ public class Documentor {
          OxFile file = (OxFile) files.get(i);
          generateDoc(file, file.url());
       }
+      classTree = new ClassTree(oxdoc, project.classes());
 
       generateStartPage("default.html");
       generateIndex("index.html");
+      generateHierarchy("hierarchy.html");
 
       writeCss();
 
@@ -50,9 +53,12 @@ public class Documentor {
    }
 
    private void generateStartPage(String fileName) throws Exception {
-      OutputFile output = new OutputFile(fileName, project.name + " project home", FileManager.PROJECT, oxdoc);
+      String title = (project.name.length() == 0) ? "Project home" : (project.name + " project home");
+      String sectionTitle = (project.name.length() == 0) ? "Files" : (project.name + " files");
+
+      OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, oxdoc);
       ArrayList files = project.files();
-      output.writeln("<h2>" + project.name + " files</h2>");
+      output.writeln("<h2>" + sectionTitle + "</h2>");
       output.writeln("<table class=\"table_of_contents\">");
       for (int i = 0; i < files.size(); i++) {
          OxFile file = (OxFile) files.get(i);
@@ -79,7 +85,17 @@ public class Documentor {
          else if (entity instanceof OxMethod)
          {
             if ( ((OxMethod) entity).parentClass() != null)
-               description = "Method of " + project.linkToEntity(((OxMethod) entity).parentClass());
+            { 
+               OxMethod method = (OxMethod) entity;
+               OxClass  parentClass = method.parentClass();
+               String type = "Method";
+               if (method.name().compareTo(parentClass.name()) == 0)
+                   type = "Constructor";
+               else if (method.name().compareTo("~" + parentClass.name()) == 0)
+                   type = "Destructor";
+
+               description = type + " of " + project.linkToEntity(method, parentClass.name());
+            }
             else
                description = "Global function";
          }
@@ -92,6 +108,17 @@ public class Documentor {
          output.writeln("</tr>");
       }
       output.writeln("</table>");
+      output.close();
+   }
+
+   private void generateHierarchy(String fileName) throws Exception {
+      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_v.png");
+      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_n.png");
+      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_l.png");
+      OutputFile output = new OutputFile(fileName, "Class hierarchy", FileManager.HIERARCHY, oxdoc);
+      output.writeln("<div class=\"tree\">");
+      output.writeln(classTree.toHtmlList());
+      output.writeln("</div>");
       output.close();
    }
 
@@ -332,28 +359,6 @@ public class Documentor {
 
 
    private void writeCss() throws IOException {
-      if (oxdoc.fileManager.outputFileExists("oxdoc.css"))
-         return;
-
-      InputStream resourceFile = OxDoc.class.getResourceAsStream("oxdoc.css");
-      if (resourceFile == null) {
-         project.oxdoc.warning("oxdoc.css resource was not found. Cannot write a style sheet.");
-
-         return;
-      }
-
-      OutputFile output = new OutputFile("oxdoc.css", oxdoc);
-      BufferedReader cssReader = new BufferedReader(new InputStreamReader(resourceFile));
-
-      while (true) {
-         int data = cssReader.read();
-         if (data < 0)
-            break;
-         output.writeChar(data);
-      }
-      cssReader.close();
-      output.close();
-
-      project.oxdoc.message("oxdoc.css not found. A new one has been created.");
+      oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc.css");
    }
 }

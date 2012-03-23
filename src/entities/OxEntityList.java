@@ -29,7 +29,6 @@ public class OxEntityList {
 
    public OxEntity add(String name, OxEntity entity) {
       entities.put(name, entity);
-
       return entity;
    }
 
@@ -74,4 +73,22 @@ public class OxEntityList {
 
       return list;
    }
+
+   public OxEntityList classes() 
+   {
+      OxEntityList list = new OxEntityList();
+      Set set = entities.entrySet();
+
+      Iterator it = set.iterator();
+      while (it.hasNext()) {
+         Map.Entry entry = (Map.Entry) it.next();
+         OxEntity entity = (OxEntity) entry.getValue();
+         String name     = (String) entry.getKey();
+         if (entity instanceof OxClass)
+            list.add(name, entity);
+       }
+
+       return list;
+   }
+
 }

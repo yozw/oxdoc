@@ -64,7 +64,6 @@ public class TextProcessor {
    }
 
    private String filterLatexExpressions(String text) {
-      System.out.println(text);
       String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
       Pattern p = Pattern.compile(pattern);
       Matcher m = p.matcher(text);

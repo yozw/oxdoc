@@ -10,6 +10,7 @@
   <property name="srcmisc" location="src/misc"/>
   <property name="bin"     location="bin"/>
   <property name="lib"     location="lib"/>
+  <property name="css"     location="css"/>
   <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
   <property name="docs"    location="docs"/>
@@ -68,8 +69,11 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="${bin}"/>
-    <copy file="${srcmisc}/oxdoc.css" todir="${build}" />
+    <copy file="${css}/default.css" tofile="${build}/oxdoc.css" />
     <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}" />
+    <copy todir="${build}/icons">  
+       <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
+    </copy>
     <copy file="${lib}/jregex.jar" todir="${bin}" />
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}">
         <manifest> 

@@ -47,6 +47,10 @@ public class OxProject {
       return _symbols.sortedList();
    }
 
+   public OxEntityList classes() {
+      return _symbols.classes();
+   }
+
    public ArrayList symbolsByDisplayName() {
       return _symbols.sortedListByDisplayName();
    }
@@ -70,11 +74,14 @@ public class OxProject {
       return linkToEntity(entity, false);
    }
 
+   public String linkToEntity(OxEntity entity, String displayText) {
+      return "<a href=\"" + entity.url() + "\">" + displayText + "</a>";
+   }
+
    public String linkToEntity(OxEntity entity, boolean useDisplayName) {
       if (useDisplayName)
          return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
       else
-
-         return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
+        return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
    }
 }

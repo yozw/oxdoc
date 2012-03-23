@@ -12,7 +12,7 @@ decl Dist = new NormalDistribution(0, 1);
 decl Z = Dist.Generate(20);
 </pre>
 **/
-class NormalDistribution {
+class NormalDistribution : Distribution {
 	decl m_vMu, m_mSigma;
 	NormalDistribution(const vMu, const mSigma);
 	virtual Generate(const cT);
