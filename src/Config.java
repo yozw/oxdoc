@@ -180,14 +180,15 @@ public class Config {
       System.out.println("");
       System.out.println("Options for output:");
       System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
-      System.out.println("                           methods are: latex, mathml, mathjax, plain [default=mathjax]");
-      System.out.println("    -icons                 Enables icons [default]");
+      System.out.println("                           methods are: latex, mathml, mathjax, plain");
+      System.out.println("                           (default=mathjax)");
+      System.out.println("    -icons                 Enables icons (default)");
       System.out.println("    -noico                 Disables icons");
       System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
       System.out.println("    -projectname \"name\"    Specifies the name of the project");
       System.out.println("    -showinternals         Enables documentation of internal methods/fields");
       System.out.println("    -windowtitle \"title\"   Specifies a browser title");
-      System.out.println("    -uplevel               Adds a link \"Up level\" in the header of every HTML file");
+      System.out.println("    -uplevel               Adds a link \"Up level\" in the header");
       System.out.println("");
       System.out.println("Options for third-party software:");
       System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");

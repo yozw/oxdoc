@@ -52,7 +52,7 @@ FIXED MARCH 23 2012:
 
 * The index now distinguishes between constructors, destructors, and methods.
 
-
+* Default settings for Latex/dvipng executables now depend on the operating system.
 
 FIXED:
 * #import command now includes appropriate header file
