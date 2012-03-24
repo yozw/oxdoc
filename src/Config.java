@@ -26,9 +26,9 @@ import java.io.File;
 
 public class Config {
    private OxDoc oxdoc = null;
-   public String Latex = "latex.exe";
+   public String Latex = null;
    public String LatexArg = "";
-   public String Dvipng = "dvipng.exe";
+   public String Dvipng = null;
    public String DvipngArg = "-Q 10 -D 110";
    public String OutputDir = "doc/";
    public String TempDir = ".";
@@ -52,6 +52,16 @@ public class Config {
 
    public Config(OxDoc oxdoc) {
       this.oxdoc = oxdoc;
+
+      if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
+      {
+         Latex = "latex.exe"; 
+         Dvipng = "dvipng.exe";
+      }
+      else {
+         Latex = "latex"; 
+         Dvipng = "dvipng";
+      }
    }
 
    public boolean setSimpleOption(String name) {
@@ -101,7 +111,7 @@ public class Config {
       if (value.equals("mathjax"))
          return new MathProcessorMathjax(oxdoc);
       if (value.equals("plain"))
-         return new MathProcessor(oxdoc);
+         return new MathProcessorPlain(oxdoc);
       throw new Exception("Formula specification " + value + " invalid. Ignored.");
    }
 
@@ -205,7 +215,7 @@ public class Config {
 
       // if the selected math processor is not supported, choose plain
       if (!MathProcessor.Supported(oxdoc))
-         MathProcessor = new MathProcessor(oxdoc);
+         MathProcessor = new MathProcessorPlain(oxdoc);
 
       MathProcessor.Start();
    }

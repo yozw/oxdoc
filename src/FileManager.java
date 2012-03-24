@@ -36,9 +36,12 @@ public class FileManager {
    public static final int ENUM = 7;
    public static final int UPLEVEL = 8;
    public static final int HIERARCHY = 9;
+   public static final int GLOBAL = 10;
+   public static final int FILES = 11;
    public static final String[] iconFiles = {
           "index", "project", "file", "class", "method", 
-          "function", "field", "enum", "uplevel", "hierarchy"
+          "function", "field", "enum", "uplevel", "hierarchy",
+          "global", "files"
    };
    private static String _imageCache = "images.xml";
    private static String _tempTexFileBase = "__oxdoc";

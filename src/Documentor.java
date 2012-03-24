@@ -57,8 +57,9 @@ public class Documentor {
       String sectionTitle = (project.name.length() == 0) ? "Files" : (project.name + " files");
 
       OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, oxdoc);
+      int iconType = FileManager.FILES; 
       ArrayList files = project.files();
-      output.writeln("<h2>" + sectionTitle + "</h2>");
+      output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionTitle + "</span></h2>");
       output.writeln("<table class=\"table_of_contents\">");
       for (int i = 0; i < files.size(); i++) {
          OxFile file = (OxFile) files.get(i);
@@ -110,7 +111,7 @@ public class Documentor {
          }
          if (oxFile.functions().size() > 0)
             generateClassDetailDocs(output, null, oxFile.functions());
-         if (oxFile.functions().size() > 0)
+         if (oxFile.enums().size() > 0)
             generateEnumDocs(output, oxFile.enums());
             
             
@@ -127,7 +128,7 @@ public class Documentor {
 
       String sectionName = (oxclass != null) ? oxclass.name() : "Global";
       String classPrefix = (oxclass != null) ? oxclass.name() : "";
-      int iconType = (containerEntity instanceof OxClass) ? FileManager.CLASS : FileManager.NONE;
+      int iconType = (containerEntity instanceof OxClass) ? FileManager.CLASS : FileManager.GLOBAL;
 
       String inheritedMethods = "";
       String inheritedFields = "";
@@ -202,8 +203,8 @@ public class Documentor {
          }
       }
 
-      output.writeln("\n<!-- " + sectionName + " --!><a name=\"" + sectionName+"\"> </a>"); /** Modified by CF to include anchor **/
-      output.write("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " " + inheritanceText);
+      output.writeln("\n<!-- " + sectionName + " --><a name=\"" + sectionName+"\"> </a>"); /** Modified by CF to include anchor **/
+      output.write("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " " + inheritanceText + "</span>");
       output.writeln("</h2>");
 
       if (oxclass != null)
@@ -245,7 +246,7 @@ public class Documentor {
 
    if (totalMembers > 0) {
      
-         output.writeln("\n<!-- Members of " + sectionName + " --!>");
+         output.writeln("\n<!-- Members of " + sectionName + " -->");
          output.writeln("<table class=\"method_table\">");
 
          for (int k = 0; k < visLabels.length; k++)		 
@@ -276,10 +277,10 @@ public class Documentor {
    private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
       String sectionName = (oxclass != null) ? oxclass.name() : "Global functions";
       String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
-      int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.NONE;
+      int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
 
-      output.writeln("\n<!-- Details for " + sectionName + " --!>");
-      output.writeln("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " details</h2>");
+      output.writeln("\n<!-- Details for " + sectionName + " -->");
+      output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " details</span></h2>");
       int count = 0;
       for (int i = 0; i < memberList.size(); i++) {
          OxEntity entity = (OxEntity) memberList.get(i);
@@ -292,10 +293,10 @@ public class Documentor {
             output.writeln("\n<hr>");
          count++;
 
-         output.writeln("\n<!-- Entity " + entity.displayName() + " --!>");
+         output.writeln("\n<!-- Entity " + entity.displayName() + " -->");
 
          Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
-         output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3>{2}{1}</h3>", args));
+         output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3><span class=\"icon\">{2}</span><span class=\"text\">{1}</span></h3>", args));
 
 		 if (entity.declaration() != null)
              output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
@@ -307,10 +308,10 @@ public class Documentor {
    private void generateEnumDocs(OutputFile output, ArrayList memberList) throws Exception {
       String sectionName = "Enumerations";
       String classPrefix = "";
-      int iconType = FileManager.NONE;
+      int iconType = FileManager.ENUM;
 
-      output.writeln("\n<!-- " + sectionName + " --!>");
-      output.writeln("<h2>" + oxdoc.fileManager.largeIcon(iconType) + sectionName + " details</h2>");
+      output.writeln("\n<!-- " + sectionName + " -->");
+      output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " details</span></h2>");
       int count = 0;
       for (int i = 0; i < memberList.size(); i++) {
          OxEntity entity = (OxEntity) memberList.get(i);
@@ -323,10 +324,10 @@ public class Documentor {
             output.writeln("\n<hr>");
          count++;
 
-         output.writeln("\n<!-- Enum " + entity.displayName() + " --!>");
+         output.writeln("\n<!-- Enum " + entity.displayName() + " -->");
 
          Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
-         output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3>{2}{1}</h3>", args));
+         output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3><span class=\"icon\">{2}</span><span class=\"text\">{1}</span></h3>", args));
 
 		 if (entity.declaration() != null)
              output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");

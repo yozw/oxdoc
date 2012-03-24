@@ -47,4 +47,8 @@ public class MathProcessorLatex extends MathProcessor {
 
       return true;
    }
+
+   public String ExtraHeader() {
+      return "<style>.expression { font-style: italic; font-family: times; font-size: 12px; }</style>";
+   }
 }
