@@ -80,7 +80,7 @@ public class OutputFile {
       writeln(oxdoc.fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
       writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.INDEX) + "<a href=\"index.html\">Index</a>");
       writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.HIERARCHY) + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
-      writeln("<h1>" + oxdoc.fileManager.largeIcon(iconType) + title + "</h1>");
+      writeln("<h1><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + title + "</span></h1>");
    }
 
    private void writeDocFooter() throws IOException {
