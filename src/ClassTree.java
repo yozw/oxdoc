@@ -34,6 +34,7 @@ class ClassTree {
 
    Node rootNode = new Node();
    Hashtable nodes = new Hashtable(); // keys: OxClass, values: Node
+   int maxDepth = 0;
 
    public ClassTree(OxDoc oxdoc, OxEntityList classes)
    {
@@ -79,20 +80,47 @@ class ClassTree {
              text.append("<li>");
           else
              text.append("<li class=\"last\">");
-          text.append("<span class=\"label\">" + project.linkToEntity(child.oxClass) + "</span> " + child.oxClass.description() + "\n");
+          text.append("<span class=\"label\">" + project.linkToEntity(child.oxClass) + "</span><span class=\"text\">" + child.oxClass.description() + "</span>\n");
           addChildrenToHtmlList(text, child);
        }
        text.append("</ul>\n");
    }
 
+   public ArrayList getTopClasses()
+   {
+       return getChildClasses(rootNode);
+   }
+
+   private ArrayList getChildClasses(Node node)
+   {
+       ArrayList children = new ArrayList();
+       for (int i = 0; i < node.children.size(); i++)
+          children.add( ((Node) node.children.get(i)).oxClass );
+       return children;
+   }
+
+   public ArrayList getChildren(OxClass oxClass)
+   {
+       Node node = (Node) nodes.get(oxClass);
+       return getChildClasses(node);
+   }
+
+   public int maxDepth()
+   {
+       return maxDepth;
+   }
+
    private void updateDepths()
    {
+       maxDepth = 0;
        updateDepths(rootNode, 0);
    }
 
    private void updateDepths(Node node, int depth)
    {
        node.depth = depth;
+       if (depth > maxDepth) 
+          maxDepth = depth;
        for (int i = 0; i < node.children.size(); i++)
        {
           Node child = (Node) node.children.get(i);

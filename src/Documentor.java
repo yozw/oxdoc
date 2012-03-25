@@ -80,13 +80,11 @@ public class Documentor {
    }
 
    private void generateHierarchy(String fileName) throws Exception {
-      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_v.png");
-      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_n.png");
-      oxdoc.fileManager.copyFromResourceIfNotExists("icons/tree_l.png");
       OutputFile output = new OutputFile(fileName, "Class hierarchy", FileManager.HIERARCHY, oxdoc);
-      output.writeln("<div class=\"tree\">");
-      output.writeln(classTree.toHtmlList());
-      output.writeln("</div>");
+
+      ClassTreeHtml classTreeHtml = new ClassTreeHtml(oxdoc, classTree);
+      classTreeHtml.writeHtml(output);
+
       output.close();
    }
 

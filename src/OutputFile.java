@@ -23,13 +23,13 @@ import java.text.*;
 
 
 public class OutputFile {
-   private ExtBufferedWriter output = null;
    private String fileName = null;
    private OxDoc oxdoc = null;
    private int iconType = 0;
    private String title = "";
 
-   private StringBuffer content = new StringBuffer();
+   private StringBuffer content = new StringBuffer();   // main content
+   private StringBuffer css     = new StringBuffer();   // extra css style
 
    class ExtBufferedWriter extends BufferedWriter {
        ExtBufferedWriter(Writer out) {
@@ -47,32 +47,41 @@ public class OutputFile {
       this.title = title;
       this.iconType = iconType;
       this.fileName = fileName;
-
-      File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
-      aFile.getParentFile().mkdirs();
-      output = new ExtBufferedWriter(new FileWriter(aFile));
    }
 
    public void close() throws IOException {
-      writeDocHeader();
+      File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
+      aFile.getParentFile().mkdirs();
+      ExtBufferedWriter output = new ExtBufferedWriter(new FileWriter(aFile));
+
+      writeDocHeader(output);
       output.write(content.toString());
-      writeDocFooter();
+      writeDocFooter(output);
       output.close();
    }
 
-   public void write(Object s) throws IOException {
+   public void write(Object s) {
       content.append(s.toString());
    }
 
-   public void writeln(Object s) throws IOException {
+   public void writeln(Object s) {
       content.append(s.toString() + "\n");
    }
 
-   private void writeDocHeader() throws IOException {
+   public void append_css(Object s) {
+      css.append(s.toString() + "\n");
+   }
+
+   private void writeDocHeader(ExtBufferedWriter output) throws IOException {
       output.writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
       // writeln("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"); 
       output.writeln("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"); 
       output.writeln("<head>"); 
+      if (css.length() > 0) {
+          output.writeln("<style type=\"text/css\">");
+          output.writeln(css.toString());
+          output.writeln("</style>");
+      }
       output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">"); 
       output.writeln(oxdoc.config.MathProcessor.ExtraHeader()); 
       output.writeln("<title>" + title + ( (oxdoc.config.WindowTitle.length() > 0) ? " - " + oxdoc.config.WindowTitle : "") + "</title>"); 
@@ -89,7 +98,7 @@ public class OutputFile {
       output.writeln("<h1><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + title + "</span></h1>"); 
    }
 
-   private void writeDocFooter() throws IOException {
+   private void writeDocFooter(ExtBufferedWriter output) throws IOException {
       Object[] args = { OxDoc.ProductName, OxDoc.Version, OxDoc.Url };
 
       output.writeln("<div class=\"footer\">"); 
