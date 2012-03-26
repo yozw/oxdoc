@@ -250,7 +250,7 @@ public class Documentor {
          for (int k = 0; k < visLabels.length; k++)		 
          {
              if (visMembers[k].size() == 0) continue;
-		     output.writeln("<tr><td colspan=\"2\" class=\"header\" valign=\"top\">" + visLabels[k] + "</td></tr>");
+		     output.writeln("<tr><td colspan=\"3\" class=\"header\" valign=\"top\">" + visLabels[k] + "</td></tr>");
 		     for (int i = 0; i < visMembers[k].size(); i++) {
 		        OxEntity entity = (OxEntity) visMembers[k].get(i);
 
@@ -258,6 +258,8 @@ public class Documentor {
 		        output.writeln(entity.smallIcon() + entity.link());
 		        output.writeln("</td><td class=\"description\" valign=\"top\">");
 		        output.write(entity.description());
+		        output.writeln("</td><td class=\"modifiers\" valign=\"top\">");
+		        output.write(entity.modifiers());
 		        output.writeln("</td></tr>");
 		     }
          }

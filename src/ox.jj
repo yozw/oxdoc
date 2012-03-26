@@ -185,7 +185,7 @@ void ClassBody() : {}
 
 void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false; String methodPrefix = ""; }
 {
-	[<VIRTUAL> { Virtual = true; } ] 
+    [<VIRTUAL> { Virtual = true; } ] 
     [<STATIC> { Static = true; } ] 
     ["~" { methodPrefix = "~"; } ] 
     name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"

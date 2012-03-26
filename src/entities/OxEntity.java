@@ -89,6 +89,11 @@ public class OxEntity {
       return _comment;
    }
 
+   public String modifiers()
+   {
+      return "";
+   }
+
    public BaseComment comment() {
       return _comment;
    }

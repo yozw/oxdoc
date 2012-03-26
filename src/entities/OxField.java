@@ -34,12 +34,18 @@ public class OxField extends OxEntity {
    }
 
    public String declaration() {
-      String decl = "";
-      if (Static) decl += "static ";
-      if (Constant) decl += "const ";
+      String decl = modifiers() + " ";
       decl += " decl " + name();
       decl += " [" + visibility() + "]";
-      return decl;
+      return decl.trim();
+   }
+
+   public String modifiers()
+   {
+      String mod = "";
+      if (Static) mod += "static ";
+      if (Constant) mod += "const ";
+      return mod.trim();
    }
 
    public OxClass.Visibility visibility() 

@@ -47,10 +47,15 @@ public class OxMethod extends OxEntity {
 
    public String declaration()
    {
-      String decl = super.declaration();
-      if (Virtual) decl = "virtual " + decl;
-      if (Static) decl = "static " + decl;
-      return decl;
+      return (modifiers() + " " + super.declaration()).trim();
+   }
+
+   public String modifiers()
+   {
+      String mod = "";
+      if (Virtual) mod += "virtual ";
+      if (Static) mod += "static ";
+      return mod.trim();
    }
 
    public BaseComment comment() {
