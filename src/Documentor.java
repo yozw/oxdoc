@@ -257,10 +257,10 @@ public class Documentor {
 
 		        output.writeln("<tr><td class=\"declaration\" valign=\"top\">");
 		        output.writeln(entity.smallIcon() + entity.link());
-		        output.writeln("</td><td class=\"description\" valign=\"top\">");
-		        output.write(entity.description());
 		        output.writeln("</td><td class=\"modifiers\" valign=\"top\">");
 		        output.write(entity.modifiers());
+		        output.writeln("</td><td class=\"description\" valign=\"top\">");
+		        output.write(entity.description());
 		        output.writeln("</td></tr>");
 		     }
          }
