@@ -48,13 +48,19 @@ public class OxEnum extends OxEntity {
 
    public String declaration() {
       String decl = "";
-      decl += " enum { ";
+      decl += " enum { " + elementString() + " }";
+      if (parentClass() != null)
+         decl += " [" + visibility() + "]";
+      return decl;
+   }
+
+   public String elementString() {
+      String decl = "";
       for (int i = 0; i < _elements.length; i++) 
       {
           if (i != 0) decl += ", ";
           decl += _elements[i];
       }
-      decl += " } [" + visibility() + "]";
       return decl;
    }
 

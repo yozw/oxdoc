@@ -128,6 +128,16 @@ public class OxClass extends OxEntity {
       });
    }
 
+   public ArrayList getMethodsAndFields() {
+
+	  return filterMembers( new MemberFilter() { 
+            public boolean keepItem(OxEntity entity) 
+            {
+                return (entity instanceof OxMethod) || (entity instanceof OxField);
+            }
+      });
+   }
+
    public ArrayList getEnums() {
 
 	  return filterMembers( new MemberFilter() { 

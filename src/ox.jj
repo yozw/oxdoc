@@ -218,19 +218,24 @@ void FieldDeclaration() :
        if ((constToken != null) && (firstToken == null)) firstToken = constToken;
        if ((declToken != null) && (firstToken == null)) firstToken = declToken;
 
-       String comment = null;
+       String commentNextVariable = null;
        if (firstToken.specialToken != null)
           if (firstToken.specialToken.beginLine != 1)
-             comment = firstToken.specialToken.image;
+             commentNextVariable = firstToken.specialToken.image;
 
        for (Object varName: variableNames)
        {
           OxField newField = currentClass.addField(( (Token) varName).image, currentVisibility);
-          if (comment != null)
-             newField.setComment(comment);
+          String comment = "";
+          if (( (Token) varName).specialToken != null)
+             comment = ((Token) varName).specialToken.image;
+          else if (commentNextVariable != null)
+             comment = commentNextVariable;
+          newField.setComment(comment);
           newField.Static = Static;
           newField.Constant = Constant;
- 		  project.addSymbol(newField);
+          project.addSymbol(newField);
+          commentNextVariable = null;
        }
     }
 }

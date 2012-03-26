@@ -47,6 +47,7 @@ public class OxMethod extends OxEntity {
 
    public String declaration()
    {
+      if (super.declaration() == null) return null;
       return (modifiers() + " " + super.declaration()).trim();
    }
 

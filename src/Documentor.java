@@ -106,13 +106,11 @@ public class Documentor {
 
 
          if (oxFile.functions().size() > 0)
-            generateClassDetailDocs(output, null, oxFile.functions());
-         if (oxFile.enums().size() > 0)
-            generateEnumDocs(output, oxFile.enums());
+            generateClassDetailDocs(output, null, oxFile.functions(), oxFile.enums());
             
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
-            generateClassDetailDocs(output, oxclass, oxclass.members());
+            generateClassDetailDocs(output, oxclass, oxclass.getMethodsAndFields(), oxclass.getEnums());
          }
             
       } finally {
@@ -203,7 +201,8 @@ public class Documentor {
          }
       }
 
-      output.writeln("\n<!-- " + sectionName + " --><a name=\"" + sectionName+"\"> </a>"); /** Modified by CF to include anchor **/
+//      output.writeln("\n<!-- " + sectionName + " -->");
+      output.writeln("<a name=\"" + sectionName+"\"> </a>"); /** Modified by CF to include anchor **/
       output.write("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " " + inheritanceText + "</span>");
       output.writeln("</h2>");
 
@@ -246,7 +245,7 @@ public class Documentor {
 
    if (totalMembers > 0) {
      
-         output.writeln("\n<!-- Members of " + sectionName + " -->");
+//         output.writeln("\n<!-- Members of " + sectionName + " -->");
          output.writeln("<table class=\"method_table\">");
 
          for (int k = 0; k < visLabels.length; k++)		 
@@ -276,13 +275,16 @@ public class Documentor {
          output.writeln("<dl class=\"inherited_fields\">" + Enums + "</dl>\n");
    }
 
-   private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
+   private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList, ArrayList enumList) throws Exception {
       String sectionName = (oxclass != null) ? oxclass.name() : "Global functions";
       String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
       int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
 
-      output.writeln("\n<!-- Details for " + sectionName + " -->");
+//      output.writeln("\n<!-- Details for " + sectionName + " -->");
       output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " details</span></h2>");
+
+      generateEnumDocs(output, oxclass, enumList);
+
       int count = 0;
       for (int i = 0; i < memberList.size(); i++) {
          OxEntity entity = (OxEntity) memberList.get(i);
@@ -295,7 +297,7 @@ public class Documentor {
             output.writeln("\n<hr>");
          count++;
 
-         output.writeln("\n<!-- Entity " + entity.displayName() + " -->");
+//         output.writeln("\n<!-- Entity " + entity.displayName() + " -->");
 
          Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
          output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3><span class=\"icon\">{2}</span><span class=\"text\">{1}</span></h3>", args));
@@ -307,13 +309,42 @@ public class Documentor {
       }
    }
 
-   private void generateEnumDocs(OutputFile output, ArrayList memberList) throws Exception {
-      String sectionName = "Enumerations";
-      String classPrefix = "";
-      int iconType = FileManager.ENUM;
+   private void generateEnumDocs(OutputFile output, OxClass oxclass, ArrayList memberList) throws Exception {
+      int count = 0;
+      for (int i = 0; i < memberList.size(); i++) {
+         OxEnum entity = (OxEnum) memberList.get(i);
+         if ((!oxdoc.config.ShowInternals) && (entity.isInternal())) 
+            continue;
+         count++;
+      }
+      if (count == 0) return;
 
-      output.writeln("\n<!-- " + sectionName + " -->");
-      output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + " details</span></h2>");
+
+      String sectionName = "Enumerations";
+      String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
+
+//      output.writeln("\n<!-- " + sectionName + " -->");
+//      output.writeln("<h3><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionName + "</span></h3>");
+
+      output.writeln("<table class=\"enum_table\">");
+      output.writeln("<tr><th colspan=\"3\" class=\"header\">" + sectionName + "</th></tr>");
+      for (int i = 0; i < memberList.size(); i++) {
+         OxEnum entity = (OxEnum) memberList.get(i);
+         String anchorName = classPrefix + entity.displayName();
+
+         if ((!oxdoc.config.ShowInternals) && (entity.isInternal())) 
+            continue;
+
+         output.writeln("<tr>");
+         output.writeln("<td class=\"declaration\"><a name=\"" + anchorName + "\"></a>" + entity.displayName() + "</td>");
+         output.writeln("<td class=\"description\">" + entity.comment() + "</td>");
+         output.writeln("<td class=\"elements\">" + entity.elementString() + "</td>");
+         output.writeln("</tr>");
+
+      }
+      output.writeln("</table>");
+
+/*
       int count = 0;
       for (int i = 0; i < memberList.size(); i++) {
          OxEntity entity = (OxEntity) memberList.get(i);
@@ -326,7 +357,7 @@ public class Documentor {
             output.writeln("\n<hr>");
          count++;
 
-         output.writeln("\n<!-- Enum " + entity.displayName() + " -->");
+//         output.writeln("\n<!-- Enum " + entity.displayName() + " -->");
 
          Object[] args = { anchorName, entity.displayName(), entity.largeIcon() };
          output.writeln(MessageFormat.format("<a name=\"{0}\"></a><h3><span class=\"icon\">{2}</span><span class=\"text\">{1}</span></h3>", args));
@@ -335,7 +366,7 @@ public class Documentor {
              output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
 
          output.writeln(entity.comment());
-      }
+      }*/
    }
 
 

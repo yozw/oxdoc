@@ -44,7 +44,10 @@ public class OxEntityList {
    public ArrayList sortedList() {
       ArrayList list = new ArrayList();
       for (Enumeration e = entities.elements(); e.hasMoreElements();)
-         list.add(e.nextElement());
+      {
+         OxEntity entity = (OxEntity) e.nextElement();
+         list.add(entity);
+      }
 
       Collections.sort(list, new Comparator() {
             public int compare(Object o1, Object o2) {
@@ -97,5 +100,6 @@ public class OxEntityList {
 
        return list;
    }
+
 
 }
