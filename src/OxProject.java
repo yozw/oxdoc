@@ -40,6 +40,8 @@ public class OxProject {
    }
 
    public OxEntity addSymbol(OxEntity entity) {
+      if (getSymbol(entity.referenceName()) != null)
+          oxdoc.warning("Multiple declarations of symbol '" + entity.referenceName() + "'");
       return (OxEntity) _symbols.add(entity.referenceName(), entity);
    }
 
@@ -68,6 +70,12 @@ public class OxProject {
       } else
 
          return linkToEntity(entity);
+   }
+
+   public void printSymbols() {
+      ArrayList list = symbolsByDisplayName();
+      for (int i = 0; i < list.size(); i++)
+          System.out.println(list.get(i));
    }
 
    public String linkToEntity(OxEntity entity) {

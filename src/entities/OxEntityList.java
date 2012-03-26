@@ -22,6 +22,7 @@ import java.util.*;
 
 public class OxEntityList {
    Hashtable entities = new Hashtable();
+   AlphanumComparator alphanumComparator = new AlphanumComparator();
 
    public OxEntity add(OxEntity entity) {
       return add(entity.name(), entity);
@@ -49,8 +50,9 @@ public class OxEntityList {
             public int compare(Object o1, Object o2) {
                OxEntity e1 = (OxEntity) o1;
                OxEntity e2 = (OxEntity) o2;
-
-               return e1.sortKey().toUpperCase().compareTo(e2.sortKey().toUpperCase());
+               String key1 = e1.sortKey().toUpperCase();
+               String key2 = e2.sortKey().toUpperCase();
+               return alphanumComparator.compare(key1, key2);
             }
          });
 
@@ -58,7 +60,10 @@ public class OxEntityList {
    }
 
    public ArrayList sortedListByDisplayName() {
-      ArrayList list = new ArrayList();
+      return sortedList();
+
+      // OBSOLETE CODE
+/*      ArrayList list = new ArrayList();
       for (Enumeration e = entities.elements(); e.hasMoreElements();)
          list.add(e.nextElement());
 
@@ -69,11 +74,11 @@ public class OxEntityList {
 
                // we don't care about display name anymore, I think: maybe get rid of functionality?
                return e1.sortKey().toUpperCase().compareTo(e2.sortKey().toUpperCase());
-//               return e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase());
+               return e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase());
             }
          });
 
-      return list;
+      return list;*/
    }
 
    public OxEntityList classes() 

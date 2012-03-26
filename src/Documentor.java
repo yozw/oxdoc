@@ -50,6 +50,8 @@ public class Documentor {
       writeCss();
 
       oxdoc.latexImageManager.makeLatexFiles();
+
+      // project.printSymbols();
    }
 
    private void generateStartPage(String fileName) throws Exception {
@@ -93,25 +95,25 @@ public class Documentor {
       try {
          output.writeln(oxFile.comment());
 
+         if (oxFile.functions().size() + oxFile.enums().size() > 0)
+            generateClassHeaderDocs(output, oxFile);
+
          ArrayList classes = oxFile.classes();
          for (int i = 0; i < classes.size(); i++) {
             OxClass oxclass = (OxClass) classes.get(i);
             generateClassHeaderDocs(output, oxclass);
          }
 
-         if (oxFile.functions().size() + oxFile.enums().size() > 0)
-            generateClassHeaderDocs(output, oxFile);
 
-
-         for (int i = 0; i < classes.size(); i++) {
-            OxClass oxclass = (OxClass) classes.get(i);
-            generateClassDetailDocs(output, oxclass, oxclass.members());
-         }
          if (oxFile.functions().size() > 0)
             generateClassDetailDocs(output, null, oxFile.functions());
          if (oxFile.enums().size() > 0)
             generateEnumDocs(output, oxFile.enums());
             
+         for (int i = 0; i < classes.size(); i++) {
+            OxClass oxclass = (OxClass) classes.get(i);
+            generateClassDetailDocs(output, oxclass, oxclass.members());
+         }
             
       } finally {
          if (output != null)
