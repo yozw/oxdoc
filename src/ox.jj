@@ -260,15 +260,16 @@ void EnumDeclaration() : { ArrayList elements = new ArrayList(); Token enumToken
        String comment = null;
        String alternativeName = null;
        if (enumToken.specialToken != null)
-       {
-          comment = enumToken.specialToken.image;
-          // trick to obtain alternative name 
-          EnumComment ec = new EnumComment(project);
-          ec.setText(comment);
-          alternativeName = ec.alternativeName();
-          if (alternativeName.trim().length() == 0)
-             alternativeName = null;
-       }
+          if (enumToken.specialToken.beginLine != 1)
+          {
+             comment = enumToken.specialToken.image;
+             // trick to obtain alternative name 
+             EnumComment ec = new EnumComment(project);
+             ec.setText(comment);
+             alternativeName = ec.alternativeName();
+             if (alternativeName.trim().length() == 0)
+                alternativeName = null;
+          }
 
        OxEnum newEnum = null;
        if (currentClass == null) 
