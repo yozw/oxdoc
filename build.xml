@@ -73,7 +73,7 @@
     <mkdir dir="${bin}"/>
     <copy file="${css}/default.css" tofile="${build}/oxdoc/oxdoc.css" />
     <copy file="${css}/default-print.css" tofile="${build}/oxdoc/print.css" />
-    <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}" />
+    <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}/oxdoc" />
     <copy todir="${build}/oxdoc/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>

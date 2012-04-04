@@ -125,8 +125,6 @@ public class Config {
 	public MathProcessor toMathProcessor(String value) throws Exception {
 		if (value.equals("latex"))
 			return new MathProcessorLatex(oxdoc);
-		if (value.equals("mathml"))
-			return new MathProcessorMathML(oxdoc);
 		if (value.equals("mathjax"))
 			return new MathProcessorMathjax(oxdoc);
 		if (value.equals("plain"))

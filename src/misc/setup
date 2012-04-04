@@ -1,5 +1,0 @@
-#!/bin/sh
-JAR="`dirname $0`/oxdoc.jar"
-
-java -jar "$JAR" --setup
-

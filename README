@@ -13,11 +13,10 @@ Installation instructions (binaries)
 WINDOWS
 -------
 * Unzip the binary zip file
-* Edit bin\oxdoc.xml
 * Use oxdoc.bat to run oxdoc
 * You may want to copy oxdoc.bat to a directory in your path, e.g. 
-  c:\windows\system32 .  Don't forget to edit oxdoc.bat and change the 
-  classpath to match the location on your computer.
+  c:\windows\system32 .  In that case, copy oxdoc.jar to the same
+  directory.
 
 
 Linux
