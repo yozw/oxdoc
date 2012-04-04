@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 import oxdoc.gui.OxDocGui;
 import oxdoc.parser.ParseException;
-import oxdoc.setup.OxDocSetup;
 
 public class OxDocCmd implements Logger {
 	private OxDoc oxdoc = null;
@@ -123,24 +122,19 @@ public class OxDocCmd implements Logger {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-	}
+	} 
 
 	// oxdoc entry point
 	public static void main(String[] args) {
 
-		boolean runGui = false, runSetup = false;
+		boolean runGui = false;
 
 		if ((args.length == 1) && (args[0].compareTo("--gui") == 0))
 			runGui = true;
-		else if ((args.length == 1) && (args[0].compareTo("--setup") == 0))
-			runSetup = true;
 
 		if (runGui) {
 			OxDocGui gui = new OxDocGui();
 			gui.run(args);
-		} else if (runSetup) {
-			OxDocSetup setup = new OxDocSetup();
-			setup.run(args);
 		} else {
 			OxDocCmd cmd = new OxDocCmd();
 			cmd.run(args, cmd);

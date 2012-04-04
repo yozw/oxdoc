@@ -60,12 +60,26 @@ public class Config {
 		this.oxdoc = oxdoc;
 
 		if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
-			Latex = "latex.exe";
-			Dvipng = "dvipng.exe";
+			Latex = findInPath("latex.exe");
+			Dvipng = findInPath("dvipng.exe");
 		} else {
-			Latex = "latex";
-			Dvipng = "dvipng";
+			Latex = findInPath("latex");
+			Dvipng = findInPath("dvipng");
 		}
+	}
+	
+	private String findInPath(String fileName)
+	{
+		String[] paths;
+		paths = System.getenv("PATH").split(File.pathSeparator);
+		
+		for (int i = 0; i < paths.length; i++)
+		{
+			File file = new File(paths[i] + File.separatorChar + fileName);
+			if (file.exists())
+				return file.getAbsolutePath();
+		}
+		return fileName;
 	}
 
 	public boolean setSimpleOption(String name) {
@@ -243,7 +257,7 @@ public class Config {
 	}
 
 	private boolean toBoolean(String value) {
-		return (value.equals("1") || value.equals("yes"));
+		return (value.equals("1") || value.equals("yes") || value.equals("on"));
 	}
 
 	public static String userHomeConfigFile() {
