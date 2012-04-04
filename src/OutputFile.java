@@ -90,6 +90,7 @@ public class OutputFile {
 			output.writeln("</style>");
 		}
 		output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
+		output.writeln("<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"print.css\">");
 		output.writeln(oxdoc.config.MathProcessor.ExtraHeader());
 		output.writeln("<title>"
 				+ title

@@ -55,7 +55,7 @@ public class OxProject {
 	public void addSymbolEnumElements(OxEnum oxenum) {
 		ArrayList elements = oxenum.elements();
 		for (int i = 0; i < elements.size(); i++)
-			addSymbol( (OxEntity) elements.get(i));
+			addSymbol((OxEntity) elements.get(i));
 	}
 
 	public ArrayList symbols() {

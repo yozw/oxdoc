@@ -90,12 +90,13 @@ class SymbolIndex {
 				addSingletonEntry(entity, "Global variable");
 			else if (entity instanceof OxField)
 				addGroupedEntry(entity, entity, "Field");
-			else if (entity instanceof OxEnumElement)
-			{
+			else if (entity instanceof OxEnumElement) {
 				OxEnumElement element = (OxEnumElement) entity;
-				addSingletonEntry(entity, "Element of enumeration " + project.linkToEntity(element.parentEnum()) );
-			}
-			else if ((entity instanceof OxMethod)
+				addSingletonEntry(
+						entity,
+						"Element of enumeration "
+								+ project.linkToEntity(element.parentEnum()));
+			} else if ((entity instanceof OxMethod)
 					&& (entity.parentClass() == null))
 				addSingletonEntry(entity, "Global function");
 			else if (entity instanceof OxMethod) {

@@ -42,9 +42,15 @@ public class Header extends Element {
 	protected void render(StringBuffer buffer) {
 		Object args[] = { "" + level, oxdoc.fileManager.largeIcon(iconType),
 				title };
-		buffer.append(MessageFormat
+		
+		if (oxdoc.config.EnableIcons)
+			buffer.append(MessageFormat
 				.format("<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n",
 						args));
+		else
+			buffer.append(MessageFormat
+					.format("<h{0}><span class=\"text\">{2}</span></h{0}>\n",
+							args));
 	}
 
 }
