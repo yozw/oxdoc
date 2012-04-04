@@ -16,34 +16,34 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
-import java.text.*;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class BinaryOutputFile {
-   FileOutputStream output = null;
-   String _fileName;
-   public OxDoc oxdoc;
+	FileOutputStream output = null;
+	String _fileName;
+	public OxDoc oxdoc;
 
-   // create a blank file
-   public BinaryOutputFile(String fileName, OxDoc oxdoc) throws IOException {
-      File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
-      aFile.getParentFile().mkdirs();
-      output = new FileOutputStream(aFile);
-      _fileName = fileName;
-      this.oxdoc = oxdoc;
-   }
+	// create a blank file
+	public BinaryOutputFile(String fileName, OxDoc oxdoc) throws IOException {
+		File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
+		aFile.getParentFile().mkdirs();
+		output = new FileOutputStream(aFile);
+		_fileName = fileName;
+		this.oxdoc = oxdoc;
+	}
 
-   public void close() throws IOException {
-      output.close();
-   }
+	public void close() throws IOException {
+		output.close();
+	}
 
-   public void write(byte[] buf, int length) throws IOException {
-      output.write(buf, 0, length);
-   }
+	public void write(byte[] buf, int length) throws IOException {
+		output.write(buf, 0, length);
+	}
 
 }

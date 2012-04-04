@@ -16,50 +16,47 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-class StreamGobbler extends Thread
-{
-    private InputStream is;
-    private String text = "";
-    private OxDoc oxdoc;
-    private boolean echo;
-    
-    StreamGobbler(InputStream is, OxDoc oxdoc, boolean echo)
-    {
-        this.is = is;
-        this.oxdoc = oxdoc;
-        this.echo = echo;
-    }
-    
-    public void run()
-    {
-        try
-        {
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String line = null;
-            while ( (line = br.readLine()) != null) {
-                text += "> " + line + "\n";
-                if (echo) 
-                    oxdoc.message("> " + line);
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();  
-        }
-    }
+class StreamGobbler extends Thread {
+	private InputStream is;
+	private String text = "";
+	private OxDoc oxdoc;
+	private boolean echo;
 
-    String getText() {
-        return text;
-    }
+	StreamGobbler(InputStream is, OxDoc oxdoc, boolean echo) {
+		this.is = is;
+		this.oxdoc = oxdoc;
+		this.echo = echo;
+	}
 
-    int length() {
-        return text.length();
-    }
+	public void run() {
+		try {
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				text += "> " + line + "\n";
+				if (echo)
+					oxdoc.message("> " + line);
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+	}
+
+	String getText() {
+		return text;
+	}
+
+	int length() {
+		return text.length();
+	}
 }
-
-

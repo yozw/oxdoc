@@ -149,8 +149,30 @@ void DeclarationStatement() : {}
 {
 /** C Ferrall modified this so that an ending ";" is optional for enum's
 **/
-	Declaration() ";" | EnumDeclaration()
+	[<EXTERN>] FieldDeclaration() | EnumDeclaration()
 }
+
+void GlobalVariableDeclaration() :
+{
+	Token externToken = null,
+              staticToken = null, 
+              constToken = null,
+              declToken = null,
+              firstToken = null; 
+        Token name; 
+        boolean Static = false, Constant = false, Extern = false;
+        ArrayList variableNames = new ArrayList(); 
+}
+{
+    [externToken = <EXTERN> { Extern = true; } ] 
+    [staticToken = <STATIC> { Static = true; } ] 
+    [constToken = <CONST> { Constant = true; } ] 
+    declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
+		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
+    {
+    }
+}
+
 
 void ClassDefinition() :
 { Token name, classtoken, parentclassname = null; }
@@ -233,7 +255,11 @@ void FieldDeclaration() :
 
        for (Object varName: variableNames)
        {
-          OxField newField = currentClass.addField(( (Token) varName).image, currentVisibility);
+          OxField newField;
+          if (currentClass == null)
+             newField = file.addVariable(( (Token) varName).image );
+          else
+             newField = currentClass.addField(( (Token) varName).image, currentVisibility);
           String comment = "";
           if (( (Token) varName).specialToken != null)
              comment = ((Token) varName).specialToken.image;
@@ -298,6 +324,7 @@ void EnumDeclaration() : { ArrayList elements = new ArrayList(); Token enumToken
 
        if (alternativeName != null)
           project.addSymbol(newEnum);
+       project.addSymbolEnumElements(newEnum);
     }
 }
 
@@ -387,7 +414,7 @@ void CompoundStatement() : {}
 void SimpleStatement() : {}
 {
 	LOOKAHEAD(3)
-      Declaration() |
+      DeclarationInFunction() |
 	  AssignmentExpression() ("," AssignmentExpression())* |
 	  JumpStatement() 
 }
@@ -421,9 +448,10 @@ Token VariableDeclaration() : { Token name; }
 	{ return name; }
 }
 
-void Declaration() : {}
+
+void DeclarationInFunction() : {}
 {
-	[<EXTERN>] [<CONST>] [<STATIC>] <DECL> VariableDeclaration() ("," VariableDeclaration())*  	
+	<DECL> VariableDeclaration() ("," VariableDeclaration())*  	
 }
 
 /** Added by C. Ferrall to parse switches

@@ -16,96 +16,114 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
-import java.text.*;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.MessageFormat;
 
 public class OutputFile {
-   private String fileName = null;
-   private OxDoc oxdoc = null;
-   private int iconType = 0;
-   private String title = "";
+	private String fileName = null;
+	private OxDoc oxdoc = null;
+	private int iconType = 0;
+	private String title = "";
 
-   private StringBuffer content = new StringBuffer();   // main content
-   private StringBuffer css     = new StringBuffer();   // extra css style
+	private StringBuffer content = new StringBuffer(); // main content
+	private StringBuffer css = new StringBuffer(); // extra css style
 
-   class ExtBufferedWriter extends BufferedWriter {
-       ExtBufferedWriter(Writer out) {
-          super(out);
-       }
-       void writeln(String s) throws IOException {
-          write(s);
-          newLine();
-       }
-   }
+	class ExtBufferedWriter extends BufferedWriter {
+		ExtBufferedWriter(Writer out) {
+			super(out);
+		}
 
-   // create an HTML file
-   public OutputFile(String fileName, String title, int iconType, OxDoc oxdoc) throws IOException {
-      this.oxdoc = oxdoc;
-      this.title = title;
-      this.iconType = iconType;
-      this.fileName = fileName;
-   }
+		void writeln(String s) throws IOException {
+			write(s);
+			newLine();
+		}
+	}
 
-   public void close() throws IOException {
-      File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
-      aFile.getParentFile().mkdirs();
-      ExtBufferedWriter output = new ExtBufferedWriter(new FileWriter(aFile));
+	// create an HTML file
+	public OutputFile(String fileName, String title, int iconType, OxDoc oxdoc)
+			throws IOException {
+		this.oxdoc = oxdoc;
+		this.title = title;
+		this.iconType = iconType;
+		this.fileName = fileName;
+	}
 
-      writeDocHeader(output);
-      output.write(content.toString());
-      writeDocFooter(output);
-      output.close();
-   }
+	public void close() throws IOException {
+		File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
+		aFile.getParentFile().mkdirs();
+		ExtBufferedWriter output = new ExtBufferedWriter(new FileWriter(aFile));
 
-   public void write(Object s) {
-      content.append(s.toString());
-   }
+		writeDocHeader(output);
+		output.write(content.toString());
+		writeDocFooter(output);
+		output.close();
+	}
 
-   public void writeln(Object s) {
-      content.append(s.toString() + "\n");
-   }
+	public void write(Object s) {
+		content.append(s.toString());
+	}
 
-   public void append_css(Object s) {
-      css.append(s.toString() + "\n");
-   }
+	public void writeln(Object s) {
+		content.append(s.toString() + "\n");
+	}
 
-   private void writeDocHeader(ExtBufferedWriter output) throws IOException {
-      output.writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
-      // writeln("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"); 
-      output.writeln("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">"); 
-      output.writeln("<head>"); 
-      if (css.length() > 0) {
-          output.writeln("<style type=\"text/css\">");
-          output.writeln(css.toString());
-          output.writeln("</style>");
-      }
-      output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">"); 
-      output.writeln(oxdoc.config.MathProcessor.ExtraHeader()); 
-      output.writeln("<title>" + title + ( (oxdoc.config.WindowTitle.length() > 0) ? " - " + oxdoc.config.WindowTitle : "") + "</title>"); 
-      output.writeln("</head>"); 
-      output.writeln("<body>"); 
-      output.writeln("<div class=\"header\">"); 
-      output.write("[ ");
-      if (oxdoc.config.UpLevel)
-         output.writeln(oxdoc.fileManager.smallIcon(FileManager.UPLEVEL) + "<a href=\"..\\default.html\">Up Level</a> |"); /** Added by CF **/
-     
-      output.writeln(oxdoc.fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>"); 
-      output.writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.INDEX) + "<a href=\"index.html\">Index</a>"); 
-      output.writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.HIERARCHY) + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");  
-      output.writeln("<h1><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + title + "</span></h1>"); 
-   }
+	public void append_css(Object s) {
+		css.append(s.toString() + "\n");
+	}
 
-   private void writeDocFooter(ExtBufferedWriter output) throws IOException {
-      Object[] args = { OxDoc.ProductName, OxDoc.Version, OxDoc.Url };
+	private void writeDocHeader(ExtBufferedWriter output) throws IOException {
+		output.writeln("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		// writeln("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+		output.writeln("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">");
+		output.writeln("<head>");
+		if (css.length() > 0) {
+			output.writeln("<style type=\"text/css\">");
+			output.writeln(css.toString());
+			output.writeln("</style>");
+		}
+		output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
+		output.writeln(oxdoc.config.MathProcessor.ExtraHeader());
+		output.writeln("<title>"
+				+ title
+				+ ((oxdoc.config.WindowTitle.length() > 0) ? " - "
+						+ oxdoc.config.WindowTitle : "") + "</title>");
+		output.writeln("</head>");
+		output.writeln("<body>");
+		output.writeln("<div class=\"header\">");
+		output.write("[ ");
+		if (oxdoc.config.UpLevel)
+			output.writeln(oxdoc.fileManager.smallIcon(FileManager.UPLEVEL)
+					+ "<a href=\"..\\default.html\">Up Level</a> |");
+		/** Added by CF **/
 
-      output.writeln("<div class=\"footer\">"); 
-      output.writeln(MessageFormat.format("Generated by <a href=\"{2}\">{0} {1}</a> &copy Copyright 2005-2012 by Y. Zwols<br>", args)); 
-      output.writeln(oxdoc.config.MathProcessor.ExtraFooter()); 
-      output.writeln("</div>"); 
-   }
+		output.writeln(oxdoc.fileManager.smallIcon(FileManager.PROJECT)
+				+ "<a href=\"default.html\">Project home</a>");
+		output.writeln(" | " + oxdoc.fileManager.smallIcon(FileManager.INDEX)
+				+ "<a href=\"index.html\">Index</a>");
+		output.writeln(" | "
+				+ oxdoc.fileManager.smallIcon(FileManager.HIERARCHY)
+				+ "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
+		output.writeln("<h1><span class=\"icon\">"
+				+ oxdoc.fileManager.largeIcon(iconType)
+				+ "</span><span class=\"text\">" + title + "</span></h1>");
+	}
+
+	private void writeDocFooter(ExtBufferedWriter output) throws IOException {
+		Object[] args = { OxDoc.ProductName, OxDoc.Version, OxDoc.Url };
+
+		output.writeln("<div class=\"footer\">");
+		output.writeln(MessageFormat
+				.format("Generated by <a href=\"{2}\">{0} {1}</a> &copy Copyright 2005-2012 by Y. Zwols<br>",
+						args));
+		output.writeln(oxdoc.config.MathProcessor.ExtraFooter());
+		output.writeln("</div>");
+	}
 }

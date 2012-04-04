@@ -16,64 +16,69 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import java.text.*;
-import oxdoc.*;
+import java.text.MessageFormat;
 
+import oxdoc.OxProject;
 
 public class ClassComment extends BaseComment {
-   private String _author = "";
-   private String _version = "";
+	private String _author = "";
+	private String _version = "";
 
-   final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+	final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
-   public ClassComment(OxProject project) {
-      super(project);
+	public ClassComment(OxProject project) {
+		super(project);
 
-      registerSection("author", SECTION_AUTHOR);
-      registerSection("authors", SECTION_AUTHOR);
-      registerSection("version", SECTION_VERSION);
-   }
+		registerSection("author", SECTION_AUTHOR);
+		registerSection("authors", SECTION_AUTHOR);
+		registerSection("version", SECTION_VERSION);
+	}
 
-   protected boolean addToSection(int SectionId, String text) {
-      if (super.addToSection(SectionId, text)) 
-         return true;
+	protected boolean addToSection(int SectionId, String text) {
+		if (super.addToSection(SectionId, text))
+			return true;
 
-      switch (SectionId)
-      {
-         case SECTION_AUTHOR:  _author += text; break;
-         case SECTION_VERSION: _version += text; break;
-         default:
-            return false;
-      }
-      return true;
-   }
+		switch (SectionId) {
+		case SECTION_AUTHOR:
+			_author += text;
+			break;
+		case SECTION_VERSION:
+			_version += text;
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
 
-   private String generateSection(String name, String classname, Object o) {
-      String text = o.toString();
-      if (text.length() == 0)
-         return "";
+	private String generateSection(String name, String classname, Object o) {
+		String text = o.toString();
+		if (text.length() == 0)
+			return "";
 
-      Object[] args = { classname, name, text };
+		Object[] args = { classname, name, text };
 
-      return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
-   }
+		return MessageFormat
+				.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n",
+						args);
+	}
 
-   public String toString() {
-      String out = longdescription() + "\n<dl>";
+	public String toString() {
+		String out = longdescription() + "\n<dl>";
 
-      out += generateSection("Author", "author", _author);
-      out += generateSection("Version", "version", _version);
+		out += generateSection("Author", "author", _author);
+		out += generateSection("Version", "version", _version);
 
-      out += generateSection("Example", "example", example());
-      out += generateSection("Comments", "comments", comments());
-      out += generateSection("See also", "seealso", see());
+		out += generateSection("Example", "example", example());
+		out += generateSection("Comments", "comments", comments());
+		out += generateSection("See also", "seealso", see());
 
-      out += "</dl>";
+		out += "</dl>";
 
-      return out;
-   }
+		return out;
+	}
 }

@@ -16,41 +16,57 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import java.text.*;
-import oxdoc.*;
-
+import oxdoc.OxProject;
 
 public class EnumComment extends FieldComment {
-   private String _alternativeName = "";
+	private String _alternativeName = "";
 
-   final int SECTION_NAME = 500;
+	final int SECTION_NAME = 500, MODIFIER_INTERNAL = 300;
+	private boolean _hasInternalModifier = false;
 
-   public EnumComment(OxProject project) {
-      super(project);
+	public EnumComment(OxProject project) {
+		super(project);
 
-      registerSection("name", SECTION_NAME);
-   }
+		registerSection("name", SECTION_NAME);
+		registerModifier("internal", MODIFIER_INTERNAL);
 
-   protected boolean addToSection(int SectionId, String text) {
-      if (super.addToSection(SectionId, text)) 
-         return true;
+	}
 
-      switch (SectionId)
-      {
-         case SECTION_NAME:  _alternativeName += text; break;
-         default:
-            return false;
-      }
-      return true;
-   }
+	protected boolean addToSection(int SectionId, String text) {
+		if (super.addToSection(SectionId, text))
+			return true;
 
-   public String alternativeName()
-   {
-      return _alternativeName;
-   }
+		switch (SectionId) {
+		case SECTION_NAME:
+			_alternativeName += text;
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
+	
+	protected boolean processModifier(int ModifierId) {
+		if (super.processModifier(ModifierId))
+			return true;
+		if (ModifierId == MODIFIER_INTERNAL) {
+			_hasInternalModifier = true;
+			return true;
+		}
+		return false;
+	}
+
+
+	public String alternativeName() {
+		return _alternativeName;
+	}
+	
+	public boolean hasInternalModifier() {
+		return _hasInternalModifier;
+	}
 
 }

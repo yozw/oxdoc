@@ -16,36 +16,34 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.html;
 
-import java.util.*;
-import java.io.*;
-import java.text.*;
-import oxdoc.*;
-
+import oxdoc.OxDoc;
 
 public class Element {
 
-   protected OxDoc oxdoc;
+	protected OxDoc oxdoc;
 
-   public Element (OxDoc oxdoc) 
-   {
-      this.oxdoc = oxdoc;
-   }
+	public Element(OxDoc oxdoc) {
+		this.oxdoc = oxdoc;
+	}
 
-   protected void render(StringBuffer buffer)
-   {
-   }
+	protected void render(StringBuffer buffer) {
+	}
 
-   public String toString()
-   {
-      StringBuffer bf = new StringBuffer();
-      render(bf);
-      return bf.toString();
-   }
+	protected String classAttr(String className) {
+		if ((className == null) || (className.trim().length() == 0))
+			return "";
+		else
+			return String.format(" class=\"%s\"", className);
+	}
+
+	public String toString() {
+		StringBuffer bf = new StringBuffer();
+		render(bf);
+		return bf.toString();
+	}
 
 }
-
-

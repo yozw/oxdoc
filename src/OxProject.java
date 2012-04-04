@@ -16,83 +16,95 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.util.*;
-import oxdoc.entities.*;
+import java.util.ArrayList;
 
+import oxdoc.entities.OxEntity;
+import oxdoc.entities.OxEntityList;
+import oxdoc.entities.OxEnum;
+import oxdoc.entities.OxFile;
 
 public class OxProject {
-   private OxEntityList _files = new OxEntityList();
-   private OxEntityList _symbols = new OxEntityList();
-   public OxDoc oxdoc = null;
-   public String name = "Untitled project";
+	private OxEntityList _files = new OxEntityList();
+	private OxEntityList _symbols = new OxEntityList();
+	public OxDoc oxdoc = null;
+	public String name = "Untitled project";
 
-   public OxProject(OxDoc oxdoc) {
-      this.oxdoc = oxdoc;
-   }
+	public OxProject(OxDoc oxdoc) {
+		this.oxdoc = oxdoc;
+	}
 
-   public OxFile addFile(String name) {
-      return (OxFile) _files.add(new OxFile(name, this));
-   }
+	public OxFile addFile(String name) {
+		return (OxFile) _files.add(new OxFile(name, this));
+	}
 
-   public ArrayList files() {
-      return _files.sortedList();
-   }
+	public ArrayList files() {
+		return _files.sortedList();
+	}
 
-   public OxEntity addSymbol(OxEntity entity) {
-      if (getSymbol(entity.referenceName()) != null)
-          oxdoc.warning("Multiple declarations of symbol '" + entity.referenceName() + "'");
-      return (OxEntity) _symbols.add(entity.referenceName(), entity);
-   }
+	public OxEntity addSymbol(OxEntity entity) {
+		if (getSymbol(entity.referenceName()) != null)
+			oxdoc.warning("Multiple declarations of symbol '"
+					+ entity.referenceName() + "'");
+		return _symbols.add(entity.referenceName(), entity);
+	}
 
-   public ArrayList symbols() {
-      return _symbols.sortedList();
-   }
+	public void addSymbolEnumElements(OxEnum oxenum) {
+		ArrayList elements = oxenum.elements();
+		for (int i = 0; i < elements.size(); i++)
+			addSymbol( (OxEntity) elements.get(i));
+	}
 
-   public OxEntityList classes() {
-      return _symbols.classes();
-   }
+	public ArrayList symbols() {
+		return _symbols.sortedList();
+	}
 
-   public ArrayList symbolsByDisplayName() {
-      return _symbols.sortedListByDisplayName();
-   }
+	public OxEntityList classes() {
+		return _symbols.classes();
+	}
 
-   public OxEntity getSymbol(String name) {
-      return (OxEntity) _symbols.get(name);
-   }
+	public ArrayList symbolsByDisplayName() {
+		return _symbols.sortedListByDisplayName();
+	}
 
-   public String linkToSymbol(String name) {
-      OxEntity entity = getSymbol(name);
-      if (entity == null) {
-         oxdoc.warning("Symbol '" + name + "' referenced to, but was not found");
+	public OxEntity getSymbol(String name) {
+		return _symbols.get(name);
+	}
 
-         return name;
-      } else
+	public String linkToSymbol(String name) {
+		OxEntity entity = getSymbol(name);
+		if (entity == null) {
+			oxdoc.warning("Symbol '" + name
+					+ "' referenced to, but was not found");
 
-         return linkToEntity(entity);
-   }
+			return name;
+		} else
 
-   public void printSymbols() {
-      ArrayList list = symbolsByDisplayName();
-      for (int i = 0; i < list.size(); i++)
-          System.out.println(list.get(i));
-   }
+			return linkToEntity(entity);
+	}
 
-   public String linkToEntity(OxEntity entity) {
-      return linkToEntity(entity, false);
-   }
+	public void printSymbols() {
+		ArrayList list = symbolsByDisplayName();
+		for (int i = 0; i < list.size(); i++)
+			System.out.println(list.get(i));
+	}
 
-   public String linkToEntity(OxEntity entity, String displayText) {
-      return "<a href=\"" + entity.url() + "\">" + displayText + "</a>";
-   }
+	public String linkToEntity(OxEntity entity) {
+		return linkToEntity(entity, false);
+	}
 
-   public String linkToEntity(OxEntity entity, boolean useDisplayName) {
-      if (useDisplayName)
-         return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
-      else
-        return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
-   }
+	public String linkToEntity(OxEntity entity, String displayText) {
+		return "<a href=\"" + entity.url() + "\">" + displayText + "</a>";
+	}
+
+	public String linkToEntity(OxEntity entity, boolean useDisplayName) {
+		if (useDisplayName)
+			return "<a href=\"" + entity.url() + "\">" + entity.displayName()
+					+ "</a>";
+		else
+			return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
+	}
 }

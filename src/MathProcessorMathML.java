@@ -16,35 +16,29 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
-import java.util.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-
-
 public class MathProcessorMathML extends MathProcessor {
-   public MathProcessorMathML(OxDoc oxdoc) {
-      super(oxdoc);
-   }
+	public MathProcessorMathML(OxDoc oxdoc) {
+		super(oxdoc);
+	}
 
-   public String ProcessFormula(String formula, boolean isInline) {
-      return "$" + formula + "$";
-   }
+	public String ProcessFormula(String formula, boolean isInline) {
+		return "$" + formula + "$";
+	}
 
-   public String ExtraHeader() {
-      return "<script type=\"text/javascript\" src=\"ASCIIMathML.js\"></script>" + "<script>mathcolor=\"Black\"</script>";
-   }
+	public String ExtraHeader() {
+		return "<script type=\"text/javascript\" src=\"ASCIIMathML.js\"></script>"
+				+ "<script>mathcolor=\"Black\"</script>";
+	}
 
-   public String ExtraFooter() {
-      return "Math typesetting by <a href=\"http://www1.chapman.edu/~jipsen/mathml/asciimath.html\">ASCIIMathML</a>";
-   }
+	public String ExtraFooter() {
+		return "Math typesetting by <a href=\"http://www1.chapman.edu/~jipsen/mathml/asciimath.html\">ASCIIMathML</a>";
+	}
 
-
-   public void Start() {
-      oxdoc.fileManager.copyFromResourceIfNotExists("ASCIIMathML.js");
-   }
+	public void Start() {
+		oxdoc.fileManager.copyFromResourceIfNotExists("ASCIIMathML.js");
+	}
 }

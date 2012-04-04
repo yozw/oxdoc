@@ -16,41 +16,44 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LogFile {
-   Writer output = null;
+	Writer output = null;
 
-   // create a blank file
-   public LogFile() throws IOException {
-      File aFile = new File("oxdoc.log");
-      output = new BufferedWriter(new FileWriter(aFile));
-      writeln("Log file created at " + GetDate());
-   }
+	// create a blank file
+	public LogFile() throws IOException {
+		File aFile = new File("oxdoc.log");
+		output = new BufferedWriter(new FileWriter(aFile));
+		writeln("Log file created at " + GetDate());
+	}
 
-   private static String GetDate() {
-      Date date = new Date();
-      SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
+	private static String GetDate() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 
-      return sdf.format(date);
-   }
+		return sdf.format(date);
+	}
 
-   public void close() throws IOException {
-      output.close();
-   }
+	public void close() throws IOException {
+		output.close();
+	}
 
-   public void write(Object s) throws IOException {
-      output.write(s.toString());
-   }
+	public void write(Object s) throws IOException {
+		output.write(s.toString());
+	}
 
-   public void writeln(Object s) throws IOException {
-      output.write(s.toString() + "\n");
-   }
+	public void writeln(Object s) throws IOException {
+		output.write(s.toString() + "\n");
+	}
 }

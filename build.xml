@@ -60,7 +60,7 @@
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
      <javac srcdir="${src}/writeconstants" destdir="${build}" nowarn="on" debug="${debug}" includeantruntime="off" />
-     <java classname="WriteConstants" classpath="${build}" output="${src}/Constants.java">
+     <java classname="oxdoc.writeconstants.WriteConstants" classpath="${build}" output="${src}/Constants.java">
          <arg value="${version}" />
      </java>
      <delete file="${build}/OxDoc.class"/>
@@ -71,9 +71,9 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="${bin}"/>
-    <copy file="${css}/default.css" tofile="${build}/oxdoc.css" />
+    <copy file="${css}/default.css" tofile="${build}/oxdoc/oxdoc.css" />
     <copy file="${srcmisc}/ASCIIMathML.js" todir="${build}" />
-    <copy todir="${build}/icons">  
+    <copy todir="${build}/oxdoc/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
     <copy file="${lib}/jregex.jar" todir="${bin}" />

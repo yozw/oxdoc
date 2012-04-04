@@ -16,77 +16,81 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.entities;
 
-import oxdoc.*;
-import oxdoc.comments.*;
+import oxdoc.FileManager;
+import oxdoc.comments.BaseComment;
+import oxdoc.comments.FunctionComment;
 
 public class OxMethod extends OxEntity {
-   public String Declaration;
-   public boolean Virtual = false;
-   public boolean Static = false;
+	public String Declaration;
+	public boolean Virtual = false;
+	public boolean Static = false;
 
-   OxMethod(String name, OxFile parentFile) 
-   {
-      super(name, null, new FunctionComment(parentFile.project()), parentFile);
+	OxMethod(String name, OxFile parentFile) {
+		super(name, null, new FunctionComment(parentFile.project()), parentFile);
 
-      setIconType(FileManager.FUNCTION);
-   }
+		setIconType(FileManager.FUNCTION);
+	}
 
-   OxMethod(String name, OxClass oxclass) {
-      super(name, oxclass, new FunctionComment(oxclass.parentFile().project()), oxclass.parentFile());
+	OxMethod(String name, OxClass oxclass) {
+		super(name, oxclass,
+				new FunctionComment(oxclass.parentFile().project()), oxclass
+						.parentFile());
 
-      if (oxclass == null)
-         setIconType(FileManager.FUNCTION);
-      else
-         setIconType(FileManager.METHOD);
-   }
+		setIconType(FileManager.METHOD);
+	}
 
-   public String url() {
-      if (parentClass() != null)
-          return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
-      else
-          return parentFileUrl() + "#" + displayName();
-   }
+	public String url() {
+		if (parentClass() != null)
+			return parentFileUrl() + "#" + parentClass().name() + "___"
+					+ displayName();
+		else
+			return parentFileUrl() + "#" + displayName();
+	}
 
-   public String declaration()
-   {
-      if (super.declaration() == null) return null;
-      return (modifiers() + " " + super.declaration()).trim();
-   }
+	public String declaration() {
+		if (super.declaration() == null)
+			return null;
+		return (modifiers() + " " + super.declaration()).trim();
+	}
 
-   public String modifiers()
-   {
-      String mod = "";
-      if (Virtual) mod += "virtual ";
-      if (Static) mod += "static ";
-      return mod.trim();
-   }
+	public OxClass.Visibility visibility() {
+		return OxClass.Visibility.Public;  // every method is public in the current version of Ox
+	}
 
-   public BaseComment comment() {
-      BaseComment _comment = super.comment();
+	public String modifiers() {
+		String mod = "";
+		if (Virtual)
+			mod += "virtual ";
+		if (Static)
+			mod += "static ";
+		return mod.trim();
+	}
 
-      if (_comment.isEmpty() && superMethod() != null)
-         return superMethod().comment();
+	public BaseComment comment() {
+		BaseComment _comment = super.comment();
 
-      return _comment;
-   }
+		if (_comment.isEmpty() && superMethod() != null)
+			return superMethod().comment();
 
-   public boolean isInternal() 
-   {
-      return ((FunctionComment) comment()).hasInternalModifier();
-   }
+		return _comment;
+	}
 
-   public OxMethod superMethod() {
-      if (parentClass() == null || parentClass().superClass() == null)
-         return null;
+	public boolean isInternal() {
+		return ((FunctionComment) comment()).hasInternalModifier();
+	}
 
-      return (OxMethod) parentClass().superClass().methodByName(this.displayName());
-   }
+	public OxMethod superMethod() {
+		if (parentClass() == null || parentClass().superClass() == null)
+			return null;
 
-   public String toString() {
-      return "<OxMethod " + referenceName() + ">";
-   }
+		return parentClass().superClass().methodByName(displayName());
+	}
+
+	public String toString() {
+		return "<OxMethod " + referenceName() + ">";
+	}
 }

@@ -16,135 +16,134 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.util.*;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import oxdoc.parser.*;
-import oxdoc.gui.*;
-import oxdoc.setup.*;
+import oxdoc.gui.OxDocGui;
+import oxdoc.parser.ParseException;
+import oxdoc.setup.OxDocSetup;
 
 public class OxDocCmd implements Logger {
-   private OxDoc oxdoc = null;
-   private ArrayList files = new ArrayList();
-   public LogFile Logfile = null;
+	private OxDoc oxdoc = null;
+	private ArrayList files = new ArrayList();
+	public LogFile Logfile = null;
 
-   public void writeMessage(String message, int Code) {
-      try {
-         System.out.println(message);
-         if (Logfile != null)
-            Logfile.writeln(message);
-      } catch (IOException E) {
-      }
-   }
+	public void writeMessage(String message, int Code) {
+		try {
+			System.out.println(message);
+			if (Logfile != null)
+				Logfile.writeln(message);
+		} catch (IOException E) {
+		}
+	}
 
-   public int parseFiles() throws Exception {
-      int totalFiles = 0;
-      for (int i = 0; i < files.size(); i++) {
-         String filename = ((String) files.get(i)).trim();
-         if (filename.length() == 0)
-            continue;
+	public int parseFiles() throws Exception {
+		int totalFiles = 0;
+		for (int i = 0; i < files.size(); i++) {
+			String filename = ((String) files.get(i)).trim();
+			if (filename.length() == 0)
+				continue;
 
-         try {
-            oxdoc.addFiles(filename);
-            totalFiles++;
-         } catch (ParseException e) {
-            oxdoc.message("Parsing of file " + filename + " failed");
-            oxdoc.message(e.toString());
-         } catch (FileNotFoundException e) {
-            oxdoc.message("File not found: " + filename);
-         }
-      }
+			try {
+				oxdoc.addFiles(filename);
+				totalFiles++;
+			} catch (ParseException e) {
+				oxdoc.message("Parsing of file " + filename + " failed");
+				oxdoc.message(e.toString());
+			} catch (FileNotFoundException e) {
+				oxdoc.message("File not found: " + filename);
+			}
+		}
 
-      return totalFiles;
-   }
+		return totalFiles;
+	}
 
-   public void examineCommandLine(String[] args) throws Exception {
-      // examine command line
-      for (int i = 0; i < args.length; i++) {
-         if (!args[i].startsWith("-")) {
-            files.add(args[i]);
+	public void examineCommandLine(String[] args) throws Exception {
+		// examine command line
+		for (int i = 0; i < args.length; i++) {
+			if (!args[i].startsWith("-")) {
+				files.add(args[i]);
 
-            continue;
-         }
+				continue;
+			}
 
-         String option = args[i].substring(1);
-         if (oxdoc.config.setSimpleOption(option))
-            continue;
+			String option = args[i].substring(1);
+			if (oxdoc.config.setSimpleOption(option))
+				continue;
 
-         i++;
-         if (i == args.length)
-            throw new Exception("Value expected after option -" + option);
+			i++;
+			if (i == args.length)
+				throw new Exception("Value expected after option -" + option);
 
-         if (!oxdoc.config.setOption(option, args[i]))
-            throw new Exception("Invalid option -" + option);
-      }
-   }
+			if (!oxdoc.config.setOption(option, args[i]))
+				throw new Exception("Invalid option -" + option);
+		}
+	}
 
-   // We need this function in order to circumvent a bug in gcj:
-   // even an empty commandline will pass non-empty args to main
-   public static boolean emptyArray(String[] x) {
-      for (int i = 0; i < x.length; i++)
-         if (x[i].trim().length() > 0)
-            return false;
+	// We need this function in order to circumvent a bug in gcj:
+	// even an empty commandline will pass non-empty args to main
+	public static boolean emptyArray(String[] x) {
+		for (int i = 0; i < x.length; i++)
+			if (x[i].trim().length() > 0)
+				return false;
 
-      return true;
-   }
+		return true;
+	}
 
-   public void run(String[] args, Logger logger) {
-      oxdoc = new OxDoc(logger);
+	public void run(String[] args, Logger logger) {
+		oxdoc = new OxDoc(logger);
 
-      if (emptyArray(args)) {
-         System.out.println("\nUsage is:");
-         System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
-         oxdoc.config.listOptions();
+		if (emptyArray(args)) {
+			System.out.println("\nUsage is:");
+			System.out
+					.println("    java oxdoc [options] inputfile [inputfile ...]");
+			Config.listOptions();
 
-         return;
-      }
+			return;
+		}
 
-      try {
-         // do configuration
-         oxdoc.config.load();
-         examineCommandLine(args);
-         oxdoc.config.validate();
+		try {
+			// do configuration
+			oxdoc.config.load();
+			examineCommandLine(args);
+			oxdoc.config.validate();
 
-         // execute parsing and document generation
-         Logfile = new LogFile();
-         if (parseFiles() > 0) {
-            oxdoc.generateDocs();
-            Logfile.close();
-         }
-      } catch (Exception e) {
-         System.out.println(e.getMessage());
-         e.printStackTrace();
-      }
-   }
+			// execute parsing and document generation
+			Logfile = new LogFile();
+			if (parseFiles() > 0) {
+				oxdoc.generateDocs();
+				Logfile.close();
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
-   // oxdoc entry point
-   public static void main(String[] args) {
+	// oxdoc entry point
+	public static void main(String[] args) {
 
-      boolean runGui = false, runSetup = false;
+		boolean runGui = false, runSetup = false;
 
-      if ((args.length == 1) && (args[0].compareTo("--gui") == 0))
-         runGui = true;
-      else if ((args.length == 1) && (args[0].compareTo("--setup") == 0))
-         runSetup = true;
+		if ((args.length == 1) && (args[0].compareTo("--gui") == 0))
+			runGui = true;
+		else if ((args.length == 1) && (args[0].compareTo("--setup") == 0))
+			runSetup = true;
 
-      if (runGui)  {
-         OxDocGui gui = new OxDocGui(); 
-         gui.run(args);
-      }
-      else
-      if (runSetup) {
-         OxDocSetup setup = new OxDocSetup(); 
-         setup.run(args);
-      }
-      else {
-         OxDocCmd cmd = new OxDocCmd();
-         cmd.run(args, cmd);
-      }
-   }
+		if (runGui) {
+			OxDocGui gui = new OxDocGui();
+			gui.run(args);
+		} else if (runSetup) {
+			OxDocSetup setup = new OxDocSetup();
+			setup.run(args);
+		} else {
+			OxDocCmd cmd = new OxDocCmd();
+			cmd.run(args, cmd);
+		}
+	}
 }

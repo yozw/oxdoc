@@ -7,6 +7,15 @@ distribution
 #ifndef __PCLIRE_DISTRIBUTION__
 #define __PCLIRE_DISTRIBUTION__
 
+enum { HEADER, REGULAR };
+
+
+/** Testing global variables. **/ static decl v;
+
+/** Testing global constants. **/ const decl z = 9;
+
+
+
 
 /** Abstract class that represents a random distribution. Classes derived from the base class
 Distribution offer functionality like generating samples. Also, a Distribution has a dimension.
@@ -29,9 +38,9 @@ Distribution::Dim() {
 	error("Distribution::Dim() not implemented; use a derived class.");
 }
 
-/** Checks whether a certain object is a distribution.
+/** @sortkey aaa @internal Checks whether a certain object is a distribution.
 @returns TRUE or FALSE 
-@sortkey aaa 
+
 **/
 Distribution::isDistribution(oObject) {
 	 return isclass(oObject, "Distribution");

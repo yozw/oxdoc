@@ -16,35 +16,32 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.gui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-
+import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 public class OxDocGui {
 
-   private static final boolean fancyLook = false;
+	private static final boolean fancyLook = false;
 
-   public void run(String[] args) {
-      javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-               try {
-                  if (fancyLook)
-				         JFrame.setDefaultLookAndFeelDecorated(true);
-                  else
-                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-               } catch (Exception e) {
-               }
+	public void run(String[] args) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					if (fancyLook)
+						JFrame.setDefaultLookAndFeelDecorated(true);
+					else
+						UIManager.setLookAndFeel(UIManager
+								.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+				}
 
-               MainWindow main = new MainWindow();
-               main.show();
-            }
-         });
-   }
+				MainWindow main = new MainWindow();
+				main.show();
+			}
+		});
+	}
 }

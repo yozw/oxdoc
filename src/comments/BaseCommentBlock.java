@@ -16,26 +16,30 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import java.util.*;
-import oxdoc.*;
+import java.util.ArrayList;
 
+import oxdoc.OxProject;
 
 public class BaseCommentBlock extends ArrayList {
-   public OxProject project = null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public OxProject project = null;
 
-   public BaseCommentBlock(OxProject project) {
-      this.project = project;
-   }
+	public BaseCommentBlock(OxProject project) {
+		this.project = project;
+	}
 
-   public String toString() {
-      return project.oxdoc.textProcessor.process(renderHTML());
-   }
+	public String toString() {
+		return project.oxdoc.textProcessor.process(renderHTML());
+	}
 
-   protected String renderHTML() {
-      return "";
-   }
+	protected String renderHTML() {
+		return "";
+	}
 }

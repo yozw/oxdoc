@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005-2009 by Y. Zwols
+oxdoc (c) Copyright 2005-2012 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,26 +18,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
  **/
 
-package oxdoc;
+package oxdoc.html;
 
-public class MathProcessorMathjax extends MathProcessor {
-	public MathProcessorMathjax(OxDoc oxdoc) {
+import oxdoc.OxDoc;
+
+public class Anchor extends Element {
+
+	String name;
+
+	public Anchor(OxDoc oxdoc, String name) {
 		super(oxdoc);
+		this.name= name;
 	}
 
-	public String ProcessFormula(String formula, boolean isInline) {
-		if (isInline)
-			return "\\(" + formula + "\\)";
-		else
-			return "$$" + formula + "$$";
-	}
-
-	public String ExtraHeader() {
-		return "<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
-	}
-
-	public String ExtraFooter() {
-		return "Math typesetting by <a href=\"http://www.mathjax.org/\">Mathjax</a>";
+	protected void render(StringBuffer buffer) {
+		buffer.append(String.format("<a name=\"%s\"></a>", name));
 	}
 
 }

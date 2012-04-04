@@ -16,73 +16,81 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.entities;
 
-import oxdoc.*;
-import oxdoc.comments.*;
+import java.util.ArrayList;
+
+import oxdoc.FileManager;
+import oxdoc.comments.EnumComment;
 
 public class OxEnum extends OxEntity {
-   public String Declaration;
-   public OxClass.Visibility _visibility;
-   private String[] _elements;
+	public String Declaration;
+	public OxClass.Visibility _visibility;
+	private ArrayList _elements = new ArrayList();
 
-   OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
-      super(name, oxclass, new EnumComment(oxclass.parentFile().project()), oxclass.parentFile()); 
-      setIconType(FileManager.ENUM);
-      _elements = elements;
-      _visibility = visibility;
-   }
+	OxEnum(String name, String[] elements, OxClass oxclass,
+			OxClass.Visibility visibility) {
+		super(name, oxclass, new EnumComment(oxclass.parentFile().project()),
+				oxclass.parentFile());
+		setIconType(FileManager.ENUM);
+		
+		for (int i = 0; i < elements.length; i++)
+			_elements.add(new OxEnumElement(elements[i], this));
+		_visibility = visibility;
+	}
 
+	OxEnum(String name, String[] elements, OxFile oxfile) {
+		super(name, null, new EnumComment(oxfile.project()), oxfile);
 
-   OxEnum(String name, String[] elements, OxFile oxfile) {
-      super(name, null, new EnumComment(oxfile.project()), oxfile);  
-      
-      setIconType(FileManager.ENUM);
-      _elements = elements;
-      _visibility = OxClass.Visibility.Public;
-   }
+		setIconType(FileManager.ENUM);
+		for (int i = 0; i < elements.length; i++)
+			_elements.add(new OxEnumElement(elements[i], this));
+		_visibility = OxClass.Visibility.Public;
+	}
 
+	public String url() {
+		if (parentClass() != null)
+			return parentFileUrl() + "#" + parentClass().name() + "___"
+					+ displayName();
+		else
+			return parentFileUrl() + "#" + displayName();
+	}
 
-   public String url() {
-      if (parentClass() != null)
-          return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
-      else
-          return parentFileUrl() + "#" + displayName();
-   }
+	public String declaration() {
+		String decl = "";
+		decl += " enum { " + elementString() + " }";
+		if (parentClass() != null)
+			decl += " [" + visibility() + "]";
+		return decl;
+	}
 
-   public String declaration() {
-      String decl = "";
-      decl += " enum { " + elementString() + " }";
-      if (parentClass() != null)
-         decl += " [" + visibility() + "]";
-      return decl;
-   }
+	public String elementString() {
+		String decl = "";
+		for (int i = 0; i < _elements.size(); i++) {
+			if (i != 0)
+				decl += ", ";
+			decl += ((OxEnumElement) _elements.get(i)).name();
+		}
+		return decl;
+	}
 
-   public String elementString() {
-      String decl = "";
-      for (int i = 0; i < _elements.length; i++) 
-      {
-          if (i != 0) decl += ", ";
-          decl += _elements[i];
-      }
-      return decl;
-   }
+	public OxClass.Visibility visibility() {
+		return _visibility;
+	}
 
-   public OxClass.Visibility visibility() 
-   {
-      return _visibility;
-   }
+	public String toString() {
+		return "<OxEnum " + referenceName() + ">";
+	}
 
-   public String toString() {
-      return "<OxEnum " + referenceName() + ">";
-   }
+	public boolean isInternal() {
+		return ((EnumComment) comment()).hasInternalModifier()
+				|| (visibility() != OxClass.Visibility.Public);
+	}
 
-
-  public boolean isInternal()
-   {
-      return ((FieldComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
-   }
-
+	public ArrayList elements()
+	{
+		return _elements;
+	}
 }

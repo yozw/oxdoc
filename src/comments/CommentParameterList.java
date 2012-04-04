@@ -16,35 +16,42 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import oxdoc.*;
+import oxdoc.OxProject;
 
 public class CommentParameterList extends BaseCommentBlock {
-   public CommentParameterList(OxProject project) {
-      super(project);
-   }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-   protected String renderHTML() {
-      if (size() == 0)
-         return "";
+	public CommentParameterList(OxProject project) {
+		super(project);
+	}
 
-      String out = "<!-- parameter table --!>\n";
-      out += "<table class=\"parameter_table\">\n";
+	protected String renderHTML() {
+		if (size() == 0)
+			return "";
 
-      for (int i = 0; i < size(); i++) {
-         String[] params = ((String) get(i)).split("[\t ]", 2);
+		String out = "<!-- parameter table --!>\n";
+		out += "<table class=\"parameter_table\">\n";
 
-         out += "<tr>\n";
-         out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
-         if (params.length > 1)
-            out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
-         out += "</tr>\n";
-      }
-      out += "</table>\n";
+		for (int i = 0; i < size(); i++) {
+			String[] params = ((String) get(i)).split("[\t ]", 2);
 
-      return out;
-   }
+			out += "<tr>\n";
+			out += "<td class=\"declaration\" valign=\"baseline\">" + params[0]
+					+ "</td>\n";
+			if (params.length > 1)
+				out += "<td class=\"description\" valign=\"baseline\">"
+						+ params[1] + "</td>\n";
+			out += "</tr>\n";
+		}
+		out += "</table>\n";
+
+		return out;
+	}
 }

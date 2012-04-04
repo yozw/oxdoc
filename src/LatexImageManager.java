@@ -16,242 +16,262 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import javax.xml.parsers.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-import org.w3c.dom.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class LatexImageManager extends ArrayList {
-   private ImageEntryList imageEntries;
-   private boolean _cacheLoaded = false;
-   private int _imageCounter = 0;
-   public OxDoc oxdoc;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ImageEntryList imageEntries;
+	private boolean _cacheLoaded = false;
+	private int _imageCounter = 0;
+	public OxDoc oxdoc;
 
-   private class ImageEntry {
-      public String _filename = "";
-      public String _formula = "";
-      public boolean needsGenerating = true;
+	private class ImageEntry {
+		public String _filename = "";
+		public String _formula = "";
+		public boolean needsGenerating = true;
 
-      public ImageEntry(String formula, String filename) {
-         _filename = filename;
-         _formula = formula;
-      }
+		public ImageEntry(String formula, String filename) {
+			_filename = filename;
+			_formula = formula;
+		}
 
-      public String filename() {
-         return _filename;
-      }
+		public String filename() {
+			return _filename;
+		}
 
-      public String formula() {
-         return _formula;
-      }
-   }
+		public String formula() {
+			return _formula;
+		}
+	}
 
-   private class ImageEntryList {
-      private Hashtable _formulas = new Hashtable();
-      private Hashtable _filenames = new Hashtable();
+	private class ImageEntryList {
+		private Hashtable _formulas = new Hashtable();
+		private Hashtable _filenames = new Hashtable();
 
-      public ImageEntry register(String Formula) {
-         return register(Formula, null);
-      }
+		public Hashtable formulas() {
+			return _formulas;
+		}
 
-      public Hashtable formulas() {
-         return _formulas;
-      }
+		public ImageEntry register(String formula, String filename) {
+			if (!_cacheLoaded) {
+				_cacheLoaded = true;
+				loadCache();
+			}
 
-      public Hashtable filenames() {
-         return _filenames;
-      }
+			formula = formula.trim().replace('\n', ' ').replace('\r', ' ');
 
-      public ImageEntry register(String formula, String filename) {
-         if (!_cacheLoaded) {
-            _cacheLoaded = true;
-            loadCache();
-         }
+			ImageEntry entry = ((ImageEntry) formulas().get(formula));
+			if (entry != null)
+				return entry;
 
-         formula = formula.trim().replace('\n', ' ').replace('\r', ' ');
+			if (filename == null)
+				do
+					filename = "img"
+							+ (new Integer(++_imageCounter)).toString()
+							+ ".png";
+				while (_filenames.get(filename) != null);
 
-         ImageEntry entry = ((ImageEntry) formulas().get(formula));
-         if (entry != null)
-            return entry;
+			entry = new ImageEntry(formula, filename);
+			_formulas.put(formula, entry);
+			_filenames.put(filename, entry);
 
-         if (filename == null) {
-            do {
-               filename = "img" + (new Integer(++_imageCounter)).toString() + ".png";
-            } while (_filenames.get(filename) != null);
-         }
+			return entry;
+		}
+	}
 
-         entry = new ImageEntry(formula, filename);
-         _formulas.put(formula, entry);
-         _filenames.put(filename, entry);
+	public LatexImageManager(OxDoc oxdoc) {
+		this.oxdoc = oxdoc;
+		imageEntries = new ImageEntryList();
+	}
 
-         return entry;
-      }
-   }
+	public String getFormulaFilename(String Formula) {
+		return imageEntries.register(Formula, null).filename();
+	}
 
-   public LatexImageManager(OxDoc oxdoc) {
-      this.oxdoc = oxdoc;
-      imageEntries = new ImageEntryList();
-   }
+	private void saveCache() {
+		try {
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder();
+			Document doc = builder.newDocument();
 
-   public String getFormulaFilename(String Formula) {
-      return imageEntries.register(Formula, null).filename();
-   }
+			Element root = doc.createElement("cache");
+			doc.appendChild(root);
 
-   private void saveCache() {
-      try {
-         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-         Document doc = builder.newDocument();
+			for (Enumeration elements = imageEntries.formulas().elements(); elements
+					.hasMoreElements();) {
+				ImageEntry e = (ImageEntry) elements.nextElement();
+				Element newElement = doc.createElement("image");
+				newElement.setAttribute("formula", e.formula());
+				newElement.setAttribute("filename", e.filename());
+				root.appendChild(newElement);
+			}
 
-         Element root = doc.createElement("cache");
-         doc.appendChild(root);
+			// Prepare the DOM document for writing
+			Source source = new DOMSource(doc);
 
-         for (Enumeration elements = imageEntries.formulas().elements();
-              elements.hasMoreElements();) {
-            ImageEntry e = (ImageEntry) elements.nextElement();
-            Element newElement = doc.createElement("image");
-            newElement.setAttribute("formula", e.formula());
-            newElement.setAttribute("filename", e.filename());
-            root.appendChild(newElement);
-         }
+			// Prepare the output file
+			File file = new File(oxdoc.fileManager.imageCache());
+			Result result = new StreamResult(new FileWriter(file));
 
-         // Prepare the DOM document for writing
-         Source source = new DOMSource(doc);
+			// Write the DOM document to the file
+			Transformer xformer = TransformerFactory.newInstance()
+					.newTransformer();
+			xformer.transform(source, result);
+		} catch (Exception e) {
+			oxdoc.warning("Error writing image cache. Don't worry.");
+		}
+	}
 
-         // Prepare the output file
-         File file = new File(oxdoc.fileManager.imageCache());
-         Result result = new StreamResult(new FileWriter(file));
+	private void loadCache() {
+		try {
+			File file = new File(oxdoc.fileManager.imageCache().trim());
+			if (!file.exists())
+				return;
 
-         // Write the DOM document to the file
-         Transformer xformer = TransformerFactory.newInstance().newTransformer();
-         xformer.transform(source, result);
-      } catch (Exception e) {
-         oxdoc.warning("Error writing image cache. Don't worry.");
-      }
-   }
+			// Parse the file
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
+					.newDocumentBuilder();
+			Document doc = builder.parse(oxdoc.fileManager.imageCache());
 
-   private void loadCache() {
-      try {
-         File file = new File(oxdoc.fileManager.imageCache().trim());
-         if (!file.exists())
-            return;
+			// Find the tags of interest
+			NodeList nodes = doc.getElementsByTagName("image");
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Element element = (Element) nodes.item(i);
+				String formula = element.getAttribute("formula");
+				String filename = element.getAttribute("filename");
+				if (oxdoc.fileManager.imageFileExists(filename)) {
+					ImageEntry entry = imageEntries.register(formula, filename);
+					entry.needsGenerating = false;
+				}
+			}
+		} catch (Exception e) {
+			oxdoc.warning("Error reading image cache. Don't worry.");
+		}
+	}
 
-         // Parse the file
-         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-         Document doc = builder.parse(oxdoc.fileManager.imageCache());
+	public void makeLatexFiles() throws IOException {
+		for (Enumeration elements = imageEntries.formulas().elements(); elements
+				.hasMoreElements();) {
+			ImageEntry e = (ImageEntry) elements.nextElement();
+			if (e.needsGenerating)
+				makeLatexFile(e);
+		}
+		saveCache();
+	}
 
-         // Find the tags of interest
-         NodeList nodes = doc.getElementsByTagName("image");
-         for (int i = 0; i < nodes.getLength(); i++) {
-            Element element = (Element) nodes.item(i);
-            String formula = element.getAttribute("formula");
-            String filename = element.getAttribute("filename");
-            if (oxdoc.fileManager.imageFileExists(filename)) {
-               ImageEntry entry = imageEntries.register(formula, filename);
-               entry.needsGenerating = false;
-            }
-         }
-      } catch (Exception e) {
-         oxdoc.warning("Error reading image cache. Don't worry.");
-      }
-   }
+	private void makeLatexFile(ImageEntry e) throws IOException {
+		oxdoc.message("Generating image for formula \"" + e.formula() + "\"...");
 
-   public void makeLatexFiles() throws IOException {
-      for (Enumeration elements = imageEntries.formulas().elements();
-           elements.hasMoreElements();) {
-         ImageEntry e = (ImageEntry) elements.nextElement();
-         if (e.needsGenerating)
-            makeLatexFile(e);
-      }
-      saveCache();
-   }
+		File aFile = new File(oxdoc.fileManager.tempTexFile());
+		Writer output = new BufferedWriter(new FileWriter(aFile));
+		output.write("\\documentclass{article}\n");
+		output.write("\\usepackage{amsmath}\n");
 
-   private void makeLatexFile(ImageEntry e) throws IOException {
-      oxdoc.message("Generating image for formula \"" + e.formula() + "\"...");
+		for (int i = 0; i < oxdoc.config.LatexPackages.size(); i++)
+			output.write("\\usepackage{"
+					+ (String) oxdoc.config.LatexPackages.get(i) + "}\n");
+		output.write("\\begin{document}\n");
+		output.write("\\pagestyle{empty}\n");
+		if (oxdoc.config.ImageBgColor != null)
+			output.write("\\special{background " + oxdoc.config.ImageBgColor
+					+ " }");
+		output.write("\\begin{align*}\n");
+		output.write(e.formula() + "\n");
+		output.write("\\end{align*}\n");
+		output.write("\\end{document}\n");
+		output.close();
 
-      File aFile = new File(oxdoc.fileManager.tempTexFile());
-      Writer output = new BufferedWriter(new FileWriter(aFile));
-      output.write("\\documentclass{article}\n");
-      output.write("\\usepackage{amsmath}\n");
+		String latexParams = oxdoc.config.LatexArg + " -interaction=batchmode";
 
-      for (int i = 0; i < oxdoc.config.LatexPackages.size(); i++)
-         output.write("\\usepackage{" + (String) oxdoc.config.LatexPackages.get(i) + "}\n");
-      output.write("\\begin{document}\n");
-      output.write("\\pagestyle{empty}\n");
-      if (oxdoc.config.ImageBgColor != null)
-         output.write("\\special{background " + oxdoc.config.ImageBgColor + " }");
-      output.write("\\begin{align*}\n");
-      output.write(e.formula() + "\n");
-      output.write("\\end{align*}\n");
-      output.write("\\end{document}\n");
-      output.close();
+		File tempDir = new File(oxdoc.fileManager.tempDir());
+		File curDir = new File(".");
+		if (!tempDir.equals(curDir))
+			latexParams += MessageFormat.format(
+					" -aux-directory={1} -output-directory={1}",
+					oxdoc.fileManager.tempDir());
 
-      String latexParams = oxdoc.config.LatexArg + " -interaction=batchmode";
+		run(oxdoc.config.Latex,
+				latexParams + " " + oxdoc.fileManager.tempFile("__oxdoc.tex"));
 
-      File tempDir = new File(oxdoc.fileManager.tempDir());
-      File curDir  = new File(".");
-      if (!tempDir.equals(curDir))
-         latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}", oxdoc.fileManager.tempDir());
+		String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
+		if (oxdoc.config.ImageBgColor == null)
+			dvipngParams += " -bg Transparent";
 
-      run(oxdoc.config.Latex, latexParams + " " + oxdoc.fileManager.tempFile("__oxdoc.tex"));
+		// have to do the following twice, because it sometimes seems to miss
+		// fonts at the first run
+		for (int i = 0; i < 2; i++) {
+			// make sure the directory exists. If not, create it
+			(new File(oxdoc.fileManager.imageFile(e.filename())))
+					.getParentFile().mkdirs();
 
-      String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
-      if (oxdoc.config.ImageBgColor == null)
-         dvipngParams += " -bg Transparent";
+			Object[] _args = { oxdoc.config.DvipngArg,
+					oxdoc.fileManager.imageFile(e.filename()),
+					oxdoc.fileManager.tempFile("__oxdoc.dvi") };
+			run(oxdoc.config.Dvipng, MessageFormat.format(dvipngParams, _args));
+		}
+		(new File(oxdoc.fileManager.tempFile("__oxdoc.tex"))).delete();
+		(new File(oxdoc.fileManager.tempFile("__oxdoc.dvi"))).delete();
+		(new File(oxdoc.fileManager.tempFile("__oxdoc.aux"))).delete();
+		(new File(oxdoc.fileManager.tempFile("__oxdoc.log"))).delete();
+	}
 
-      // have to do the following twice, because it sometimes seems to miss fonts at the first run
-      for (int i = 0; i < 2; i++) {
-         // make sure the directory exists.  If not, create it
-         (new File(oxdoc.fileManager.imageFile(e.filename()))).getParentFile().mkdirs();
+	private void run(String filename, String parameters) throws IOException {
+		oxdoc.message("   " + filename + " " + parameters);
 
-         Object[] _args = {
-                             oxdoc.config.DvipngArg,
-                             oxdoc.fileManager.imageFile(e.filename()),
-                             oxdoc.fileManager.tempFile("__oxdoc.dvi")
-         };
-         run(oxdoc.config.Dvipng, MessageFormat.format(dvipngParams, _args));
-      }
-      (new File(oxdoc.fileManager.tempFile("__oxdoc.tex"))).delete();
-      (new File(oxdoc.fileManager.tempFile("__oxdoc.dvi"))).delete();
-      (new File(oxdoc.fileManager.tempFile("__oxdoc.aux"))).delete();
-      (new File(oxdoc.fileManager.tempFile("__oxdoc.log"))).delete();
-   }
+		Runtime run = Runtime.getRuntime();
+		try {
+			Process pp = run.exec(filename + " " + parameters);
+			oxdoc.message("");
 
-   private void run(String filename, String parameters) throws IOException {
-      oxdoc.message("   " + filename + " " + parameters);
+			StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(),
+					oxdoc, false);
+			StreamGobbler outputGobbler = new StreamGobbler(
+					pp.getInputStream(), oxdoc, true);
 
-      Runtime run = Runtime.getRuntime();
-      try {
-         Process pp = run.exec(filename + " " + parameters);
-         oxdoc.message("");
+			errorGobbler.start();
+			outputGobbler.start();
 
-         StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), oxdoc, false);
-         StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), oxdoc, true);
+			pp.waitFor();
 
-         errorGobbler.start();
-         outputGobbler.start();         
+			if (errorGobbler.length() > 0) {
+				oxdoc.message("");
+				oxdoc.message(errorGobbler.getText());
+			}
 
-         pp.waitFor();
-
-         if (errorGobbler.length() > 0) {
-            oxdoc.message("");
-            oxdoc.message(errorGobbler.getText());
-         }
-
-      } catch (InterruptedException E) {
-         System.out.println("Execution interrupted");
-         System.exit(1);
-      } catch (IOException E) {
-         System.out.println("Input/output error");
-         System.exit(1);
-      }
-   }
+		} catch (InterruptedException E) {
+			System.out.println("Execution interrupted");
+			System.exit(1);
+		} catch (IOException E) {
+			System.out.println("Input/output error");
+			System.exit(1);
+		}
+	}
 }

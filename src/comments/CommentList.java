@@ -16,24 +16,29 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import oxdoc.*;
+import oxdoc.OxProject;
 
 public class CommentList extends BaseCommentBlock {
-   public CommentList(OxProject project) {
-      super(project);
-   }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-   protected String renderHTML() {
-      String out = "<ul>";
+	public CommentList(OxProject project) {
+		super(project);
+	}
 
-      for (int i = 0; i < size(); i++)
-         out += "<li>" + ((String) get(i)).trim() + "\n";
-      out += "</li>";
+	protected String renderHTML() {
+		String out = "<ul>";
 
-      return out;
-   }
+		for (int i = 0; i < size(); i++)
+			out += "<li>" + ((String) get(i)).trim() + "\n";
+		out += "</li>";
+
+		return out;
+	}
 }

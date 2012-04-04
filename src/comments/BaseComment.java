@@ -16,202 +16,236 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
 import java.util.HashMap;
-import oxdoc.*;
 
+import oxdoc.OxProject;
 
 public class BaseComment {
-   final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;
- 
-   private String _text = "";
-   private String _description = "";
-   private String _sortKey = null;
-   private CommentTextBlock _longdescription = null;
-   private CommentTextBlock _comments = null;
-   private CommentTextBlock _example = null;
-   private CommentSeeAlsoList _see = null;
-   private CommentList _ref = null;
-   private CommentList _todo = null;
-   private HashMap _sections = new HashMap();
-   private HashMap _modifiers = new HashMap();
-   public OxProject project = null;
+	final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3,
+			SECTION_SEE = 4, SECTION_SORTKEY = 5;
 
-   public BaseComment(OxProject project) {
-      this.project = project;
-      _longdescription = new CommentTextBlock(project);
-      _comments = new CommentTextBlock(project);
-      _example = new CommentTextBlock(project);
-      _see = new CommentSeeAlsoList(project);
-      _ref = new CommentList(project);
-      _todo = new CommentList(project);
+	private String _text = "";
+	private String _description = "";
+	private String _sortKey = null;
+	private CommentTextBlock _longdescription = null;
+	private CommentTextBlock _comments = null;
+	private CommentTextBlock _example = null;
+	private CommentSeeAlsoList _see = null;
+	private CommentList _ref = null;
+	private CommentList _todo = null;
+	private HashMap _sections = new HashMap();
+	private HashMap _modifiers = new HashMap(); // modifiers have 0 parameters
+	private HashMap _settings = new HashMap(); // settings have 1 parameter
+	public OxProject project = null;
 
-      registerSection("comments", SECTION_COMMENTS);
-      registerSection("comment", SECTION_COMMENTS);
-      registerSection("ref", SECTION_REF);
-      registerSection("example", SECTION_EXAMPLE);
-      registerSection("examples", SECTION_EXAMPLE);
-      registerSection("see", SECTION_SEE);
-      registerSection("seealso", SECTION_SEE);
-      registerSection("sortkey", SECTION_SORTKEY);
-   }
+	public BaseComment(OxProject project) {
+		this.project = project;
+		_longdescription = new CommentTextBlock(project);
+		_comments = new CommentTextBlock(project);
+		_example = new CommentTextBlock(project);
+		_see = new CommentSeeAlsoList(project);
+		_ref = new CommentList(project);
+		_todo = new CommentList(project);
 
-   protected void registerSection(String name, int SectionId)
-   {
-      _sections.put(name, new Integer(SectionId));
-   }
+		registerSection("comments", SECTION_COMMENTS);
+		registerSection("comment", SECTION_COMMENTS);
+		registerSection("ref", SECTION_REF);
+		registerSection("example", SECTION_EXAMPLE);
+		registerSection("examples", SECTION_EXAMPLE);
+		registerSection("see", SECTION_SEE);
+		registerSection("seealso", SECTION_SEE);
+		registerSetting("sortkey", SECTION_SORTKEY);
+	}
 
-   protected void registerModifier(String name, int ModifierId)
-   {
-      _modifiers.put(name, new Integer(ModifierId));
-   }
+	protected void registerSection(String name, int SectionId) {
+		_sections.put(name, new Integer(SectionId));
+	}
 
-   protected int getSectionId(String name) 
-   {
-      return (Integer) _sections.get(name);
-   }
+	protected void registerSetting(String name, int SettingId) {
+		_settings.put(name, new Integer(SettingId));
+	}
 
-   protected int getModifierId(String name) 
-   {
-      return (Integer) _modifiers.get(name);
-   }
+	protected void registerModifier(String name, int ModifierId) {
+		_modifiers.put(name, new Integer(ModifierId));
+	}
 
-   /** Add a piece of text to one of the sections. Do not access this
-   method directly. It is used by SetText. Override this method to add more sections.
-   **/
-   protected boolean addToSection(int SectionId, String text) 
-   {
-      switch (SectionId) 
-      {
-          case SECTION_COMMENTS: _comments.add(text); break;
-          case SECTION_REF:      _ref.add(text); break;
-          case SECTION_EXAMPLE:  _example.add(text); break;
-          case SECTION_SEE:      _see.add(text); break;
-          case SECTION_SORTKEY:  _sortKey = text; break;
-          default: return false;
-      }
-      return true;
-   }
+	protected int getSectionId(String name) {
+		return (Integer) _sections.get(name);
+	}
 
-   protected boolean isSection(String name) 
-   {
-      return _sections.containsKey(name);
-   }
+	protected int getModifierId(String name) {
+		return (Integer) _modifiers.get(name);
+	}
 
-   protected boolean isModifier(String name) 
-   {
-      return _modifiers.containsKey(name);
-   }
+	protected int getSettingId(String name) {
+		return (Integer) _settings.get(name);
+	}
 
-   protected boolean processModifier(int ModifierId) 
-   {
-      return false;
-   }
+	/**
+	 * Add a piece of text to one of the sections. Do not access this method
+	 * directly. It is used by SetText. Override this method to add more
+	 * sections.
+	 **/
+	protected boolean addToSection(int SectionId, String text) {
+		switch (SectionId) {
+		case SECTION_COMMENTS:
+			_comments.add(text);
+			break;
+		case SECTION_REF:
+			_ref.add(text);
+			break;
+		case SECTION_EXAMPLE:
+			_example.add(text);
+			break;
+		case SECTION_SEE:
+			_see.add(text);
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
 
-   private static String extractShortDescription(String text) {
-      text = text + " ";
+	protected boolean isSection(String name) {
+		return _sections.containsKey(name);
+	}
 
-      int i = -1;
-      while ((i = text.indexOf(".", i+1)) != -1)
-      {
-         // short description ends with space followed by whitespace, cr, lf, or tab
-         if (i == text.length()) 
-            return text;
-         char nextChar = text.charAt(i+1);
-         if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r') || (nextChar == '\t')) 
-            return text.substring(0, i + 1);
-      }
+	protected boolean isModifier(String name) {
+		return _modifiers.containsKey(name);
+	}
 
-      return text;
-   }
+	protected boolean isSetting(String name) {
+		return _settings.containsKey(name);
+	}
 
-   /** Feeds an input comment block as a string and parses it. It interprets @<section name> blocks and
-   passes the contents to AddToSection. **/
-   public void setText(String text) throws Exception {
-      if (!text.startsWith("/**") || !text.endsWith("**/"))
-         return;
-      text = text.substring(3, text.length() - 3).trim();
-      _text = text;
+	protected boolean processModifier(int ModifierId) {
+		return false;
+	}
 
-      String[] sections = text.split("@");
+	protected boolean processSetting(int SettingId, String argument) {
+		switch (SettingId) {
+		case SECTION_SORTKEY:
+			_sortKey = argument;
+			return true;
+		}
 
-      String description = "";
-      int curSection = -1;
+		return false;
+	}
 
-      for (int i = 0; i < sections.length; i++) {
-         String textLine;
+	private static String extractShortDescription(String text) {
+		text = text + " ";
 
-         if (i == 0) 
-            textLine = sections[0];
-         else
-         {
-            String[] words = sections[i].split("[\t\n ]", 2);
-            String commandName = words[0];
-            textLine = (words.length > 1) ? words[1] : "";
+		int i = -1;
+		while ((i = text.indexOf(".", i + 1)) != -1) {
+			// short description ends with space followed by whitespace, cr, lf,
+			// or tab
+			if (i == text.length())
+				return text;
+			char nextChar = text.charAt(i + 1);
+			if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r')
+					|| (nextChar == '\t'))
+				return text.substring(0, i + 1);
+		}
 
-            if (isModifier(commandName))
-               processModifier(getModifierId(commandName));
-            else if (isSection(commandName))
-               curSection = getSectionId(commandName);
-            else
-               textLine = "@" + commandName + " " + textLine;
-         }
+		return text;
+	}
 
-         if (curSection == -1)
-            description += textLine + " ";
-         else
-            addToSection(curSection, textLine);
-      }
+	/**
+	 * Feeds an input comment block as a string and parses it. It interprets
+	 * 
+	 * @<section name> blocks and passes the contents to AddToSection.
+	 **/
+	public void setText(String text) throws Exception {
+		if (!text.startsWith("/**") || !text.endsWith("**/"))
+			return;
+		text = text.substring(3, text.length() - 3).trim();
+		_text = text;
 
-      _description = extractShortDescription(description);
-      _longdescription.add(description);
-   }
+		String[] sections = text.split("@");
 
-   /** Short description of the entity, i.e. the part before the first . **/
-   public String description() {
-      return project.oxdoc.textProcessor.process(_description);
-   }
+		String description = "";
+		int curSection = -1;
 
-   /** Long description of the entity **/
-   public CommentTextBlock longdescription() {
-      return _longdescription;
-   }
+		for (int i = 0; i < sections.length; i++) {
+			String textLine;
 
-   /** Comments of the entity **/
-   public CommentTextBlock comments() {
-      return _comments;
-   }
+			if (i == 0)
+				textLine = sections[0];
+			else {
+				String[] words = sections[i].split("[\t\n ]", 2);
+				String commandName = words[0];
+				textLine = (words.length > 1) ? words[1] : "";
 
-   /** Example block of the entity **/
-   public CommentTextBlock example() {
-      return _example;
-   }
+				if (isModifier(commandName))
+					processModifier(getModifierId(commandName));
+				else if (isSetting(commandName))
+				{
+					words = sections[i].split("[\t\n ]", 3);
+					textLine = (words.length > 2) ? words[2] : "";
+					processSetting(getSettingId(commandName), words[1]);
+				}
+				else if (isSection(commandName))
+					curSection = getSectionId(commandName);
+				else
+					textLine = "@" + commandName + " " + textLine;
+			}
 
-   /** The see also list of the entity **/
-   public CommentSeeAlsoList see() {
-      return _see;
-   }
+			if (curSection == -1)
+				description += textLine + " ";
+			else
+				addToSection(curSection, textLine);
+		}
 
-   /** The reference list of the entity **/
-   public CommentList ref() {
-      return _ref;
-   }
+		_description = extractShortDescription(description);
+		_longdescription.add(description);
+	}
 
-   /** The to do list of the entity **/
-   public CommentList todo() {
-      return _todo;
-   }
+	/** Short description of the entity, i.e. the part before the first period (.) **/
+	public String description() {
+		return project.oxdoc.textProcessor.process(_description);
+	}
 
-   /** The sort key of this entity; returns null if not set. **/
-   public String sortKey() {
-      return _sortKey;
-   }
+	/** Long description of the entity **/
+	public CommentTextBlock longdescription() {
+		return _longdescription;
+	}
 
-   /** Checks whether the comment is empty **/
-   public boolean isEmpty() {
-      return _text.trim().length() == 0;
-   }
+	/** Comments of the entity **/
+	public CommentTextBlock comments() {
+		return _comments;
+	}
+
+	/** Example block of the entity **/
+	public CommentTextBlock example() {
+		return _example;
+	}
+
+	/** The see also list of the entity **/
+	public CommentSeeAlsoList see() {
+		return _see;
+	}
+
+	/** The reference list of the entity **/
+	public CommentList ref() {
+		return _ref;
+	}
+
+	/** The to do list of the entity **/
+	public CommentList todo() {
+		return _todo;
+	}
+
+	/** The sort key of this entity; returns null if not set. **/
+	public String sortKey() {
+		return _sortKey;
+	}
+
+	/** Checks whether the comment is empty **/
+	public boolean isEmpty() {
+		return _text.trim().length() == 0;
+	}
 }

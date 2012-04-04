@@ -20,31 +20,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc.html;
 
-import java.text.MessageFormat;
+import java.util.ArrayList;
 
 import oxdoc.OxDoc;
 
-public class Header extends Element {
+public class DefinitionList extends Element {
 
-	String title;
-	int level;
-	int iconType;
+	String cssClass;
+	ArrayList labels = new ArrayList();
+	ArrayList definitions = new ArrayList();
 
-	public Header(OxDoc oxdoc, int level, int iconType, String title) {
+	public DefinitionList(OxDoc oxdoc, String cssClass) {
 		super(oxdoc);
-
-		this.oxdoc = oxdoc;
-		this.level = level;
-		this.iconType = iconType;
-		this.title = title;
+		this.cssClass = cssClass;
+	}
+	
+	public void addItem(String label, String definition)
+	{
+		labels.add(label);
+		definitions.add(definition);
 	}
 
 	protected void render(StringBuffer buffer) {
-		Object args[] = { "" + level, oxdoc.fileManager.largeIcon(iconType),
-				title };
-		buffer.append(MessageFormat
-				.format("<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n",
-						args));
+		buffer.append(String.format("<dl%s>\n", classAttr(cssClass)));
+		for (int i = 0; i < labels.size(); i++)
+		{
+			String label = (String) labels.get(i);
+			String definition = (String) definitions.get(i);
+			
+			buffer.append(String.format("<dt>%s</dt><dd>%s</dd>\n", label, definition));
+		}
+		buffer.append("</dl>\n");
+	}
+
+	public String toString() {
+		StringBuffer bf = new StringBuffer();
+		render(bf);
+		return bf.toString();
 	}
 
 }

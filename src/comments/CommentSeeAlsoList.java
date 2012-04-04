@@ -16,33 +16,38 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc.comments;
 
-import oxdoc.*;
+import oxdoc.OxProject;
 
 public class CommentSeeAlsoList extends BaseCommentBlock {
-   public CommentSeeAlsoList(OxProject project) {
-      super(project);
-   }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-   public boolean add(Object o) {
-      String[] references = o.toString().split(",");
-      for (int j = 0; j < references.length; j++)
-         super.add(references[j].trim());
+	public CommentSeeAlsoList(OxProject project) {
+		super(project);
+	}
 
-      return true;
-   }
+	public boolean add(Object o) {
+		String[] references = o.toString().split(",");
+		for (int j = 0; j < references.length; j++)
+			super.add(references[j].trim());
 
-   protected String renderHTML() {
-      String out = "";
-      for (int j = 0; j < size(); j++) {
-         if (j > 0)
-            out += ", ";
-         out += project.linkToSymbol(get(j).toString());
-      }
+		return true;
+	}
 
-      return out;
-   }
+	protected String renderHTML() {
+		String out = "";
+		for (int j = 0; j < size(); j++) {
+			if (j > 0)
+				out += ", ";
+			out += project.linkToSymbol(get(j).toString());
+		}
+
+		return out;
+	}
 }

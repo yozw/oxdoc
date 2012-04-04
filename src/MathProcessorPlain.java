@@ -16,31 +16,22 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-**/
+ **/
 
 package oxdoc;
 
-import java.io.File;
-import java.util.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-
-
 public class MathProcessorPlain extends MathProcessor {
-   public OxDoc oxdoc = null;
+	public OxDoc oxdoc = null;
 
-   public MathProcessorPlain(OxDoc oxdoc) {
-      super(oxdoc);
-   }
+	public MathProcessorPlain(OxDoc oxdoc) {
+		super(oxdoc);
+	}
 
-   public String ProcessFormula(String formula, boolean isInline) {
-      return formula;
-   }
+	public String ProcessFormula(String formula, boolean isInline) {
+		return formula;
+	}
 
-   public String ExtraHeader() {
-      return "<style>.expression { font-style: italic; font-family: times; } .equation { font-style: italic; font-family: times; }</style>";
-   }
+	public String ExtraHeader() {
+		return "<style>.expression { font-style: italic; font-family: times; } .equation { font-style: italic; font-family: times; }</style>";
+	}
 }
-
-
-
