@@ -17,8 +17,11 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-import java.text.*;
 
+package oxdoc.comments;
+
+import java.text.*;
+import oxdoc.*;
 
 public class FieldComment extends BaseComment {
    final int MODIFIER_INTERNAL = 300;

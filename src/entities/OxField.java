@@ -17,6 +17,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
+
+package oxdoc.entities;
+
+import oxdoc.*;
+import oxdoc.comments.*;
+
 public class OxField extends OxEntity {
    public String Declaration;
    public OxClass.Visibility _visibility;

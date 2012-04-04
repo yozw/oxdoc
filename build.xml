@@ -11,7 +11,6 @@
   <property name="bin"     location="bin"/>
   <property name="lib"     location="lib"/>
   <property name="css"     location="css"/>
-  <property name="parser"  location="src/parser" />
   <property name="build"   location="build"/>
   <property name="docs"    location="docs"/>
 
@@ -24,16 +23,19 @@
 
   <target name="clean">
     <delete file="${bin}/oxdoc.jar"/>
+    <delete file="${src}/Constants.java"/>
     <delete dir="${build}"/>
     <delete dir="${docs}"/>
-    <delete dir="${parser}"/>
+    <delete>
+       <fileset dir="${src}/parser" includes="*.java"/>
+    </delete>    
     <delete dir="${zips}"/>
   </target>
 
 
   <target name="parser">
-     <mkdir dir="${parser}"/>
-     <javacc target="${src}/ox.jj" outputdirectory="${parser}"
+     <mkdir dir="${src}/parser"/>
+     <javacc target="${src}/parser/ox.jj" outputdirectory="${src}/parser"
       javacchome="/usr/share/java"
       debuglookahead="false"
       debugparser="false"
@@ -58,7 +60,7 @@
   <target name="compile" depends="parser">
      <mkdir dir="${build}"/>
      <javac srcdir="${src}/writeconstants" destdir="${build}" nowarn="on" debug="${debug}" includeantruntime="off" />
-     <java classname="WriteConstants" classpath="${build}" output="${parser}/Constants.java">
+     <java classname="WriteConstants" classpath="${build}" output="${src}/Constants.java">
          <arg value="${version}" />
      </java>
      <delete file="${build}/OxDoc.class"/>
@@ -78,7 +80,7 @@
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}">
         <manifest> 
 	  	   <attribute name="Built-By" value="${user.name}" />  
-		   <attribute name="Main-Class" value="OxDocCmd" />  
+		   <attribute name="Main-Class" value="oxdoc.OxDocCmd" />  
 		   <attribute name="Class-Path" value="jregex.jar" />
         </manifest> 
     </jar>

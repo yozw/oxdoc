@@ -18,6 +18,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
+package oxdoc;
+
 public interface Logger {
    void writeMessage(String message, int Code);
 }

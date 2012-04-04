@@ -18,8 +18,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
+package oxdoc;
+
 import java.util.*;
 import java.io.*;
+
+import oxdoc.parser.*;
+import oxdoc.gui.*;
+import oxdoc.setup.*;
 
 public class OxDocCmd implements Logger {
    private OxDoc oxdoc = null;

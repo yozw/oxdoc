@@ -18,10 +18,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
+package oxdoc;
+
 import java.util.*;
 import java.io.*;
 import java.text.*;
 
+import oxdoc.entities.*;
+import oxdoc.html.*;
 
 public class Documentor {
    private OxProject project = null;
@@ -31,6 +35,11 @@ public class Documentor {
    public Documentor(OxDoc oxdoc) {
       this.oxdoc = oxdoc;
       this.project = oxdoc.project;
+      constructTableSpecs();
+   }
+
+   private void constructTableSpecs()
+   {
    }
 
    public void generateDocs() throws Exception {
@@ -61,14 +70,22 @@ public class Documentor {
       OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, oxdoc);
       int iconType = FileManager.FILES; 
       ArrayList files = project.files();
-      output.writeln("<h2><span class=\"icon\">" + oxdoc.fileManager.largeIcon(iconType) + "</span><span class=\"text\">" + sectionTitle + "</span></h2>");
-      output.writeln("<table class=\"table_of_contents\">");
+
+      Header header = new Header(oxdoc, 2, iconType, sectionTitle);
+      output.writeln(header);
+
+      Table fileTable = new Table(oxdoc);
+      fileTable.specs().cssClass = "table_of_contents";
+      fileTable.specs().columnCssClasses.add("file");
+      fileTable.specs().columnCssClasses.add("description");
+
       for (int i = 0; i < files.size(); i++) {
          OxFile file = (OxFile) files.get(i);
-         output.writeln("<tr><td class=\"file\">" + file.smallIcon() + project.linkToEntity(file) + "</td>");
-         output.writeln("<td class=\"description\">" + file.description() + "</td></tr>");
+         String[] row = { file.smallIcon() + project.linkToEntity(file), file.description() };
+         fileTable.addRow(row);
       }
-      output.writeln("</table>");
+      output.writeln(fileTable);
+
       output.close();
    }
 

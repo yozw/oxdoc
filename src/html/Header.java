@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols
+oxdoc (c) Copyright 2005-2012 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,22 +18,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
-package oxdoc.comments;
+package oxdoc.html;
 
+import java.util.*;
+import java.io.*;
+import java.text.*;
 import oxdoc.*;
 
-public class CommentList extends BaseCommentBlock {
-   public CommentList(OxProject project) {
-      super(project);
+public class Header extends Element {
+
+   String title;
+   int level;
+   int iconType;
+
+   public Header (OxDoc oxdoc, int level, int iconType, String title) 
+   {
+       super(oxdoc);
+
+       this.oxdoc = oxdoc;
+       this.level = level;
+       this.iconType = iconType;
+       this.title = title;
    }
 
-   protected String renderHTML() {
-      String out = "<ul>";
-
-      for (int i = 0; i < size(); i++)
-         out += "<li>" + ((String) get(i)).trim() + "\n";
-      out += "</li>";
-
-      return out;
+   protected void render(StringBuffer buffer)
+   {
+      Object args[] = {"" + level, oxdoc.fileManager.largeIcon(iconType), title};
+      buffer.append(MessageFormat.format("<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n", args));
    }
+
 }
+
+

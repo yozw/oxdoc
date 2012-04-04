@@ -17,6 +17,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
+
+package oxdoc.entities;
+
+import oxdoc.*;
+import oxdoc.comments.*;
+
 public class OxEntity {
    private String name;
    protected OxFile _parentFile = null;
@@ -83,7 +89,7 @@ public class OxEntity {
       return (_parentFile == null) ? "" : _parentFile.url();
    }
 
-   public BaseComment setComment(String comment) throws ParseException {
+   public BaseComment setComment(String comment) throws Exception {
       _comment.setText(comment);
 
       return _comment;

@@ -22,6 +22,8 @@
  *
  */
 
+package oxdoc;
+
 import java.util.Comparator;
 
 /**

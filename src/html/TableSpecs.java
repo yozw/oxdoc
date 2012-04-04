@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols
+oxdoc (c) Copyright 2005-2012 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,22 +18,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
-package oxdoc.comments;
+package oxdoc.html;
 
-import oxdoc.*;
+import java.util.*;
 
-public class CommentList extends BaseCommentBlock {
-   public CommentList(OxProject project) {
-      super(project);
-   }
-
-   protected String renderHTML() {
-      String out = "<ul>";
-
-      for (int i = 0; i < size(); i++)
-         out += "<li>" + ((String) get(i)).trim() + "\n";
-      out += "</li>";
-
-      return out;
-   }
+public class TableSpecs {
+   public String cssClass = null;
+   public ArrayList columnCssClasses = new ArrayList();      
 }
+
+

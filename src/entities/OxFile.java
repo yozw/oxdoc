@@ -17,8 +17,12 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
-import java.util.*;
 
+package oxdoc.entities;
+
+import java.util.*;
+import oxdoc.*;
+import oxdoc.comments.*;
 
 public class OxFile extends OxEntity {
    private OxEntityList _functions = new OxEntityList();

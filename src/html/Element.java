@@ -1,6 +1,6 @@
 /**
 
-oxdoc (c) Copyright 2005 by Y. Zwols
+oxdoc (c) Copyright 2005-2012 by Y. Zwols
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,22 +18,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
-package oxdoc.comments;
+package oxdoc.html;
 
+import java.util.*;
+import java.io.*;
+import java.text.*;
 import oxdoc.*;
 
-public class CommentList extends BaseCommentBlock {
-   public CommentList(OxProject project) {
-      super(project);
+
+public class Element {
+
+   protected OxDoc oxdoc;
+
+   public Element (OxDoc oxdoc) 
+   {
+      this.oxdoc = oxdoc;
    }
 
-   protected String renderHTML() {
-      String out = "<ul>";
-
-      for (int i = 0; i < size(); i++)
-         out += "<li>" + ((String) get(i)).trim() + "\n";
-      out += "</li>";
-
-      return out;
+   protected void render(StringBuffer buffer)
+   {
    }
+
+   public String toString()
+   {
+      StringBuffer bf = new StringBuffer();
+      render(bf);
+      return bf.toString();
+   }
+
 }
+
+

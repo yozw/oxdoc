@@ -18,7 +18,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
+package oxdoc;
+
 import java.util.*;
+import oxdoc.entities.*;
+import oxdoc.html.*;
 
 class SymbolIndex {
 
@@ -156,7 +160,11 @@ class SymbolIndex {
       sortEntriesByName(indexEntries);
 
       // write table
-      output.writeln("<table class=\"index\">");
+      Table table = new Table(oxdoc);
+      table.specs().cssClass = "index";
+      table.specs().columnCssClasses.add("declaration");
+      table.specs().columnCssClasses.add("description");
+
       for (int i = 0; i < indexEntries.size(); i++) {
          IndexEntry entry = (IndexEntry) indexEntries.get(i);
          OxEntity entity = entry.entity;
@@ -170,11 +178,10 @@ class SymbolIndex {
                  description += (j==0 ? "" : ", ") + project.linkToEntity(memberEntity, memberEntity.parentClass().name());
              } 
          }
-         output.write((i % 2 == 0) ? "<tr class=\"even_row\">" : "<tr class=\"odd_row\">");
-         output.write("<td class=\"declaration\" valign=\"top\">" + entity.smallIcon() + project.linkToEntity(entity, true) + "</td>");
-         output.write("<td class=\"description\" valign=\"top\">" + description + "</td>");
-         output.writeln("</tr>");
+
+         String[] row = { entity.smallIcon() + project.linkToEntity(entity), description };
+         table.addRow(row);
       }
-      output.writeln("</table>");
+      output.writeln(table);
    }
 }

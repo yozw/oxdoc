@@ -18,7 +18,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 **/
 
+package oxdoc.comments;
+
 import java.util.HashMap;
+import oxdoc.*;
+
 
 public class BaseComment {
    final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;
@@ -126,7 +130,7 @@ public class BaseComment {
 
    /** Feeds an input comment block as a string and parses it. It interprets @<section name> blocks and
    passes the contents to AddToSection. **/
-   public void setText(String text) throws ParseException {
+   public void setText(String text) throws Exception {
       if (!text.startsWith("/**") || !text.endsWith("**/"))
          return;
       text = text.substring(3, text.length() - 3).trim();
