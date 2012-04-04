@@ -1,13 +1,18 @@
 TO DO LIST for oxdoc:
 
-* update documentation: icons / mathML / @internal / -showinternal / #import 
-* Check newer version of http://www1.chapman.edu/~jipsen/mathml/asciimath.html
-  - Check license!!
+* update documentation: icons  / @internal / -showinternal / #import 
 
 
-* update OxDocGui: formulas radiobox, on linux: generate bash script, generate oxdoc.xml,
-  add other options.
-  
+FIXED APRIL 4 2012:
+* Removed setup utility => not really necessary anymore because 
+  Mathjax is default, and latex and dvipdfm are searced for on path
+* Refactored HTML output refactoring
+* Added global variable support
+* Enumeration elements are now in the index
+* Removed AsciiMathML support
+* Fixed GUI
+* Beautified java code
+
 
 FIXED MARCH 23 2012:
 * fixed the enumeration declaration problem (enum { N=1, M =N+1} is now parsed properly)

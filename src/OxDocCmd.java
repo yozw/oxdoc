@@ -62,7 +62,7 @@ public class OxDocCmd implements Logger {
 		return totalFiles;
 	}
 
-	public void examineCommandLine(String[] args) throws Exception {
+	public void examineCommandLine(String[] args) throws IllegalArgumentException {
 		// examine command line
 		for (int i = 0; i < args.length; i++) {
 			if (!args[i].startsWith("-")) {
@@ -77,10 +77,10 @@ public class OxDocCmd implements Logger {
 
 			i++;
 			if (i == args.length)
-				throw new Exception("Value expected after option -" + option);
+				throw new IllegalArgumentException("Value expected after option -" + option);
 
 			if (!oxdoc.config.setOption(option, args[i]))
-				throw new Exception("Invalid option -" + option);
+				throw new IllegalArgumentException("Invalid option -" + option);
 		}
 	}
 
@@ -109,7 +109,12 @@ public class OxDocCmd implements Logger {
 		try {
 			// do configuration
 			oxdoc.config.load();
-			examineCommandLine(args);
+			try {
+				examineCommandLine(args);
+			} catch (IllegalArgumentException E) {
+				System.err.println("Error parsing command line. " + E.getMessage());
+				return;
+			}
 			oxdoc.config.validate();
 
 			// execute parsing and document generation
@@ -119,7 +124,9 @@ public class OxDocCmd implements Logger {
 				Logfile.close();
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println("----------------------------------------------");
+			System.err.println("An error has occurred");
+			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
 	} 
