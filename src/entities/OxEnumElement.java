@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 package oxdoc.entities;
 
 import oxdoc.FileManager;
-import oxdoc.comments.EnumComment;
 
 public class OxEnumElement extends OxEntity {
 	private OxEnum oxEnum;

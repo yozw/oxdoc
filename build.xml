@@ -9,7 +9,6 @@
   <property name="src"     location="src"/>
   <property name="srcmisc" location="src/misc"/>
   <property name="bin"     location="bin"/>
-  <property name="lib"     location="lib"/>
   <property name="css"     location="css"/>
   <property name="build"   location="build"/>
   <property name="docs"    location="docs"/>
@@ -142,8 +141,6 @@
     <copy todir="${pkg-src}/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
-    <copy todir="${pkg-src}/lib">    <fileset dir="lib" defaultexcludes="yes" />   </copy>
-
     <zip destfile="${pkg-src}.zip" basedir="${pkg-src}">
         <zipfileset dir="${pkg-src}" prefix="oxdoc/" />
     </zip>
