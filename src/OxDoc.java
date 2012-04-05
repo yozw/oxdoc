@@ -28,9 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Enumeration;
 
-import jregex.util.io.PathPattern;
 import oxdoc.parser.Parser;
 
 public class OxDoc {
@@ -67,12 +65,9 @@ public class OxDoc {
 	}
 
 	public void addFiles(String filespec) throws Exception {
-		PathPattern pp = new PathPattern(new File(filespec).getAbsolutePath());
-		Enumeration e = pp.enumerateFiles();
-		while (e.hasMoreElements()) {
-			File f = (File) e.nextElement();
-			addFile(f);
-		}
+		Iterable<File> files = PathMatcher.scan(filespec);
+		for (File file: files)
+			addFile(file);
 	}
 
 	public void addFile(File file) throws Exception {

@@ -65,7 +65,7 @@
      </java>
      <delete file="${build}/OxDoc.class"/>
      <delete file="${build}/Constants.class"/>
-     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" classpath="${lib}/jregex.jar" includeantruntime="off"  />
+     <javac srcdir="${src}" destdir="${build}" nowarn="on" debug="${debug}" includeantruntime="off"  />
   </target>
 
 
@@ -76,12 +76,10 @@
     <copy todir="${build}/oxdoc/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
-    <copy file="${lib}/jregex.jar" todir="${bin}" />
     <jar jarfile="${bin}/oxdoc.jar" basedir="${build}">
         <manifest> 
 	  	   <attribute name="Built-By" value="${user.name}" />  
 		   <attribute name="Main-Class" value="oxdoc.OxDocCmd" />  
-		   <attribute name="Class-Path" value="jregex.jar" />
         </manifest> 
     </jar>
   </target>
@@ -110,7 +108,6 @@
     <copy file="${srcmisc}/oxdoc.bat"         todir="${pkg-bin}/bin" />
     <copy file="${srcmisc}/oxdocgui.bat"      todir="${pkg-bin}/bin" />
     <copy file="${bin}/oxdoc.jar"             todir="${pkg-bin}/bin" />
-    <copy file="${lib}/jregex.jar"            todir="${pkg-bin}/bin" />
     <copy todir="${pkg-bin}/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
     </copy>
