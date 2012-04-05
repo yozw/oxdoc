@@ -323,7 +323,9 @@ public class Documentor {
 			if (entity.declaration() != null)
 				output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
 
+			output.writeln("<dl><dd>");
 			output.writeln(entity.comment());
+			output.writeln("</dd></dl>");
 		}
 	}
 

@@ -54,15 +54,16 @@ public class FieldComment extends BaseComment {
 	}
 
 	public String toString() {
-		String out = "<dl>\n<dd>" + longdescription() + "<dl>\n";
+		String extraInfo = "";
 
-		out += generateSection("Example", "example", example());
-		out += generateSection("Comments", "comments", comments());
-		out += generateSection("See also", "seealso", see());
+		extraInfo += generateSection("Example", "example", example());
+		extraInfo += generateSection("Comments", "comments", comments());
+		extraInfo += generateSection("See also", "seealso", see());
+		
+		if (extraInfo.length() > 0)
+			extraInfo = "\n<dl>" + extraInfo + "</dl>";
 
-		out += "</dl></dd>\n</dl>";
-
-		return out;
+		return longdescription() + extraInfo;
 	}
 
 	public boolean hasInternalModifier() {

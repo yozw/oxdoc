@@ -66,17 +66,18 @@ public class ClassComment extends BaseComment {
 	}
 
 	public String toString() {
-		String out = longdescription() + "\n<dl>";
+		String extraInfo = "";
 
-		out += generateSection("Author", "author", _author);
-		out += generateSection("Version", "version", _version);
+		extraInfo += generateSection("Author", "author", _author);
+		extraInfo += generateSection("Version", "version", _version);
 
-		out += generateSection("Example", "example", example());
-		out += generateSection("Comments", "comments", comments());
-		out += generateSection("See also", "seealso", see());
+		extraInfo += generateSection("Example", "example", example());
+		extraInfo += generateSection("Comments", "comments", comments());
+		extraInfo += generateSection("See also", "seealso", see());
 
-		out += "</dl>";
+		if (extraInfo.length() > 0)
+			extraInfo = "<dl>" + extraInfo + "</dl>";
 
-		return out;
+		return longdescription() + extraInfo;
 	}
 }

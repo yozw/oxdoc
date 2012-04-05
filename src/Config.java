@@ -195,16 +195,15 @@ public class Config {
 		System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
 		System.out.println("                           methods are: latex, mathml, mathjax, plain");
 		System.out.println("                           (default=mathjax)");
-		System.out.println("    -icons                 Enables icons (default)");
 		System.out.println("    -noicons               Disables icons");
 		System.out
 				.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
 		System.out.println("    -projectname \"name\"    Specifies the name of the project");
 		System.out.println("    -showinternals         Enables documentation of internal methods/fields");
-		System.out.println("    -windowtitle \"title\"   Specifies a browser title");
 		System.out.println("    -uplevel               Adds a link \"Up level\" in the header");
+		System.out.println("    -windowtitle \"title\"   Specifies a browser title");
 		System.out.println("");
-		System.out.println("Options for third-party software:");
+		System.out.println("Options for LaTeX formula generation:");
 		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
 		System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
 		System.out.println("                           The color is either an HTML color code of");

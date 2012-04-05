@@ -82,17 +82,18 @@ public class FunctionComment extends BaseComment {
 	}
 
 	public String toString() {
-		String out = "<dl>\n<dd>" + longdescription() + "<dl>\n";
+		String extraInfo = "";
 
-		out += generateSection("Parameters", "parameters", params());
-		out += generateSection("Returns", "returns", returns());
-		out += generateSection("Example", "example", example());
-		out += generateSection("Comments", "comments", comments());
-		out += generateSection("See also", "seealso", see());
+		extraInfo += generateSection("Parameters", "parameters", params());
+		extraInfo += generateSection("Returns", "returns", returns());
+		extraInfo += generateSection("Example", "example", example());
+		extraInfo += generateSection("Comments", "comments", comments());
+		extraInfo += generateSection("See also", "seealso", see());
 
-		out += "</dl></dd>\n</dl>";
+		if (extraInfo.length() > 0)
+			extraInfo = "\n<dl>" + extraInfo + "</dl>";
 
-		return out;
+		return longdescription() + extraInfo;
 	}
 
 	public BaseCommentBlock params() {
