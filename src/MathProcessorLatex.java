@@ -28,26 +28,21 @@ public class MathProcessorLatex extends MathProcessor {
 	}
 
 	public String ProcessFormula(String formula, boolean isInline) {
-		String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}")
-				+ formula;
-		String filename = oxdoc.latexImageManager
-				.getFormulaFilename(extFormula);
+		String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
+		String filename = oxdoc.latexImageManager.getFormulaFilename(extFormula);
 
-		return "<img class=\"latex\" src=\""
-				+ oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula
-				+ "\">";
+		return "<img class=\"latex\" src=\"" + oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
 	}
 
 	public boolean Supported(OxDoc oxdoc) {
 		if (!(new File(oxdoc.config.Latex)).exists()) {
-			oxdoc.warning("LaTeX executable not found. LaTeX support disabled (looking for "
-					+ oxdoc.config.Latex + ")");
+			oxdoc.warning("LaTeX executable not found. LaTeX support disabled (looking for " + oxdoc.config.Latex + ")");
 
 			return false;
 		}
 		if (!(new File(oxdoc.config.Dvipng)).exists()) {
-			oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for "
-					+ oxdoc.config.Dvipng + ")");
+			oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + oxdoc.config.Dvipng
+					+ ")");
 
 			return false;
 		}

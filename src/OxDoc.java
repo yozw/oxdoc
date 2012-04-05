@@ -60,13 +60,13 @@ public class OxDoc {
 	}
 
 	public static String aboutText() {
-		return ProductName + " " + Version + " [" + Constants.COMPILETIME
-				+ "]\n" + CopyrightNotice + "\n\n" + LicenseNotice;
+		return ProductName + " " + Version + " [" + Constants.COMPILETIME + "]\n" + CopyrightNotice + "\n\n"
+				+ LicenseNotice;
 	}
 
 	public void addFiles(String filespec) throws Exception {
 		Iterable<File> files = PathMatcher.scan(filespec);
-		for (File file: files)
+		for (File file : files)
 			addFile(file);
 	}
 
@@ -79,11 +79,9 @@ public class OxDoc {
 		Preprocessor p = new Preprocessor(this, bufferWriter);
 		p.ProcessFile(file);
 
-		ByteArrayInputStream bufferIn = new ByteArrayInputStream(
-				bufferStream.toByteArray());
+		ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 
-		Parser parser = new Parser(bufferIn, this, project.addFile(file
-				.getName()), project);
+		Parser parser = new Parser(bufferIn, this, project.addFile(file.getName()), project);
 		parser.OxFileDefinition();
 	}
 
@@ -103,8 +101,7 @@ public class OxDoc {
 	}
 
 	public void messageStream(InputStream inputStream) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				inputStream));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
 		while (true) {
 			String data = reader.readLine();

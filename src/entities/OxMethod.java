@@ -36,17 +36,14 @@ public class OxMethod extends OxEntity {
 	}
 
 	OxMethod(String name, OxClass oxclass) {
-		super(name, oxclass,
-				new FunctionComment(oxclass.parentFile().project()), oxclass
-						.parentFile());
+		super(name, oxclass, new FunctionComment(oxclass.parentFile().project()), oxclass.parentFile());
 
 		setIconType(FileManager.METHOD);
 	}
 
 	public String url() {
 		if (parentClass() != null)
-			return parentFileUrl() + "#" + parentClass().name() + "___"
-					+ displayName();
+			return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
 		else
 			return parentFileUrl() + "#" + displayName();
 	}
@@ -58,7 +55,8 @@ public class OxMethod extends OxEntity {
 	}
 
 	public OxClass.Visibility visibility() {
-		return OxClass.Visibility.Public;  // every method is public in the current version of Ox
+		return OxClass.Visibility.Public; // every method is public in the
+											// current version of Ox
 	}
 
 	public String modifiers() {

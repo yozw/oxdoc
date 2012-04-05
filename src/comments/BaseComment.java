@@ -25,8 +25,7 @@ import java.util.HashMap;
 import oxdoc.OxProject;
 
 public class BaseComment {
-	final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3,
-			SECTION_SEE = 4, SECTION_SORTKEY = 5;
+	final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;
 
 	private String _text = "";
 	private String _description = "";
@@ -146,8 +145,7 @@ public class BaseComment {
 			if (i == text.length())
 				return text;
 			char nextChar = text.charAt(i + 1);
-			if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r')
-					|| (nextChar == '\t'))
+			if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r') || (nextChar == '\t'))
 				return text.substring(0, i + 1);
 		}
 
@@ -182,13 +180,11 @@ public class BaseComment {
 
 				if (isModifier(commandName))
 					processModifier(getModifierId(commandName));
-				else if (isSetting(commandName))
-				{
+				else if (isSetting(commandName)) {
 					words = sections[i].split("[\t\n ]", 3);
 					textLine = (words.length > 2) ? words[2] : "";
 					processSetting(getSettingId(commandName), words[1]);
-				}
-				else if (isSection(commandName))
+				} else if (isSection(commandName))
 					curSection = getSectionId(commandName);
 				else
 					textLine = "@" + commandName + " " + textLine;
@@ -204,7 +200,10 @@ public class BaseComment {
 		_longdescription.add(description);
 	}
 
-	/** Short description of the entity, i.e. the part before the first period (.) **/
+	/**
+	 * Short description of the entity, i.e. the part before the first period
+	 * (.)
+	 **/
 	public String description() {
 		return project.oxdoc.textProcessor.process(_description);
 	}

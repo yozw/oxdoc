@@ -42,8 +42,8 @@ public class TextProcessor {
 
 		output = "";
 		for (int i = 0; i < lines.length; i++)
-			if ((i > 0) && (i < lines.length - 1) && isEmptyLine(lines[i])
-					&& !isEmptyLine(lines[i - 1]) && !isEmptyLine(lines[i + 1]))
+			if ((i > 0) && (i < lines.length - 1) && isEmptyLine(lines[i]) && !isEmptyLine(lines[i - 1])
+					&& !isEmptyLine(lines[i + 1]))
 				output += "<P/>\n";
 			else
 				output += lines[i];
@@ -80,14 +80,11 @@ public class TextProcessor {
 			} else
 				formula = text.substring(m.start() + 1, m.end() - 1);
 
-			String replacement = oxdoc.config.MathProcessor.ProcessFormula(
-					formula, isInline);
+			String replacement = oxdoc.config.MathProcessor.ProcessFormula(formula, isInline);
 
 			Object[] args = { isInline ? "expression" : "equation", replacement };
-			replacement = MessageFormat.format(
-					"<span class=\"{0}\">{1}</span>", args);
-			m.appendReplacement(myStringBuffer,
-					Matcher.quoteReplacement(replacement));
+			replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);
+			m.appendReplacement(myStringBuffer, Matcher.quoteReplacement(replacement));
 		}
 
 		return m.appendTail(myStringBuffer).toString();

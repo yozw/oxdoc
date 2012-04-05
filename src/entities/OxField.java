@@ -37,16 +37,14 @@ public class OxField extends OxEntity {
 	}
 
 	OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
-		super(name, oxclass, new FieldComment(oxclass.parentFile().project()),
-				oxclass.parentFile());
+		super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
 		setIconType(FileManager.FIELD);
 		_visibility = visibility;
 	}
 
 	public String url() {
 		if (parentClass() != null)
-			return parentFileUrl() + "#" + parentClass().name() + "___"
-					+ displayName();
+			return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
 		else
 			return parentFileUrl() + "#" + displayName();
 
@@ -78,8 +76,7 @@ public class OxField extends OxEntity {
 	}
 
 	public boolean isInternal() {
-		return ((FieldComment) comment()).hasInternalModifier()
-				|| (visibility() != OxClass.Visibility.Public);
+		return ((FieldComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
 	}
 
 }

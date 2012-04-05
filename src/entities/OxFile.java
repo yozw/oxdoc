@@ -55,8 +55,7 @@ public class OxFile extends OxEntity {
 		String[] _elements = new String[elements.size()];
 		for (int i = 0; i < elements.size(); i++)
 			_elements[i] = elements.get(i).toString();
-		return (OxEnum) _enums
-				.add(new OxEnum(alternativeName, _elements, this));
+		return (OxEnum) _enums.add(new OxEnum(alternativeName, _elements, this));
 	}
 
 	public OxClass addClass(String name) {
@@ -82,9 +81,8 @@ public class OxFile extends OxEntity {
 	public ArrayList variables() {
 		return _variables.sortedList();
 	}
-	
-	public ArrayList functionsAndVariables()
-	{
+
+	public ArrayList functionsAndVariables() {
 		OxEntityList newList = new OxEntityList();
 		newList.addAll(_functions);
 		newList.addAll(_variables);

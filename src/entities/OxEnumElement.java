@@ -24,7 +24,6 @@ import oxdoc.FileManager;
 
 public class OxEnumElement extends OxEntity {
 	private OxEnum oxEnum;
-	
 
 	OxEnumElement(String name, OxEnum oxEnum) {
 		super(name, null, null, oxEnum.project());
@@ -35,9 +34,8 @@ public class OxEnumElement extends OxEntity {
 	public String url() {
 		return oxEnum.url();
 	}
-	
-	public String referenceName()
-	{
+
+	public String referenceName() {
 		return oxEnum.referenceName() + "$$" + name();
 	}
 
@@ -49,8 +47,7 @@ public class OxEnumElement extends OxEntity {
 		return oxEnum.isInternal();
 	}
 
-	public OxEnum parentEnum()
-	{
+	public OxEnum parentEnum() {
 		return oxEnum;
 	}
 }

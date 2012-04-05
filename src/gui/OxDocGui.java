@@ -34,8 +34,7 @@ public class OxDocGui {
 					if (fancyLook)
 						JFrame.setDefaultLookAndFeelDecorated(true);
 					else
-						UIManager.setLookAndFeel(UIManager
-								.getSystemLookAndFeelClassName());
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
 				}
 

@@ -67,14 +67,12 @@ public class Config {
 			Dvipng = findInPath("dvipng");
 		}
 	}
-	
-	private String findInPath(String fileName)
-	{
+
+	private String findInPath(String fileName) {
 		String[] paths;
 		paths = System.getenv("PATH").split(File.pathSeparator);
-		
-		for (int i = 0; i < paths.length; i++)
-		{
+
+		for (int i = 0; i < paths.length; i++) {
 			File file = new File(paths[i] + File.separatorChar + fileName);
 			if (file.exists())
 				return file.getAbsolutePath();
@@ -115,8 +113,7 @@ public class Config {
 			return out.trim();
 		} catch (Exception e) {
 			if (oxdoc != null)
-				oxdoc.warning("Color specification " + color
-						+ " invalid. Ignored. (" + e.toString() + ")");
+				oxdoc.warning("Color specification " + color + " invalid. Ignored. (" + e.toString() + ")");
 
 			return null;
 		}
@@ -129,8 +126,7 @@ public class Config {
 			return new MathProcessorMathjax(oxdoc);
 		if (value.equals("plain"))
 			return new MathProcessorPlain(oxdoc);
-		throw new Exception("Formula specification " + value
-				+ " invalid. Ignored.");
+		throw new Exception("Formula specification " + value + " invalid. Ignored.");
 	}
 
 	String[] concat(String[] A, String[] B) {
@@ -152,8 +148,7 @@ public class Config {
 			else if (name.equals("outputdir"))
 				OutputDir = FileManager.nativePath(value);
 			else if (name.equals("include"))
-				IncludePaths = concat(value.split(File.pathSeparator),
-						IncludePaths);
+				IncludePaths = concat(value.split(File.pathSeparator), IncludePaths);
 			else if (name.equals("imagebgcolor")) {
 				if (value.trim().equalsIgnoreCase("transparent"))
 					ImageBgColor = null;
@@ -194,51 +189,33 @@ public class Config {
 
 	public static void listOptions() {
 		System.out.println("Options for input:");
-		System.out
-				.println("    -include \"paths\"       Provides include search path");
+		System.out.println("    -include \"paths\"       Provides include search path");
 		System.out.println("");
 		System.out.println("Options for output:");
-		System.out
-				.println("    -formulas <method>     Specifies how to generate formulas. Available");
-		System.out
-				.println("                           methods are: latex, mathml, mathjax, plain");
+		System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
+		System.out.println("                           methods are: latex, mathml, mathjax, plain");
 		System.out.println("                           (default=mathjax)");
+		System.out.println("    -icons                 Enables icons (default)");
+		System.out.println("    -noicons               Disables icons");
 		System.out
-				.println("    -icons                 Enables icons (default)");
-		System.out.println("    -noico                 Disables icons");
-		System.out
-				.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc"
-						+ File.separator);
-		System.out
-				.println("    -projectname \"name\"    Specifies the name of the project");
-		System.out
-				.println("    -showinternals         Enables documentation of internal methods/fields");
-		System.out
-				.println("    -windowtitle \"title\"   Specifies a browser title");
-		System.out
-				.println("    -uplevel               Adds a link \"Up level\" in the header");
+				.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
+		System.out.println("    -projectname \"name\"    Specifies the name of the project");
+		System.out.println("    -showinternals         Enables documentation of internal methods/fields");
+		System.out.println("    -windowtitle \"title\"   Specifies a browser title");
+		System.out.println("    -uplevel               Adds a link \"Up level\" in the header");
 		System.out.println("");
 		System.out.println("Options for third-party software:");
-		System.out
-				.println("    -dvipng <executable>   Provides the path to the dvipng executable");
-		System.out
-				.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
-		System.out
-				.println("                           The color is either an HTML color code of");
-		System.out
-				.println("                           the form #RRGGBB, or 'transparent'");
-		System.out
-				.println("    -imagepath <path>      The directory in which LaTeX images will be written.");
-		System.out.println("                           Default: `images"
-				+ File.separator + "' in the output directory.");
-		System.out
-				.println("    -latex <executable>    Provides the path to the LaTeX executable");
-		System.out
-				.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
-		System.out
-				.println("                           import using \\usepackage");
-		System.out
-				.println("    -tempdir <dir>         Provides the directory in which temporary");
+		System.out.println("    -dvipng <executable>   Provides the path to the dvipng executable");
+		System.out.println("    -imagebgcolor <color>  Sets background color for LaTeX images");
+		System.out.println("                           The color is either an HTML color code of");
+		System.out.println("                           the form #RRGGBB, or 'transparent'");
+		System.out.println("    -imagepath <path>      The directory in which LaTeX images will be written.");
+		System.out.println("                           Default: `images" + File.separator
+				+ "' in the output directory.");
+		System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
+		System.out.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
+		System.out.println("                           import using \\usepackage");
+		System.out.println("    -tempdir <dir>         Provides the directory in which temporary");
 		System.out.println("                           files will be written");
 	}
 
@@ -262,8 +239,7 @@ public class Config {
 		if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
 			return FileManager.appDirFile(ConfigFile);
 		else
-			return System.getProperty("user.home") + File.separator + ".oxdoc"
-					+ File.separator + ConfigFile;
+			return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + ConfigFile;
 	}
 
 	public void load() {
@@ -280,8 +256,7 @@ public class Config {
 
 		try {
 			// Parse the file
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder();
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = builder.parse(file);
 
 			// Find the tags of interest

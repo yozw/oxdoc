@@ -62,8 +62,7 @@ public class SetupWindow implements ActionListener {
 
 	public SetupWindow() {
 		// Create and set up the window.
-		frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION
-				+ " setup");
+		frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION + " setup");
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -86,8 +85,7 @@ public class SetupWindow implements ActionListener {
 
 		Dimension dim = frame.getToolkit().getScreenSize();
 		Rectangle abounds = frame.getBounds();
-		frame.setLocation((dim.width - abounds.width) / 2,
-				(dim.height - abounds.height) / 2);
+		frame.setLocation((dim.width - abounds.width) / 2, (dim.height - abounds.height) / 2);
 	}
 
 	private JComponent setupCopyright() {
@@ -136,10 +134,8 @@ public class SetupWindow implements ActionListener {
 		JPanel optionPanel = new JPanel(layout);
 
 		JLabel labelLatex = new JLabel("Location of " + latexExecutable() + ":");
-		JLabel labelDvipng = new JLabel("Location of " + dvipngExecutable()
-				+ ":");
-		JLabel labelFormulas = new JLabel(
-				"Default setting for formula generation:");
+		JLabel labelDvipng = new JLabel("Location of " + dvipngExecutable() + ":");
+		JLabel labelFormulas = new JLabel("Default setting for formula generation:");
 
 		editLatex = new JTextField(20);
 		editDvipng = new JTextField(20);
@@ -198,19 +194,17 @@ public class SetupWindow implements ActionListener {
 			File dvipngFile = new File(getDvipng());
 			if (!latexFile.exists()) {
 				Object[] options = { "Cancel", "Ignore" };
-				int result = JOptionPane.showOptionDialog(frame,
-						"Warning: the file " + latexFile + " does not exist.",
-						"File does not exist", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+				int result = JOptionPane.showOptionDialog(frame, "Warning: the file " + latexFile + " does not exist.",
+						"File does not exist", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options,
+						options[0]);
 				if (result != 1)
 					return;
 			}
 			if (!dvipngFile.exists()) {
 				Object[] options = { "Cancel", "Ignore" };
 				int result = JOptionPane.showOptionDialog(frame,
-						"Warning: the file " + dvipngFile + " does not exist.",
-						"File does not exist", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+						"Warning: the file " + dvipngFile + " does not exist.", "File does not exist",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 				if (result != 1)
 					return;
 			}
@@ -220,10 +214,8 @@ public class SetupWindow implements ActionListener {
 
 			if (oxdocXmlFile.exists()) {
 				Object[] options = { "Ok", "Cancel" };
-				int result = JOptionPane.showOptionDialog(frame, "The file "
-						+ oxdocXmlFile + " already exists.\n"
-						+ "Click OK to overwrite the file.", "File exists",
-						JOptionPane.DEFAULT_OPTION,
+				int result = JOptionPane.showOptionDialog(frame, "The file " + oxdocXmlFile + " already exists.\n"
+						+ "Click OK to overwrite the file.", "File exists", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 				if (result != 0)
 					return;
@@ -233,10 +225,8 @@ public class SetupWindow implements ActionListener {
 
 			Writer output = new BufferedWriter(new FileWriter(oxdocXmlFile));
 			output.write("<oxdoc>\n");
-			output.write("   <option name=\"latex\" value=\"" + getLatex()
-					+ "\" />\n");
-			output.write("   <option name=\"dvipng\" value=\"" + getDvipng()
-					+ "\" />\n");
+			output.write("   <option name=\"latex\" value=\"" + getLatex() + "\" />\n");
+			output.write("   <option name=\"dvipng\" value=\"" + getDvipng() + "\" />\n");
 			String formulas = null;
 			if (radioLatex.isSelected())
 				formulas = "latex";
@@ -246,19 +236,15 @@ public class SetupWindow implements ActionListener {
 				formulas = "plain";
 			if (formulas != null)
 				;
-			output.write("   <option name=\"formulas\" value=\"" + formulas
-					+ "\" />\n");
+			output.write("   <option name=\"formulas\" value=\"" + formulas + "\" />\n");
 
 			output.write("</oxdoc>\n");
 			output.close();
 
 			Object[] options = { "No", "Yes" };
-			int result = JOptionPane.showOptionDialog(frame,
-					"Successfully wrote configuration into file "
-							+ oxdocXmlFile
-							+ ".\nDo you want to exit this setup program?",
-					"Success", JOptionPane.DEFAULT_OPTION,
-					JOptionPane.INFORMATION_MESSAGE, null, options, options[1]);
+			int result = JOptionPane.showOptionDialog(frame, "Successfully wrote configuration into file "
+					+ oxdocXmlFile + ".\nDo you want to exit this setup program?", "Success",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[1]);
 			if (result == 1)
 				System.exit(1);
 		} catch (Exception E) {
@@ -281,8 +267,7 @@ public class SetupWindow implements ActionListener {
 	}
 
 	public static void showException(Exception E) {
-		JOptionPane.showMessageDialog(frame, E.getMessage(), "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frame, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static void showAbout() {

@@ -94,9 +94,7 @@ public class LatexImageManager extends ArrayList {
 
 			if (filename == null)
 				do
-					filename = "img"
-							+ (new Integer(++_imageCounter)).toString()
-							+ ".png";
+					filename = "img" + (new Integer(++_imageCounter)).toString() + ".png";
 				while (_filenames.get(filename) != null);
 
 			entry = new ImageEntry(formula, filename);
@@ -118,15 +116,13 @@ public class LatexImageManager extends ArrayList {
 
 	private void saveCache() {
 		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder();
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = builder.newDocument();
 
 			Element root = doc.createElement("cache");
 			doc.appendChild(root);
 
-			for (Enumeration elements = imageEntries.formulas().elements(); elements
-					.hasMoreElements();) {
+			for (Enumeration elements = imageEntries.formulas().elements(); elements.hasMoreElements();) {
 				ImageEntry e = (ImageEntry) elements.nextElement();
 				Element newElement = doc.createElement("image");
 				newElement.setAttribute("formula", e.formula());
@@ -142,8 +138,7 @@ public class LatexImageManager extends ArrayList {
 			Result result = new StreamResult(new FileWriter(file));
 
 			// Write the DOM document to the file
-			Transformer xformer = TransformerFactory.newInstance()
-					.newTransformer();
+			Transformer xformer = TransformerFactory.newInstance().newTransformer();
 			xformer.transform(source, result);
 		} catch (Exception e) {
 			oxdoc.warning("Error writing image cache. Don't worry.");
@@ -157,8 +152,7 @@ public class LatexImageManager extends ArrayList {
 				return;
 
 			// Parse the file
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance()
-					.newDocumentBuilder();
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = builder.parse(oxdoc.fileManager.imageCache());
 
 			// Find the tags of interest
@@ -178,8 +172,7 @@ public class LatexImageManager extends ArrayList {
 	}
 
 	public void makeLatexFiles() throws IOException {
-		for (Enumeration elements = imageEntries.formulas().elements(); elements
-				.hasMoreElements();) {
+		for (Enumeration elements = imageEntries.formulas().elements(); elements.hasMoreElements();) {
 			ImageEntry e = (ImageEntry) elements.nextElement();
 			if (e.needsGenerating)
 				makeLatexFile(e);
@@ -196,13 +189,11 @@ public class LatexImageManager extends ArrayList {
 		output.write("\\usepackage{amsmath}\n");
 
 		for (int i = 0; i < oxdoc.config.LatexPackages.size(); i++)
-			output.write("\\usepackage{"
-					+ (String) oxdoc.config.LatexPackages.get(i) + "}\n");
+			output.write("\\usepackage{" + (String) oxdoc.config.LatexPackages.get(i) + "}\n");
 		output.write("\\begin{document}\n");
 		output.write("\\pagestyle{empty}\n");
 		if (oxdoc.config.ImageBgColor != null)
-			output.write("\\special{background " + oxdoc.config.ImageBgColor
-					+ " }");
+			output.write("\\special{background " + oxdoc.config.ImageBgColor + " }");
 		output.write("\\begin{align*}\n");
 		output.write(e.formula() + "\n");
 		output.write("\\end{align*}\n");
@@ -214,12 +205,10 @@ public class LatexImageManager extends ArrayList {
 		File tempDir = new File(oxdoc.fileManager.tempDir());
 		File curDir = new File(".");
 		if (!tempDir.equals(curDir))
-			latexParams += MessageFormat.format(
-					" -aux-directory={1} -output-directory={1}",
+			latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}",
 					oxdoc.fileManager.tempDir());
 
-		run(oxdoc.config.Latex,
-				latexParams + " " + oxdoc.fileManager.tempFile("__oxdoc.tex"));
+		run(oxdoc.config.Latex, latexParams + " " + oxdoc.fileManager.tempFile("__oxdoc.tex"));
 
 		String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
 		if (oxdoc.config.ImageBgColor == null)
@@ -229,11 +218,9 @@ public class LatexImageManager extends ArrayList {
 		// fonts at the first run
 		for (int i = 0; i < 2; i++) {
 			// make sure the directory exists. If not, create it
-			(new File(oxdoc.fileManager.imageFile(e.filename())))
-					.getParentFile().mkdirs();
+			(new File(oxdoc.fileManager.imageFile(e.filename()))).getParentFile().mkdirs();
 
-			Object[] _args = { oxdoc.config.DvipngArg,
-					oxdoc.fileManager.imageFile(e.filename()),
+			Object[] _args = { oxdoc.config.DvipngArg, oxdoc.fileManager.imageFile(e.filename()),
 					oxdoc.fileManager.tempFile("__oxdoc.dvi") };
 			run(oxdoc.config.Dvipng, MessageFormat.format(dvipngParams, _args));
 		}
@@ -251,10 +238,8 @@ public class LatexImageManager extends ArrayList {
 			Process pp = run.exec(filename + " " + parameters);
 			oxdoc.message("");
 
-			StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(),
-					oxdoc, false);
-			StreamGobbler outputGobbler = new StreamGobbler(
-					pp.getInputStream(), oxdoc, true);
+			StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), oxdoc, false);
+			StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), oxdoc, true);
 
 			errorGobbler.start();
 			outputGobbler.start();

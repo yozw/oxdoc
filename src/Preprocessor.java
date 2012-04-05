@@ -66,15 +66,13 @@ public class Preprocessor {
 	private void ignoreIncludeFiles(String fileName, ArrayList tryFiles) {
 		if (!ignoredFiles.contains(fileName)) {
 			ignoredFiles.add(fileName);
-			String warning = "Included file " + fileName
-					+ " could not be opened. File will be ignored.";
+			String warning = "Included file " + fileName + " could not be opened. File will be ignored.";
 
 			if (oxdoc.config.Verbose) {
 				warning += "\n-- Looked for the following files:";
 
 				for (int i = 0; i < tryFiles.size(); i++)
-					warning += "\n   "
-							+ ((File) tryFiles.get(i)).getAbsoluteFile();
+					warning += "\n   " + ((File) tryFiles.get(i)).getAbsoluteFile();
 			}
 			oxdoc.warning(warning);
 		}
@@ -143,8 +141,8 @@ public class Preprocessor {
 		return line;
 	}
 
-	private int ProcessBlock(BufferedReader is, int endMarkers, boolean active,
-			File file, File mainFile) throws Exception {
+	private int ProcessBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile)
+			throws Exception {
 
 		String line;
 		ArrayList params = new ArrayList();
@@ -159,8 +157,7 @@ public class Preprocessor {
 				if (cmd == IFNDEF)
 					write = !write;
 
-				int lastCmd = ProcessBlock(is, ELSE | ENDIF, write && active,
-						file, mainFile);
+				int lastCmd = ProcessBlock(is, ELSE | ENDIF, write && active, file, mainFile);
 				if (lastCmd == ELSE)
 					ProcessBlock(is, ENDIF, (!write) && active, file, mainFile);
 				continue;
@@ -186,8 +183,7 @@ public class Preprocessor {
 				break;
 			case INCLUDE:
 				if (params.size() != 1)
-					throw new IOException(((cmd == IMPORT) ? "#import"
-							: "#include") + " requires 1 argument");
+					throw new IOException(((cmd == IMPORT) ? "#import" : "#include") + " requires 1 argument");
 				if (active) {
 					boolean lookLocal;
 					String fileSpec = (String) params.get(0);
@@ -201,8 +197,7 @@ public class Preprocessor {
 						oxdoc.warning("Invalid preprocessor clause: " + line);
 						break;
 					}
-					String fileName = fileSpec.substring(1,
-							fileSpec.length() - 1);
+					String fileName = fileSpec.substring(1, fileSpec.length() - 1);
 					// if (cmd == IMPORT)
 					// fileName += ".h";
 
@@ -214,17 +209,14 @@ public class Preprocessor {
 						// with a relative path is specified), or in the
 						// specified directory (if the filename has an absolute
 						// path);
-						String basePath = mainFile.getAbsoluteFile()
-								.getParent();
-						tryFiles.add(new File(basePath + File.separatorChar
-								+ fileName));
+						String basePath = mainFile.getAbsoluteFile().getParent();
+						tryFiles.add(new File(basePath + File.separatorChar + fileName));
 					}
 
 					// * the directories specified on the compiler command line
 					// (if any);
 					for (int i = 0; i < oxdoc.config.IncludePaths.length; i++)
-						tryFiles.add(new File(oxdoc.config.IncludePaths[i]
-								+ File.separatorChar + fileName));
+						tryFiles.add(new File(oxdoc.config.IncludePaths[i] + File.separatorChar + fileName));
 					// * in the current directory.
 					tryFiles.add(new File(fileName));
 

@@ -110,8 +110,7 @@ public class CmdWindow implements ActionListener, Logger {
 		fc.setSelectedFile(new File("oxdoc.log"));
 		if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION)
 			try {
-				Writer output = new BufferedWriter(new FileWriter(
-						fc.getSelectedFile()));
+				Writer output = new BufferedWriter(new FileWriter(fc.getSelectedFile()));
 				output.write(memo.getText());
 				output.close();
 			} catch (Exception E) {

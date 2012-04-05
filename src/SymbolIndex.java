@@ -85,19 +85,14 @@ class SymbolIndex {
 
 			if (entity instanceof OxClass)
 				addSingletonEntry(entity, "Class");
-			else if ((entity instanceof OxField)
-					&& (entity.parentClass() == null))
+			else if ((entity instanceof OxField) && (entity.parentClass() == null))
 				addSingletonEntry(entity, "Global variable");
 			else if (entity instanceof OxField)
 				addGroupedEntry(entity, entity, "Field");
 			else if (entity instanceof OxEnumElement) {
 				OxEnumElement element = (OxEnumElement) entity;
-				addSingletonEntry(
-						entity,
-						"Element of enumeration "
-								+ project.linkToEntity(element.parentEnum()));
-			} else if ((entity instanceof OxMethod)
-					&& (entity.parentClass() == null))
+				addSingletonEntry(entity, "Element of enumeration " + project.linkToEntity(element.parentEnum()));
+			} else if ((entity instanceof OxMethod) && (entity.parentClass() == null))
 				addSingletonEntry(entity, "Global function");
 			else if (entity instanceof OxMethod) {
 				OxMethod method = (OxMethod) entity;
@@ -111,12 +106,10 @@ class SymbolIndex {
 				// now, find furthest ancestor class that has the same method
 				OxClass ancestorClass = parentClass;
 				while ((ancestorClass.superClass() != null)
-						&& (ancestorClass.superClass().methodByName(
-								method.name()) != null))
+						&& (ancestorClass.superClass().methodByName(method.name()) != null))
 					ancestorClass = ancestorClass.superClass();
 
-				addGroupedEntry(ancestorClass.methodByName(method.name()),
-						entity, type);
+				addGroupedEntry(ancestorClass.methodByName(method.name()), entity, type);
 			}
 		}
 	}
@@ -127,8 +120,7 @@ class SymbolIndex {
 		return entry;
 	}
 
-	private IndexEntry addGroupedEntry(OxEntity ancestorEntity,
-			OxEntity entity, String type) {
+	private IndexEntry addGroupedEntry(OxEntity ancestorEntity, OxEntity entity, String type) {
 		IndexEntry entry = (IndexEntry) entries.get(ancestorEntity);
 		if (entry == null)
 			entry = new IndexEntry(ancestorEntity.name(), type, entity);
@@ -163,8 +155,7 @@ class SymbolIndex {
 				if (depth1 != depth2)
 					return depth2 - depth1;
 
-				return e1.name().toUpperCase()
-						.compareTo(e2.name().toUpperCase());
+				return e1.name().toUpperCase().compareTo(e2.name().toUpperCase());
 			}
 		});
 	}
@@ -192,16 +183,13 @@ class SymbolIndex {
 				sortOwningClassMembers(entry.owningClassMembers);
 				description += " of ";
 				for (int j = 0; j < entry.owningClassMembers.size(); j++) {
-					OxEntity memberEntity = (OxEntity) entry.owningClassMembers
-							.get(j);
+					OxEntity memberEntity = (OxEntity) entry.owningClassMembers.get(j);
 					description += (j == 0 ? "" : ", ")
-							+ project.linkToEntity(memberEntity, memberEntity
-									.parentClass().name());
+							+ project.linkToEntity(memberEntity, memberEntity.parentClass().name());
 				}
 			}
 
-			String[] row = { entity.smallIcon() + project.linkToEntity(entity),
-					description };
+			String[] row = { entity.smallIcon() + project.linkToEntity(entity), description };
 			table.addRow(row);
 		}
 		output.writeln(table);

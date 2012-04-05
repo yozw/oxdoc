@@ -33,16 +33,14 @@ public class OxEntity {
 	public String _declaration;
 	private OxClass _parentClass;
 
-	public OxEntity(String name, OxClass parentClass, BaseComment comment,
-			OxProject project) {
+	public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
 		this.name = name;
 		_project = project;
 		_comment = comment;
 		_parentClass = parentClass;
 	}
 
-	public OxEntity(String name, OxClass parentClass, BaseComment comment,
-			OxFile parentFile) {
+	public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
 		this.name = name;
 		_project = parentFile.project();
 		_comment = comment;
@@ -135,7 +133,7 @@ public class OxEntity {
 	}
 
 	public String sortKey() {
-		if ((comment() == null) || (comment().sortKey() == null)) 
+		if ((comment() == null) || (comment().sortKey() == null))
 			return name();
 		return comment().sortKey();
 	}

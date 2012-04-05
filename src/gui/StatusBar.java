@@ -140,8 +140,7 @@ public class StatusBar extends JPanel {
 	}
 
 	public static Border createComponentBorder() {
-		return BorderFactory.createCompoundBorder(
-				BorderFactory.createBevelBorder(BevelBorder.LOWERED),
+		return BorderFactory.createCompoundBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED),
 				BorderFactory.createEmptyBorder(0, 4, 0, 4));
 	}
 
@@ -181,8 +180,7 @@ public class StatusBar extends JPanel {
 		}
 	}
 
-	public void setStatusBarProgress(String msg, int minimum, int maximum,
-			int value) {
+	public void setStatusBarProgress(String msg, int minimum, int maximum, int value) {
 		if (false == _pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
 			_pnlLabelOrProgress.remove(0);
 			_pnlLabelOrProgress.add(_progressBar);

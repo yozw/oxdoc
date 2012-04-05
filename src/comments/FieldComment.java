@@ -40,9 +40,7 @@ public class FieldComment extends BaseComment {
 
 		Object[] args = { classname, name, text };
 
-		return MessageFormat
-				.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n",
-						args);
+		return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
 	}
 
 	protected boolean processModifier(int ModifierId) {
@@ -66,7 +64,7 @@ public class FieldComment extends BaseComment {
 
 		return out;
 	}
-	
+
 	public boolean hasInternalModifier() {
 		return _hasInternalModifier;
 	}

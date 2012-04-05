@@ -16,10 +16,8 @@ public class WriteConstants {
 		System.out.println("/* Generated code -- do not edit */");
 		System.out.println("package oxdoc;");
 		System.out.println("public class Constants {");
-		System.out.println("    public static final String COMPILETIME = \""
-				+ date + "\";");
-		System.out.println("    public static final String VERSION = \""
-				+ args[0] + "\";");
+		System.out.println("    public static final String COMPILETIME = \"" + date + "\";");
+		System.out.println("    public static final String VERSION = \"" + args[0] + "\";");
 		System.out.println("}");
 	}
 

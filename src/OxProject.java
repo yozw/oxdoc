@@ -47,8 +47,7 @@ public class OxProject {
 
 	public OxEntity addSymbol(OxEntity entity) {
 		if (getSymbol(entity.referenceName()) != null)
-			oxdoc.warning("Multiple declarations of symbol '"
-					+ entity.referenceName() + "'");
+			oxdoc.warning("Multiple declarations of symbol '" + entity.referenceName() + "'");
 		return _symbols.add(entity.referenceName(), entity);
 	}
 
@@ -77,8 +76,7 @@ public class OxProject {
 	public String linkToSymbol(String name) {
 		OxEntity entity = getSymbol(name);
 		if (entity == null) {
-			oxdoc.warning("Symbol '" + name
-					+ "' referenced to, but was not found");
+			oxdoc.warning("Symbol '" + name + "' referenced to, but was not found");
 
 			return name;
 		} else
@@ -102,8 +100,7 @@ public class OxProject {
 
 	public String linkToEntity(OxEntity entity, boolean useDisplayName) {
 		if (useDisplayName)
-			return "<a href=\"" + entity.url() + "\">" + entity.displayName()
-					+ "</a>";
+			return "<a href=\"" + entity.url() + "\">" + entity.displayName() + "</a>";
 		else
 			return "<a href=\"" + entity.url() + "\">" + entity.name() + "</a>";
 	}

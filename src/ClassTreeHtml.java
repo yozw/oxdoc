@@ -44,12 +44,11 @@ class ClassTreeHtml {
 			+ "table.tree td.text { padding-bottom: 8px; }\n"
 			+ "table.tree td.label { padding-left: 8px; padding-right: 32px; height: 1px; }";
 
-	private String script = "<![if !IE]>\n"
-			+ "<script>"
+	private String script = "<![if !IE]>\n" + "<script>"
 			+ "if (navigator.userAgent.indexOf('Firefox') != -1) { // firefox\n"
 			+ "   var elements = document.getElementsByClassName('fffix');\n"
-			+ "   for (var i = 0; i < elements.length; i++) elements[i].style.height = 'auto';\n"
-			+ "}\n" + "</script>\n" + "<![endif]>";
+			+ "   for (var i = 0; i < elements.length; i++) elements[i].style.height = 'auto';\n" + "}\n"
+			+ "</script>\n" + "<![endif]>";
 
 	public ClassTreeHtml(OxDoc oxdoc, ClassTree classTree) {
 		project = oxdoc.project;
@@ -74,13 +73,10 @@ class ClassTreeHtml {
 		output.writeln(script);
 	}
 
-	private void writeTree(OutputFile output, ArrayList classes,
-			String prependText, int remainingColumns) {
+	private void writeTree(OutputFile output, ArrayList classes, String prependText, int remainingColumns) {
 		String labelWrapper = "<td style=\"height:1px; width:auto;\" colspan=\"{1}\" class=\"fffix\">\n"
-				+ "<table class=\"labelwrapper\">\n"
-				+ "   <tbody><tr><td class=\"label\">{0}</td></tr>\n"
-				+ "   <tr class=\"bottom\"><td class=\"line\">{2}</td></tr>\n"
-				+ "</tbody></table>\n" + "</td>";
+				+ "<table class=\"labelwrapper\">\n" + "   <tbody><tr><td class=\"label\">{0}</td></tr>\n"
+				+ "   <tr class=\"bottom\"><td class=\"line\">{2}</td></tr>\n" + "</tbody></table>\n" + "</td>";
 
 		String textWrapper = "<td class=\"text\">{0}</td>";
 
@@ -102,8 +98,7 @@ class ClassTreeHtml {
 			else
 				output.writeln("<td class=\"line\"><div class=\"vline last\"><div class=\"hline\">&nbsp;</div></div></td>");
 
-			Object[] labelArgs = { project.linkToEntity(oxClass),
-					remainingColumns - 1, lineText };
+			Object[] labelArgs = { project.linkToEntity(oxClass), remainingColumns - 1, lineText };
 			output.writeln(MessageFormat.format(labelWrapper, labelArgs));
 
 			Object[] textArgs = { oxClass.description() };
@@ -116,8 +111,7 @@ class ClassTreeHtml {
 			else
 				addPrependText = "<td class=\"line\">&nbsp;</td>";
 
-			writeTree(output, childClasses,
-					prependText + addPrependText + "\n", remainingColumns - 1);
+			writeTree(output, childClasses, prependText + addPrependText + "\n", remainingColumns - 1);
 		}
 	}
 

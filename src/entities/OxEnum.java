@@ -30,12 +30,10 @@ public class OxEnum extends OxEntity {
 	public OxClass.Visibility _visibility;
 	private ArrayList _elements = new ArrayList();
 
-	OxEnum(String name, String[] elements, OxClass oxclass,
-			OxClass.Visibility visibility) {
-		super(name, oxclass, new EnumComment(oxclass.parentFile().project()),
-				oxclass.parentFile());
+	OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
+		super(name, oxclass, new EnumComment(oxclass.parentFile().project()), oxclass.parentFile());
 		setIconType(FileManager.ENUM);
-		
+
 		for (int i = 0; i < elements.length; i++)
 			_elements.add(new OxEnumElement(elements[i], this));
 		_visibility = visibility;
@@ -52,8 +50,7 @@ public class OxEnum extends OxEntity {
 
 	public String url() {
 		if (parentClass() != null)
-			return parentFileUrl() + "#" + parentClass().name() + "___"
-					+ displayName();
+			return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
 		else
 			return parentFileUrl() + "#" + displayName();
 	}
@@ -85,12 +82,10 @@ public class OxEnum extends OxEntity {
 	}
 
 	public boolean isInternal() {
-		return ((EnumComment) comment()).hasInternalModifier()
-				|| (visibility() != OxClass.Visibility.Public);
+		return ((EnumComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
 	}
 
-	public ArrayList elements()
-	{
+	public ArrayList elements() {
 		return _elements;
 	}
 }

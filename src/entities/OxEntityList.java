@@ -44,11 +44,10 @@ public class OxEntityList {
 		entities.put(name, entity);
 		return entity;
 	}
-	
-	public void addAll(OxEntityList list)
-	{
+
+	public void addAll(OxEntityList list) {
 		Collection c = list.entities.values();
-		for (Object entity: c)
+		for (Object entity : c)
 			add((OxEntity) entity);
 	}
 

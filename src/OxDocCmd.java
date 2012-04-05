@@ -99,8 +99,7 @@ public class OxDocCmd implements Logger {
 
 		if (emptyArray(args)) {
 			System.out.println("\nUsage is:");
-			System.out
-					.println("    java oxdoc [options] inputfile [inputfile ...]");
+			System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
 			Config.listOptions();
 
 			return;
@@ -129,7 +128,7 @@ public class OxDocCmd implements Logger {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
-	} 
+	}
 
 	// oxdoc entry point
 	public static void main(String[] args) {

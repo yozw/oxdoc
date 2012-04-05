@@ -28,7 +28,7 @@ public class Anchor extends Element {
 
 	public Anchor(OxDoc oxdoc, String name) {
 		super(oxdoc);
-		this.name= name;
+		this.name = name;
 	}
 
 	protected void render(StringBuffer buffer) {

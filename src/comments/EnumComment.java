@@ -49,7 +49,7 @@ public class EnumComment extends FieldComment {
 		}
 		return true;
 	}
-	
+
 	protected boolean processModifier(int ModifierId) {
 		if (super.processModifier(ModifierId))
 			return true;
@@ -60,11 +60,10 @@ public class EnumComment extends FieldComment {
 		return false;
 	}
 
-
 	public String alternativeName() {
 		return _alternativeName;
 	}
-	
+
 	public boolean hasInternalModifier() {
 		return _hasInternalModifier;
 	}

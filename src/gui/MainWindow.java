@@ -56,8 +56,7 @@ import oxdoc.Os;
 import oxdoc.OxDoc;
 
 public class MainWindow implements ActionListener {
-	private final String actionRun = "run", actionExit = "exit",
-			actionSaveBatch = "batch", actionSaveBash = "bash",
+	private final String actionRun = "run", actionExit = "exit", actionSaveBatch = "batch", actionSaveBash = "bash",
 			actionSaveXml = "xml", actionAbout = "about";
 	private static JFrame frame;
 	private JTextField editWorkDirectory;
@@ -76,7 +75,7 @@ public class MainWindow implements ActionListener {
 
 	public MainWindow() {
 		// Create and set up the window.
-		
+
 		frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,8 +97,7 @@ public class MainWindow implements ActionListener {
 
 		Dimension dim = frame.getToolkit().getScreenSize();
 		Rectangle abounds = frame.getBounds();
-		frame.setLocation((dim.width - abounds.width) / 2,
-				(dim.height - abounds.height) / 2);
+		frame.setLocation((dim.width - abounds.width) / 2, (dim.height - abounds.height) / 2);
 	}
 
 	private void setStatus(String text) {
@@ -140,14 +138,13 @@ public class MainWindow implements ActionListener {
 		GridBagLayout layout = new GridBagLayout();
 		JPanel optionPanel = new JPanel(layout);
 
-		JLabel labelWorkDirectory = new JLabel(
-				"Directory containing input Ox files:");
+		JLabel labelWorkDirectory = new JLabel("Directory containing input Ox files:");
 		JLabel labelFilenames = new JLabel("File specification (e.g. *.ox):");
 		JLabel labelOutputdir = new JLabel("Output directory:");
 		JLabel labelProjectName = new JLabel("Project name:");
 		JLabel labelWindowTitle = new JLabel("Window title:");
-		JLabel labelIncludes = new JLabel("Include paths separated by "
-				+ separatorDescription(File.pathSeparatorChar) + ":");
+		JLabel labelIncludes = new JLabel("Include paths separated by " + separatorDescription(File.pathSeparatorChar)
+				+ ":");
 		JLabel labelOtherOptions = new JLabel("Other options:");
 		JLabel labelFormulas = new JLabel("Generate formulas by:");
 
@@ -165,8 +162,7 @@ public class MainWindow implements ActionListener {
 		group.add(radioLatex);
 		group.add(radioPlainText);
 
-		chkShowInternals = new JCheckBox(
-				"Generate documentation for internal fields and methods", false);
+		chkShowInternals = new JCheckBox("Generate documentation for internal fields and methods", false);
 		chkEnableIcons = new JCheckBox("Enable icons", true);
 
 		editWorkDirectory.setText((new File("")).getAbsolutePath());
@@ -229,8 +225,7 @@ public class MainWindow implements ActionListener {
 			break;
 		}
 
-		JMenuItem oxdocXmlItem = new JMenuItem(
-				"Save options to oxdoc.xml file...");
+		JMenuItem oxdocXmlItem = new JMenuItem("Save options to oxdoc.xml file...");
 		oxdocXmlItem.setActionCommand(actionSaveXml);
 		oxdocXmlItem.addActionListener(this);
 		fileMenu.add(oxdocXmlItem);
@@ -274,8 +269,7 @@ public class MainWindow implements ActionListener {
 	}
 
 	public static void showException(Exception E) {
-		JOptionPane.showMessageDialog(frame, E.getMessage(), "Error",
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(frame, E.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static void showAbout() {
@@ -284,7 +278,7 @@ public class MainWindow implements ActionListener {
 
 	private HashMap getOptions() {
 		HashMap map = new HashMap();
-		
+
 		if (radioLatex.isSelected())
 			map.put("formulas", "latex");
 		else if (radioMathjax.isSelected())
@@ -292,8 +286,8 @@ public class MainWindow implements ActionListener {
 		else if (radioPlainText.isSelected())
 			map.put("formulas", "plain");
 
-		map.put("icons", chkEnableIcons.isSelected() ? "on": "off");
-		map.put("internals", chkShowInternals.isSelected() ? "on": "off");
+		map.put("icons", chkEnableIcons.isSelected() ? "on" : "off");
+		map.put("internals", chkShowInternals.isSelected() ? "on" : "off");
 
 		if (outputDir().length() > 0)
 			map.put("outputdir", outputDir());
@@ -309,8 +303,8 @@ public class MainWindow implements ActionListener {
 	private String generateOxdocArguments() {
 		HashMap options = getOptions();
 		String args = inputFileSpec();
-		
-		for (Object key: options.keySet())
+
+		for (Object key : options.keySet())
 			args += String.format(" -%s \"%s\"", key, options.get(key));
 
 		return args;
@@ -348,14 +342,9 @@ public class MainWindow implements ActionListener {
 			if (!file.exists())
 				return file;
 
-			int overwriteResult = JOptionPane
-					.showConfirmDialog(
-							frame,
-							"The file "
-									+ file
-									+ " already exists. Do you want to overwrite the existing file?",
-							"Save file", JOptionPane.YES_NO_CANCEL_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
+			int overwriteResult = JOptionPane.showConfirmDialog(frame, "The file " + file
+					+ " already exists. Do you want to overwrite the existing file?", "Save file",
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
 			if (overwriteResult == JOptionPane.YES_OPTION)
 				return file;
 			if (overwriteResult == JOptionPane.CANCEL_OPTION)
@@ -374,7 +363,7 @@ public class MainWindow implements ActionListener {
 			output.write("<oxdoc>\n");
 			output.write("<!-- This file was generated by oxdocgui -->\n");
 			HashMap options = getOptions();
-			for (Object key: options.keySet())
+			for (Object key : options.keySet())
 				output.write(String.format("  <option %s=\"%s\"/>\n", key, options.get(key)));
 			output.write("</oxdoc>\n");
 			output.close();
@@ -444,7 +433,7 @@ public class MainWindow implements ActionListener {
 
 						oxdoc.config.load();
 						HashMap options = getOptions();
-						for (Object key: options.keySet())
+						for (Object key : options.keySet())
 							oxdoc.config.setOption(key.toString(), options.get(key).toString());
 						oxdoc.config.setOption("outputdir", outputDir());
 						oxdoc.config.validate();
@@ -454,8 +443,7 @@ public class MainWindow implements ActionListener {
 
 						cmd.writeMessage("\nExecution succesful", 0);
 					} catch (Exception E) {
-						cmd.writeMessage(
-								"\nExecution failed: \n" + E.getMessage(), 0);
+						cmd.writeMessage("\nExecution failed: \n" + E.getMessage(), 0);
 					}
 					cmd.enableButtons(true);
 				}

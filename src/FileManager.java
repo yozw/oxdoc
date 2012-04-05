@@ -41,9 +41,8 @@ public class FileManager {
 	public static final int HIERARCHY = 9;
 	public static final int GLOBAL = 10;
 	public static final int FILES = 11;
-	public static final String[] iconFiles = { "index", "project", "file",
-			"class", "method", "function", "field", "enum", "uplevel",
-			"hierarchy", "global", "files" };
+	public static final String[] iconFiles = { "index", "project", "file", "class", "method", "function", "field",
+			"enum", "uplevel", "hierarchy", "global", "files" };
 	private static String _imageCache = "images.xml";
 	private static String _tempTexFileBase = "__oxdoc";
 	public OxDoc oxdoc = null;
@@ -66,8 +65,7 @@ public class FileManager {
 	}
 
 	public String imageFile(String filename) {
-		return nativePath(oxdoc.config.OutputDir)
-				+ nativePath(oxdoc.config.ImagePath) + filename;
+		return nativePath(oxdoc.config.OutputDir) + nativePath(oxdoc.config.ImagePath) + filename;
 	}
 
 	public String tempDir() {
@@ -127,13 +125,11 @@ public class FileManager {
 	public static String appDirFile(String fileName) {
 		File appDir = getApplicationDirectory(OxDoc.class);
 
-		return appDir.toString().replaceAll("%20", " ") + File.separator
-				+ fileName;
+		return appDir.toString().replaceAll("%20", " ") + File.separator + fileName;
 	}
 
 	public static String nativePath(String Path) {
-		String out = Path.replace('/', File.separatorChar).replace('\\',
-				File.separatorChar);
+		String out = Path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
 		if (out.length() == 0)
 			return out;
 		if (!out.endsWith(File.separator))
@@ -153,8 +149,7 @@ public class FileManager {
 	}
 
 	public static String nativeFileName(String FileName) {
-		String out = FileName.replace('/', File.separatorChar).replace('\\',
-				File.separatorChar);
+		String out = FileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
 
 		return out;
 	}
@@ -188,8 +183,7 @@ public class FileManager {
 	}
 
 	// this is a cached version of _copyFromResourceIfNotExists
-	public boolean copyFromResourceIfNotExists(String fileName,
-			String resourceName) {
+	public boolean copyFromResourceIfNotExists(String fileName, String resourceName) {
 		// check if we've requested this resource before
 		String key = fileName + "||" + resourceName;
 		if (resourceResults.containsKey(key))
@@ -200,14 +194,12 @@ public class FileManager {
 		return result;
 	}
 
-	private boolean _copyFromResourceIfNotExists(String fileName,
-			String resourceName) {
+	private boolean _copyFromResourceIfNotExists(String fileName, String resourceName) {
 		try {
 			if (oxdoc.fileManager.outputFileExists(fileName))
 				return true;
 
-			InputStream resourceFile = OxDoc.class
-					.getResourceAsStream(resourceName);
+			InputStream resourceFile = OxDoc.class.getResourceAsStream(resourceName);
 			if (resourceFile == null) {
 				oxdoc.warning("Resource '" + resourceName + "' does not exist.");
 				return false;

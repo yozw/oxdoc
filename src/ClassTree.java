@@ -58,8 +58,7 @@ class ClassTree {
 			OxClass parentClass = oxClass.superClass();
 
 			Node classNode = (Node) nodes.get(oxClass);
-			Node parentNode = (parentClass != null) ? (Node) nodes
-					.get(parentClass) : rootNode;
+			Node parentNode = (parentClass != null) ? (Node) nodes.get(parentClass) : rootNode;
 
 			parentNode.children.add(classNode);
 		}
@@ -77,9 +76,7 @@ class ClassTree {
 				text.append("<li>");
 			else
 				text.append("<li class=\"last\">");
-			text.append("<span class=\"label\">"
-					+ project.linkToEntity(child.oxClass)
-					+ "</span><span class=\"text\">"
+			text.append("<span class=\"label\">" + project.linkToEntity(child.oxClass) + "</span><span class=\"text\">"
 					+ child.oxClass.description() + "</span>\n");
 			addChildrenToHtmlList(text, child);
 		}
