@@ -63,8 +63,6 @@ public class Documentor {
 		writeCss();
 
 		oxdoc.latexImageManager.makeLatexFiles();
-
-		// project.printSymbols();
 	}
 
 	private void generateStartPage(String fileName) throws Exception {
@@ -395,7 +393,10 @@ public class Documentor {
 	}
 
 	private void writeCss() throws IOException {
-		oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc.css");
+		if (oxdoc.config.EnableIcons)
+			oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc.css");
+		else
+			oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc-noicons.css");
 		oxdoc.fileManager.copyFromResourceIfNotExists("print.css");
 	}
 }

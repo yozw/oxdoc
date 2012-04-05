@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 public class PathMatcher {
 
 	// Determines whether matching is supposed to be case-sensitive
-	public static boolean caseSensitive = true;
+	public static boolean caseSensitive = true, isWindows = false;
 
 	/** This class implements pattern-based file name filtering **/
 	private class WildcardFilter implements FilenameFilter {
@@ -40,7 +40,7 @@ public class PathMatcher {
 
 		public WildcardFilter(String pattern) {
 			// turn the pattern into a regular expression
-			pattern = pattern.replace(".", "\\.").replace("?", ".?")
+			pattern = pattern.replace("\\", "\\\\").replace(".", "\\.").replace("?", ".?")
 					.replace("*", ".*");
 			if (caseSensitive)
 				regexPattern = Pattern.compile(pattern);
@@ -66,20 +66,38 @@ public class PathMatcher {
 	 * @return A list of matching files.
 	 **/
 	public static Iterable<File> scan(String pattern) {
+		
+		// check for Windows
+		isWindows = System.getProperty("os.name", "generic").toLowerCase().indexOf("win") >= 0;
 
-		// check for Windows; if so, we want case-insensitive matching
-		caseSensitive = System.getProperty("os.name", "generic").toLowerCase().indexOf("win") < 0;
+		// if we are on Windows, we want case-insensitive matching
+		caseSensitive = !isWindows;
 		
 		// construct the full path corresponding to pattern
 		pattern = new File(pattern).getAbsolutePath();
 
 		// separate full path into levels
-		List<String> patterns = Arrays.asList(pattern.split(File.separator));
-
+		List<String> patterns = Arrays.asList(pattern.split(File.separator.replace("\\", "\\\\")));
+		
+		// find the longest leading sequence of patterns not containing
+		// wildcards
+		ListIterator<String> iterator = patterns.listIterator();
+		String leadingPath = "";
+		boolean isFirst = true;
+		while (true)
+		{
+			String item = iterator.next();
+			if (!iterator.hasNext() || containsWildcards(item))
+				break;
+			leadingPath += (isFirst ? "" : File.separator) + item;
+			isFirst = false;
+		}
+		iterator.previous();
+		
 		// scan directories
 		List<File> fileList = new ArrayList<File>();
 		PathMatcher pm = new PathMatcher();
-		pm.doScan(new File(File.separator), patterns.listIterator(), fileList);
+		pm.doScan(new File(leadingPath), iterator, fileList);
 
 		// return file list
 		return fileList;
@@ -88,6 +106,7 @@ public class PathMatcher {
 	/** This function does the actual scanning. It looks in directory **/
 	private void doScan(File dir, ListIterator<String> patternIterator,
 			List<File> fileList) {
+		
 		// Find next (non-empty) pattern. If no such pattern exists, exit.
 		String pattern = "";
 		while (pattern.length() == 0) {
@@ -95,7 +114,7 @@ public class PathMatcher {
 				return;
 			pattern = patternIterator.next();
 		}
-
+		
 		// List files in current directory that match the pattern
 		String[] fileNames = dir.list(new WildcardFilter(pattern));
 		for (String fileName : fileNames) {
@@ -111,5 +130,10 @@ public class PathMatcher {
 
 		// Return the pattern iterator to its original position
 		patternIterator.previous();
+	}
+	
+	private static boolean containsWildcards(String pattern)
+	{
+		return pattern.contains("*") || pattern.contains("?");
 	}
 }

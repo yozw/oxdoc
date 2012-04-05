@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.MessageFormat;
 
+import oxdoc.html.Header;
+
 public class OutputFile {
 	private String fileName = null;
 	private OxDoc oxdoc = null;
@@ -41,8 +43,8 @@ public class OutputFile {
 			super(out);
 		}
 
-		void writeln(String s) throws IOException {
-			write(s);
+		void writeln(Object s) throws IOException {
+			write(s.toString());
 			newLine();
 		}
 	}
@@ -89,7 +91,11 @@ public class OutputFile {
 			output.writeln(css.toString());
 			output.writeln("</style>");
 		}
-		output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
+		
+		if (oxdoc.config.EnableIcons)
+			output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
+		else
+			output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc-noicons.css\">");
 		output.writeln("<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"print.css\">");
 		output.writeln(oxdoc.config.MathProcessor.ExtraHeader());
 		output.writeln("<title>"
@@ -112,9 +118,9 @@ public class OutputFile {
 		output.writeln(" | "
 				+ oxdoc.fileManager.smallIcon(FileManager.HIERARCHY)
 				+ "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
-		output.writeln("<h1><span class=\"icon\">"
-				+ oxdoc.fileManager.largeIcon(iconType)
-				+ "</span><span class=\"text\">" + title + "</span></h1>");
+		
+		Header h1 = new Header(oxdoc,  1, iconType, title);
+		output.writeln(h1);
 	}
 
 	private void writeDocFooter(ExtBufferedWriter output) throws IOException {

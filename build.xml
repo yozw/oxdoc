@@ -71,6 +71,7 @@
   <target name="jar" depends="compile">
     <mkdir dir="${bin}"/>
     <copy file="${css}/default.css" tofile="${build}/oxdoc/oxdoc.css" />
+    <copy file="${css}/default-noicons.css" tofile="${build}/oxdoc/oxdoc-noicons.css" />
     <copy file="${css}/default-print.css" tofile="${build}/oxdoc/print.css" />
     <copy todir="${build}/oxdoc/icons">  
        <fileset dir="icons" defaultexcludes="yes" includes="*.png" />
