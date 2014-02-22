@@ -20,8 +20,6 @@
 
 package oxdoc.html;
 
-import oxdoc.OxDoc;
-
 import java.util.ArrayList;
 
 public class Table extends Element {
@@ -42,17 +40,14 @@ public class Table extends Element {
     }
   }
 
-  private TableSpecs tableSpecs;
+  private final TableSpecs tableSpecs;
+  private final ArrayList rows = new ArrayList();
 
-  ArrayList rows = new ArrayList();
-
-  public Table(OxDoc oxdoc) {
-    super(oxdoc);
+  public Table() {
     tableSpecs = new TableSpecs();
   }
 
-  public Table(OxDoc oxdoc, TableSpecs tableSpecs) {
-    super(oxdoc);
+  public Table(TableSpecs tableSpecs) {
     this.tableSpecs = tableSpecs;
   }
 

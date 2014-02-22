@@ -34,13 +34,13 @@ class ClassTree {
     int depth = 0;
   }
 
-  private OxProject project = null;
-  Node rootNode = new Node();
-  Hashtable nodes = new Hashtable(); // keys: OxClass, values: Node
-  int maxDepth = 0;
+  private final OxProject project;
+  private final Node rootNode = new Node();
+  private final Hashtable nodes = new Hashtable(); // keys: OxClass, values: Node
+  private int maxDepth = 0;
 
-  public ClassTree(OxDoc oxdoc, OxEntityList classes) {
-    project = oxdoc.project;
+  public ClassTree(OxProject project, OxEntityList classes) {
+    this.project = project;
 
     ArrayList classList = classes.sortedList();
 

@@ -26,14 +26,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 class StreamGobbler extends Thread {
-  private InputStream is;
+  private final InputStream is;
+  private final OxDocLogger logger;
+  private final boolean echo;
   private String text = "";
-  private OxDoc oxdoc;
-  private boolean echo;
 
-  StreamGobbler(InputStream is, OxDoc oxdoc, boolean echo) {
+  StreamGobbler(InputStream is, OxDocLogger logger, boolean echo) {
     this.is = is;
-    this.oxdoc = oxdoc;
+    this.logger = logger;
     this.echo = echo;
   }
 
@@ -41,11 +41,11 @@ class StreamGobbler extends Thread {
     try {
       InputStreamReader isr = new InputStreamReader(is);
       BufferedReader br = new BufferedReader(isr);
-      String line = null;
+      String line;
       while ((line = br.readLine()) != null) {
         text += "> " + line + "\n";
         if (echo)
-          oxdoc.message("> " + line);
+          logger.message("> " + line);
       }
     } catch (IOException ioe) {
       ioe.printStackTrace();

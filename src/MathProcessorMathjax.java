@@ -21,22 +21,18 @@
 package oxdoc;
 
 public class MathProcessorMathjax extends MathProcessor {
-  public MathProcessorMathjax(OxDoc oxdoc) {
-    super(oxdoc);
-  }
-
-  public String ProcessFormula(String formula, boolean isInline) {
+  public String processFormula(String formula, boolean isInline) {
     if (isInline)
       return "\\(" + formula + "\\)";
     else
       return "$$" + formula + "$$";
   }
 
-  public String ExtraHeader() {
+  public String getExtraHeader() {
     return "<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
   }
 
-  public String ExtraFooter() {
+  public String getExtraFooter() {
     return "Math typesetting by <a href=\"http://www.mathjax.org/\">Mathjax</a>";
   }
 

@@ -33,13 +33,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Documentor {
-  private OxProject project = null;
-  private OxDoc oxdoc = null;
-  private ClassTree classTree = null;
+  private final OxProject project;
+  private LatexImageManager latexImageManager;
+  private FileManager fileManager;
+  private final OxDocLogger logger;
+  private final Config config;
 
-  public Documentor(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
-    project = oxdoc.project;
+  private ClassTree classTree;
+
+  public Documentor(OxProject project, OxDocLogger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
+    this.logger = logger;
+    this.config = config;
+    this.project = project;
+    this.latexImageManager = latexImageManager;
+    this.fileManager = fileManager;
     constructTableSpecs();
   }
 
@@ -47,14 +54,14 @@ public class Documentor {
   }
 
   public void generateDocs() throws Exception {
-    project.name = oxdoc.config.ProjectName;
+    project.name = config.projectName;
 
     ArrayList files = project.files();
     for (int i = 0; i < files.size(); i++) {
       OxFile file = (OxFile) files.get(i);
       generateDoc(file, file.url());
     }
-    classTree = new ClassTree(oxdoc, project.classes());
+    classTree = new ClassTree(project, project.classes());
 
     generateStartPage("default.html");
     generateIndex("index.html");
@@ -62,21 +69,21 @@ public class Documentor {
 
     writeCss();
 
-    oxdoc.latexImageManager.makeLatexFiles();
+    latexImageManager.makeLatexFiles();
   }
 
   private void generateStartPage(String fileName) throws Exception {
     String title = (project.name.length() == 0) ? "Project home" : (project.name + " project home");
     String sectionTitle = (project.name.length() == 0) ? "Files" : (project.name + " files");
 
-    OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, oxdoc);
+    OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, project, config, fileManager);
     int iconType = FileManager.FILES;
     ArrayList files = project.files();
 
-    Header header = new Header(oxdoc, 2, iconType, sectionTitle);
+    Header header = new Header(2, iconType, sectionTitle, fileManager, config);
     output.writeln(header);
 
-    Table fileTable = new Table(oxdoc);
+    Table fileTable = new Table();
     fileTable.specs().cssClass = "table_of_contents";
     fileTable.specs().columnCssClasses.add("file");
     fileTable.specs().columnCssClasses.add("description");
@@ -92,25 +99,25 @@ public class Documentor {
   }
 
   private void generateIndex(String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, oxdoc);
+    OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, project, config, fileManager);
 
-    SymbolIndex index = new SymbolIndex(oxdoc, classTree);
+    SymbolIndex index = new SymbolIndex(project, classTree, config);
 
     index.write(output);
     output.close();
   }
 
   private void generateHierarchy(String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, "Class hierarchy", FileManager.HIERARCHY, oxdoc);
+    OutputFile output = new OutputFile(fileName, "Class hierarchy", FileManager.HIERARCHY, project, config, fileManager);
 
-    ClassTreeHtml classTreeHtml = new ClassTreeHtml(oxdoc, classTree);
+    ClassTreeHtml classTreeHtml = new ClassTreeHtml(project, classTree);
     classTreeHtml.writeHtml(output);
 
     output.close();
   }
 
   private void generateDoc(OxFile oxFile, String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, oxFile.name(), oxFile.iconType(), oxdoc);
+    OutputFile output = new OutputFile(fileName, oxFile.name(), oxFile.iconType(), project, config, fileManager);
     try {
       output.writeln(oxFile.comment());
 
@@ -171,7 +178,7 @@ public class Documentor {
     int iconType = FileManager.CLASS;
 
 		/* Write anchor */
-    output.writeln(new Anchor(oxdoc, sectionName));
+    output.writeln(new Anchor(sectionName));
 
 		/* Add superclasses to section name */
     ArrayList superClasses = oxclass.getSuperClasses();
@@ -181,7 +188,7 @@ public class Documentor {
     }
 
 		/* Write header */
-    Header header = new Header(oxdoc, 2, iconType, sectionName);
+    Header header = new Header(2, iconType, sectionName, fileManager, config);
     output.writeln(header);
 
 		/* Print comment */
@@ -189,7 +196,7 @@ public class Documentor {
       output.writeln(oxclass.comment());
 
 		/* Construct a new table */
-    Table table = new Table(oxdoc);
+    Table table = new Table();
     table.specs().cssClass = "method_table";
     table.specs().columnCssClasses.add("declaration");
     table.specs().columnCssClasses.add("modifiers");
@@ -201,7 +208,7 @@ public class Documentor {
         oxclass.getMethods(), oxclass.getEnums()};
 
 		/* Filter any members that are marked as internal */
-    if (!oxdoc.config.ShowInternals)
+    if (!config.showInternals)
       for (int i = 0; i < visMembers.length; i++)
         removeInternals(visMembers[i]);
 
@@ -228,14 +235,14 @@ public class Documentor {
     ArrayList[] inhMembers = {oxclass.getInheritedMethods(), oxclass.getInheritedFields(),
         oxclass.getInheritedEnums()};
 
-    if (!oxdoc.config.ShowInternals)
+    if (!config.showInternals)
       for (int i = 0; i < inhMembers.length; i++)
         removeInternals(inhMembers[i]);
 
     for (int i = 0; i < inhMembers.length; i++) {
       if (inhMembers[i].size() == 0)
         continue;
-      DefinitionList dl = new DefinitionList(oxdoc, "inherited");
+      DefinitionList dl = new DefinitionList("inherited");
       formatInheritedMembers(dl, inhMembers[i], inhLabels[i]);
       output.writeln(dl);
     }
@@ -252,12 +259,12 @@ public class Documentor {
     ArrayList[] visMembers = {oxfile.variables(), oxfile.functions(), oxfile.enums()};
 
 		/* Filter any members that are marked as internal */
-    if (!oxdoc.config.ShowInternals)
+    if (!config.showInternals)
       for (int i = 0; i < visMembers.length; i++)
         removeInternals(visMembers[i]);
 
 		/* Construct a new table */
-    Table table = new Table(oxdoc);
+    Table table = new Table();
     table.specs().cssClass = "method_table";
     table.specs().columnCssClasses.add("declaration");
     table.specs().columnCssClasses.add("modifiers");
@@ -285,8 +292,8 @@ public class Documentor {
 
 		/* Write if there is anything to write */
     if (table.getRowCount() > 0) {
-      Header header = new Header(oxdoc, 2, iconType, "Global " + sectionName);
-      output.writeln(new Anchor(oxdoc, "global"));
+      Header header = new Header(2, iconType, "Global " + sectionName, fileManager, config);
+      output.writeln(new Anchor("global"));
       output.writeln(header);
       output.writeln(table);
     }
@@ -298,13 +305,13 @@ public class Documentor {
     String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
     int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
 
-    if (!oxdoc.config.ShowInternals)
+    if (!config.showInternals)
       removeInternals(memberList);
 
     if (enumList.size() + memberList.size() == 0)
       return;
 
-    Header header = new Header(oxdoc, 2, iconType, sectionName);
+    Header header = new Header(2, iconType, sectionName, fileManager, config);
     output.writeln(header);
 
     generateEnumDocs(output, oxclass, enumList);
@@ -316,8 +323,8 @@ public class Documentor {
       if (i != 0)
         output.writeln("\n<hr>");
 
-      Header h3 = new Header(oxdoc, 3, entity.iconType(), entity.name());
-      output.writeln(new Anchor(oxdoc, anchorName));
+      Header h3 = new Header(3, entity.iconType(), entity.name(), fileManager, config);
+      output.writeln(new Anchor(anchorName));
       output.writeln(h3);
 
       if (entity.declaration() != null)
@@ -333,7 +340,7 @@ public class Documentor {
     int count = 0;
     for (int i = 0; i < memberList.size(); i++) {
       OxEnum entity = (OxEnum) memberList.get(i);
-      if ((!oxdoc.config.ShowInternals) && (entity.isInternal()))
+      if ((!config.showInternals) && (entity.isInternal()))
         continue;
       count++;
     }
@@ -343,7 +350,7 @@ public class Documentor {
     String sectionName = "Enumerations";
     String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
 
-    Table table = new Table(oxdoc);
+    Table table = new Table();
     table.specs().cssClass = "enum_table";
     table.specs().columnCssClasses.add("declaration");
     table.specs().columnCssClasses.add("description");
@@ -354,10 +361,10 @@ public class Documentor {
       OxEnum entity = (OxEnum) memberList.get(i);
       String anchorName = classPrefix + entity.name();
 
-      if ((!oxdoc.config.ShowInternals) && (entity.isInternal()))
+      if ((!config.showInternals) && (entity.isInternal()))
         continue;
 
-      String[] row = {new Anchor(oxdoc, anchorName).toString() + entity.displayName(),
+      String[] row = {new Anchor(anchorName).toString() + entity.displayName(),
           entity.comment().toString(), entity.elementString()};
 
       table.addRow(row);
@@ -368,10 +375,10 @@ public class Documentor {
   }
 
   private void writeCss() throws IOException {
-    if (oxdoc.config.EnableIcons)
-      oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc.css");
+    if (config.enableIcons)
+      fileManager.copyFromResourceIfNotExists("oxdoc.css");
     else
-      oxdoc.fileManager.copyFromResourceIfNotExists("oxdoc-noicons.css");
-    oxdoc.fileManager.copyFromResourceIfNotExists("print.css");
+      fileManager.copyFromResourceIfNotExists("oxdoc-noicons.css");
+    fileManager.copyFromResourceIfNotExists("print.css");
   }
 }

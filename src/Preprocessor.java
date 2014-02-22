@@ -26,9 +26,10 @@ import java.util.Collection;
 
 public class Preprocessor {
 
-  private ArrayList defines = new ArrayList();
-  private OxDoc oxdoc = null;
-  private Writer outputStream;
+  private final ArrayList defines = new ArrayList();
+  private final OxDocLogger logger;
+  private final Writer outputStream;
+  private final Config config;
   private static Collection ignoredFiles = new ArrayList();
   private static final int PLAINLINE = 0;
   private static final int ENDIF = 1;
@@ -39,9 +40,10 @@ public class Preprocessor {
   private static final int INCLUDE = 32;
   private static final int IMPORT = 64;
 
-  public Preprocessor(OxDoc oxdoc, Writer outputStream) {
-    this.oxdoc = oxdoc;
+  public Preprocessor(OxDocLogger logger, Config config, Writer outputStream) {
+    this.logger = logger;
     this.outputStream = outputStream;
+    this.config = config;
   }
 
   public void ProcessFile(File file) throws Exception {
@@ -64,13 +66,13 @@ public class Preprocessor {
       ignoredFiles.add(fileName);
       String warning = "Included file " + fileName + " could not be opened. File will be ignored.";
 
-      if (oxdoc.config.Verbose) {
+      if (config.verbose) {
         warning += "\n-- Looked for the following files:";
 
         for (int i = 0; i < tryFiles.size(); i++)
           warning += "\n   " + ((File) tryFiles.get(i)).getAbsoluteFile();
       }
-      oxdoc.warning(warning);
+      logger.warning(warning);
     }
   }
 
@@ -190,7 +192,7 @@ public class Preprocessor {
             else if ((firstChar == '<') && (lastChar == '>'))
               lookLocal = false;
             else {
-              oxdoc.warning("Invalid preprocessor clause: " + line);
+              logger.warning("Invalid preprocessor clause: " + line);
               break;
             }
             String fileName = fileSpec.substring(1, fileSpec.length() - 1);
@@ -211,8 +213,8 @@ public class Preprocessor {
 
             // * the directories specified on the compiler command line
             // (if any);
-            for (int i = 0; i < oxdoc.config.IncludePaths.length; i++)
-              tryFiles.add(new File(oxdoc.config.IncludePaths[i] + File.separatorChar + fileName));
+            for (int i = 0; i < config.includePaths.length; i++)
+              tryFiles.add(new File(config.includePaths[i] + File.separatorChar + fileName));
             // * in the current directory.
             tryFiles.add(new File(fileName));
 

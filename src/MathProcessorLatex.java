@@ -23,26 +23,33 @@ package oxdoc;
 import java.io.File;
 
 public class MathProcessorLatex extends MathProcessor {
-  public MathProcessorLatex(OxDoc oxdoc) {
-    super(oxdoc);
+  private final OxDocLogger logger;
+  private final Config config;
+  private final LatexImageManager latexImageManager;
+  private final FileManager fileManager;
+
+  public MathProcessorLatex(OxDocLogger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
+    this.logger = logger;
+    this.config = config;
+    this.latexImageManager = latexImageManager;
+    this.fileManager = fileManager;
   }
 
-  public String ProcessFormula(String formula, boolean isInline) {
+  public String processFormula(String formula, boolean isInline) {
     String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
-    String filename = oxdoc.latexImageManager.getFormulaFilename(extFormula);
+    String filename = latexImageManager.getFormulaFilename(extFormula);
 
-    return "<img class=\"latex\" src=\"" + oxdoc.fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
+    return "<img class=\"latex\" src=\"" + fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
   }
 
-  public boolean Supported(OxDoc oxdoc) {
-    if (!(new File(oxdoc.config.Latex)).exists()) {
-      oxdoc.warning("LaTeX executable not found. LaTeX support disabled (looking for " + oxdoc.config.Latex + ")");
+  public boolean isSupported() {
+    if (!(new File(config.latex)).exists()) {
+      logger.warning("LaTeX executable not found. LaTeX support disabled (looking for " + config.latex + ")");
 
       return false;
     }
-    if (!(new File(oxdoc.config.Dvipng)).exists()) {
-      oxdoc.warning("Dvipng executable not found. LaTeX support disabled (looking for " + oxdoc.config.Dvipng
-          + ")");
+    if (!(new File(config.dvipng)).exists()) {
+      logger.warning("Dvipng executable not found. LaTeX support disabled (looking for " + config.dvipng + ")");
 
       return false;
     }
@@ -50,7 +57,7 @@ public class MathProcessorLatex extends MathProcessor {
     return true;
   }
 
-  public String ExtraHeader() {
+  public String getExtraHeader() {
     return "<style>.expression { font-style: italic; font-family: times; font-size: 12px; }</style>";
   }
 }

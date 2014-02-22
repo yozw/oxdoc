@@ -20,14 +20,11 @@
 
 package oxdoc.html;
 
-import oxdoc.OxDoc;
-
 public class Anchor extends Element {
 
-  String name;
+  private final String name;
 
-  public Anchor(OxDoc oxdoc, String name) {
-    super(oxdoc);
+  public Anchor(String name) {
     this.name = name;
   }
 

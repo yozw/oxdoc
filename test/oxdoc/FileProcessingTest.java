@@ -21,22 +21,25 @@ import oxdoc.parser.Parser;
 @RunWith(JUnit4.class)
 public class FileProcessingTest {
 
-  private final static OxDoc OXDOC = new OxDoc();
+  private final static OxDocLogger logger = new OxDocLogger();
+  private final static Config config = new Config(logger);
+  private final static FileManager fileManager = new FileManager(logger, config);
+  private final static TextProcessor textProcessor = new TextProcessor(logger, config);
 
   @Test
   public void thisAlwaysPasses() throws Exception {
-    OxProject project = new OxProject(OXDOC);
+    OxProject project = new OxProject(logger, fileManager, textProcessor);
     File file = new File("example/dist_degen.ox");
     
 		ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
 		OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
-		Preprocessor p = new Preprocessor(OXDOC, bufferWriter);
+		Preprocessor p = new Preprocessor(logger, config, bufferWriter);
 		p.ProcessFile(file);
 
 		ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 
-		Parser parser = new Parser(bufferIn, OXDOC, project.addFile(file.getName()), project);
+		Parser parser = new Parser(bufferIn, logger, project.addFile(file.getName()), project);
 		parser.OxFileDefinition();
 
   }

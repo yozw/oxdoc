@@ -32,14 +32,14 @@ import oxdoc.comments.*;
 
 	private OxFile file = null;
 	private OxProject project = null;
-	private OxDoc oxdoc = null;
+	private OxDocLogger logger = null;
 	private OxClass currentClass = null;
 	private OxClass.Visibility currentVisibility = OxClass.Visibility.Private;
 
-  	public Parser(java.io.InputStream stream, OxDoc oxdoc, OxFile file, OxProject project) {
+  	public Parser(java.io.InputStream stream, OxDocLogger logger, OxFile file, OxProject project) {
      		this(stream, null);
 		this.file = file; 
-		this.oxdoc = oxdoc;
+		this.logger = logger;
 		this.project = project;
   	}
 
@@ -358,12 +358,12 @@ void FunctionDefinition() :
 
 	  	 OxClass oxClass = file.getClass(classname.image);
 		 if (oxClass == null) {
-		    oxdoc.warning("Definition of method " + methodName + " of class " + classname.image + ": class " + classname.image + " is not defined yet.");
+		    logger.warning("Definition of method " + methodName + " of class " + classname.image + ": class " + classname.image + " is not defined yet.");
 			oxClass = file.addClass(classname.image);
 		 }
 	     OxMethod newMethod = oxClass.methodByName(methodName);
          if (newMethod == null) {
-		    oxdoc.warning("Definition of method " + methodName + " of class " + classname.image + ": method is not declared yet.");
+		    logger.warning("Definition of method " + methodName + " of class " + classname.image + ": method is not declared yet.");
 			newMethod = oxClass.addMethod(methodName);
          }
 	     if (classname.specialToken != null)

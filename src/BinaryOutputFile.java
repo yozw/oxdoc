@@ -25,17 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class BinaryOutputFile {
-  FileOutputStream output = null;
-  String _fileName;
-  public OxDoc oxdoc;
+  private final FileOutputStream output;
 
   // create a blank file
-  public BinaryOutputFile(String fileName, OxDoc oxdoc) throws IOException {
-    File aFile = new File(oxdoc.fileManager.outputFile(fileName).trim());
+  public BinaryOutputFile(String fileName, FileManager fileManager) throws IOException {
+    File aFile = new File(fileManager.outputFile(fileName).trim());
     aFile.getParentFile().mkdirs();
     output = new FileOutputStream(aFile);
-    _fileName = fileName;
-    this.oxdoc = oxdoc;
   }
 
   public void close() throws IOException {

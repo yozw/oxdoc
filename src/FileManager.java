@@ -45,15 +45,17 @@ public class FileManager {
       "enum", "uplevel", "hierarchy", "global", "files"};
   private static String _imageCache = "images.xml";
   private static String _tempTexFileBase = "__oxdoc";
-  public OxDoc oxdoc = null;
+  private final OxDocLogger logger;
+  private final Config config;
 
   // for speed reasons, register which resource we've tried to write so far
   // key: String (filename + "||" + resourcename), value: integer (0 =
   // success)
   Hashtable resourceResults = new Hashtable();
 
-  public FileManager(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
+  public FileManager(OxDocLogger logger, Config config) {
+    this.logger = logger;
+    this.config = config;
   }
 
   public String imageCache() {
@@ -61,15 +63,15 @@ public class FileManager {
   }
 
   public String outputFile(String filename) {
-    return nativePath(oxdoc.config.OutputDir) + filename;
+    return nativePath(config.outputDir) + filename;
   }
 
   public String imageFile(String filename) {
-    return nativePath(oxdoc.config.OutputDir) + nativePath(oxdoc.config.ImagePath) + filename;
+    return nativePath(config.outputDir) + nativePath(config.imagePath) + filename;
   }
 
   public String tempDir() {
-    return nativePath(oxdoc.config.TempDir);
+    return nativePath(config.tempDir);
   }
 
   public String tempFile(String filename) {
@@ -77,7 +79,7 @@ public class FileManager {
   }
 
   public String imageUrl(String filename) {
-    return unixPath(oxdoc.config.ImagePath) + filename;
+    return unixPath(config.imagePath) + filename;
   }
 
   public boolean fileExists(String fileName) {
@@ -155,7 +157,7 @@ public class FileManager {
   }
 
   public String largeIcon(int iconType) {
-    if (!oxdoc.config.EnableIcons)
+    if (!config.enableIcons)
       return "";
     if (iconType < 0)
       return "";
@@ -167,7 +169,7 @@ public class FileManager {
   }
 
   public String smallIcon(int iconType) {
-    if (!oxdoc.config.EnableIcons)
+    if (!config.enableIcons)
       return "";
     if (iconType < 0)
       return "";
@@ -196,16 +198,16 @@ public class FileManager {
 
   private boolean _copyFromResourceIfNotExists(String fileName, String resourceName) {
     try {
-      if (oxdoc.fileManager.outputFileExists(fileName))
+      if (outputFileExists(fileName))
         return true;
 
       InputStream resourceFile = OxDoc.class.getResourceAsStream(resourceName);
       if (resourceFile == null) {
-        oxdoc.warning("Resource '" + resourceName + "' does not exist.");
+        logger.warning("Resource '" + resourceName + "' does not exist.");
         return false;
       }
 
-      BinaryOutputFile output = new BinaryOutputFile(fileName, oxdoc);
+      BinaryOutputFile output = new BinaryOutputFile(fileName, this);
 
       byte[] buffer = new byte[4096];
 
@@ -218,9 +220,9 @@ public class FileManager {
       resourceFile.close();
       output.close();
 
-      oxdoc.message("Succesfully wrote " + fileName);
+      logger.message("Succesfully wrote " + fileName);
     } catch (Exception E) {
-      oxdoc.message(E.getMessage());
+      logger.message(E.getMessage());
       return false;
     }
     return true;

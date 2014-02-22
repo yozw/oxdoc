@@ -28,13 +28,17 @@ import oxdoc.entities.OxFile;
 import java.util.ArrayList;
 
 public class OxProject {
-  private OxEntityList _files = new OxEntityList();
-  private OxEntityList _symbols = new OxEntityList();
-  public OxDoc oxdoc = null;
+  public final FileManager fileManager;
+  public final TextProcessor textProcessor;
+  public final OxDocLogger logger;
   public String name = "Untitled project";
+  private final OxEntityList _files = new OxEntityList();
+  private final OxEntityList _symbols = new OxEntityList();
 
-  public OxProject(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
+  public OxProject(OxDocLogger logger, FileManager fileManager, TextProcessor textProcessor) {
+    this.logger = logger;
+    this.fileManager = fileManager;
+    this.textProcessor = textProcessor;
   }
 
   public OxFile addFile(String name) {
@@ -47,7 +51,7 @@ public class OxProject {
 
   public OxEntity addSymbol(OxEntity entity) {
     if (getSymbol(entity.referenceName()) != null)
-      oxdoc.warning("Multiple declarations of symbol '" + entity.referenceName() + "'");
+      logger.warning("Multiple declarations of symbol '" + entity.referenceName() + "'");
     return _symbols.add(entity.referenceName(), entity);
   }
 
@@ -76,8 +80,7 @@ public class OxProject {
   public String linkToSymbol(String name) {
     OxEntity entity = getSymbol(name);
     if (entity == null) {
-      oxdoc.warning("Symbol '" + name + "' referenced to, but was not found");
-
+      logger.warning("Symbol '" + name + "' referenced to, but was not found");
       return name;
     } else
 

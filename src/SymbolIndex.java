@@ -30,9 +30,9 @@ import java.util.Hashtable;
 
 class SymbolIndex {
 
-  private OxProject project = null;
-  private OxDoc oxdoc = null;
-  private ClassTree classTree = null;
+  private final OxProject project;
+  private final ClassTree classTree;
+  private final Config config;
 
   /*
    * Entry in the index. Every entry is associated with an entity. For
@@ -61,10 +61,10 @@ class SymbolIndex {
 
   Hashtable entries = null; // entries, key: OxEntity, value: IndexEntry
 
-  public SymbolIndex(OxDoc oxdoc, ClassTree classTree) {
-    this.oxdoc = oxdoc;
-    project = oxdoc.project;
+  public SymbolIndex(OxProject project, ClassTree classTree, Config config) {
+    this.project = project;
     this.classTree = classTree;
+    this.config = config;
 
     constructIndex();
   }
@@ -76,7 +76,7 @@ class SymbolIndex {
 
     for (int i = 0; i < symbols.size(); i++) {
       OxEntity entity = (OxEntity) symbols.get(i);
-      if ((!oxdoc.config.ShowInternals) && entity.isInternal())
+      if ((!config.showInternals) && entity.isInternal())
         continue;
 
       if (entity instanceof OxClass)
@@ -166,7 +166,7 @@ class SymbolIndex {
     sortEntriesByName(indexEntries);
 
     // write table
-    Table table = new Table(oxdoc);
+    Table table = new Table();
     table.specs().cssClass = "index";
     table.specs().columnCssClasses.add("declaration");
     table.specs().columnCssClasses.add("description");

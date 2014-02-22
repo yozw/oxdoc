@@ -25,30 +25,34 @@ import oxdoc.OxProject;
 import java.util.HashMap;
 
 public class BaseComment {
-  final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;
+  private final static int SECTION_COMMENTS = 1;
+  private final static int SECTION_REF = 2;
+  private final static int SECTION_EXAMPLE = 3;
+  private final static int SECTION_SEE = 4;
+  private final static int SECTION_SORTKEY = 5;
 
-  private String _text = "";
-  private String _description = "";
-  private String _sortKey = null;
-  private CommentTextBlock _longdescription = null;
-  private CommentTextBlock _comments = null;
-  private CommentTextBlock _example = null;
-  private CommentSeeAlsoList _see = null;
-  private CommentList _ref = null;
-  private CommentList _todo = null;
-  private HashMap _sections = new HashMap();
-  private HashMap _modifiers = new HashMap(); // modifiers have 0 parameters
-  private HashMap _settings = new HashMap(); // settings have 1 parameter
-  public OxProject project = null;
+  private String text = "";
+  private String description = "";
+  private String sortKey = null;
+  private final CommentTextBlock longDescription;
+  private final CommentTextBlock comments;
+  private final CommentTextBlock example;
+  private final CommentSeeAlsoList see;
+  private final CommentList ref;
+  private final CommentList toDo;
+  private final HashMap sections = new HashMap();
+  private final HashMap modifiers = new HashMap(); // modifiers have 0 parameters
+  private final HashMap settings = new HashMap(); // settings have 1 parameter
+  private final OxProject project;
 
   public BaseComment(OxProject project) {
     this.project = project;
-    _longdescription = new CommentTextBlock(project);
-    _comments = new CommentTextBlock(project);
-    _example = new CommentTextBlock(project);
-    _see = new CommentSeeAlsoList(project);
-    _ref = new CommentList(project);
-    _todo = new CommentList(project);
+    longDescription = new CommentTextBlock(project);
+    comments = new CommentTextBlock(project);
+    example = new CommentTextBlock(project);
+    see = new CommentSeeAlsoList(project);
+    ref = new CommentList(project);
+    toDo = new CommentList(project);
 
     registerSection("comments", SECTION_COMMENTS);
     registerSection("comment", SECTION_COMMENTS);
@@ -61,27 +65,27 @@ public class BaseComment {
   }
 
   protected void registerSection(String name, int SectionId) {
-    _sections.put(name, new Integer(SectionId));
+    sections.put(name, new Integer(SectionId));
   }
 
   protected void registerSetting(String name, int SettingId) {
-    _settings.put(name, new Integer(SettingId));
+    settings.put(name, new Integer(SettingId));
   }
 
   protected void registerModifier(String name, int ModifierId) {
-    _modifiers.put(name, new Integer(ModifierId));
+    modifiers.put(name, new Integer(ModifierId));
   }
 
   protected int getSectionId(String name) {
-    return (Integer) _sections.get(name);
+    return (Integer) sections.get(name);
   }
 
   protected int getModifierId(String name) {
-    return (Integer) _modifiers.get(name);
+    return (Integer) modifiers.get(name);
   }
 
   protected int getSettingId(String name) {
-    return (Integer) _settings.get(name);
+    return (Integer) settings.get(name);
   }
 
   /**
@@ -92,16 +96,16 @@ public class BaseComment {
   protected boolean addToSection(int SectionId, String text) {
     switch (SectionId) {
       case SECTION_COMMENTS:
-        _comments.add(text);
+        comments.add(text);
         break;
       case SECTION_REF:
-        _ref.add(text);
+        ref.add(text);
         break;
       case SECTION_EXAMPLE:
-        _example.add(text);
+        example.add(text);
         break;
       case SECTION_SEE:
-        _see.add(text);
+        see.add(text);
         break;
       default:
         return false;
@@ -110,15 +114,15 @@ public class BaseComment {
   }
 
   protected boolean isSection(String name) {
-    return _sections.containsKey(name);
+    return sections.containsKey(name);
   }
 
   protected boolean isModifier(String name) {
-    return _modifiers.containsKey(name);
+    return modifiers.containsKey(name);
   }
 
   protected boolean isSetting(String name) {
-    return _settings.containsKey(name);
+    return settings.containsKey(name);
   }
 
   protected boolean processModifier(int ModifierId) {
@@ -128,7 +132,7 @@ public class BaseComment {
   protected boolean processSetting(int SettingId, String argument) {
     switch (SettingId) {
       case SECTION_SORTKEY:
-        _sortKey = argument;
+        sortKey = argument;
         return true;
     }
 
@@ -161,7 +165,7 @@ public class BaseComment {
     if (!text.startsWith("/**") || !text.endsWith("**/"))
       return;
     text = text.substring(3, text.length() - 3).trim();
-    _text = text;
+    this.text = text;
 
     String[] sections = text.split("@");
 
@@ -196,8 +200,8 @@ public class BaseComment {
         addToSection(curSection, textLine);
     }
 
-    _description = extractShortDescription(description);
-    _longdescription.add(description);
+    this.description = extractShortDescription(description);
+    longDescription.add(description);
   }
 
   /**
@@ -205,62 +209,62 @@ public class BaseComment {
    * (.)
    */
   public String description() {
-    return project.oxdoc.textProcessor.process(_description);
+    return project.textProcessor.process(description, project);
   }
 
   /**
    * Long description of the entity *
    */
   public CommentTextBlock longdescription() {
-    return _longdescription;
+    return longDescription;
   }
 
   /**
    * Comments of the entity *
    */
   public CommentTextBlock comments() {
-    return _comments;
+    return comments;
   }
 
   /**
    * Example block of the entity *
    */
   public CommentTextBlock example() {
-    return _example;
+    return example;
   }
 
   /**
    * The see also list of the entity *
    */
   public CommentSeeAlsoList see() {
-    return _see;
+    return see;
   }
 
   /**
    * The reference list of the entity *
    */
   public CommentList ref() {
-    return _ref;
+    return ref;
   }
 
   /**
    * The to do list of the entity *
    */
   public CommentList todo() {
-    return _todo;
+    return toDo;
   }
 
   /**
    * The sort key of this entity; returns null if not set. *
    */
   public String sortKey() {
-    return _sortKey;
+    return sortKey;
   }
 
   /**
    * Checks whether the comment is empty *
    */
   public boolean isEmpty() {
-    return _text.trim().length() == 0;
+    return text.trim().length() == 0;
   }
 }

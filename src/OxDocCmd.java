@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class OxDocCmd implements Logger {
   private OxDoc oxdoc = null;
+  private OxDocLogger logger = null;
   private ArrayList files = new ArrayList();
   public LogFile Logfile = null;
 
@@ -52,10 +53,10 @@ public class OxDocCmd implements Logger {
         oxdoc.addFiles(filename);
         totalFiles++;
       } catch (ParseException e) {
-        oxdoc.message("Parsing of file " + filename + " failed");
-        oxdoc.message(e.toString());
+        logger.message("Parsing of file " + filename + " failed");
+        logger.message(e.toString());
       } catch (FileNotFoundException e) {
-        oxdoc.message("File not found: " + filename);
+        logger.message("File not found: " + filename);
       }
     }
 
@@ -94,7 +95,8 @@ public class OxDocCmd implements Logger {
     return true;
   }
 
-  public void run(String[] args, Logger logger) {
+  public void run(String[] args, OxDocLogger logger) {
+    this.logger = logger;
     oxdoc = new OxDoc(logger);
 
     if (emptyArray(args)) {
@@ -143,7 +145,7 @@ public class OxDocCmd implements Logger {
       gui.run(args);
     } else {
       OxDocCmd cmd = new OxDocCmd();
-      cmd.run(args, cmd);
+      cmd.run(args, new OxDocLogger(cmd));
     }
   }
 }

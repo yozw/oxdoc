@@ -21,28 +21,23 @@
 package oxdoc;
 
 public class MathProcessor {
-  public OxDoc oxdoc = null;
 
-  public MathProcessor(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
-  }
-
-  public String ProcessFormula(String formula, boolean isInline) {
+  public String processFormula(String formula, boolean isInline) {
     return formula;
   }
 
-  public boolean Supported(OxDoc oxdoc) {
+  public boolean isSupported() {
     return true;
   }
 
-  public String ExtraHeader() {
+  public String getExtraHeader() {
     return "";
   }
 
-  public String ExtraFooter() {
+  public String getExtraFooter() {
     return "";
   }
 
-  public void Start() {
+  public void start() {
   }
 }

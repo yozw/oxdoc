@@ -23,6 +23,7 @@ package oxdoc.gui;
 import oxdoc.Constants;
 import oxdoc.Os;
 import oxdoc.OxDoc;
+import oxdoc.OxDocLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,7 +56,7 @@ public class MainWindow implements ActionListener {
   public MainWindow() {
     // Create and set up the window.
 
-    frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION);
+    frame = new JFrame(OxDoc.PRODUCT_NAME + " " + Constants.VERSION);
     frame.setResizable(false);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -70,7 +71,7 @@ public class MainWindow implements ActionListener {
     // Display the window.
     frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
     statusBar = new StatusBar();
-    setStatus(OxDoc.CopyrightNotice);
+    setStatus(OxDoc.COPYRIGHT_NOTICE);
     frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
     frame.pack();
 
@@ -408,7 +409,7 @@ public class MainWindow implements ActionListener {
           try {
             System.setProperty("user.dir", workingDir());
 
-            OxDoc oxdoc = new OxDoc(cmd);
+            OxDoc oxdoc = new OxDoc(new OxDocLogger(cmd));
 
             oxdoc.config.load();
             HashMap options = getOptions();

@@ -25,7 +25,7 @@ import oxdoc.OxProject;
 import java.text.MessageFormat;
 
 public class FieldComment extends BaseComment {
-  final int MODIFIER_INTERNAL = 300;
+  private final static int MODIFIER_INTERNAL = 300;
   private boolean _hasInternalModifier = false;
 
   public FieldComment(OxProject project) {

@@ -21,17 +21,11 @@
 package oxdoc;
 
 public class MathProcessorPlain extends MathProcessor {
-  public OxDoc oxdoc = null;
-
-  public MathProcessorPlain(OxDoc oxdoc) {
-    super(oxdoc);
-  }
-
-  public String ProcessFormula(String formula, boolean isInline) {
+  public String processFormula(String formula, boolean isInline) {
     return formula;
   }
 
-  public String ExtraHeader() {
+  public String getExtraHeader() {
     return "<style>.expression { font-style: italic; font-family: times; } .equation { font-style: italic; font-family: times; }</style>";
   }
 }

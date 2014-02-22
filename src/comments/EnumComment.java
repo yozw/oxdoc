@@ -23,9 +23,9 @@ package oxdoc.comments;
 import oxdoc.OxProject;
 
 public class EnumComment extends FieldComment {
-  private String _alternativeName = "";
+  private final static int SECTION_NAME = 500, MODIFIER_INTERNAL = 300;
 
-  final int SECTION_NAME = 500, MODIFIER_INTERNAL = 300;
+  private String _alternativeName = "";
   private boolean _hasInternalModifier = false;
 
   public EnumComment(OxProject project) {
@@ -33,7 +33,6 @@ public class EnumComment extends FieldComment {
 
     registerSection("name", SECTION_NAME);
     registerModifier("internal", MODIFIER_INTERNAL);
-
   }
 
   protected boolean addToSection(int SectionId, String text) {

@@ -28,7 +28,7 @@ public class ClassComment extends BaseComment {
   private String _author = "";
   private String _version = "";
 
-  final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+  private final static int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
   public ClassComment(OxProject project) {
     super(project);

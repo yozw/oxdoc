@@ -20,15 +20,7 @@
 
 package oxdoc.html;
 
-import oxdoc.OxDoc;
-
 public class Element {
-
-  protected OxDoc oxdoc;
-
-  public Element(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
-  }
 
   protected void render(StringBuffer buffer) {
   }

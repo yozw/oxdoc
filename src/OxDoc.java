@@ -22,39 +22,48 @@ package oxdoc;
 
 import oxdoc.parser.Parser;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.OutputStreamWriter;
 
 public class OxDoc {
-  public static final String ProductName = "oxdoc";
-  public static final String Version = Constants.VERSION;
-  public static final String Url = "http://oxdoc.sourceforge.net";
-  public static final String CopyrightNotice = "(c) Copyright 2005-2012 by Y. Zwols [yorizwols@users.sourceforge.net]";
-  public static final String LicenseNotice = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n"
+  public static final String PRODUCT_NAME = "oxdoc";
+  public static final String VERSION = Constants.VERSION;
+  public static final String URL = "http://oxdoc.sourceforge.net";
+  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2012 by Y. Zwols [yorizwols@users.sourceforge.net]";
+  public static final String LICENSE_NOTICE = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n"
       + "You are welcome to redistribute it under certain conditions.\n"
       + "See the LICENSE file for distribution details.\n";
-  public OxProject project = new OxProject(this);
-  public Config config = new Config(this);
-  public FileManager fileManager = new FileManager(this);
-  public LatexImageManager latexImageManager = new LatexImageManager(this);
-  public TextProcessor textProcessor = new TextProcessor(this);
-  private Logger logger = null;
+  public final OxProject project;
+  public final Config config;
+  public final FileManager fileManager;
+  public final LatexImageManager latexImageManager;
+  public final TextProcessor textProcessor;
+  public final OxDocLogger logger;
 
-  public OxDoc(Logger logger) {
+  public OxDoc(OxDocLogger logger) {
     this.logger = logger;
-    message(aboutText());
+    config = new Config(logger);
+    fileManager = new FileManager(logger, config);
+    textProcessor = new TextProcessor(logger, config);
+    project = new OxProject(logger, fileManager, textProcessor);
+    latexImageManager = new LatexImageManager(logger, fileManager, config);
+
+    config.addMathProcessor("latex", new MathProcessorLatex(logger, config, latexImageManager, fileManager));
+    config.addMathProcessor("mathjax", new MathProcessorMathjax());
+    config.addMathProcessor("plain", new MathProcessorPlain());
+
+    logger.message(aboutText());
   }
 
   public OxDoc() {
-    this(new Logger() {
-      public void writeMessage(String message, int Code) {
-        System.out.println(message);
-      }
-    });
+    this(new OxDocLogger());
   }
 
   public static String aboutText() {
-    return ProductName + " " + Version + " [" + Constants.COMPILETIME + "]\n" + CopyrightNotice + "\n\n"
-        + LicenseNotice;
+    return PRODUCT_NAME + " " + VERSION + " [" + Constants.COMPILETIME + "]\n" + COPYRIGHT_NOTICE + "\n\n"
+        + LICENSE_NOTICE;
   }
 
   public void addFiles(String filespec) throws Exception {
@@ -64,44 +73,22 @@ public class OxDoc {
   }
 
   public void addFile(File file) throws Exception {
-    message("Reading file " + file);
+    logger.message("Reading file " + file);
 
     ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
     OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
-    Preprocessor p = new Preprocessor(this, bufferWriter);
+    Preprocessor p = new Preprocessor(logger, config, bufferWriter);
     p.ProcessFile(file);
 
     ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 
-    Parser parser = new Parser(bufferIn, this, project.addFile(file.getName()), project);
+    Parser parser = new Parser(bufferIn, logger, project.addFile(file.getName()), project);
     parser.OxFileDefinition();
   }
 
   public void generateDocs() throws Exception {
-    Documentor documentor = new Documentor(this);
+    Documentor documentor = new Documentor(project, logger, config, latexImageManager, fileManager);
     documentor.generateDocs();
-  }
-
-  public void message(String message) {
-    if (logger != null)
-      logger.writeMessage(message, 0);
-  }
-
-  public void warning(String message) {
-    if (logger != null)
-      logger.writeMessage("Warning: " + message, 1);
-  }
-
-  public void messageStream(InputStream inputStream) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-    while (true) {
-      String data = reader.readLine();
-      if (data == null)
-        break;
-      message("> " + data);
-    }
-    reader.close();
   }
 }

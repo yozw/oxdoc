@@ -20,18 +20,15 @@
 
 package oxdoc.html;
 
-import oxdoc.OxDoc;
-
 import java.util.ArrayList;
 
 public class DefinitionList extends Element {
 
-  String cssClass;
-  ArrayList labels = new ArrayList();
-  ArrayList definitions = new ArrayList();
+  private final String cssClass;
+  private final ArrayList labels = new ArrayList();
+  private final ArrayList definitions = new ArrayList();
 
-  public DefinitionList(OxDoc oxdoc, String cssClass) {
-    super(oxdoc);
+  public DefinitionList(String cssClass) {
     this.cssClass = cssClass;
   }
 

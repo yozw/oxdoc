@@ -28,43 +28,48 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Config {
-  private OxDoc oxdoc = null;
-  public String Latex = null;
-  public String LatexArg = "";
-  public String Dvipng = null;
-  public String DvipngArg = "-Q 10 -D 110";
-  public String OutputDir = "doc/";
-  public String TempDir = ".";
-  public String[] IncludePaths = new String[]{};
-  public String ImagePath = "images/";
-  public String WindowTitle = "";
-  public String ProjectName = "";
-  public MathProcessor MathProcessor = null;
-  public boolean Verbose = false;
-  public boolean UpLevel = false;
+  public String latex = null;
+  public String latexArg = "";
+  public String dvipng = null;
+  public String dvipngArg = "-Q 10 -D 110";
+  public String outputDir = "doc/";
+  public String tempDir = ".";
+  public String[] includePaths = new String[]{};
+  public String imagePath = "images/";
+  public String windowTitle = "";
+  public String projectName = "";
+  public MathProcessor mathProcessor = null;
+  public boolean verbose = false;
+  public boolean upLevel = false;
+  public boolean enableIcons = true;
+  public boolean showInternals = false;
 
-  // public static boolean EnableLatex = true;
-  public boolean EnableIcons = true;
-
-  public boolean ShowInternals = false;
-
+  public static String configFile = "oxdoc.xml";
   // color in the form "rgb <r> <g> <b>", or null for transparent
-  public String ImageBgColor = "rgb 1.0 1.0 1.0";
-  public static String ConfigFile = "oxdoc.xml";
-  public ArrayList LatexPackages = new ArrayList();
+  public String imageBgColor = "rgb 1.0 1.0 1.0";
+  public ArrayList latexPackages = new ArrayList();
 
-  public Config(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
+  private final OxDocLogger logger;
+  private final Map mathProcessors = new HashMap();
+
+  public Config(OxDocLogger logger) {
+    this.logger = logger;
 
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
-      Latex = findInPath("latex.exe");
-      Dvipng = findInPath("dvipng.exe");
+      latex = findInPath("latex.exe");
+      dvipng = findInPath("dvipng.exe");
     } else {
-      Latex = findInPath("latex");
-      Dvipng = findInPath("dvipng");
+      latex = findInPath("latex");
+      dvipng = findInPath("dvipng");
     }
+  }
+
+  public void addMathProcessor(String id, MathProcessor processor) {
+    mathProcessors.put(id, processor);
   }
 
   private String findInPath(String fileName) {
@@ -111,21 +116,18 @@ public class Config {
 
       return out.trim();
     } catch (Exception e) {
-      if (oxdoc != null)
-        oxdoc.warning("Color specification " + color + " invalid. Ignored. (" + e.toString() + ")");
+      if (logger != null)
+        logger.warning("Color specification " + color + " invalid. Ignored. (" + e.toString() + ")");
 
       return null;
     }
   }
 
   public MathProcessor toMathProcessor(String value) throws Exception {
-    if (value.equals("latex"))
-      return new MathProcessorLatex(oxdoc);
-    if (value.equals("mathjax"))
-      return new MathProcessorMathjax(oxdoc);
-    if (value.equals("plain"))
-      return new MathProcessorPlain(oxdoc);
-    throw new Exception("Formula specification " + value + " invalid. Ignored.");
+    MathProcessor processor = (MathProcessor) mathProcessors.get(value);
+    if (processor == null)
+      throw new Exception("Formula specification " + value + " invalid. Ignored.");
+    return processor;
   }
 
   String[] concat(String[] A, String[] B) {
@@ -139,48 +141,48 @@ public class Config {
   public boolean setOption(String name, String value) {
     try {
       if (name.equals("latex"))
-        Latex = FileManager.nativeFileName(value);
+        latex = FileManager.nativeFileName(value);
       else if (name.equals("dvipng"))
-        Dvipng = FileManager.nativeFileName(value);
+        dvipng = FileManager.nativeFileName(value);
       else if (name.equals("tempdir"))
-        TempDir = FileManager.nativePath(value);
+        tempDir = FileManager.nativePath(value);
       else if (name.equals("outputdir"))
-        OutputDir = FileManager.nativePath(value);
+        outputDir = FileManager.nativePath(value);
       else if (name.equals("include"))
-        IncludePaths = concat(value.split(File.pathSeparator), IncludePaths);
+        includePaths = concat(value.split(File.pathSeparator), includePaths);
       else if (name.equals("imagebgcolor")) {
         if (value.trim().equalsIgnoreCase("transparent"))
-          ImageBgColor = null;
+          imageBgColor = null;
         else {
           String latexColor = htmlColorToLatex(value);
           if (latexColor != null)
-            ImageBgColor = latexColor;
+            imageBgColor = latexColor;
         }
       } else if (name.equals("imagepath"))
-        ImagePath = value;
+        imagePath = value;
       else if (name.equals("latexpackages")) {
         String[] packages = value.split("[,;]");
         for (int i = 0; i < packages.length; i++)
-          LatexPackages.add(packages[i]);
+          latexPackages.add(packages[i]);
       } else if (name.equals("formulas"))
-        MathProcessor = toMathProcessor(value);
+        mathProcessor = toMathProcessor(value);
       else if (name.equals("icons"))
-        EnableIcons = toBoolean(value);
+        enableIcons = toBoolean(value);
       else if (name.equals("showinternals"))
-        ShowInternals = toBoolean(value);
+        showInternals = toBoolean(value);
       else if (name.equals("projectname"))
-        ProjectName = value;
+        projectName = value;
       else if (name.equals("windowtitle"))
-        WindowTitle = value;
+        windowTitle = value;
       else if (name.equals("verbose"))
-        Verbose = toBoolean(value);
+        verbose = toBoolean(value);
       else if (name.equals("uplevel"))
-        UpLevel = toBoolean(value);
+        upLevel = toBoolean(value);
       else
         return false;
     } catch (Exception E) {
-      if (oxdoc != null)
-        oxdoc.warning(E.getMessage());
+      if (logger != null)
+        logger.warning(E.getMessage());
     }
 
     return true;
@@ -218,15 +220,15 @@ public class Config {
   }
 
   public void validate() {
-    if (MathProcessor == null)
+    if (mathProcessor == null)
       // auto select Mathjax
-      MathProcessor = new MathProcessorMathjax(oxdoc);
+      mathProcessor = new MathProcessorMathjax();
 
     // if the selected math processor is not supported, choose plain
-    if (!MathProcessor.Supported(oxdoc))
-      MathProcessor = new MathProcessorPlain(oxdoc);
+    if (!mathProcessor.isSupported())
+      mathProcessor = new MathProcessorPlain();
 
-    MathProcessor.Start();
+    mathProcessor.start();
   }
 
   private boolean toBoolean(String value) {
@@ -235,22 +237,22 @@ public class Config {
 
   public static String userHomeConfigFile() {
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
-      return FileManager.appDirFile(ConfigFile);
+      return FileManager.appDirFile(configFile);
     else
-      return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + ConfigFile;
+      return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + configFile;
   }
 
   public void load() {
     load(userHomeConfigFile());
-    load(ConfigFile);
+    load(configFile);
   }
 
   public void load(String Filename) {
     File file = new File(Filename);
     if (!file.exists())
       return;
-    if (oxdoc != null)
-      oxdoc.message("Loading configuration file " + Filename);
+    if (logger != null)
+      logger.message("Loading configuration file " + Filename);
 
     try {
       // Parse the file

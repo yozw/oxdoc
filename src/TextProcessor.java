@@ -25,18 +25,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextProcessor {
-  public OxDoc oxdoc = null;
+  public final OxDocLogger logger;
+  private Config config;
 
-  public TextProcessor(OxDoc oxdoc) {
-    this.oxdoc = oxdoc;
+  public TextProcessor(OxDocLogger logger, Config config) {
+    this.logger = logger;
+    this.config = config;
   }
 
   private boolean isEmptyLine(String S) {
     return (S.trim().length() == 0);
   }
 
-  public String process(String text) {
-    String output = filterReferences(filterLatexExpressions(text));
+  public String process(String text, OxProject project) {
+    String output = filterReferences(filterLatexExpressions(text), project);
 
     String[] lines = output.split("(?m)^");
 
@@ -51,7 +53,7 @@ public class TextProcessor {
     return output;
   }
 
-  private String filterReferences(String text) {
+  private String filterReferences(String text, OxProject project) {
     String pattern = "\\`([^\\`]+)\\`";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
@@ -59,7 +61,7 @@ public class TextProcessor {
 
     while (m.find()) {
       String ref = text.substring(m.start() + 1, m.end() - 1);
-      m.appendReplacement(myStringBuffer, oxdoc.project.linkToSymbol(ref));
+      m.appendReplacement(myStringBuffer, project.linkToSymbol(ref));
     }
 
     return m.appendTail(myStringBuffer).toString();
@@ -80,7 +82,7 @@ public class TextProcessor {
       } else
         formula = text.substring(m.start() + 1, m.end() - 1);
 
-      String replacement = oxdoc.config.MathProcessor.ProcessFormula(formula, isInline);
+      String replacement = config.mathProcessor.processFormula(formula, isInline);
 
       Object[] args = {isInline ? "expression" : "equation", replacement};
       replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);

@@ -27,10 +27,10 @@ import java.util.ArrayList;
 
 class ClassTreeHtml {
 
-  private OxProject project = null;
-  private ClassTree classTree = null;
+  private final OxProject project;
+  private final ClassTree classTree;
 
-  private String css = "table.tree { border-collapse: collapse;  }\n"
+  private final static String CSS = "table.tree { border-collapse: collapse;  }\n"
       + "table.tree tr { height: 1px; padding: 0px; margin: 0px; }\n"
       + "table.tree td { vertical-align: top; padding: 0px; }\n"
       + "table.tree td.line { width: 16px; font-size: 5pt; }\n"
@@ -44,20 +44,20 @@ class ClassTreeHtml {
       + "table.tree td.text { padding-bottom: 8px; }\n"
       + "table.tree td.label { padding-left: 8px; padding-right: 32px; height: 1px; }";
 
-  private String script = "<![if !IE]>\n" + "<script>"
+  private final static String SCRIPT = "<![if !IE]>\n" + "<script>"
       + "if (navigator.userAgent.indexOf('Firefox') != -1) { // firefox\n"
       + "   var elements = document.getElementsByClassName('fffix');\n"
       + "   for (var i = 0; i < elements.length; i++) elements[i].style.height = 'auto';\n" + "}\n"
       + "</script>\n" + "<![endif]>";
 
-  public ClassTreeHtml(OxDoc oxdoc, ClassTree classTree) {
-    project = oxdoc.project;
+  public ClassTreeHtml(OxProject project, ClassTree classTree) {
+    this.project = project;
     this.classTree = classTree;
   }
 
   public void writeHtml(OutputFile output) {
     int column_count = classTree.maxDepth() + 1;
-    output.append_css(css);
+    output.append_css(CSS);
 
     output.writeln("<table class=\"tree\">");
     output.writeln("<tbody><tr>");
@@ -70,7 +70,7 @@ class ClassTreeHtml {
 
     output.writeln("</tbody></table>");
 
-    output.writeln(script);
+    output.writeln(SCRIPT);
   }
 
   private void writeTree(OutputFile output, ArrayList classes, String prependText, int remainingColumns) {

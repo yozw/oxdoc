@@ -20,29 +20,32 @@
 
 package oxdoc.html;
 
-import oxdoc.OxDoc;
+import oxdoc.Config;
+import oxdoc.FileManager;
 
 import java.text.MessageFormat;
 
 public class Header extends Element {
 
-  String title;
-  int level;
-  int iconType;
+  private final String title;
+  private final FileManager fileManager;
+  private final Config config;
+  private final int level;
+  private final int iconType;
 
-  public Header(OxDoc oxdoc, int level, int iconType, String title) {
-    super(oxdoc);
-
-    this.oxdoc = oxdoc;
+  public Header(int level, int iconType, String title, FileManager fileManager, Config config) {
     this.level = level;
     this.iconType = iconType;
     this.title = title;
+    this.fileManager = fileManager;
+    this.config = config;
   }
 
+  // TODO(yori): Maybe add FileManager and Config to signature
   protected void render(StringBuffer buffer) {
-    Object args[] = {"" + level, oxdoc.fileManager.largeIcon(iconType), title};
+    Object args[] = {"" + level, fileManager.largeIcon(iconType), title};
 
-    if (oxdoc.config.EnableIcons)
+    if (config.enableIcons)
       buffer.append(MessageFormat.format(
           "<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n", args));
     else

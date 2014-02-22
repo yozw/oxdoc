@@ -25,35 +25,36 @@ import oxdoc.OxProject;
 import oxdoc.comments.BaseComment;
 
 public class OxEntity {
-  private String name;
-  protected OxFile _parentFile = null;
-  private BaseComment _comment = null;
-  private int _iconType = FileManager.NONE;
-  private OxProject _project;
-  public String _declaration;
-  private OxClass _parentClass;
+  private final String name;
+  private final BaseComment comment;
+  private final OxProject project;
+  private final OxClass parentClass;
+  protected final OxFile _parentFile;
+  public String declaration;
+  private int iconType = FileManager.NONE;
 
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
     this.name = name;
-    _project = project;
-    _comment = comment;
-    _parentClass = parentClass;
+    this.project = project;
+    this.comment = comment;
+    this.parentClass = parentClass;
+    _parentFile = null;
   }
 
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
     this.name = name;
-    _project = parentFile.project();
-    _comment = comment;
+    project = parentFile.project();
+    this.comment = comment;
     _parentFile = parentFile;
-    _parentClass = parentClass;
+    this.parentClass = parentClass;
   }
 
   public OxProject project() {
-    return _project;
+    return project;
   }
 
   public OxClass parentClass() {
-    return _parentClass;
+    return parentClass;
   }
 
   public String name() {
@@ -61,29 +62,29 @@ public class OxEntity {
   }
 
   public String referenceName() {
-    if (_parentClass == null)
+    if (parentClass == null)
       return name();
-    return _parentClass.name() + "::" + name();
+    return parentClass.name() + "::" + name();
   }
 
   public int iconType() {
-    return _iconType;
+    return iconType;
   }
 
   public String smallIcon() {
-    return project().oxdoc.fileManager.smallIcon(_iconType);
+    return project().fileManager.smallIcon(iconType);
   }
 
   public String largeIcon() {
-    return project().oxdoc.fileManager.largeIcon(_iconType);
+    return project().fileManager.largeIcon(iconType);
   }
 
   protected void setIconType(int iconType) {
-    _iconType = iconType;
+    this.iconType = iconType;
   }
 
   public String description() {
-    return project().oxdoc.textProcessor.process(comment().description());
+    return project().textProcessor.process(comment().description(), project());
   }
 
   protected String parentFileUrl() {
@@ -91,9 +92,9 @@ public class OxEntity {
   }
 
   public BaseComment setComment(String comment) throws Exception {
-    _comment.setText(comment);
+    this.comment.setText(comment);
 
-    return _comment;
+    return this.comment;
   }
 
   public String modifiers() {
@@ -101,7 +102,7 @@ public class OxEntity {
   }
 
   public BaseComment comment() {
-    return _comment;
+    return comment;
   }
 
   public String url() {
@@ -125,7 +126,7 @@ public class OxEntity {
   }
 
   public String declaration() {
-    return _declaration;
+    return declaration;
   }
 
   public boolean isInternal() {

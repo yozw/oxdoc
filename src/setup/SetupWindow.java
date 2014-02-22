@@ -46,7 +46,7 @@ public class SetupWindow implements ActionListener {
 
   public SetupWindow() {
     // Create and set up the window.
-    frame = new JFrame(OxDoc.ProductName + " " + Constants.VERSION + " setup");
+    frame = new JFrame(OxDoc.PRODUCT_NAME + " " + Constants.VERSION + " setup");
     frame.setResizable(false);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -74,7 +74,7 @@ public class SetupWindow implements ActionListener {
 
   private JComponent setupCopyright() {
     JLabel copyrightLabel = new JLabel();
-    copyrightLabel.setText(OxDoc.CopyrightNotice);
+    copyrightLabel.setText(OxDoc.COPYRIGHT_NOTICE);
     return copyrightLabel;
   }
 

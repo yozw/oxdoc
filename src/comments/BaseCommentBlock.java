@@ -29,14 +29,15 @@ public class BaseCommentBlock extends ArrayList {
    *
    */
   private static final long serialVersionUID = 1L;
-  public OxProject project = null;
+
+  protected final OxProject project;
 
   public BaseCommentBlock(OxProject project) {
     this.project = project;
   }
 
   public String toString() {
-    return project.oxdoc.textProcessor.process(renderHTML());
+    return project.textProcessor.process(renderHTML(), project);
   }
 
   protected String renderHTML() {
