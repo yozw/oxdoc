@@ -20,17 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc.entities;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import oxdoc.AlphanumComparator;
+
+import java.util.*;
 
 public class OxEntityList {
 	Hashtable entities = new Hashtable();

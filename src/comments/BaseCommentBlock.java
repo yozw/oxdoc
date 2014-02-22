@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc.comments;
 
-import java.util.ArrayList;
-
 import oxdoc.OxProject;
+
+import java.util.ArrayList;
 
 public class BaseCommentBlock extends ArrayList {
 	/**

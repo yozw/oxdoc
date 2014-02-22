@@ -20,12 +20,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc;
 
+import oxdoc.gui.OxDocGui;
+import oxdoc.parser.ParseException;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import oxdoc.gui.OxDocGui;
-import oxdoc.parser.ParseException;
 
 public class OxDocCmd implements Logger {
 	private OxDoc oxdoc = null;

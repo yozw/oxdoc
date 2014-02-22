@@ -20,17 +20,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc;
 
+import oxdoc.entities.*;
+import oxdoc.html.Table;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
-
-import oxdoc.entities.OxClass;
-import oxdoc.entities.OxEntity;
-import oxdoc.entities.OxEnumElement;
-import oxdoc.entities.OxField;
-import oxdoc.entities.OxMethod;
-import oxdoc.html.Table;
 
 class SymbolIndex {
 

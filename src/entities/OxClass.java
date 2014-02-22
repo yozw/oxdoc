@@ -20,11 +20,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc.entities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import oxdoc.FileManager;
 import oxdoc.comments.ClassComment;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 public class OxClass extends OxEntity {
 

@@ -20,9 +20,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import oxdoc.entities.OxClass;
 import oxdoc.entities.OxEntity;
 import oxdoc.entities.OxEnum;
@@ -31,6 +28,9 @@ import oxdoc.html.Anchor;
 import oxdoc.html.DefinitionList;
 import oxdoc.html.Header;
 import oxdoc.html.Table;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Documentor {
 	private OxProject project = null;

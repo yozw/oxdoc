@@ -20,9 +20,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc.comments;
 
-import java.util.HashMap;
-
 import oxdoc.OxProject;
+
+import java.util.HashMap;
 
 public class BaseComment {
 	final int SECTION_COMMENTS = 1, SECTION_REF = 2, SECTION_EXAMPLE = 3, SECTION_SEE = 4, SECTION_SORTKEY = 5;

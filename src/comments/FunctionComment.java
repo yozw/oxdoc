@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  **/
 package oxdoc.comments;
 
-import java.text.MessageFormat;
-
 import oxdoc.OxProject;
+
+import java.text.MessageFormat;
 
 public class FunctionComment extends BaseComment {
 	private BaseCommentBlock _params;

@@ -19,21 +19,10 @@
 
 package oxdoc.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import java.awt.*;
 
 /**
  * This is a statusbar component with a text control for messages.

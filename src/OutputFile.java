@@ -20,14 +20,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 package oxdoc;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.text.MessageFormat;
-
 import oxdoc.html.Header;
+
+import java.io.*;
+import java.text.MessageFormat;
 
 public class OutputFile {
 	private String fileName = null;
