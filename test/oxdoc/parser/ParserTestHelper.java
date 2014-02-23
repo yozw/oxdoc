@@ -1,6 +1,9 @@
 package oxdoc.parser;
 
-import oxdoc.*;
+import oxdoc.Config;
+import oxdoc.FileManager;
+import oxdoc.OxProject;
+import oxdoc.TextProcessor;
 import oxdoc.entities.OxFile;
 
 import java.io.ByteArrayInputStream;
@@ -33,13 +36,8 @@ public class ParserTestHelper {
     return project;
   }
 
-  public OxFile getFile() {
-    return file;
-  }
-
   public static ParserTestHelper create(String input) throws Exception {
     InputStream inputStream = new ByteArrayInputStream(input.getBytes("UTF-8"));
-    ParserTestHelper helper = new ParserTestHelper(inputStream);
-    return helper;
+    return new ParserTestHelper(inputStream);
   }
 }

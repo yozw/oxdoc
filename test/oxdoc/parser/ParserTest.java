@@ -1,14 +1,15 @@
 package oxdoc.parser;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static oxdoc.parser.ParserTestHelper.create;
 
 @RunWith(JUnit4.class)
-public class ParserTest extends TestCase {
+public class ParserTest {
 
   @Test
   public void testClassDeclaration() throws Exception {
