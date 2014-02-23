@@ -91,7 +91,24 @@
     <copy file="${srcmisc}/oxdoc.bat"       todir="${bin}" />
   </target>
 
-  <target name="dist" depends="pkg-bin,pkg-src">
+  <target name="test" depends="build">
+    <javac srcdir="${srctest}" destdir="${build}" classpath="${junit}" nowarn="on" debug="${debug}" includeantruntime="off"  />
+    <junit>
+      <classpath>
+        <pathelement location="${build}" />    
+        <pathelement location="${junit}"/>
+        <pathelement location="${hamcrest}"/>
+      </classpath>    
+      <batchtest>
+        <fileset dir="${srctest}">
+          <include name="**/*Test.java" />
+        </fileset>
+      </batchtest>
+      <formatter type="brief" usefile="false"/>
+    </junit>
+  </target>
+  
+  <target name="dist" depends="test,pkg-bin,pkg-src">
   </target>
 
   <target name="prepare-pkg">
@@ -151,27 +168,9 @@
         <tarfileset dir="${pkg-src}" prefix="oxdoc/" />
     </tar>
   </target>
-
   
   <target name="rebuild" depends="clean,dist" />
 
-  <target name="test">
-    <javac srcdir="${srctest}" destdir="${build}" classpath="${junit}" nowarn="on" debug="${debug}" includeantruntime="off"  />
-    <junit>
-      <classpath>
-        <pathelement location="${build}" />    
-        <pathelement location="${junit}"/>
-        <pathelement location="${hamcrest}"/>
-      </classpath>    
-      <batchtest>
-        <fileset dir="${srctest}">
-          <include name="**/*Test.java" />
-        </fileset>
-      </batchtest>
-      <formatter type="brief" usefile="false"/>
-    </junit>
-  </target>
-  
   <target name="jalopy">
      <taskdef name="jalopy" classname="de.hunsicker.jalopy.plugin.ant.AntPlugin" />
      <jalopy convention="oxdoc-conv.xml">
