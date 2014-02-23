@@ -171,21 +171,22 @@ public class BaseComment {
 
     String description = "";
     int curSection = -1;
+    int index = 0;
 
-    for (int i = 0; i < sections.length; i++) {
+    for (String section : sections) {
       String textLine;
 
-      if (i == 0)
+      if (index == 0)
         textLine = sections[0];
       else {
-        String[] words = sections[i].split("[\t\n ]", 2);
+        String[] words = section.split("[\t\n ]", 2);
         String commandName = words[0];
         textLine = (words.length > 1) ? words[1] : "";
 
         if (isModifier(commandName))
           processModifier(getModifierId(commandName));
         else if (isSetting(commandName)) {
-          words = sections[i].split("[\t\n ]", 3);
+          words = section.split("[\t\n ]", 3);
           textLine = (words.length > 2) ? words[2] : "";
           processSetting(getSettingId(commandName), words[1]);
         } else if (isSection(commandName))
@@ -198,6 +199,7 @@ public class BaseComment {
         description += textLine + " ";
       else
         addToSection(curSection, textLine);
+      index++;
     }
 
     this.description = extractShortDescription(description);

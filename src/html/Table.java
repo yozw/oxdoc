@@ -87,9 +87,8 @@ public class Table extends Element {
 
     int columnCount = getColumnCount();
 
-    for (int r = 0; r < rows.size(); r++) {
-      TableRow row = rows.get(r);
-
+    int rowIndex = 0;
+    for (TableRow row : rows) {
       switch (row.type) {
         case HEADER:
           buffer.append(String.format("<tr><td colspan=\"%d\" class=\"header\" valign=\"top\">%s</td></tr>",
@@ -97,7 +96,7 @@ public class Table extends Element {
           break;
 
         case REGULAR:
-          buffer.append(String.format("<tr%s>\n", classAttr((r % 2 == 1) ? "even" : "odd")));
+          buffer.append(String.format("<tr%s>\n", classAttr((rowIndex % 2 == 1) ? "even" : "odd")));
           for (int c = 0; c < columnCount; c++) {
             String text = (c < row.cells.size()) ? row.cells.get(c) : "&nbsp;";
             String cssClass = (c < tableSpecs.columnCssClasses.size()) ? tableSpecs.columnCssClasses
@@ -107,6 +106,7 @@ public class Table extends Element {
           }
           buffer.append("</tr>\n");
       }
+      rowIndex++;
     }
 
     buffer.append("</table>\n");

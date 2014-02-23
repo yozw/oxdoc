@@ -71,7 +71,7 @@ public class OxProject {
   public String getLinkToSymbol(String name) {
     OxEntity entity = getSymbol(name);
     if (entity == null) {
-      logger.warning("Symbol '" + name + "' referenced to, but was not found");
+      logger.warning("Symbol '" + name + "' referenced, but not found");
       return name;
     } else
 

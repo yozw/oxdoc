@@ -160,15 +160,15 @@ public class StatusBar extends JPanel {
 
   private void updateSubcomponentsFont(Container cont) {
     Component[] comps = cont.getComponents();
-    for (int i = 0; i < comps.length; ++i) {
-      comps[i].setFont(_font);
-      if (comps[i] instanceof Container)
-        updateSubcomponentsFont((Container) comps[i]);
+    for (Component comp : comps) {
+      comp.setFont(_font);
+      if (comp instanceof Container)
+        updateSubcomponentsFont((Container) comp);
     }
   }
 
   public void setStatusBarProgress(String msg, int minimum, int maximum, int value) {
-    if (false == pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
+    if (!(pnlLabelOrProgress.getComponent(0) instanceof JProgressBar)) {
       pnlLabelOrProgress.remove(0);
       pnlLabelOrProgress.add(progressBar);
       validate();

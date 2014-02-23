@@ -82,8 +82,8 @@ public class ClassTree {
 
   private ArrayList<OxClass> getChildClasses(Node node) {
     ArrayList<OxClass> children = new ArrayList<OxClass>();
-    for (int i = 0; i < node.children.size(); i++)
-      children.add(node.children.get(i).oxClass);
+    for (Node child : node.children)
+      children.add(child.oxClass);
     return children;
   }
 

@@ -81,5 +81,4 @@ public class OxEntityList {
 
     return list;
   }
-
 }

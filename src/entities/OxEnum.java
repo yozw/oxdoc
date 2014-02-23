@@ -69,10 +69,12 @@ public class OxEnum extends OxEntity {
 
   public String getElementString() {
     String decl = "";
-    for (int i = 0; i < elements.size(); i++) {
-      if (i != 0)
+    int index = 0;
+    for (OxEnumElement element : elements) {
+      if (index != 0)
         decl += ", ";
-      decl += elements.get(i).getName();
+      decl += element.getName();
+      index++;
     }
     return decl;
   }
