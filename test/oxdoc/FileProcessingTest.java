@@ -19,7 +19,7 @@ public class FileProcessingTest {
 
   @Test
   public void testExampleFile() throws Exception {
-    OxProject project = new OxProject(fileManager, textProcessor);
+    OxProject project = new OxProject(fileManager, textProcessor, config);
     File file = new File("example/dist_degen.ox");
 
     ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();

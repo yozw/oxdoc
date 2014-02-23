@@ -24,17 +24,20 @@ import oxdoc.entities.*;
 
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class OxProject {
-  public final FileManager fileManager;
-  public final TextProcessor textProcessor;
-  public final Logger logger = Logging.getLogger();
-  public String name = "Untitled project";
+  private final FileManager fileManager;
+  private final TextProcessor textProcessor;
+  private final Logger logger = Logging.getLogger();
+  private final Config config;
   private final OxEntityList list = new OxEntityList();
   private final OxEntityList symbols = new OxEntityList();
 
-  public OxProject(FileManager fileManager, TextProcessor textProcessor) {
-    this.fileManager = fileManager;
-    this.textProcessor = textProcessor;
+  public OxProject(FileManager fileManager, TextProcessor textProcessor, Config config) {
+    this.fileManager = checkNotNull(fileManager);
+    this.textProcessor = checkNotNull(textProcessor);
+    this.config = checkNotNull(config);
   }
 
   public OxFile addFile(String name) {
@@ -91,5 +94,17 @@ public class OxProject {
       return "<a href=\"" + entity.getUrl() + "\">" + entity.getDisplayName() + "</a>";
     else
       return "<a href=\"" + entity.getUrl() + "\">" + entity.getName() + "</a>";
+  }
+
+  public String getName() {
+    return config.getProjectName();
+  }
+
+  public TextProcessor getTextProcessor() {
+    return textProcessor;
+  }
+
+  public FileManager getFileManager() {
+    return fileManager;
   }
 }

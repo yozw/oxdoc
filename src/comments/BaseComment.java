@@ -211,7 +211,7 @@ public class BaseComment {
    * (.)
    */
   public String description() {
-    return project.textProcessor.process(description, project);
+    return project.getTextProcessor().process(description, project);
   }
 
   /**

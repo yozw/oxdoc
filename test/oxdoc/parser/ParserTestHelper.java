@@ -22,7 +22,7 @@ public class ParserTestHelper {
     TextProcessor textProcessor = new TextProcessor(config);
     FileManager fileManager = new FileManager(config);
 
-    project = new OxProject(fileManager, textProcessor);
+    project = new OxProject(fileManager, textProcessor, config);
     file = new OxFile("test.ox", project);
   }
 

@@ -47,7 +47,7 @@ public class OxDoc {
     config = new Config();
     fileManager = new FileManager(config);
     textProcessor = new TextProcessor(config);
-    project = new OxProject(fileManager, textProcessor);
+    project = new OxProject(fileManager, textProcessor, config);
     latexImageManager = new LatexImageManager(fileManager, config);
 
     config.addMathProcessor("latex", new MathProcessorLatex(config, latexImageManager, fileManager));

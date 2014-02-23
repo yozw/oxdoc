@@ -78,11 +78,11 @@ public class OxEntity {
   }
 
   public String getSmallIcon() {
-    return getProject().fileManager.getSmallIconHtml(iconType);
+    return getProject().getFileManager().getSmallIconHtml(iconType);
   }
 
   public String getLargeIcon() {
-    return getProject().fileManager.getLargeIconHtml(iconType);
+    return getProject().getFileManager().getLargeIconHtml(iconType);
   }
 
   protected void setIconType(int iconType) {
@@ -90,7 +90,7 @@ public class OxEntity {
   }
 
   public String getDescription() {
-    return getProject().textProcessor.process(getComment().description(), getProject());
+    return getProject().getTextProcessor().process(getComment().description(), getProject());
   }
 
   protected String getParentFileUrl() {

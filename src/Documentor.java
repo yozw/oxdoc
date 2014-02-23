@@ -49,15 +49,9 @@ public class Documentor {
     this.latexImageManager = checkNotNull(latexImageManager);
     this.fileManager = checkNotNull(fileManager);
     this.renderContext = new RenderContext(fileManager);
-    constructTableSpecs();
-  }
-
-  private void constructTableSpecs() {
   }
 
   public void generateDocs() throws Exception {
-    project.name = config.getProjectName();
-
     for (OxEntity entity : project.getFiles()) {
       OxFile file = (OxFile) entity;
       generateDoc(file, file.getUrl());
@@ -74,8 +68,8 @@ public class Documentor {
   }
 
   private void generateStartPage(String fileName) throws Exception {
-    String title = (project.name.length() == 0) ? "Project home" : (project.name + " project home");
-    String sectionTitle = (project.name.length() == 0) ? "Files" : (project.name + " files");
+    String title = (project.getName().length() == 0) ? "Project home" : (project.getName() + " project home");
+    String sectionTitle = (project.getName().length() == 0) ? "Files" : (project.getName() + " files");
 
     OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, config, fileManager);
     int iconType = FileManager.FILES;

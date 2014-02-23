@@ -36,7 +36,7 @@ public class BaseCommentBlock extends ArrayList<String> {
   }
 
   public String toString() {
-    return project.textProcessor.process(renderHTML(), project);
+    return project.getTextProcessor().process(renderHTML(), project);
   }
 
   protected String renderHTML() {
