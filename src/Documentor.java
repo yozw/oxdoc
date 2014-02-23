@@ -33,17 +33,16 @@ import java.util.ArrayList;
 import static oxdoc.Utils.checkNotNull;
 
 public class Documentor {
+  private final Logger logger = Logging.getLogger();
   private final OxProject project;
   private final LatexImageManager latexImageManager;
   private final FileManager fileManager;
-  private final Logger logger;
   private final Config config;
   private final RenderContext renderContext;
 
   private ClassTree classTree;
 
-  public Documentor(OxProject project, Logger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
-    this.logger = checkNotNull(logger);
+  public Documentor(OxProject project, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
     this.config = checkNotNull(config);
     this.project = checkNotNull(project);
     this.latexImageManager = checkNotNull(latexImageManager);
@@ -121,7 +120,7 @@ public class Documentor {
   private void generateDoc(OxFile oxFile, String fileName) throws Exception {
     OutputFile output = new OutputFile(fileName, oxFile.getName(), oxFile.getIconType(), project, config, fileManager);
     try {
-      output.writeln(oxFile.comment());
+      output.writeln(oxFile.getComment());
 
       generateGlobalHeaderDocs(output, oxFile);
 
@@ -195,7 +194,7 @@ public class Documentor {
 
 		/* Print comment */
     if (oxclass != null)
-      output.writeln(oxclass.comment());
+      output.writeln(oxclass.getComment());
 
 		/* Construct a new table */
     Table table = new Table();
@@ -333,7 +332,7 @@ public class Documentor {
         output.writeln("<span class=\"declaration\">" + entity.getDeclaration() + "</span>");
 
       output.writeln("<dl><dd>");
-      output.writeln(entity.comment());
+      output.writeln(entity.getComment());
       output.writeln("</dd></dl>");
     }
   }
@@ -367,7 +366,7 @@ public class Documentor {
         continue;
 
       Anchor anchor = new Anchor(anchorName);
-      BaseComment comment = entity.comment();
+      BaseComment comment = entity.getComment();
       String[] row = {
           anchor.toString() + entity.getDisplayName(),
           comment.toString(),

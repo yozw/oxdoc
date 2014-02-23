@@ -81,7 +81,7 @@ public class OxEnum extends OxEntity {
   }
 
   public boolean isInternal() {
-    return ((EnumComment) comment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
+    return ((EnumComment) getComment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }
 
   public ArrayList getElements() {

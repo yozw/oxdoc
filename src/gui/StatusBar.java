@@ -39,21 +39,21 @@ public class StatusBar extends JPanel {
    * Message to display if there is no msg to display. Defaults to a blank
    * string.
    */
-  private String _msgWhenEmpty = " ";
+  private String msgWhenEmpty = " ";
 
   /**
    * Label showing the message in the statusbar.
    */
-  private final JLabel _textLbl = new JLabel();
+  private final JLabel textLbl = new JLabel();
 
-  private final JProgressBar _progressBar = new JProgressBar();
+  private final JProgressBar progressBar = new JProgressBar();
 
-  private final JPanel _pnlLabelOrProgress = new JPanel();
+  private final JPanel pnlLabelOrProgress = new JPanel();
 
   /**
    * Constraints used to add new controls to this statusbar.
    */
-  private final GridBagConstraints _gbc = new GridBagConstraints();
+  private final GridBagConstraints gridBagConstraints = new GridBagConstraints();
 
   private Font _font;
 
@@ -89,7 +89,7 @@ public class StatusBar extends JPanel {
     if (text != null)
       myText = text.trim();
     if (myText != null && myText.length() > 0)
-      _textLbl.setText(myText);
+      textLbl.setText(myText);
     else
       clearText();
   }
@@ -100,19 +100,19 @@ public class StatusBar extends JPanel {
    * @return
    */
   public synchronized String getText() {
-    return _textLbl.getText();
+    return textLbl.getText();
   }
 
   public synchronized void clearText() {
-    _textLbl.setText(_msgWhenEmpty);
+    textLbl.setText(msgWhenEmpty);
   }
 
   public synchronized void setTextWhenEmpty(String value) {
-    final boolean wasEmpty = _textLbl.getText().equals(_msgWhenEmpty);
+    final boolean wasEmpty = textLbl.getText().equals(msgWhenEmpty);
     if (value != null && value.length() > 0)
-      _msgWhenEmpty = value;
+      msgWhenEmpty = value;
     else
-      _msgWhenEmpty = " ";
+      msgWhenEmpty = " ";
     if (wasEmpty)
       clearText();
   }
@@ -125,7 +125,7 @@ public class StatusBar extends JPanel {
       comp.setFont(_font);
       updateSubcomponentsFont(comp);
     }
-    super.add(comp, _gbc);
+    super.add(comp, gridBagConstraints);
   }
 
   public static Border createComponentBorder() {
@@ -136,28 +136,28 @@ public class StatusBar extends JPanel {
   private void createGUI() {
     clearText();
 
-    Dimension progSize = _progressBar.getPreferredSize();
-    progSize.height = _textLbl.getPreferredSize().height;
-    _progressBar.setPreferredSize(progSize);
+    Dimension progSize = progressBar.getPreferredSize();
+    progSize.height = textLbl.getPreferredSize().height;
+    progressBar.setPreferredSize(progSize);
 
-    _progressBar.setStringPainted(true);
+    progressBar.setStringPainted(true);
 
-    _pnlLabelOrProgress.setLayout(new GridLayout(1, 1));
-    _pnlLabelOrProgress.add(_textLbl);
+    pnlLabelOrProgress.setLayout(new GridLayout(1, 1));
+    pnlLabelOrProgress.add(textLbl);
 
     // The message area is on the right of the statusbar and takes
     // up all available space.
-    _gbc.anchor = GridBagConstraints.WEST;
-    _gbc.weightx = 1.0;
-    _gbc.fill = GridBagConstraints.HORIZONTAL;
-    _gbc.gridy = 0;
-    _gbc.gridx = 0;
-    addJComponent(_pnlLabelOrProgress);
+    gridBagConstraints.anchor = GridBagConstraints.WEST;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.gridy = 0;
+    gridBagConstraints.gridx = 0;
+    addJComponent(pnlLabelOrProgress);
 
     // Any other components are on the right.
-    _gbc.weightx = 0.0;
-    _gbc.anchor = GridBagConstraints.CENTER;
-    _gbc.gridx = GridBagConstraints.RELATIVE;
+    gridBagConstraints.weightx = 0.0;
+    gridBagConstraints.anchor = GridBagConstraints.CENTER;
+    gridBagConstraints.gridx = GridBagConstraints.RELATIVE;
   }
 
   private void updateSubcomponentsFont(Container cont) {
@@ -170,26 +170,26 @@ public class StatusBar extends JPanel {
   }
 
   public void setStatusBarProgress(String msg, int minimum, int maximum, int value) {
-    if (false == _pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
-      _pnlLabelOrProgress.remove(0);
-      _pnlLabelOrProgress.add(_progressBar);
+    if (false == pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
+      pnlLabelOrProgress.remove(0);
+      pnlLabelOrProgress.add(progressBar);
       validate();
     }
 
-    _progressBar.setMinimum(minimum);
-    _progressBar.setMaximum(maximum);
-    _progressBar.setValue(value);
+    progressBar.setMinimum(minimum);
+    progressBar.setMaximum(maximum);
+    progressBar.setValue(value);
 
     if (null != msg)
-      _progressBar.setString(msg);
+      progressBar.setString(msg);
     else
-      _progressBar.setString("");
+      progressBar.setString("");
   }
 
   public void setStatusBarProgressFinished() {
-    if (_pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
-      _pnlLabelOrProgress.remove(0);
-      _pnlLabelOrProgress.add(_textLbl);
+    if (pnlLabelOrProgress.getComponent(0) instanceof JProgressBar) {
+      pnlLabelOrProgress.remove(0);
+      pnlLabelOrProgress.add(textLbl);
       validate();
       repaint();
     }

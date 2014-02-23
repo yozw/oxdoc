@@ -8,8 +8,6 @@ import java.io.InputStream;
 
 public class ParserTestHelper {
 
-  private static final Logger logger = new ConsoleLogger();
-
   private final Config config;
   private final OxProject project;
   private final OxFile file;
@@ -18,11 +16,11 @@ public class ParserTestHelper {
 
   private ParserTestHelper(InputStream inputStream) {
     this.inputStream = inputStream;
-    config = new Config(logger);
-    TextProcessor textProcessor = new TextProcessor(logger, config);
-    FileManager fileManager = new FileManager(logger, config);
+    config = new Config();
+    TextProcessor textProcessor = new TextProcessor(config);
+    FileManager fileManager = new FileManager(config);
 
-    project = new OxProject(logger, fileManager, textProcessor);
+    project = new OxProject(fileManager, textProcessor);
     file = new OxFile("test.ox", project);
   }
 
@@ -35,7 +33,7 @@ public class ParserTestHelper {
 
   public ParserTestHelper test() throws Exception {
     testCalled = true;
-    Parser parser = new Parser(inputStream, logger, file, project);
+    Parser parser = new Parser(inputStream, file, project);
     parser.OxFileDefinition();
     return this;
   }

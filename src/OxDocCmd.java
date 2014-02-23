@@ -29,7 +29,7 @@ import java.util.List;
 
 public class OxDocCmd {
   public final LogFile logFile = new LogFile();
-  public final Logger logger = new LogFileLogger(logFile);
+  public final Logger logger = Logging.getLogger();
 
   public int parseFiles(Iterable<String> files, OxDoc oxdoc) throws Exception {
     int totalFiles = 0;
@@ -86,7 +86,8 @@ public class OxDocCmd {
   }
 
   public void run(String[] args) {
-    OxDoc oxdoc = new OxDoc(logger);
+    Logging.setLogger(new LogFileLogger(logFile));
+    OxDoc oxdoc = new OxDoc();
     List<String> files = new ArrayList<String>();
 
     if (emptyArray(args)) {
@@ -123,7 +124,6 @@ public class OxDocCmd {
 
   // oxdoc entry point
   public static void main(String[] args) {
-
     boolean runGui = false;
 
     if ((args.length == 1) && (args[0].compareTo("--gui") == 0))

@@ -42,7 +42,7 @@ import static oxdoc.Utils.checkNotNull;
 
 public class LatexImageManager extends ArrayList {
   private static final long serialVersionUID = 1L;
-  private final Logger logger;
+  private final Logger logger = Logging.getLogger();
   private final Config config;
   private final FileManager fileManager;
   private final ImageEntryList imageEntries;
@@ -102,8 +102,7 @@ public class LatexImageManager extends ArrayList {
     }
   }
 
-  public LatexImageManager(Logger logger, FileManager fileManager, Config config) {
-    this.logger = checkNotNull(logger);
+  public LatexImageManager(FileManager fileManager, Config config) {
     this.fileManager = checkNotNull(fileManager);
     this.config = checkNotNull(config);
     imageEntries = new ImageEntryList();
@@ -219,9 +218,9 @@ public class LatexImageManager extends ArrayList {
       // make sure the directory exists. If not, create it
       (new File(fileManager.getImageFilename(e.getFilename()))).getParentFile().mkdirs();
 
-      Object[] _args = {config.dvipngArg, fileManager.getImageFilename(e.getFilename()),
+      Object[] args = {config.dvipngArg, fileManager.getImageFilename(e.getFilename()),
           fileManager.getTempFilename("__oxdoc.dvi")};
-      run(config.dvipng, MessageFormat.format(dvipngParams, _args));
+      run(config.dvipng, MessageFormat.format(dvipngParams, args));
     }
     (new File(fileManager.getTempFilename("__oxdoc.tex"))).delete();
     (new File(fileManager.getTempFilename("__oxdoc.dvi"))).delete();
@@ -237,8 +236,8 @@ public class LatexImageManager extends ArrayList {
       Process pp = run.exec(filename + " " + parameters);
       logger.info("");
 
-      StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), logger, false);
-      StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), logger, true);
+      StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), false);
+      StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), true);
 
       errorGobbler.start();
       outputGobbler.start();

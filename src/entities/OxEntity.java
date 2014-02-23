@@ -90,7 +90,7 @@ public class OxEntity {
   }
 
   public String getDescription() {
-    return getProject().textProcessor.process(comment().description(), getProject());
+    return getProject().textProcessor.process(getComment().description(), getProject());
   }
 
   protected String getParentFileUrl() {
@@ -106,7 +106,7 @@ public class OxEntity {
     return "";
   }
 
-  public BaseComment comment() {
+  public BaseComment getComment() {
     return comment;
   }
 
@@ -139,9 +139,9 @@ public class OxEntity {
   }
 
   public String getSortKey() {
-    if ((comment() == null) || (comment().sortKey() == null))
+    if ((getComment() == null) || (getComment().sortKey() == null))
       return getName();
-    return comment().sortKey();
+    return getComment().sortKey();
   }
 
   public OxFile getParentFile() {

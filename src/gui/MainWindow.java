@@ -21,6 +21,7 @@
 package oxdoc.gui;
 
 import oxdoc.Constants;
+import oxdoc.Logging;
 import oxdoc.Os;
 import oxdoc.OxDoc;
 
@@ -401,6 +402,7 @@ public class MainWindow implements ActionListener {
   public void runOxdoc() {
     try {
       final CmdWindow cmd = new CmdWindow();
+      Logging.setLogger(cmd);
       cmd.show();
 
       Thread oxdocThread = new Thread() {
@@ -408,7 +410,7 @@ public class MainWindow implements ActionListener {
           try {
             System.setProperty("user.dir", workingDir());
 
-            OxDoc oxdoc = new OxDoc(cmd);
+            OxDoc oxdoc = new OxDoc();
 
             oxdoc.getConfig().load();
             HashMap options = getOptions();

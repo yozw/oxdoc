@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static oxdoc.Utils.checkNotNull;
-
 public class Config {
   public String latex = null;
   public String latexArg = "";
@@ -55,12 +53,10 @@ public class Config {
   public String imageBgColor = "rgb 1.0 1.0 1.0";
   public ArrayList latexPackages = new ArrayList();
 
-  private final Logger logger;
+  private final Logger logger = Logging.getLogger();
   private final Map mathProcessors = new HashMap();
 
-  public Config(Logger logger) {
-    this.logger = checkNotNull(logger);
-
+  public Config() {
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
       latex = findInPath("latex.exe");
       dvipng = findInPath("dvipng.exe");

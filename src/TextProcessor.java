@@ -27,11 +27,9 @@ import java.util.regex.Pattern;
 import static oxdoc.Utils.checkNotNull;
 
 public class TextProcessor {
-  private final Logger logger;
   private final Config config;
 
-  public TextProcessor(Logger logger, Config config) {
-    this.logger = checkNotNull(logger);
+  public TextProcessor(Config config) {
     this.config = checkNotNull(config);
   }
 

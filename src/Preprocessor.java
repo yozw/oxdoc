@@ -38,13 +38,12 @@ public class Preprocessor {
   private static final int INCLUDE = 32;
   private static final int IMPORT = 64;
 
+  private final Logger logger = Logging.getLogger();
   private final ArrayList defines = new ArrayList();
-  private final Logger logger;
   private final Writer outputStream;
   private final Config config;
 
-  public Preprocessor(Logger logger, Config config, Writer outputStream) {
-    this.logger = checkNotNull(logger);
+  public Preprocessor(Config config, Writer outputStream) {
     this.outputStream = checkNotNull(outputStream);
     this.config = checkNotNull(config);
   }

@@ -53,9 +53,9 @@ public class OxMethod extends OxEntity {
     return (getModifiers() + " " + super.getDeclaration()).trim();
   }
 
-  public OxClass.Visibility visibility() {
-    return OxClass.Visibility.Public; // every method is public in the
-    // current version of Ox
+  public OxClass.Visibility getVisibility() {
+    return OxClass.Visibility.Public;
+    // every method is public in the current version of Ox
   }
 
   public String getModifiers() {
@@ -67,17 +67,17 @@ public class OxMethod extends OxEntity {
     return mod.trim();
   }
 
-  public BaseComment comment() {
-    BaseComment _comment = super.comment();
+  public BaseComment getComment() {
+    BaseComment superComment = super.getComment();
 
-    if (_comment.isEmpty() && superMethod() != null)
-      return superMethod().comment();
+    if (superComment.isEmpty() && superMethod() != null)
+      return superMethod().getComment();
 
-    return _comment;
+    return superComment;
   }
 
   public boolean isInternal() {
-    return ((FunctionComment) comment()).hasInternalModifier();
+    return ((FunctionComment) getComment()).hasInternalModifier();
   }
 
   public OxMethod superMethod() {

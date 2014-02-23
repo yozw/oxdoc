@@ -81,10 +81,10 @@ public class OxClass extends OxEntity {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-    String[] _elements = new String[elements.size()];
+    String[] elementArray = new String[elements.size()];
     for (int i = 0; i < elements.size(); i++)
-      _elements[i] = elements.get(i).toString();
-    return (OxEnum) members.add(new OxEnum(alternativeName, _elements, this, vis));
+      elementArray[i] = elements.get(i).toString();
+    return (OxEnum) members.add(new OxEnum(alternativeName, elementArray, this, vis));
   }
 
   public ArrayList getMembers() {
@@ -236,7 +236,7 @@ public class OxClass extends OxEntity {
 
         if (member instanceof OxMethod) {
           OxMethod oxMethod = (OxMethod) member;
-          if (oxMethod.visibility() != OxClass.Visibility.Private)
+          if (oxMethod.getVisibility() != OxClass.Visibility.Private)
             list.add(oxMethod);
         } else if (member instanceof OxField) {
           OxField oxField = (OxField) member;

@@ -45,9 +45,9 @@ public class FileManager {
   public static final int FILES = 11;
   public static final String[] iconFiles = {"index", "project", "file", "class", "method", "function", "field",
       "enum", "uplevel", "hierarchy", "global", "files"};
+  private static final Logger logger = Logging.getLogger();
   private static String imageCache = "images.xml";
   private static String tempTexFileBase = "__oxdoc";
-  private final Logger logger;
   private final Config config;
 
   // for speed reasons, register which resource we've tried to write so far
@@ -55,8 +55,7 @@ public class FileManager {
   // success)
   Hashtable resourceResults = new Hashtable();
 
-  public FileManager(Logger logger, Config config) {
-    this.logger = checkNotNull(logger);
+  public FileManager(Config config) {
     this.config = checkNotNull(config);
   }
 

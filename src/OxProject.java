@@ -30,29 +30,28 @@ import java.util.ArrayList;
 public class OxProject {
   public final FileManager fileManager;
   public final TextProcessor textProcessor;
-  public final Logger logger;
+  public final Logger logger = Logging.getLogger();
   public String name = "Untitled project";
-  private final OxEntityList _files = new OxEntityList();
-  private final OxEntityList _symbols = new OxEntityList();
+  private final OxEntityList list = new OxEntityList();
+  private final OxEntityList symbols = new OxEntityList();
 
-  public OxProject(Logger logger, FileManager fileManager, TextProcessor textProcessor) {
-    this.logger = logger;
+  public OxProject(FileManager fileManager, TextProcessor textProcessor) {
     this.fileManager = fileManager;
     this.textProcessor = textProcessor;
   }
 
   public OxFile addFile(String name) {
-    return (OxFile) _files.add(new OxFile(name, this));
+    return (OxFile) list.add(new OxFile(name, this));
   }
 
   public ArrayList getFiles() {
-    return _files.sortedList();
+    return list.sortedList();
   }
 
   public OxEntity addSymbol(OxEntity entity) {
     if (getSymbol(entity.getReferenceName()) != null)
       logger.warning("Multiple declarations of symbol '" + entity.getReferenceName() + "'");
-    return _symbols.add(entity.getReferenceName(), entity);
+    return symbols.add(entity.getReferenceName(), entity);
   }
 
   public void addSymbolEnumElements(OxEnum oxenum) {
@@ -62,19 +61,19 @@ public class OxProject {
   }
 
   public ArrayList getSymbols() {
-    return _symbols.sortedList();
+    return symbols.sortedList();
   }
 
   public OxEntityList getClasses() {
-    return _symbols.getClasses();
+    return symbols.getClasses();
   }
 
   public ArrayList getSymbolsByDisplayName() {
-    return _symbols.getSortedListByDisplayName();
+    return symbols.getSortedListByDisplayName();
   }
 
   public OxEntity getSymbol(String name) {
-    return _symbols.get(name);
+    return symbols.get(name);
   }
 
   public String getLinkToSymbol(String name) {

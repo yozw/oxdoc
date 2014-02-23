@@ -52,10 +52,10 @@ public class OxFile extends OxEntity {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-    String[] _elements = new String[elements.size()];
+    String[] elementArray = new String[elements.size()];
     for (int i = 0; i < elements.size(); i++)
-      _elements[i] = elements.get(i).toString();
-    return (OxEnum) enums.add(new OxEnum(alternativeName, _elements, this));
+      elementArray[i] = elements.get(i).toString();
+    return (OxEnum) enums.add(new OxEnum(alternativeName, elementArray, this));
   }
 
   public OxClass addClass(String name) {

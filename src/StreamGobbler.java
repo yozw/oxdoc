@@ -26,14 +26,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class StreamGobbler extends Thread {
+  private final Logger logger = Logging.getLogger();
   private final InputStream is;
-  private final Logger logger;
   private final boolean echo;
   private String text = "";
 
-  StreamGobbler(InputStream is, Logger logger, boolean echo) {
+  StreamGobbler(InputStream is, boolean echo) {
     this.is = is;
-    this.logger = logger;
     this.echo = echo;
   }
 

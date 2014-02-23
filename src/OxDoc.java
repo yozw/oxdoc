@@ -36,20 +36,19 @@ public class OxDoc {
       + "You are welcome to redistribute it under certain conditions.\n"
       + "See the LICENSE file for distribution details.\n";
 
+  private final Logger logger = Logging.getLogger();
   private final OxProject project;
   private final Config config;
   private final FileManager fileManager;
   private final LatexImageManager latexImageManager;
   private final TextProcessor textProcessor;
-  private final Logger logger;
 
-  public OxDoc(Logger logger) {
-    this.logger = logger;
-    config = new Config(logger);
-    fileManager = new FileManager(logger, config);
-    textProcessor = new TextProcessor(logger, config);
-    project = new OxProject(logger, fileManager, textProcessor);
-    latexImageManager = new LatexImageManager(logger, fileManager, config);
+  public OxDoc() {
+    config = new Config();
+    fileManager = new FileManager(config);
+    textProcessor = new TextProcessor(config);
+    project = new OxProject(fileManager, textProcessor);
+    latexImageManager = new LatexImageManager(fileManager, config);
 
     config.addMathProcessor("latex", new MathProcessorLatex(logger, config, latexImageManager, fileManager));
     config.addMathProcessor("mathjax", new MathProcessorMathjax());
@@ -75,17 +74,17 @@ public class OxDoc {
     ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
     OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
-    Preprocessor p = new Preprocessor(logger, config, bufferWriter);
+    Preprocessor p = new Preprocessor(config, bufferWriter);
     p.processFile(file);
 
     ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 
-    Parser parser = new Parser(bufferIn, logger, project.addFile(file.getName()), project);
+    Parser parser = new Parser(bufferIn, project.addFile(file.getName()), project);
     parser.OxFileDefinition();
   }
 
   public void generateDocs() throws Exception {
-    Documentor documentor = new Documentor(project, logger, config, latexImageManager, fileManager);
+    Documentor documentor = new Documentor(project, config, latexImageManager, fileManager);
     documentor.generateDocs();
   }
 

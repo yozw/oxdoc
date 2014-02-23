@@ -27,8 +27,8 @@ import java.text.MessageFormat;
 public class ClassComment extends BaseComment {
   public final static int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
-  private String _author = "";
-  private String _version = "";
+  private String author = "";
+  private String version = "";
 
   public ClassComment(OxProject project) {
     super(project);
@@ -44,10 +44,10 @@ public class ClassComment extends BaseComment {
 
     switch (SectionId) {
       case SECTION_AUTHOR:
-        _author += text;
+        author += text;
         break;
       case SECTION_VERSION:
-        _version += text;
+        version += text;
         break;
       default:
         return false;
@@ -68,8 +68,8 @@ public class ClassComment extends BaseComment {
   public String toString() {
     String extraInfo = "";
 
-    extraInfo += generateSection("Author", "author", _author);
-    extraInfo += generateSection("Version", "version", _version);
+    extraInfo += generateSection("Author", "author", author);
+    extraInfo += generateSection("Version", "version", version);
 
     extraInfo += generateSection("Example", "example", example());
     extraInfo += generateSection("Comments", "comments", comments());
