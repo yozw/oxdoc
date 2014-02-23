@@ -74,4 +74,18 @@ public class ParserTest extends TestCase {
     helper.test();
     assertNotNull(helper.getProject().getSymbol("main"));
   }
+
+  @Test
+  public void testForEach() throws Exception {
+    String input = "main() {foreach(x in y[0]) println(x);}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testForEachWithBraces() throws Exception {
+    String input = "main() {foreach(x in y[0]) { println(x); } }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
 }

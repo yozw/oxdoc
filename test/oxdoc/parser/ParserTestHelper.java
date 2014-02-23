@@ -24,13 +24,6 @@ public class ParserTestHelper {
     file = new OxFile("test.ox", project);
   }
 
-  @Override
-  protected void finalize() throws Throwable {
-    if (!testCalled) {
-      throw new RuntimeException("ParserTestHelper created without calling test() method.");
-    }
-  }
-
   public ParserTestHelper test() throws Exception {
     testCalled = true;
     Parser parser = new Parser(inputStream, file, project);

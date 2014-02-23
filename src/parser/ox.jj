@@ -96,6 +96,8 @@ TOKEN : {
 	<CASE: "case"> |
 	<ENUM: "enum"> |
 	<FOR: "for"> |
+	<FOREACH: "foreach"> |
+	<IN: "in"> |
 	<IF: "if"> |
 	<DO: "do"> |
     <PUBLIC: "public"> | /** Three tokens added by C. Ferrall **/
@@ -483,6 +485,7 @@ void IterationStatement() : {}
 {
 	( <WHILE> "(" Expression() ")" Statement() |
 	  <DO> Statement() <WHILE> "(" Expression() ")" ";" |
+	  <FOREACH> "(" Expression() <IN> Expression() ")" |
 	  <FOR> "("
 	  		[ SimpleStatement() ]
 	  		";"

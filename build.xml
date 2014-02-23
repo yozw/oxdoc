@@ -95,7 +95,7 @@
   </target>
 
   <target name="prepare-pkg">
-    <copy file="README"                     todir="${target}" />
+    <copy file="README.md"                  todir="${target}" />
     <copy file="LICENSE"                    todir="${target}" />
     <copy todir="${target}/css">     <fileset dir="css" />     </copy>
     <copy todir="${target}/example"> <fileset dir="example" /> </copy>
