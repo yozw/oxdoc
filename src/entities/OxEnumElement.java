@@ -25,29 +25,29 @@ import oxdoc.FileManager;
 public class OxEnumElement extends OxEntity {
   private OxEnum oxEnum;
 
-  OxEnumElement(String name, OxEnum oxEnum) {
-    super(name, null, null, oxEnum.project());
+  public OxEnumElement(String name, OxEnum oxEnum) {
+    super(name, null, null, oxEnum.getProject());
     setIconType(FileManager.ENUM);
     this.oxEnum = oxEnum;
   }
 
-  public String url() {
-    return oxEnum.url();
+  public String getUrl() {
+    return oxEnum.getUrl();
   }
 
-  public String referenceName() {
-    return oxEnum.referenceName() + "$$" + name();
+  public String getReferenceName() {
+    return oxEnum.getReferenceName() + "$$" + getName();
   }
 
   public String toString() {
-    return "<OxEnumElement " + referenceName() + ">";
+    return "<OxEnumElement " + getReferenceName() + ">";
   }
 
   public boolean isInternal() {
     return oxEnum.isInternal();
   }
 
-  public OxEnum parentEnum() {
+  public OxEnum getParentEnum() {
     return oxEnum;
   }
 }

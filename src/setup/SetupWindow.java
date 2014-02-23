@@ -255,7 +255,7 @@ public class SetupWindow implements ActionListener {
   }
 
   public static void showAbout() {
-    JOptionPane.showMessageDialog(frame, OxDoc.aboutText());
+    JOptionPane.showMessageDialog(frame, OxDoc.getAboutText());
   }
 
   public void show() {

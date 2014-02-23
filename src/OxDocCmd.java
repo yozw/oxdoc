@@ -99,14 +99,14 @@ public class OxDocCmd {
 
     try {
       // do configuration
-      oxdoc.config.load();
+      oxdoc.getConfig().load();
       try {
-        examineCommandLine(args, files, oxdoc.config);
+        examineCommandLine(args, files, oxdoc.getConfig());
       } catch (IllegalArgumentException E) {
         System.err.println("Error parsing command line. " + E.getMessage());
         return;
       }
-      oxdoc.config.validate();
+      oxdoc.getConfig().validate();
 
       // execute parsing and document generation
       if (parseFiles(files, oxdoc) > 0) {

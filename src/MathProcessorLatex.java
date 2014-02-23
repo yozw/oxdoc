@@ -39,7 +39,7 @@ public class MathProcessorLatex extends MathProcessor {
     String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
     String filename = latexImageManager.getFormulaFilename(extFormula);
 
-    return "<img class=\"latex\" src=\"" + fileManager.imageUrl(filename) + "\" alt=\"" + formula + "\">";
+    return "<img class=\"latex\" src=\"" + fileManager.getImageUrl(filename) + "\" alt=\"" + formula + "\">";
   }
 
   public boolean isSupported() {

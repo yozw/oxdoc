@@ -57,13 +57,13 @@ public class OxClass extends OxEntity {
   private final OxEntityList members = new OxEntityList();
   private String superClassName = null;
 
-  OxClass(String name, OxFile parentFile) {
-    super(name, null, new ClassComment(parentFile.project()), parentFile);
+  public OxClass(String name, OxFile parentFile) {
+    super(name, null, new ClassComment(parentFile.getProject()), parentFile);
     setIconType(FileManager.CLASS);
   }
 
-  OxClass(String name, String superClassName, OxFile parentFile) {
-    super(name, null, new ClassComment(parentFile.project()), parentFile);
+  public OxClass(String name, String superClassName, OxFile parentFile) {
+    super(name, null, new ClassComment(parentFile.getProject()), parentFile);
     setIconType(FileManager.CLASS);
     this.superClassName = superClassName;
   }
@@ -87,12 +87,12 @@ public class OxClass extends OxEntity {
     return (OxEnum) members.add(new OxEnum(alternativeName, _elements, this, vis));
   }
 
-  public ArrayList members() {
+  public ArrayList getMembers() {
     return members.sortedList();
   }
 
   public ArrayList filterMembers(MemberFilter filter) {
-    ArrayList members = members();
+    ArrayList members = getMembers();
     ArrayList list = new ArrayList();
 
     for (int i = 0; i < members.size(); i++) {
@@ -104,7 +104,7 @@ public class OxClass extends OxEntity {
   }
 
   public ArrayList filterInheritedMembers(MemberFilter filter) {
-    ArrayList members = inheritedMembers();
+    ArrayList members = getInheritedMembers();
     ArrayList list = new ArrayList();
 
     for (int i = 0; i < members.size(); i++) {
@@ -116,28 +116,25 @@ public class OxClass extends OxEntity {
   }
 
   public ArrayList getPrivateFields() {
-
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).visibility() == Visibility.Private));
+        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Private));
       }
     });
   }
 
   public ArrayList getProtectedFields() {
-
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).visibility() == Visibility.Protected));
+        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Protected));
       }
     });
   }
 
   public ArrayList getPublicFields() {
-
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).visibility() == Visibility.Public));
+        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Public));
       }
     });
   }
@@ -195,11 +192,11 @@ public class OxClass extends OxEntity {
     OxClass currentClass = this;
 
     while (true) {
-      String superClassName = currentClass.superClassName();
+      String superClassName = currentClass.getSuperClassName();
       if (superClassName == null)
         break;
 
-      OxEntity entity = project().getSymbol(superClassName);
+      OxEntity entity = getProject().getSymbol(superClassName);
       if ((entity == null) || !(entity instanceof OxClass))
         break;
 
@@ -209,34 +206,33 @@ public class OxClass extends OxEntity {
     return list;
   }
 
-  public ArrayList inheritedMembers() {
-
+  public ArrayList getInheritedMembers() {
     ArrayList list = new ArrayList();
     OxClass currentClass = this;
     HashSet seenMemberNames = new HashSet();
-    ArrayList members = members();
+    ArrayList members = getMembers();
     for (int i = 0; i < members.size(); i++) {
       OxEntity member = (OxEntity) members.get(i);
-      seenMemberNames.add(member.name());
+      seenMemberNames.add(member.getName());
     }
 
     while (true) {
-      String superClassName = currentClass.superClassName();
+      String superClassName = currentClass.getSuperClassName();
       if (superClassName == null)
         break;
 
-      OxEntity entity = project().getSymbol(superClassName);
+      OxEntity entity = getProject().getSymbol(superClassName);
       if ((entity == null) || !(entity instanceof OxClass))
         break;
       currentClass = (OxClass) entity;
 
-      members = currentClass.members();
+      members = currentClass.getMembers();
 
       for (int i = 0; i < members.size(); i++) {
         OxEntity member = (OxEntity) members.get(i);
-        if (seenMemberNames.contains(member.name()))
+        if (seenMemberNames.contains(member.getName()))
           continue;
-        seenMemberNames.add(member.name());
+        seenMemberNames.add(member.getName());
 
         if (member instanceof OxMethod) {
           OxMethod oxMethod = (OxMethod) member;
@@ -244,11 +240,11 @@ public class OxClass extends OxEntity {
             list.add(oxMethod);
         } else if (member instanceof OxField) {
           OxField oxField = (OxField) member;
-          if (oxField.visibility() != OxClass.Visibility.Private)
+          if (oxField.getVisibility() != OxClass.Visibility.Private)
             list.add(oxField);
         } else if (member instanceof OxEnum) {
           OxEnum oxEnum = (OxEnum) member;
-          if (oxEnum.visibility() != OxClass.Visibility.Private)
+          if (oxEnum.getVisibility() != OxClass.Visibility.Private)
             list.add(oxEnum);
         } else
           throw new java.lang.Error("Class member has unexpected class: " + member);
@@ -257,31 +253,31 @@ public class OxClass extends OxEntity {
     return list;
   }
 
-  public OxMethod methodByName(String s) {
+  public OxMethod getMethodByName(String s) {
     return (OxMethod) members.get(s);
   }
 
-  public OxField fieldByName(String s) {
+  public OxField getFieldByName(String s) {
     return (OxField) members.get(s);
   }
 
-  public String superClassName() {
+  public String getSuperClassName() {
     return superClassName;
   }
 
-  public OxClass superClass() {
+  public OxClass getSuperClass() {
     if (superClassName == null)
       return null;
 
-    return (OxClass) parentFile().project().getSymbol(superClassName);
+    return (OxClass) getParentFile().getProject().getSymbol(superClassName);
   }
 
-  public String url() {
-    return parentFile().url() + "#" + name();
+  public String getUrl() {
+    return getParentFile().getUrl() + "#" + getName();
     /** Modfied by CF **/
   }
 
   public String toString() {
-    return "<OxClass " + name() + ">";
+    return "<OxClass " + getName() + ">";
   }
 }

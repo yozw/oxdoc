@@ -70,34 +70,34 @@ public class OxFile extends OxEntity {
     return (OxClass) classes.get(name);
   }
 
-  public ArrayList functions() {
+  public ArrayList getFunctions() {
     return functions.sortedList();
   }
 
-  public ArrayList enums() {
+  public ArrayList getEnums() {
     return enums.sortedList();
   }
 
-  public ArrayList variables() {
+  public ArrayList getVariables() {
     return variables.sortedList();
   }
 
-  public ArrayList functionsAndVariables() {
+  public ArrayList getFunctionsAndVariables() {
     OxEntityList newList = new OxEntityList();
     newList.addAll(functions);
     newList.addAll(variables);
     return newList.sortedList();
   }
 
-  public ArrayList classes() {
+  public ArrayList getClasses() {
     return classes.sortedList();
   }
 
-  public String url() {
-    return name() + ".html";
+  public String getUrl() {
+    return getName() + ".html";
   }
 
   public String toString() {
-    return "<OxFile " + name() + ">";
+    return "<OxFile " + getName() + ">";
   }
 }

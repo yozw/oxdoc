@@ -58,12 +58,12 @@ public class Documentor {
   public void generateDocs() throws Exception {
     project.name = config.projectName;
 
-    ArrayList files = project.files();
+    ArrayList files = project.getFiles();
     for (int i = 0; i < files.size(); i++) {
       OxFile file = (OxFile) files.get(i);
-      generateDoc(file, file.url());
+      generateDoc(file, file.getUrl());
     }
-    classTree = new ClassTree(project, project.classes());
+    classTree = new ClassTree(project, project.getClasses());
 
     generateStartPage("default.html");
     generateIndex("index.html");
@@ -80,7 +80,7 @@ public class Documentor {
 
     OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, project, config, fileManager);
     int iconType = FileManager.FILES;
-    ArrayList files = project.files();
+    ArrayList files = project.getFiles();
 
     Header header = new Header(2, iconType, sectionTitle, renderContext);
     output.writeln(header);
@@ -92,7 +92,7 @@ public class Documentor {
 
     for (int i = 0; i < files.size(); i++) {
       OxFile file = (OxFile) files.get(i);
-      String[] row = {file.smallIcon() + project.linkToEntity(file), file.description()};
+      String[] row = {file.getSmallIcon() + project.getLinkToEntity(file), file.getDescription()};
       fileTable.addRow(row);
     }
     output.writeln(fileTable);
@@ -119,19 +119,19 @@ public class Documentor {
   }
 
   private void generateDoc(OxFile oxFile, String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, oxFile.name(), oxFile.iconType(), project, config, fileManager);
+    OutputFile output = new OutputFile(fileName, oxFile.getName(), oxFile.getIconType(), project, config, fileManager);
     try {
       output.writeln(oxFile.comment());
 
       generateGlobalHeaderDocs(output, oxFile);
 
-      ArrayList classes = oxFile.classes();
+      ArrayList classes = oxFile.getClasses();
       for (int i = 0; i < classes.size(); i++) {
         OxClass oxClass = (OxClass) classes.get(i);
         generateClassHeaderDocs(output, oxClass);
       }
 
-      generateClassDetailDocs(output, null, oxFile.functionsAndVariables(), oxFile.enums());
+      generateClassDetailDocs(output, null, oxFile.getFunctionsAndVariables(), oxFile.getEnums());
 
       for (int i = 0; i < classes.size(); i++) {
         OxClass oxclass = (OxClass) classes.get(i);
@@ -159,16 +159,16 @@ public class Documentor {
     OxClass lastClass = null;
     for (int i = 0; i < inheritedMembers.size(); i++) {
       OxEntity member = (OxEntity) inheritedMembers.get(i);
-      if (member.parentClass() != lastClass) {
+      if (member.getParentClass() != lastClass) {
         if (lastClass != null)
           list.addItem(curLabel, curItems);
-        lastClass = member.parentClass();
-        curLabel = String.format("%s from %s:", label, project.linkToEntity(member.parentClass()));
+        lastClass = member.getParentClass();
+        curLabel = String.format("%s from %s:", label, project.getLinkToEntity(member.getParentClass()));
         curItems = "";
       }
       if (curItems.length() > 0)
         curItems += ", ";
-      curItems += project.linkToEntity(member);
+      curItems += project.getLinkToEntity(member);
     }
     if (curLabel.length() > 0)
       list.addItem(curLabel, curItems);
@@ -176,7 +176,7 @@ public class Documentor {
 
   // generate header docs. Entity should be either OxClass or OxFile type
   private void generateClassHeaderDocs(OutputFile output, OxClass oxclass) throws Exception {
-    String sectionName = oxclass.name();
+    String sectionName = oxclass.getName();
     int iconType = FileManager.CLASS;
 
 		/* Write anchor */
@@ -186,7 +186,7 @@ public class Documentor {
     ArrayList superClasses = oxclass.getSuperClasses();
     for (int i = 0; i < superClasses.size(); i++) {
       OxClass superClass = (OxClass) superClasses.get(i);
-      sectionName += " : " + project.linkToEntity(superClass);
+      sectionName += " : " + project.getLinkToEntity(superClass);
     }
 
 		/* Write header */
@@ -223,7 +223,7 @@ public class Documentor {
       for (int i = 0; i < visMembers[k].size(); i++) {
         OxEntity entity = (OxEntity) visMembers[k].get(i);
 
-        String[] row = {entity.smallIcon() + entity.link(), entity.modifiers(), entity.description()};
+        String[] row = {entity.getSmallIcon() + entity.getLink(), entity.getModifiers(), entity.getDescription()};
 
         table.addRow(row);
       }
@@ -258,7 +258,7 @@ public class Documentor {
     int iconType = FileManager.GLOBAL;
 
     String[] visLabels = {"Variables", "Functions", "Enumerations"};
-    ArrayList[] visMembers = {oxfile.variables(), oxfile.functions(), oxfile.enums()};
+    ArrayList[] visMembers = {oxfile.getVariables(), oxfile.getFunctions(), oxfile.getEnums()};
 
 		/* Filter any members that are marked as internal */
     if (!config.showInternals)
@@ -286,7 +286,7 @@ public class Documentor {
       for (int i = 0; i < visMembers[k].size(); i++) {
         OxEntity entity = (OxEntity) visMembers[k].get(i);
 
-        String[] row = {entity.smallIcon() + entity.link(), entity.modifiers(), entity.description()};
+        String[] row = {entity.getSmallIcon() + entity.getLink(), entity.getModifiers(), entity.getDescription()};
 
         table.addRow(row);
       }
@@ -303,8 +303,8 @@ public class Documentor {
 
   private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList memberList, ArrayList enumList)
       throws Exception {
-    String sectionName = (oxclass != null) ? oxclass.name() : "Global ";
-    String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
+    String sectionName = (oxclass != null) ? oxclass.getName() : "Global ";
+    String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
     int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
 
     if (!config.showInternals)
@@ -320,17 +320,17 @@ public class Documentor {
 
     for (int i = 0; i < memberList.size(); i++) {
       OxEntity entity = (OxEntity) memberList.get(i);
-      String anchorName = classPrefix + entity.displayName();
+      String anchorName = classPrefix + entity.getDisplayName();
 
       if (i != 0)
         output.writeln("\n<hr>");
 
-      Header h3 = new Header(3, entity.iconType(), entity.name(), renderContext);
+      Header h3 = new Header(3, entity.getIconType(), entity.getName(), renderContext);
       output.writeln(new Anchor(anchorName));
       output.writeln(h3);
 
-      if (entity.declaration() != null)
-        output.writeln("<span class=\"declaration\">" + entity.declaration() + "</span>");
+      if (entity.getDeclaration() != null)
+        output.writeln("<span class=\"declaration\">" + entity.getDeclaration() + "</span>");
 
       output.writeln("<dl><dd>");
       output.writeln(entity.comment());
@@ -350,7 +350,7 @@ public class Documentor {
       return;
 
     String sectionName = "Enumerations";
-    String classPrefix = (oxclass != null) ? oxclass.name() + "___" : "";
+    String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
 
     Table table = new Table();
     table.specs().cssClass = "enum_table";
@@ -361,7 +361,7 @@ public class Documentor {
     table.addHeaderRow(sectionName);
     for (int i = 0; i < memberList.size(); i++) {
       OxEnum entity = (OxEnum) memberList.get(i);
-      String anchorName = classPrefix + entity.name();
+      String anchorName = classPrefix + entity.getName();
 
       if ((!config.showInternals) && (entity.isInternal()))
         continue;
@@ -369,9 +369,9 @@ public class Documentor {
       Anchor anchor = new Anchor(anchorName);
       BaseComment comment = entity.comment();
       String[] row = {
-          anchor.toString() + entity.displayName(),
+          anchor.toString() + entity.getDisplayName(),
           comment.toString(),
-          entity.elementString()};
+          entity.getElementString()};
 
       table.addRow(row);
     }

@@ -29,7 +29,7 @@ public class OxEntityList {
   private final Hashtable entities = new Hashtable();
 
   public OxEntity add(OxEntity entity) {
-    return add(entity.name(), entity);
+    return add(entity.getName(), entity);
   }
 
   public OxEntity add(String name, OxEntity entity) {
@@ -62,8 +62,8 @@ public class OxEntityList {
       public int compare(Object o1, Object o2) {
         OxEntity e1 = (OxEntity) o1;
         OxEntity e2 = (OxEntity) o2;
-        String key1 = e1.sortKey().toUpperCase();
-        String key2 = e2.sortKey().toUpperCase();
+        String key1 = e1.getSortKey().toUpperCase();
+        String key2 = e2.getSortKey().toUpperCase();
         return alphanumComparator.compare(key1, key2);
       }
     });
@@ -71,11 +71,11 @@ public class OxEntityList {
     return list;
   }
 
-  public ArrayList sortedListByDisplayName() {
+  public ArrayList getSortedListByDisplayName() {
     return sortedList();
   }
 
-  public OxEntityList classes() {
+  public OxEntityList getClasses() {
     OxEntityList list = new OxEntityList();
     Set set = entities.entrySet();
 

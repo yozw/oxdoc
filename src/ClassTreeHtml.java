@@ -25,6 +25,8 @@ import oxdoc.entities.OxClass;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 class ClassTreeHtml {
 
   private final OxProject project;
@@ -51,8 +53,8 @@ class ClassTreeHtml {
       + "</script>\n" + "<![endif]>";
 
   public ClassTreeHtml(OxProject project, ClassTree classTree) {
-    this.project = project;
-    this.classTree = classTree;
+    this.project = checkNotNull(project);
+    this.classTree = checkNotNull(classTree);
   }
 
   public void writeHtml(OutputFile output) {
@@ -98,10 +100,10 @@ class ClassTreeHtml {
       else
         output.writeln("<td class=\"line\"><div class=\"vline last\"><div class=\"hline\">&nbsp;</div></div></td>");
 
-      Object[] labelArgs = {project.linkToEntity(oxClass), remainingColumns - 1, lineText};
+      Object[] labelArgs = {project.getLinkToEntity(oxClass), remainingColumns - 1, lineText};
       output.writeln(MessageFormat.format(labelWrapper, labelArgs));
 
-      Object[] textArgs = {oxClass.description()};
+      Object[] textArgs = {oxClass.getDescription()};
       output.writeln(MessageFormat.format(textWrapper, textArgs));
       output.writeln("</tr>");
 

@@ -26,11 +26,11 @@ import oxdoc.comments.EnumComment;
 import java.util.ArrayList;
 
 public class OxEnum extends OxEntity {
-  public OxClass.Visibility visibility;
   private final ArrayList elements = new ArrayList();
+  private OxClass.Visibility visibility;
 
-  OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
-    super(name, oxclass, new EnumComment(oxclass.parentFile().project()), oxclass.parentFile());
+  public OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
+    super(name, oxclass, new EnumComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
     setIconType(FileManager.ENUM);
 
     for (int i = 0; i < elements.length; i++)
@@ -38,8 +38,8 @@ public class OxEnum extends OxEntity {
     this.visibility = visibility;
   }
 
-  OxEnum(String name, String[] elements, OxFile oxfile) {
-    super(name, null, new EnumComment(oxfile.project()), oxfile);
+  public OxEnum(String name, String[] elements, OxFile oxfile) {
+    super(name, null, new EnumComment(oxfile.getProject()), oxfile);
 
     setIconType(FileManager.ENUM);
     for (int i = 0; i < elements.length; i++)
@@ -47,44 +47,44 @@ public class OxEnum extends OxEntity {
     visibility = OxClass.Visibility.Public;
   }
 
-  public String url() {
-    if (parentClass() != null)
-      return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
+  public String getUrl() {
+    if (getParentClass() != null)
+      return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
     else
-      return parentFileUrl() + "#" + displayName();
+      return getParentFileUrl() + "#" + getDisplayName();
   }
 
-  public String declaration() {
+  public String getDeclaration() {
     String decl = "";
-    decl += " enum { " + elementString() + " }";
-    if (parentClass() != null)
-      decl += " [" + visibility() + "]";
+    decl += " enum { " + getElementString() + " }";
+    if (getParentClass() != null)
+      decl += " [" + getVisibility() + "]";
     return decl;
   }
 
-  public String elementString() {
+  public String getElementString() {
     String decl = "";
     for (int i = 0; i < elements.size(); i++) {
       if (i != 0)
         decl += ", ";
-      decl += ((OxEnumElement) elements.get(i)).name();
+      decl += ((OxEnumElement) elements.get(i)).getName();
     }
     return decl;
   }
 
-  public OxClass.Visibility visibility() {
+  public OxClass.Visibility getVisibility() {
     return visibility;
   }
 
   public String toString() {
-    return "<OxEnum " + referenceName() + ">";
+    return "<OxEnum " + getReferenceName() + ">";
   }
 
   public boolean isInternal() {
-    return ((EnumComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
+    return ((EnumComment) comment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }
 
-  public ArrayList elements() {
+  public ArrayList getElements() {
     return elements;
   }
 }

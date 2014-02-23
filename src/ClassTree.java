@@ -26,7 +26,9 @@ import oxdoc.entities.OxEntityList;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-class ClassTree {
+import static oxdoc.Utils.checkNotNull;
+
+public class ClassTree {
 
   private class Node {
     OxClass oxClass;
@@ -40,7 +42,7 @@ class ClassTree {
   private int maxDepth = 0;
 
   public ClassTree(OxProject project, OxEntityList classes) {
-    this.project = project;
+    this.project = checkNotNull(project);
 
     ArrayList classList = classes.sortedList();
 
@@ -55,7 +57,7 @@ class ClassTree {
     // next, construct parent-child relationships
     for (int i = 0; i < classList.size(); i++) {
       OxClass oxClass = (OxClass) classList.get(i);
-      OxClass parentClass = oxClass.superClass();
+      OxClass parentClass = oxClass.getSuperClass();
 
       Node classNode = (Node) nodes.get(oxClass);
       Node parentNode = (parentClass != null) ? (Node) nodes.get(parentClass) : rootNode;
@@ -76,8 +78,8 @@ class ClassTree {
         text.append("<li>");
       else
         text.append("<li class=\"last\">");
-      text.append("<span class=\"label\">" + project.linkToEntity(child.oxClass) + "</span><span class=\"text\">"
-          + child.oxClass.description() + "</span>\n");
+      text.append("<span class=\"label\">" + project.getLinkToEntity(child.oxClass) + "</span><span class=\"text\">"
+          + child.oxClass.getDescription() + "</span>\n");
       addChildrenToHtmlList(text, child);
     }
     text.append("</ul>\n");

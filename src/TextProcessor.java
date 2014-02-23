@@ -24,13 +24,15 @@ import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class TextProcessor {
-  public final Logger logger;
-  private Config config;
+  private final Logger logger;
+  private final Config config;
 
   public TextProcessor(Logger logger, Config config) {
-    this.logger = logger;
-    this.config = config;
+    this.logger = checkNotNull(logger);
+    this.config = checkNotNull(config);
   }
 
   private boolean isEmptyLine(String S) {
@@ -61,7 +63,7 @@ public class TextProcessor {
 
     while (m.find()) {
       String ref = text.substring(m.start() + 1, m.end() - 1);
-      m.appendReplacement(myStringBuffer, project.linkToSymbol(ref));
+      m.appendReplacement(myStringBuffer, project.getLinkToSymbol(ref));
     }
 
     return m.appendTail(myStringBuffer).toString();

@@ -25,32 +25,32 @@ import oxdoc.comments.BaseComment;
 import oxdoc.comments.FunctionComment;
 
 public class OxMethod extends OxEntity {
-  public boolean Virtual = false;
-  public boolean Static = false;
+  private boolean isVirtual = false;
+  private boolean isStatic = false;
 
   public OxMethod(String name, OxFile parentFile) {
-    super(name, null, new FunctionComment(parentFile.project()), parentFile);
+    super(name, null, new FunctionComment(parentFile.getProject()), parentFile);
 
     setIconType(FileManager.FUNCTION);
   }
 
   public OxMethod(String name, OxClass oxclass) {
-    super(name, oxclass, new FunctionComment(oxclass.parentFile().project()), oxclass.parentFile());
+    super(name, oxclass, new FunctionComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
 
     setIconType(FileManager.METHOD);
   }
 
-  public String url() {
-    if (parentClass() != null)
-      return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
+  public String getUrl() {
+    if (getParentClass() != null)
+      return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
     else
-      return parentFileUrl() + "#" + displayName();
+      return getParentFileUrl() + "#" + getDisplayName();
   }
 
-  public String declaration() {
-    if (super.declaration() == null)
+  public String getDeclaration() {
+    if (super.getDeclaration() == null)
       return null;
-    return (modifiers() + " " + super.declaration()).trim();
+    return (getModifiers() + " " + super.getDeclaration()).trim();
   }
 
   public OxClass.Visibility visibility() {
@@ -58,11 +58,11 @@ public class OxMethod extends OxEntity {
     // current version of Ox
   }
 
-  public String modifiers() {
+  public String getModifiers() {
     String mod = "";
-    if (Virtual)
+    if (isVirtual)
       mod += "virtual ";
-    if (Static)
+    if (isStatic)
       mod += "static ";
     return mod.trim();
   }
@@ -81,13 +81,21 @@ public class OxMethod extends OxEntity {
   }
 
   public OxMethod superMethod() {
-    if (parentClass() == null || parentClass().superClass() == null)
+    if (getParentClass() == null || getParentClass().getSuperClass() == null)
       return null;
 
-    return parentClass().superClass().methodByName(displayName());
+    return getParentClass().getSuperClass().getMethodByName(getDisplayName());
   }
 
   public String toString() {
-    return "<OxMethod " + referenceName() + ">";
+    return "<OxMethod " + getReferenceName() + ">";
+  }
+
+  public void setVirtual(boolean virtual) {
+    isVirtual = virtual;
+  }
+
+  public void setStatic(boolean aStatic) {
+    isStatic = aStatic;
   }
 }

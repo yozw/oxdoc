@@ -29,7 +29,7 @@ public class BinaryOutputFile {
 
   // create a blank file
   public BinaryOutputFile(String fileName, FileManager fileManager) throws IOException {
-    File aFile = new File(fileManager.outputFile(fileName).trim());
+    File aFile = new File(fileManager.getOutputFilename(fileName).trim());
     aFile.getParentFile().mkdirs();
     output = new FileOutputStream(aFile);
   }

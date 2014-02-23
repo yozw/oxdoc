@@ -38,79 +38,79 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-public class LatexImageManager extends ArrayList {
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-  private ImageEntryList imageEntries;
-  private boolean _cacheLoaded = false;
-  private int _imageCounter = 0;
-  public final Logger logger;
-  private FileManager fileManager;
-  private Config config;
+import static oxdoc.Utils.checkNotNull;
 
-  private class ImageEntry {
-    public String _filename = "";
-    public String _formula = "";
+public class LatexImageManager extends ArrayList {
+  private static final long serialVersionUID = 1L;
+  private final Logger logger;
+  private final Config config;
+  private final FileManager fileManager;
+  private final ImageEntryList imageEntries;
+
+  private boolean cacheLoaded = false;
+  private int imageCounter = 0;
+
+  private static class ImageEntry {
+    public final String filename;
+    public final String formula;
     public boolean needsGenerating = true;
 
     public ImageEntry(String formula, String filename) {
-      _filename = filename;
-      _formula = formula;
+      this.filename = checkNotNull(filename);
+      this.formula = checkNotNull(formula);
     }
 
-    public String filename() {
-      return _filename;
+    public String getFilename() {
+      return filename;
     }
 
-    public String formula() {
-      return _formula;
+    public String getFormula() {
+      return formula;
     }
   }
 
   private class ImageEntryList {
-    private Hashtable _formulas = new Hashtable();
-    private Hashtable _filenames = new Hashtable();
+    private final Hashtable formulas = new Hashtable();
+    private final Hashtable filenames = new Hashtable();
 
-    public Hashtable formulas() {
-      return _formulas;
+    public Hashtable getFormulas() {
+      return formulas;
     }
 
     public ImageEntry register(String formula, String filename) {
-      if (!_cacheLoaded) {
-        _cacheLoaded = true;
+      if (!cacheLoaded) {
+        cacheLoaded = true;
         loadCache();
       }
 
       formula = formula.trim().replace('\n', ' ').replace('\r', ' ');
 
-      ImageEntry entry = ((ImageEntry) formulas().get(formula));
+      ImageEntry entry = ((ImageEntry) getFormulas().get(formula));
       if (entry != null)
         return entry;
 
       if (filename == null)
         do
-          filename = "img" + (Integer.toString(++_imageCounter)) + ".png";
-        while (_filenames.get(filename) != null);
+          filename = "img" + (Integer.toString(++imageCounter)) + ".png";
+        while (filenames.get(filename) != null);
 
       entry = new ImageEntry(formula, filename);
-      _formulas.put(formula, entry);
-      _filenames.put(filename, entry);
+      formulas.put(formula, entry);
+      filenames.put(filename, entry);
 
       return entry;
     }
   }
 
   public LatexImageManager(Logger logger, FileManager fileManager, Config config) {
-    this.logger = logger;
-    this.fileManager = fileManager;
-    this.config = config;
+    this.logger = checkNotNull(logger);
+    this.fileManager = checkNotNull(fileManager);
+    this.config = checkNotNull(config);
     imageEntries = new ImageEntryList();
   }
 
   public String getFormulaFilename(String Formula) {
-    return imageEntries.register(Formula, null).filename();
+    return imageEntries.register(Formula, null).getFilename();
   }
 
   private void saveCache() {
@@ -121,11 +121,11 @@ public class LatexImageManager extends ArrayList {
       Element root = doc.createElement("cache");
       doc.appendChild(root);
 
-      for (Enumeration elements = imageEntries.formulas().elements(); elements.hasMoreElements(); ) {
+      for (Enumeration elements = imageEntries.getFormulas().elements(); elements.hasMoreElements(); ) {
         ImageEntry e = (ImageEntry) elements.nextElement();
         Element newElement = doc.createElement("image");
-        newElement.setAttribute("formula", e.formula());
-        newElement.setAttribute("filename", e.filename());
+        newElement.setAttribute("formula", e.getFormula());
+        newElement.setAttribute("filename", e.getFilename());
         root.appendChild(newElement);
       }
 
@@ -133,7 +133,7 @@ public class LatexImageManager extends ArrayList {
       Source source = new DOMSource(doc);
 
       // Prepare the output file
-      File file = new File(fileManager.imageCache());
+      File file = new File(fileManager.getImageCache());
       Result result = new StreamResult(new FileWriter(file));
 
       // Write the DOM document to the file
@@ -146,13 +146,13 @@ public class LatexImageManager extends ArrayList {
 
   private void loadCache() {
     try {
-      File file = new File(fileManager.imageCache().trim());
+      File file = new File(fileManager.getImageCache().trim());
       if (!file.exists())
         return;
 
       // Parse the file
       DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      Document doc = builder.parse(fileManager.imageCache());
+      Document doc = builder.parse(fileManager.getImageCache());
 
       // Find the tags of interest
       NodeList nodes = doc.getElementsByTagName("image");
@@ -171,7 +171,7 @@ public class LatexImageManager extends ArrayList {
   }
 
   public void makeLatexFiles() throws IOException {
-    for (Enumeration elements = imageEntries.formulas().elements(); elements.hasMoreElements(); ) {
+    for (Enumeration elements = imageEntries.getFormulas().elements(); elements.hasMoreElements(); ) {
       ImageEntry e = (ImageEntry) elements.nextElement();
       if (e.needsGenerating)
         makeLatexFile(e);
@@ -180,9 +180,9 @@ public class LatexImageManager extends ArrayList {
   }
 
   private void makeLatexFile(ImageEntry e) throws IOException {
-    logger.info("Generating image for formula \"" + e.formula() + "\"...");
+    logger.info("Generating image for formula \"" + e.getFormula() + "\"...");
 
-    File aFile = new File(fileManager.tempTexFile());
+    File aFile = new File(fileManager.getTempTexFile());
     Writer output = new BufferedWriter(new FileWriter(aFile));
     output.write("\\documentclass{article}\n");
     output.write("\\usepackage{amsmath}\n");
@@ -194,20 +194,20 @@ public class LatexImageManager extends ArrayList {
     if (config.imageBgColor != null)
       output.write("\\special{background " + config.imageBgColor + " }");
     output.write("\\begin{align*}\n");
-    output.write(e.formula() + "\n");
+    output.write(e.getFormula() + "\n");
     output.write("\\end{align*}\n");
     output.write("\\end{document}\n");
     output.close();
 
     String latexParams = config.latexArg + " -interaction=batchmode";
 
-    File tempDir = new File(fileManager.tempDir());
+    File tempDir = new File(fileManager.getTempDir());
     File curDir = new File(".");
     if (!tempDir.equals(curDir))
       latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}",
-          fileManager.tempDir());
+          fileManager.getTempDir());
 
-    run(config.latex, latexParams + " " + fileManager.tempFile("__oxdoc.tex"));
+    run(config.latex, latexParams + " " + fileManager.getTempFilename("__oxdoc.tex"));
 
     String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
     if (config.imageBgColor == null)
@@ -217,16 +217,16 @@ public class LatexImageManager extends ArrayList {
     // fonts at the first run
     for (int i = 0; i < 2; i++) {
       // make sure the directory exists. If not, create it
-      (new File(fileManager.imageFile(e.filename()))).getParentFile().mkdirs();
+      (new File(fileManager.getImageFilename(e.getFilename()))).getParentFile().mkdirs();
 
-      Object[] _args = {config.dvipngArg, fileManager.imageFile(e.filename()),
-          fileManager.tempFile("__oxdoc.dvi")};
+      Object[] _args = {config.dvipngArg, fileManager.getImageFilename(e.getFilename()),
+          fileManager.getTempFilename("__oxdoc.dvi")};
       run(config.dvipng, MessageFormat.format(dvipngParams, _args));
     }
-    (new File(fileManager.tempFile("__oxdoc.tex"))).delete();
-    (new File(fileManager.tempFile("__oxdoc.dvi"))).delete();
-    (new File(fileManager.tempFile("__oxdoc.aux"))).delete();
-    (new File(fileManager.tempFile("__oxdoc.log"))).delete();
+    (new File(fileManager.getTempFilename("__oxdoc.tex"))).delete();
+    (new File(fileManager.getTempFilename("__oxdoc.dvi"))).delete();
+    (new File(fileManager.getTempFilename("__oxdoc.aux"))).delete();
+    (new File(fileManager.getTempFilename("__oxdoc.log"))).delete();
   }
 
   private void run(String filename, String parameters) throws IOException {

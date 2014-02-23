@@ -28,11 +28,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 
-class SymbolIndex {
+import static oxdoc.Utils.checkNotNull;
+
+public class SymbolIndex {
 
   private final OxProject project;
   private final ClassTree classTree;
   private final Config config;
+  private final Hashtable entries; // entries, key: OxEntity, value: IndexEntry
 
   /*
    * Entry in the index. Every entry is associated with an entity. For
@@ -43,7 +46,7 @@ class SymbolIndex {
    * associated entity will be A::X(). The array owningClassMembers (for lack
    * of a better name) will contain A::X() and B::X().
    */
-  private class IndexEntry {
+  private static class IndexEntry {
     String text = "";
     String type = "";
     OxEntity entity = null; // the entity associated with the index entry
@@ -59,20 +62,17 @@ class SymbolIndex {
     }
   }
 
-  Hashtable entries = null; // entries, key: OxEntity, value: IndexEntry
-
   public SymbolIndex(OxProject project, ClassTree classTree, Config config) {
-    this.project = project;
-    this.classTree = classTree;
-    this.config = config;
-
-    constructIndex();
+    this.project = checkNotNull(project);
+    this.classTree = checkNotNull(classTree);
+    this.config = checkNotNull(config);
+    this.entries = constructIndex();
   }
 
-  private void constructIndex() {
-    entries = new Hashtable();
+  private Hashtable constructIndex() {
+    Hashtable entries = new Hashtable();
 
-    ArrayList symbols = project.symbolsByDisplayName();
+    ArrayList symbols = project.getSymbolsByDisplayName();
 
     for (int i = 0; i < symbols.size(); i++) {
       OxEntity entity = (OxEntity) symbols.get(i);
@@ -81,37 +81,38 @@ class SymbolIndex {
 
       if (entity instanceof OxClass)
         addSingletonEntry(entity, "Class");
-      else if ((entity instanceof OxField) && (entity.parentClass() == null))
+      else if ((entity instanceof OxField) && (entity.getParentClass() == null))
         addSingletonEntry(entity, "Global variable");
       else if (entity instanceof OxField)
         addGroupedEntry(entity, entity, "Field");
       else if (entity instanceof OxEnumElement) {
         OxEnumElement element = (OxEnumElement) entity;
-        addSingletonEntry(entity, "Element of enumeration " + project.linkToEntity(element.parentEnum()));
-      } else if ((entity instanceof OxMethod) && (entity.parentClass() == null))
+        addSingletonEntry(entity, "Element of enumeration " + project.getLinkToEntity(element.getParentEnum()));
+      } else if ((entity instanceof OxMethod) && (entity.getParentClass() == null))
         addSingletonEntry(entity, "Global function");
       else if (entity instanceof OxMethod) {
         OxMethod method = (OxMethod) entity;
-        OxClass parentClass = method.parentClass();
+        OxClass parentClass = method.getParentClass();
         String type = "Method";
-        if (method.name().compareTo(parentClass.name()) == 0)
+        if (method.getName().compareTo(parentClass.getName()) == 0)
           type = "Constructor";
-        else if (method.name().compareTo("~" + parentClass.name()) == 0)
+        else if (method.getName().compareTo("~" + parentClass.getName()) == 0)
           type = "Destructor";
 
         // now, find furthest ancestor class that has the same method
         OxClass ancestorClass = parentClass;
-        while ((ancestorClass.superClass() != null)
-            && (ancestorClass.superClass().methodByName(method.name()) != null))
-          ancestorClass = ancestorClass.superClass();
+        while ((ancestorClass.getSuperClass() != null)
+            && (ancestorClass.getSuperClass().getMethodByName(method.getName()) != null))
+          ancestorClass = ancestorClass.getSuperClass();
 
-        addGroupedEntry(ancestorClass.methodByName(method.name()), entity, type);
+        addGroupedEntry(ancestorClass.getMethodByName(method.getName()), entity, type);
       }
     }
+    return entries;
   }
 
   private IndexEntry addSingletonEntry(OxEntity entity, String type) {
-    IndexEntry entry = new IndexEntry(entity.name(), type, entity);
+    IndexEntry entry = new IndexEntry(entity.getName(), type, entity);
     entries.put(entity, entry);
     return entry;
   }
@@ -119,7 +120,7 @@ class SymbolIndex {
   private IndexEntry addGroupedEntry(OxEntity ancestorEntity, OxEntity entity, String type) {
     IndexEntry entry = (IndexEntry) entries.get(ancestorEntity);
     if (entry == null)
-      entry = new IndexEntry(ancestorEntity.name(), type, entity);
+      entry = new IndexEntry(ancestorEntity.getName(), type, entity);
     entry.owningClassMembers.add(entity);
     entries.put(ancestorEntity, entry);
     return entry;
@@ -142,8 +143,8 @@ class SymbolIndex {
   private void sortOwningClassMembers(ArrayList members) {
     Collections.sort(members, new Comparator() {
       public int compare(Object o1, Object o2) {
-        OxClass e1 = ((OxEntity) o1).parentClass();
-        OxClass e2 = ((OxEntity) o2).parentClass();
+        OxClass e1 = ((OxEntity) o1).getParentClass();
+        OxClass e2 = ((OxEntity) o2).getParentClass();
 
         int depth1 = classTree.getClassDepth(e1);
         int depth2 = classTree.getClassDepth(e2);
@@ -151,7 +152,7 @@ class SymbolIndex {
         if (depth1 != depth2)
           return depth2 - depth1;
 
-        return e1.name().toUpperCase().compareTo(e2.name().toUpperCase());
+        return e1.getName().toUpperCase().compareTo(e2.getName().toUpperCase());
       }
     });
   }
@@ -181,11 +182,11 @@ class SymbolIndex {
         for (int j = 0; j < entry.owningClassMembers.size(); j++) {
           OxEntity memberEntity = (OxEntity) entry.owningClassMembers.get(j);
           description += (j == 0 ? "" : ", ")
-              + project.linkToEntity(memberEntity, memberEntity.parentClass().name());
+              + project.getLinkToEntity(memberEntity, memberEntity.getParentClass().getName());
         }
       }
 
-      String[] row = {entity.smallIcon() + project.linkToEntity(entity), description};
+      String[] row = {entity.getSmallIcon() + project.getLinkToEntity(entity), description};
       table.addRow(row);
     }
     output.writeln(table);

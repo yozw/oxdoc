@@ -63,7 +63,7 @@ public class OutputFile {
   }
 
   public void close() throws IOException {
-    File aFile = new File(fileManager.outputFile(fileName).trim());
+    File aFile = new File(fileManager.getOutputFilename(fileName).trim());
     aFile.getParentFile().mkdirs();
     ExtBufferedWriter output = new ExtBufferedWriter(new FileWriter(aFile));
 
@@ -109,13 +109,13 @@ public class OutputFile {
     output.writeln("<div class=\"header\">");
     output.write("[ ");
     if (config.upLevel)
-      output.writeln(fileManager.smallIcon(FileManager.UPLEVEL)
+      output.writeln(fileManager.getSmallIconHtml(FileManager.UPLEVEL)
           + "<a href=\"..\\default.html\">Up Level</a> |");
     /** Added by CF **/
 
-    output.writeln(fileManager.smallIcon(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
-    output.writeln(" | " + fileManager.smallIcon(FileManager.INDEX) + "<a href=\"index.html\">Index</a>");
-    output.writeln(" | " + fileManager.smallIcon(FileManager.HIERARCHY)
+    output.writeln(fileManager.getSmallIconHtml(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
+    output.writeln(" | " + fileManager.getSmallIconHtml(FileManager.INDEX) + "<a href=\"index.html\">Index</a>");
+    output.writeln(" | " + fileManager.getSmallIconHtml(FileManager.HIERARCHY)
         + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
 
     Header h1 = new Header(1, iconType, title, renderContext);

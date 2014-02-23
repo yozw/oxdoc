@@ -27,7 +27,7 @@ public class FileProcessingTest {
 		OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
 		Preprocessor p = new Preprocessor(logger, config, bufferWriter);
-		p.ProcessFile(file);
+		p.processFile(file);
 
 		ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 

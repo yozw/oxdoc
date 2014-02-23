@@ -24,13 +24,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class Preprocessor {
 
-  private final ArrayList defines = new ArrayList();
-  private final Logger logger;
-  private final Writer outputStream;
-  private final Config config;
-  private static Collection ignoredFiles = new ArrayList();
+  private static final Collection ignoredFiles = new ArrayList();
   private static final int PLAINLINE = 0;
   private static final int ENDIF = 1;
   private static final int ELSE = 2;
@@ -40,24 +38,29 @@ public class Preprocessor {
   private static final int INCLUDE = 32;
   private static final int IMPORT = 64;
 
+  private final ArrayList defines = new ArrayList();
+  private final Logger logger;
+  private final Writer outputStream;
+  private final Config config;
+
   public Preprocessor(Logger logger, Config config, Writer outputStream) {
-    this.logger = logger;
-    this.outputStream = outputStream;
-    this.config = config;
+    this.logger = checkNotNull(logger);
+    this.outputStream = checkNotNull(outputStream);
+    this.config = checkNotNull(config);
   }
 
-  public void ProcessFile(File file) throws Exception {
-    ProcessFile(file, file);
+  public void processFile(File file) throws Exception {
+    processFile(file, file);
   }
 
-  private void ProcessFile(File file, File mainFile) throws Exception {
-    BufferedReader reader = null;
+  private void processFile(File file, File mainFile) throws Exception {
+    BufferedReader reader;
     try {
       reader = new BufferedReader(new FileReader(file));
     } catch (IOException E) {
       throw new Exception("Could not open file " + file);
     }
-    ProcessBlock(reader, 0, true, file, mainFile);
+    processBlock(reader, 0, true, file, mainFile);
     outputStream.flush();
   }
 
@@ -122,24 +125,10 @@ public class Preprocessor {
   }
 
   private String preprocessLine(String line) {
-    /*
-		 * // try to recognize character constants // and replace them by string
-		 * constants ...
-		 * 
-		 * // replace single characters line = line.replaceAll("'([^'])'",
-		 * "\"$1\"");
-		 * 
-		 * // replace escape character \n, \t, \b, \r, \f line =
-		 * line.replaceAll("'(\\\\[a,b,f,n,r,t,b])'", "\"$1\"");
-		 * 
-		 * // replace escape character \n, \t, \b, \r, \f line =
-		 * line.replaceAll("'(\\\\x[0-9,A-F]+)'", "\"$1\"");
-		 */
-
     return line;
   }
 
-  private int ProcessBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile)
+  private int processBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile)
       throws Exception {
 
     String line;
@@ -155,9 +144,9 @@ public class Preprocessor {
           if (cmd == IFNDEF)
             write = !write;
 
-          int lastCmd = ProcessBlock(is, ELSE | ENDIF, write && active, file, mainFile);
+          int lastCmd = processBlock(is, ELSE | ENDIF, write && active, file, mainFile);
           if (lastCmd == ELSE)
-            ProcessBlock(is, ENDIF, (!write) && active, file, mainFile);
+            processBlock(is, ENDIF, (!write) && active, file, mainFile);
           continue;
         case ELSE:
           if ((endMarkers & ELSE) == 0)
@@ -224,7 +213,7 @@ public class Preprocessor {
               // System.out.println("DEBUG INFO: Trying file " +
               // tryFile);
               if (tryFile.exists()) {
-                ProcessFile(tryFile, mainFile);
+                processFile(tryFile, mainFile);
                 done = true;
                 break;
               }

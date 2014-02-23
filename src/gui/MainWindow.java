@@ -252,7 +252,7 @@ public class MainWindow implements ActionListener {
   }
 
   public static void showAbout() {
-    JOptionPane.showMessageDialog(frame, OxDoc.aboutText());
+    JOptionPane.showMessageDialog(frame, OxDoc.getAboutText());
   }
 
   private HashMap getOptions() {
@@ -410,12 +410,12 @@ public class MainWindow implements ActionListener {
 
             OxDoc oxdoc = new OxDoc(cmd);
 
-            oxdoc.config.load();
+            oxdoc.getConfig().load();
             HashMap options = getOptions();
             for (Object key : options.keySet())
-              oxdoc.config.setOption(key.toString(), options.get(key).toString());
-            oxdoc.config.setOption("outputdir", outputDir());
-            oxdoc.config.validate();
+              oxdoc.getConfig().setOption(key.toString(), options.get(key).toString());
+            oxdoc.getConfig().setOption("outputdir", outputDir());
+            oxdoc.getConfig().validate();
 
             oxdoc.addFiles(editFilenames.getText());
             oxdoc.generateDocs();

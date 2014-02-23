@@ -42,7 +42,7 @@ public class CommentSeeAlsoList extends BaseCommentBlock {
     for (int j = 0; j < size(); j++) {
       if (j > 0)
         out += ", ";
-      out += project.linkToSymbol(get(j).toString());
+      out += project.getLinkToSymbol(get(j).toString());
     }
 
     return out;

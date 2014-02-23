@@ -27,6 +27,8 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.Hashtable;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class FileManager {
   public static final int NONE = -1;
   public static final int INDEX = 0;
@@ -54,58 +56,46 @@ public class FileManager {
   Hashtable resourceResults = new Hashtable();
 
   public FileManager(Logger logger, Config config) {
-    this.logger = logger;
-    this.config = config;
+    this.logger = checkNotNull(logger);
+    this.config = checkNotNull(config);
   }
 
-  public String imageCache() {
-    return outputFile(imageCache);
+  public String getImageCache() {
+    return getOutputFilename(imageCache);
   }
 
-  public String outputFile(String filename) {
-    return nativePath(config.outputDir) + filename;
+  public String getOutputFilename(String filename) {
+    return toNativePath(config.outputDir) + filename;
   }
 
-  public String imageFile(String filename) {
-    return nativePath(config.outputDir) + nativePath(config.imagePath) + filename;
+  public String getImageFilename(String filename) {
+    return toNativePath(config.outputDir) + toNativePath(config.imagePath) + filename;
   }
 
-  public String tempDir() {
-    return nativePath(config.tempDir);
+  public String getTempDir() {
+    return toNativePath(config.tempDir);
   }
 
-  public String tempFile(String filename) {
-    return nativePath(tempDir()) + filename;
+  public String getTempFilename(String filename) {
+    return toNativePath(getTempDir()) + filename;
   }
 
-  public String imageUrl(String filename) {
-    return unixPath(config.imagePath) + filename;
-  }
-
-  public boolean fileExists(String fileName) {
-    File aFile = new File(fileName);
-
-    return aFile.exists();
+  public String getImageUrl(String filename) {
+    return toUnixPath(config.imagePath) + filename;
   }
 
   public boolean outputFileExists(String fileName) {
-    File aFile = new File(outputFile(fileName));
-
+    File aFile = new File(getOutputFilename(fileName));
     return aFile.exists();
   }
 
   public boolean imageFileExists(String fileName) {
-    File aFile = new File(imageFile(fileName));
-
+    File aFile = new File(getImageFilename(fileName));
     return aFile.exists();
   }
 
-  public String tempTexFile() {
-    return tempFile(tempTexFileBase + ".tex");
-  }
-
-  public String tempDviFile() {
-    return tempFile(tempTexFileBase + ".dvi");
+  public String getTempTexFile() {
+    return getTempFilename(tempTexFileBase + ".tex");
   }
 
   public static File getApplicationDirectory(Class clas) {
@@ -124,13 +114,13 @@ public class FileManager {
     return new File(url.getFile()).getParentFile();
   }
 
-  public static String appDirFile(String fileName) {
+  public static String getAppDirFilename(String fileName) {
     File appDir = getApplicationDirectory(OxDoc.class);
 
     return appDir.toString().replaceAll("%20", " ") + File.separator + fileName;
   }
 
-  public static String nativePath(String Path) {
+  public static String toNativePath(String Path) {
     String out = Path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
     if (out.length() == 0)
       return out;
@@ -140,7 +130,7 @@ public class FileManager {
     return out;
   }
 
-  public static String unixPath(String Path) {
+  public static String toUnixPath(String Path) {
     String out = Path.replace('\\', '/');
     if (out.length() == 0)
       return out;
@@ -150,13 +140,12 @@ public class FileManager {
     return out;
   }
 
-  public static String nativeFileName(String FileName) {
+  public static String toNativeFileName(String FileName) {
     String out = FileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-
     return out;
   }
 
-  public String largeIcon(int iconType) {
+  public String getLargeIconHtml(int iconType) {
     if (!config.enableIcons)
       return "";
     if (iconType < 0)
@@ -168,7 +157,7 @@ public class FileManager {
     return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
   }
 
-  public String smallIcon(int iconType) {
+  public String getSmallIconHtml(int iconType) {
     if (!config.enableIcons)
       return "";
     if (iconType < 0)
@@ -184,19 +173,19 @@ public class FileManager {
     return copyFromResourceIfNotExists(fileName, fileName);
   }
 
-  // this is a cached version of _copyFromResourceIfNotExists
+  // this is a cached version of doCopyFromResourceIfNotExists
   public boolean copyFromResourceIfNotExists(String fileName, String resourceName) {
     // check if we've requested this resource before
     String key = fileName + "||" + resourceName;
     if (resourceResults.containsKey(key))
       return ((Boolean) resourceResults.get(key)).booleanValue();
 
-    boolean result = _copyFromResourceIfNotExists(fileName, resourceName);
+    boolean result = doCopyFromResourceIfNotExists(fileName, resourceName);
     resourceResults.put(key, new Boolean(result));
     return result;
   }
 
-  private boolean _copyFromResourceIfNotExists(String fileName, String resourceName) {
+  private boolean doCopyFromResourceIfNotExists(String fileName, String resourceName) {
     try {
       if (outputFileExists(fileName))
         return true;

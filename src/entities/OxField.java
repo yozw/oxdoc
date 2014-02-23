@@ -24,58 +24,69 @@ import oxdoc.FileManager;
 import oxdoc.comments.FieldComment;
 
 public class OxField extends OxEntity {
-  public OxClass.Visibility visibility;
-  public boolean Static = false;
-  public boolean Constant = false;
+  private OxClass.Visibility visibility;
+  private boolean isStatic = false;
+  private boolean isConstant = false;
 
-  OxField(String name, OxFile parentFile) {
-    super(name, null, new FieldComment(parentFile.project()), parentFile);
+  public OxField(String name, OxFile parentFile) {
+    super(name, null, new FieldComment(parentFile.getProject()), parentFile);
 
     setIconType(FileManager.FIELD);
     visibility = OxClass.Visibility.Public;
   }
 
-  OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
-    super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
+  public OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
+    super(name, oxclass, new FieldComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
     setIconType(FileManager.FIELD);
     this.visibility = visibility;
   }
 
-  public String url() {
-    if (parentClass() != null)
-      return parentFileUrl() + "#" + parentClass().name() + "___" + displayName();
+  public String getUrl() {
+    if (getParentClass() != null)
+      return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
     else
-      return parentFileUrl() + "#" + displayName();
+      return getParentFileUrl() + "#" + getDisplayName();
 
   }
 
-  public String declaration() {
-    String decl = modifiers() + " ";
-    decl += " decl " + name();
-    if (parentClass() != null)
-      decl += " [" + visibility() + "]";
+  public String getDeclaration() {
+    String decl = getModifiers() + " ";
+    decl += " decl " + getName();
+    if (getParentClass() != null)
+      decl += " [" + getVisibility() + "]";
     return decl.trim();
   }
 
-  public String modifiers() {
+  public String getModifiers() {
     String mod = "";
-    if (Static)
+    if (isStatic)
       mod += "static ";
-    if (Constant)
+    if (isConstant)
       mod += "const ";
     return mod.trim();
   }
 
-  public OxClass.Visibility visibility() {
+  public OxClass.Visibility getVisibility() {
     return visibility;
   }
 
   public String toString() {
-    return "<OxField " + referenceName() + ">";
+    return "<OxField " + getReferenceName() + ">";
   }
 
   public boolean isInternal() {
-    return ((FieldComment) comment()).hasInternalModifier() || (visibility() != OxClass.Visibility.Public);
+    return ((FieldComment) comment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }
 
+  public void setVisibility(OxClass.Visibility visibility) {
+    this.visibility = visibility;
+  }
+
+  public void setStatic(boolean aStatic) {
+    isStatic = aStatic;
+  }
+
+  public void setConstant(boolean constant) {
+    isConstant = constant;
+  }
 }

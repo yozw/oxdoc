@@ -221,8 +221,8 @@ void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false
     name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
     {
        OxMethod newMethod = currentClass.addMethod(methodPrefix + name.image);
-       newMethod.Virtual = Virtual;
-       newMethod.Static = Static;
+       newMethod.setVirtual(Virtual);
+       newMethod.setStatic(Static);
     }
 }
 
@@ -268,8 +268,8 @@ void FieldDeclaration() :
 
           try { 
              newField.setComment(comment);
-             newField.Static = Static;
-             newField.Constant = Constant;
+             newField.setStatic(Static);
+             newField.setConstant(Constant);
              project.addSymbol(newField);
              commentNextVariable = null;
           } catch (Exception E) 
@@ -361,7 +361,7 @@ void FunctionDefinition() :
 		    logger.warning("Definition of method " + methodName + " of class " + classname.image + ": class " + classname.image + " is not defined yet.");
 			oxClass = file.addClass(classname.image);
 		 }
-	     OxMethod newMethod = oxClass.methodByName(methodName);
+	     OxMethod newMethod = oxClass.getMethodByName(methodName);
          if (newMethod == null) {
 		    logger.warning("Definition of method " + methodName + " of class " + classname.image + ": method is not declared yet.");
 			newMethod = oxClass.addMethod(methodName);
@@ -393,7 +393,7 @@ void FunctionDefinition() :
 	  for(; t1 != t2; t1 = t1.next)
 	  	decl += t1.image + " ";
 	  decl += t2.image;
-	  func.declaration = decl;
+	  func.setDeclaration(decl);
 	}
 	CompoundStatement()
 }

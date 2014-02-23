@@ -143,13 +143,13 @@ public class Config {
   public boolean setOption(String name, String value) {
     try {
       if (name.equals("latex"))
-        latex = FileManager.nativeFileName(value);
+        latex = FileManager.toNativeFileName(value);
       else if (name.equals("dvipng"))
-        dvipng = FileManager.nativeFileName(value);
+        dvipng = FileManager.toNativeFileName(value);
       else if (name.equals("tempdir"))
-        tempDir = FileManager.nativePath(value);
+        tempDir = FileManager.toNativePath(value);
       else if (name.equals("outputdir"))
-        outputDir = FileManager.nativePath(value);
+        outputDir = FileManager.toNativePath(value);
       else if (name.equals("include"))
         includePaths = concat(value.split(File.pathSeparator), includePaths);
       else if (name.equals("imagebgcolor")) {
@@ -239,7 +239,7 @@ public class Config {
 
   public static String userHomeConfigFile() {
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
-      return FileManager.appDirFile(configFile);
+      return FileManager.getAppDirFilename(configFile);
     else
       return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + configFile;
   }

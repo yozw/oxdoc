@@ -40,7 +40,7 @@ public class Header extends Element {
 
   @Override
   protected void render(StringBuffer buffer) {
-    String iconHtml = context.getFileManager().largeIcon(iconType);
+    String iconHtml = context.getFileManager().getLargeIconHtml(iconType);
     Object args[] = {"" + level, iconHtml, title};
 
     if (iconHtml.length() > 0)

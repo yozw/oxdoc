@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-class StreamGobbler extends Thread {
+public class StreamGobbler extends Thread {
   private final InputStream is;
   private final Logger logger;
   private final boolean echo;

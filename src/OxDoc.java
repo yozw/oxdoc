@@ -29,18 +29,19 @@ import java.io.OutputStreamWriter;
 
 public class OxDoc {
   public static final String PRODUCT_NAME = "oxdoc";
+  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2014 by Y. Zwols [yorizwols@users.sourceforge.net]";
   public static final String VERSION = Constants.VERSION;
   public static final String URL = "http://oxdoc.sourceforge.net";
-  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2012 by Y. Zwols [yorizwols@users.sourceforge.net]";
   public static final String LICENSE_NOTICE = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n"
       + "You are welcome to redistribute it under certain conditions.\n"
       + "See the LICENSE file for distribution details.\n";
-  public final OxProject project;
-  public final Config config;
-  public final FileManager fileManager;
-  public final LatexImageManager latexImageManager;
-  public final TextProcessor textProcessor;
-  public final Logger logger;
+
+  private final OxProject project;
+  private final Config config;
+  private final FileManager fileManager;
+  private final LatexImageManager latexImageManager;
+  private final TextProcessor textProcessor;
+  private final Logger logger;
 
   public OxDoc(Logger logger) {
     this.logger = logger;
@@ -54,14 +55,10 @@ public class OxDoc {
     config.addMathProcessor("mathjax", new MathProcessorMathjax());
     config.addMathProcessor("plain", new MathProcessorPlain());
 
-    logger.info(aboutText());
+    logger.info(getAboutText());
   }
 
-  public OxDoc() {
-    this(new ConsoleLogger());
-  }
-
-  public static String aboutText() {
+  public static String getAboutText() {
     return PRODUCT_NAME + " " + VERSION + " [" + Constants.COMPILETIME + "]\n" + COPYRIGHT_NOTICE + "\n\n"
         + LICENSE_NOTICE;
   }
@@ -79,7 +76,7 @@ public class OxDoc {
     OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
     Preprocessor p = new Preprocessor(logger, config, bufferWriter);
-    p.ProcessFile(file);
+    p.processFile(file);
 
     ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
 
@@ -90,5 +87,9 @@ public class OxDoc {
   public void generateDocs() throws Exception {
     Documentor documentor = new Documentor(project, logger, config, latexImageManager, fileManager);
     documentor.generateDocs();
+  }
+
+  public Config getConfig() {
+    return config;
   }
 }
