@@ -50,7 +50,7 @@ public class OxDoc {
     project = new OxProject(fileManager, textProcessor);
     latexImageManager = new LatexImageManager(fileManager, config);
 
-    config.addMathProcessor("latex", new MathProcessorLatex(logger, config, latexImageManager, fileManager));
+    config.addMathProcessor("latex", new MathProcessorLatex(config, latexImageManager, fileManager));
     config.addMathProcessor("mathjax", new MathProcessorMathjax());
     config.addMathProcessor("plain", new MathProcessorPlain());
 

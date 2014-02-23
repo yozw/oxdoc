@@ -57,7 +57,8 @@ public class SetupWindow implements ActionListener {
 
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (Exception E) {
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
 
     mainPanel.add(setupOptionPanel());

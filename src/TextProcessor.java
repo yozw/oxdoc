@@ -54,7 +54,7 @@ public class TextProcessor {
   }
 
   private String filterReferences(String text, OxProject project) {
-    String pattern = "\\`([^\\`]+)\\`";
+    String pattern = "`([^`]+)`";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
     StringBuffer myStringBuffer = new StringBuffer();
@@ -82,7 +82,7 @@ public class TextProcessor {
       } else
         formula = text.substring(m.start() + 1, m.end() - 1);
 
-      String replacement = config.mathProcessor.processFormula(formula, isInline);
+      String replacement = config.getMathProcessor().processFormula(formula, isInline);
 
       Object[] args = {isInline ? "expression" : "equation", replacement};
       replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);

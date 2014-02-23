@@ -35,6 +35,7 @@ public class OxDocGui {
           else
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
+          throw new RuntimeException(e);
         }
 
         MainWindow main = new MainWindow();

@@ -20,10 +20,7 @@
 
 package oxdoc;
 
-import oxdoc.entities.OxEntity;
-import oxdoc.entities.OxEntityList;
-import oxdoc.entities.OxEnum;
-import oxdoc.entities.OxFile;
+import oxdoc.entities.*;
 
 import java.util.ArrayList;
 
@@ -44,7 +41,7 @@ public class OxProject {
     return (OxFile) list.add(new OxFile(name, this));
   }
 
-  public ArrayList getFiles() {
+  public ArrayList<OxEntity> getFiles() {
     return list.sortedList();
   }
 
@@ -55,20 +52,15 @@ public class OxProject {
   }
 
   public void addSymbolEnumElements(OxEnum oxenum) {
-    ArrayList elements = oxenum.getElements();
-    for (int i = 0; i < elements.size(); i++)
-      addSymbol((OxEntity) elements.get(i));
-  }
-
-  public ArrayList getSymbols() {
-    return symbols.sortedList();
+    for (OxEnumElement element : oxenum.getElements())
+      addSymbol(element);
   }
 
   public OxEntityList getClasses() {
     return symbols.getClasses();
   }
 
-  public ArrayList getSymbolsByDisplayName() {
+  public ArrayList<OxEntity> getSymbolsByDisplayName() {
     return symbols.getSortedListByDisplayName();
   }
 
@@ -84,12 +76,6 @@ public class OxProject {
     } else
 
       return getLinkToEntity(entity);
-  }
-
-  public void printSymbols() {
-    ArrayList list = getSymbolsByDisplayName();
-    for (int i = 0; i < list.size(); i++)
-      System.out.println(list.get(i));
   }
 
   public String getLinkToEntity(OxEntity entity) {

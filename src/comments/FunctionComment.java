@@ -43,11 +43,11 @@ public class FunctionComment extends BaseComment {
     registerModifier("internal", MODIFIER_INTERNAL);
   }
 
-  protected boolean addToSection(int SectionId, String text) {
-    if (super.addToSection(SectionId, text))
+  protected boolean addToSection(int sectionId, String text) {
+    if (super.addToSection(sectionId, text))
       return true;
 
-    switch (SectionId) {
+    switch (sectionId) {
       case SECTION_PARAM:
         params.add(text);
         break;

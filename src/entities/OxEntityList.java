@@ -26,7 +26,7 @@ import java.util.*;
 
 public class OxEntityList {
   private static final AlphanumComparator alphanumComparator = new AlphanumComparator();
-  private final Hashtable entities = new Hashtable();
+  private final Hashtable<String, OxEntity> entities = new Hashtable<String, OxEntity>();
 
   public OxEntity add(OxEntity entity) {
     return add(entity.getName(), entity);
@@ -38,30 +38,24 @@ public class OxEntityList {
   }
 
   public void addAll(OxEntityList list) {
-    Collection c = list.entities.values();
-    for (Object entity : c)
-      add((OxEntity) entity);
+    for (OxEntity entity : list.entities.values())
+      add(entity);
   }
 
   public OxEntity get(String name) {
-    return (OxEntity) entities.get(name);
+    return entities.get(name);
   }
 
   public int size() {
     return entities.size();
   }
 
-  public ArrayList sortedList() {
-    ArrayList list = new ArrayList();
-    for (Enumeration e = entities.elements(); e.hasMoreElements(); ) {
-      OxEntity entity = (OxEntity) e.nextElement();
-      list.add(entity);
-    }
+  public ArrayList<OxEntity> sortedList() {
+    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
+    list.addAll(entities.values());
 
-    Collections.sort(list, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        OxEntity e1 = (OxEntity) o1;
-        OxEntity e2 = (OxEntity) o2;
+    Collections.sort(list, new Comparator<OxEntity>() {
+      public int compare(OxEntity e1, OxEntity e2) {
         String key1 = e1.getSortKey().toUpperCase();
         String key2 = e2.getSortKey().toUpperCase();
         return alphanumComparator.compare(key1, key2);
@@ -71,19 +65,16 @@ public class OxEntityList {
     return list;
   }
 
-  public ArrayList getSortedListByDisplayName() {
+  public ArrayList<OxEntity> getSortedListByDisplayName() {
     return sortedList();
   }
 
   public OxEntityList getClasses() {
     OxEntityList list = new OxEntityList();
-    Set set = entities.entrySet();
 
-    Iterator it = set.iterator();
-    while (it.hasNext()) {
-      Map.Entry entry = (Map.Entry) it.next();
-      OxEntity entity = (OxEntity) entry.getValue();
-      String name = (String) entry.getKey();
+    for (Map.Entry<String, OxEntity> entry : entities.entrySet()) {
+      OxEntity entity = entry.getValue();
+      String name = entry.getKey();
       if (entity instanceof OxClass)
         list.add(name, entity);
     }

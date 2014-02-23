@@ -78,8 +78,8 @@ public class OxDocCmd {
   // We need this function in order to circumvent a bug in gcj:
   // even an empty commandline will pass non-empty args to main
   public static boolean emptyArray(String[] x) {
-    for (int i = 0; i < x.length; i++)
-      if (x[i].trim().length() > 0)
+    for (String entry : x)
+      if (entry.trim().length() > 0)
         return false;
 
     return true;

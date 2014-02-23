@@ -46,14 +46,14 @@ public class FileManager {
   public static final String[] iconFiles = {"index", "project", "file", "class", "method", "function", "field",
       "enum", "uplevel", "hierarchy", "global", "files"};
   private static final Logger logger = Logging.getLogger();
-  private static String imageCache = "images.xml";
-  private static String tempTexFileBase = "__oxdoc";
+  private static final String imageCache = "images.xml";
+  private static final String tempTexFileBase = "__oxdoc";
   private final Config config;
 
   // for speed reasons, register which resource we've tried to write so far
   // key: String (filename + "||" + resourcename), value: integer (0 =
   // success)
-  Hashtable resourceResults = new Hashtable();
+  private final Hashtable<String, Boolean> resourceResults = new Hashtable<String, Boolean>();
 
   public FileManager(Config config) {
     this.config = checkNotNull(config);
@@ -64,15 +64,15 @@ public class FileManager {
   }
 
   public String getOutputFilename(String filename) {
-    return toNativePath(config.outputDir) + filename;
+    return toNativePath(config.getOutputDir()) + filename;
   }
 
   public String getImageFilename(String filename) {
-    return toNativePath(config.outputDir) + toNativePath(config.imagePath) + filename;
+    return toNativePath(config.getOutputDir()) + toNativePath(config.getImagePath()) + filename;
   }
 
   public String getTempDir() {
-    return toNativePath(config.tempDir);
+    return toNativePath(config.getTempDir());
   }
 
   public String getTempFilename(String filename) {
@@ -80,7 +80,7 @@ public class FileManager {
   }
 
   public String getImageUrl(String filename) {
-    return toUnixPath(config.imagePath) + filename;
+    return toUnixPath(config.getImagePath()) + filename;
   }
 
   public boolean outputFileExists(String fileName) {
@@ -119,8 +119,8 @@ public class FileManager {
     return appDir.toString().replaceAll("%20", " ") + File.separator + fileName;
   }
 
-  public static String toNativePath(String Path) {
-    String out = Path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+  public static String toNativePath(String path) {
+    String out = path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
     if (out.length() == 0)
       return out;
     if (!out.endsWith(File.separator))
@@ -129,8 +129,8 @@ public class FileManager {
     return out;
   }
 
-  public static String toUnixPath(String Path) {
-    String out = Path.replace('\\', '/');
+  public static String toUnixPath(String path) {
+    String out = path.replace('\\', '/');
     if (out.length() == 0)
       return out;
     if (!out.endsWith("/"))
@@ -139,13 +139,12 @@ public class FileManager {
     return out;
   }
 
-  public static String toNativeFileName(String FileName) {
-    String out = FileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-    return out;
+  public static String toNativeFileName(String fileName) {
+    return fileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
   }
 
   public String getLargeIconHtml(int iconType) {
-    if (!config.enableIcons)
+    if (!config.isEnableIcons())
       return "";
     if (iconType < 0)
       return "";
@@ -157,7 +156,7 @@ public class FileManager {
   }
 
   public String getSmallIconHtml(int iconType) {
-    if (!config.enableIcons)
+    if (!config.isEnableIcons())
       return "";
     if (iconType < 0)
       return "";
@@ -177,10 +176,10 @@ public class FileManager {
     // check if we've requested this resource before
     String key = fileName + "||" + resourceName;
     if (resourceResults.containsKey(key))
-      return ((Boolean) resourceResults.get(key)).booleanValue();
+      return resourceResults.get(key);
 
     boolean result = doCopyFromResourceIfNotExists(fileName, resourceName);
-    resourceResults.put(key, new Boolean(result));
+    resourceResults.put(key, result);
     return result;
   }
 
@@ -208,7 +207,7 @@ public class FileManager {
       resourceFile.close();
       output.close();
 
-      logger.info("Succesfully wrote " + fileName);
+      logger.info("Successfully wrote " + fileName);
     } catch (Exception E) {
       logger.info(E.getMessage());
       return false;

@@ -35,6 +35,7 @@ public class OxDocSetup {
           else
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
+          throw new RuntimeException(e);
         }
 
         SetupWindow setup = new SetupWindow();

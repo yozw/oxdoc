@@ -21,6 +21,7 @@
 package oxdoc.html;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static oxdoc.Utils.checkNotNull;
 
@@ -32,7 +33,7 @@ public class Table extends Element {
 
   private static class TableRow {
     final RowType type;
-    final ArrayList cells = new ArrayList();
+    final ArrayList<String> cells = new ArrayList<String>();
     String title = "";
 
     TableRow(RowType type) {
@@ -41,7 +42,7 @@ public class Table extends Element {
   }
 
   private final TableSpecs tableSpecs;
-  private final ArrayList rows = new ArrayList();
+  private final ArrayList<TableRow> rows = new ArrayList<TableRow>();
 
   public Table() {
     this(new TableSpecs());
@@ -61,10 +62,9 @@ public class Table extends Element {
     rows.add(newRow);
   }
 
-  public void addRow(String[] row) {
+  public void addRow(String... row) {
     TableRow newRow = new TableRow(RowType.REGULAR);
-    for (int i = 0; i < row.length; i++)
-      newRow.cells.add(row[i]);
+    Collections.addAll(newRow.cells, row);
     rows.add(newRow);
   }
 
@@ -74,8 +74,7 @@ public class Table extends Element {
 
   public int getColumnCount() {
     int colCount = 0;
-    for (int r = 0; r < rows.size(); r++) {
-      TableRow row = (TableRow) rows.get(r);
+    for (TableRow row : rows) {
       if (row.cells.size() > colCount)
         colCount = row.cells.size();
     }
@@ -89,7 +88,7 @@ public class Table extends Element {
     int columnCount = getColumnCount();
 
     for (int r = 0; r < rows.size(); r++) {
-      TableRow row = (TableRow) rows.get(r);
+      TableRow row = rows.get(r);
 
       switch (row.type) {
         case HEADER:
@@ -100,14 +99,13 @@ public class Table extends Element {
         case REGULAR:
           buffer.append(String.format("<tr%s>\n", classAttr((r % 2 == 1) ? "even" : "odd")));
           for (int c = 0; c < columnCount; c++) {
-            String text = (c < row.cells.size()) ? (String) row.cells.get(c) : "&nbsp;";
-            String cssClass = (c < tableSpecs.columnCssClasses.size()) ? (String) tableSpecs.columnCssClasses
+            String text = (c < row.cells.size()) ? row.cells.get(c) : "&nbsp;";
+            String cssClass = (c < tableSpecs.columnCssClasses.size()) ? tableSpecs.columnCssClasses
                 .get(c) : null;
 
             buffer.append(String.format("<td%s>%s</td>\n", classAttr(cssClass), text));
           }
           buffer.append("</tr>\n");
-
       }
     }
 

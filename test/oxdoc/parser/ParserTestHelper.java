@@ -12,7 +12,6 @@ public class ParserTestHelper {
   private final OxProject project;
   private final OxFile file;
   private final InputStream inputStream;
-  private boolean testCalled = false;
 
   private ParserTestHelper(InputStream inputStream) {
     this.inputStream = inputStream;
@@ -25,7 +24,6 @@ public class ParserTestHelper {
   }
 
   public ParserTestHelper test() throws Exception {
-    testCalled = true;
     Parser parser = new Parser(inputStream, file, project);
     parser.OxFileDefinition();
     return this;
@@ -37,11 +35,6 @@ public class ParserTestHelper {
 
   public OxFile getFile() {
     return file;
-  }
-
-  public ParserTestHelper showInternals() {
-    config.showInternals = true;
-    return this;
   }
 
   public static ParserTestHelper create(String input) throws Exception {

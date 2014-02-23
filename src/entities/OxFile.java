@@ -47,15 +47,17 @@ public class OxFile extends OxEntity {
     return (OxField) variables.add(new OxField(name, this));
   }
 
-  public OxEnum addEnum(String alternativeName, ArrayList elements) {
+  public OxEnum addEnum(String alternativeName, ArrayList<OxEnumElement> elements) {
     if ((alternativeName == null) || (alternativeName.length() == 0)) {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-    String[] elementArray = new String[elements.size()];
-    for (int i = 0; i < elements.size(); i++)
-      elementArray[i] = elements.get(i).toString();
-    return (OxEnum) enums.add(new OxEnum(alternativeName, elementArray, this));
+
+    ArrayList<String> stringElements = new ArrayList<String>();
+    for (Object element : elements) {
+      stringElements.add(element.toString());
+    }
+    return (OxEnum) enums.add(new OxEnum(alternativeName, stringElements, this));
   }
 
   public OxClass addClass(String name) {
@@ -70,26 +72,26 @@ public class OxFile extends OxEntity {
     return (OxClass) classes.get(name);
   }
 
-  public ArrayList getFunctions() {
+  public ArrayList<OxEntity> getFunctions() {
     return functions.sortedList();
   }
 
-  public ArrayList getEnums() {
+  public ArrayList<OxEntity> getEnums() {
     return enums.sortedList();
   }
 
-  public ArrayList getVariables() {
+  public ArrayList<OxEntity> getVariables() {
     return variables.sortedList();
   }
 
-  public ArrayList getFunctionsAndVariables() {
+  public ArrayList<OxEntity> getFunctionsAndVariables() {
     OxEntityList newList = new OxEntityList();
     newList.addAll(functions);
     newList.addAll(variables);
     return newList.sortedList();
   }
 
-  public ArrayList getClasses() {
+  public ArrayList<OxEntity> getClasses() {
     return classes.sortedList();
   }
 

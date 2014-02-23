@@ -34,14 +34,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import static oxdoc.Utils.checkNotNull;
 
-public class LatexImageManager extends ArrayList {
-  private static final long serialVersionUID = 1L;
+public class LatexImageManager {
   private final Logger logger = Logging.getLogger();
   private final Config config;
   private final FileManager fileManager;
@@ -70,10 +68,10 @@ public class LatexImageManager extends ArrayList {
   }
 
   private class ImageEntryList {
-    private final Hashtable formulas = new Hashtable();
-    private final Hashtable filenames = new Hashtable();
+    private final Hashtable<String, ImageEntry> formulas = new Hashtable<String, ImageEntry>();
+    private final Hashtable<String, ImageEntry> filenames = new Hashtable<String, ImageEntry>();
 
-    public Hashtable getFormulas() {
+    public Hashtable<String, ImageEntry> getFormulas() {
       return formulas;
     }
 
@@ -85,7 +83,7 @@ public class LatexImageManager extends ArrayList {
 
       formula = formula.trim().replace('\n', ' ').replace('\r', ' ');
 
-      ImageEntry entry = ((ImageEntry) getFormulas().get(formula));
+      ImageEntry entry = getFormulas().get(formula);
       if (entry != null)
         return entry;
 
@@ -186,19 +184,21 @@ public class LatexImageManager extends ArrayList {
     output.write("\\documentclass{article}\n");
     output.write("\\usepackage{amsmath}\n");
 
-    for (int i = 0; i < config.latexPackages.size(); i++)
-      output.write("\\usepackage{" + (String) config.latexPackages.get(i) + "}\n");
+    for (String latexPackage : config.getLatexPackages()) {
+      output.write("\\usepackage{" + latexPackage + "}\n");
+    }
     output.write("\\begin{document}\n");
     output.write("\\pagestyle{empty}\n");
-    if (config.imageBgColor != null)
-      output.write("\\special{background " + config.imageBgColor + " }");
+    if (config.getImageBgColor() != null) {
+      output.write("\\special{background " + config.getImageBgColor() + " }");
+    }
     output.write("\\begin{align*}\n");
     output.write(e.getFormula() + "\n");
     output.write("\\end{align*}\n");
     output.write("\\end{document}\n");
     output.close();
 
-    String latexParams = config.latexArg + " -interaction=batchmode";
+    String latexParams = config.getLatexArg() + " -interaction=batchmode";
 
     File tempDir = new File(fileManager.getTempDir());
     File curDir = new File(".");
@@ -206,11 +206,12 @@ public class LatexImageManager extends ArrayList {
       latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}",
           fileManager.getTempDir());
 
-    run(config.latex, latexParams + " " + fileManager.getTempFilename("__oxdoc.tex"));
+    run(config.getLatex(), latexParams + " " + fileManager.getTempFilename("__oxdoc.tex"));
 
     String dvipngParams = "{0} -T tight --gamma 1.5 -o {1} {2}";
-    if (config.imageBgColor == null)
+    if (config.getImageBgColor() == null) {
       dvipngParams += " -bg Transparent";
+    }
 
     // have to do the following twice, because it sometimes seems to miss
     // fonts at the first run
@@ -218,9 +219,9 @@ public class LatexImageManager extends ArrayList {
       // make sure the directory exists. If not, create it
       (new File(fileManager.getImageFilename(e.getFilename()))).getParentFile().mkdirs();
 
-      Object[] args = {config.dvipngArg, fileManager.getImageFilename(e.getFilename()),
+      Object[] args = {config.getDvipngArg(), fileManager.getImageFilename(e.getFilename()),
           fileManager.getTempFilename("__oxdoc.dvi")};
-      run(config.dvipng, MessageFormat.format(dvipngParams, args));
+      run(config.getDvipng(), MessageFormat.format(dvipngParams, args));
     }
     (new File(fileManager.getTempFilename("__oxdoc.tex"))).delete();
     (new File(fileManager.getTempFilename("__oxdoc.dvi"))).delete();

@@ -27,34 +27,34 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import static oxdoc.FileManager.toNativePath;
 
 public class Config {
-  public String latex = null;
-  public String latexArg = "";
-  public String dvipng = null;
-  public String dvipngArg = "-Q 10 -D 110";
-  public String outputDir = "doc/";
-  public String tempDir = ".";
-  public String[] includePaths = new String[]{};
-  public String imagePath = "images/";
-  public String windowTitle = "";
-  public String projectName = "";
-  public MathProcessor mathProcessor = null;
-  public boolean verbose = false;
-  public boolean upLevel = false;
-  public boolean enableIcons = true;
-  public boolean showInternals = false;
 
-  public static String configFile = "oxdoc.xml";
+  private String latex = null;
+  private String latexArg = "";
+  private String dvipng = null;
+  private String dvipngArg = "-Q 10 -D 110";
+  private String outputDir = "doc/";
+  private String tempDir = ".";
+  private final List<String> includePaths = new ArrayList<String>();
+  private String imagePath = "images/";
+  private String windowTitle = "";
+  private String projectName = "";
+  private MathProcessor mathProcessor = null;
+  private boolean verbose = false;
+  private boolean upLevel = false;
+  private boolean enableIcons = true;
+  private boolean showInternals = false;
   // color in the form "rgb <r> <g> <b>", or null for transparent
-  public String imageBgColor = "rgb 1.0 1.0 1.0";
-  public ArrayList latexPackages = new ArrayList();
+  private String imageBgColor = "rgb 1.0 1.0 1.0";
 
+  public  static String configFile = "oxdoc.xml";
+  private final List<String> latexPackages = new ArrayList<String>();
+  private final Map<String, MathProcessor> mathProcessors = new HashMap();
   private final Logger logger = Logging.getLogger();
-  private final Map mathProcessors = new HashMap();
 
   public Config() {
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
@@ -74,8 +74,8 @@ public class Config {
     String[] paths;
     paths = System.getenv("PATH").split(File.pathSeparator);
 
-    for (int i = 0; i < paths.length; i++) {
-      File file = new File(paths[i] + File.separatorChar + fileName);
+    for (String path : paths) {
+      File file = new File(path + File.separatorChar + fileName);
       if (file.exists())
         return file.getAbsolutePath();
     }
@@ -122,18 +122,10 @@ public class Config {
   }
 
   public MathProcessor toMathProcessor(String value) throws Exception {
-    MathProcessor processor = (MathProcessor) mathProcessors.get(value);
+    MathProcessor processor = mathProcessors.get(value);
     if (processor == null)
       throw new Exception("Formula specification " + value + " invalid. Ignored.");
     return processor;
-  }
-
-  String[] concat(String[] A, String[] B) {
-    String[] C = new String[A.length + B.length];
-    System.arraycopy(A, 0, C, 0, A.length);
-    System.arraycopy(B, 0, C, A.length, B.length);
-
-    return C;
   }
 
   public boolean setOption(String name, String value) {
@@ -143,12 +135,12 @@ public class Config {
       else if (name.equals("dvipng"))
         dvipng = FileManager.toNativeFileName(value);
       else if (name.equals("tempdir"))
-        tempDir = FileManager.toNativePath(value);
+        tempDir = toNativePath(value);
       else if (name.equals("outputdir"))
-        outputDir = FileManager.toNativePath(value);
-      else if (name.equals("include"))
-        includePaths = concat(value.split(File.pathSeparator), includePaths);
-      else if (name.equals("imagebgcolor")) {
+        outputDir = toNativePath(value);
+      else if (name.equals("include")) {
+        Collections.addAll(includePaths, value.split(File.pathSeparator));
+      } else if (name.equals("imagebgcolor")) {
         if (value.trim().equalsIgnoreCase("transparent"))
           imageBgColor = null;
         else {
@@ -160,8 +152,7 @@ public class Config {
         imagePath = value;
       else if (name.equals("latexpackages")) {
         String[] packages = value.split("[,;]");
-        for (int i = 0; i < packages.length; i++)
-          latexPackages.add(packages[i]);
+        Collections.addAll(latexPackages, packages);
       } else if (name.equals("formulas"))
         mathProcessor = toMathProcessor(value);
       else if (name.equals("icons"))
@@ -245,11 +236,11 @@ public class Config {
     load(configFile);
   }
 
-  public void load(String Filename) {
-    File file = new File(Filename);
+  public void load(String filename) {
+    File file = new File(filename);
     if (!file.exists())
       return;
-    logger.info("Loading configuration file " + Filename);
+    logger.info("Loading configuration file " + filename);
 
     try {
       // Parse the file
@@ -266,6 +257,75 @@ public class Config {
         setOption(name, value);
       }
     } catch (Exception E) {
+      logger.warning("Could not parse configuration file " + filename);
     }
+  }
+
+  public String getLatex() {
+    return latex;
+  }
+
+  public String getLatexArg() {
+    return latexArg;
+  }
+
+  public String getDvipng() {
+    return dvipng;
+  }
+
+  public String getDvipngArg() {
+    return dvipngArg;
+  }
+
+  public String getOutputDir() {
+    return toNativePath(outputDir);
+  }
+
+  public String getTempDir() {
+    return toNativePath(tempDir);
+  }
+
+  public List<String> getIncludePaths() {
+    return includePaths;
+  }
+
+  public String getImagePath() {
+    return imagePath;
+  }
+
+  public String getWindowTitle() {
+    return windowTitle;
+  }
+
+  public String getProjectName() {
+    return projectName;
+  }
+
+  public MathProcessor getMathProcessor() {
+    return mathProcessor;
+  }
+
+  public boolean isVerbose() {
+    return verbose;
+  }
+
+  public boolean isUpLevel() {
+    return upLevel;
+  }
+
+  public boolean isEnableIcons() {
+    return enableIcons;
+  }
+
+  public boolean isShowInternals() {
+    return showInternals;
+  }
+
+  public String getImageBgColor() {
+    return imageBgColor;
+  }
+
+  public List<String> getLatexPackages() {
+    return latexPackages;
   }
 }

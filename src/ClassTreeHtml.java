@@ -75,19 +75,20 @@ class ClassTreeHtml {
     output.writeln(SCRIPT);
   }
 
-  private void writeTree(OutputFile output, ArrayList classes, String prependText, int remainingColumns) {
+  private void writeTree(OutputFile output, ArrayList<OxClass> classes, String prependText, int remainingColumns) {
     String labelWrapper = "<td style=\"height:1px; width:auto;\" colspan=\"{1}\" class=\"fffix\">\n"
         + "<table class=\"labelwrapper\">\n" + "   <tbody><tr><td class=\"label\">{0}</td></tr>\n"
         + "   <tr class=\"bottom\"><td class=\"line\">{2}</td></tr>\n" + "</tbody></table>\n" + "</td>";
 
     String textWrapper = "<td class=\"text\">{0}</td>";
 
-    for (int i = 0; i < classes.size(); i++) {
-      OxClass oxClass = (OxClass) classes.get(i);
-      boolean isLast = (i == classes.size() - 1);
-      ArrayList childClasses = classTree.getChildren(oxClass);
+    int index = 0;
 
-      String lineText = "";
+    for (OxClass oxClass : classes) {
+      boolean isLast = (index == classes.size() - 1);
+      ArrayList<OxClass> childClasses = classTree.getChildren(oxClass);
+
+      String lineText;
       if (childClasses.size() > 0)
         lineText = "<div class=\"vline\">&nbsp;</div>";
       else
@@ -114,6 +115,7 @@ class ClassTreeHtml {
         addPrependText = "<td class=\"line\">&nbsp;</td>";
 
       writeTree(output, childClasses, prependText + addPrependText + "\n", remainingColumns - 1);
+      index++;
     }
   }
 

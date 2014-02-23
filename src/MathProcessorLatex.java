@@ -23,13 +23,12 @@ package oxdoc;
 import java.io.File;
 
 public class MathProcessorLatex extends MathProcessor {
-  private final Logger logger;
+  private final Logger logger = Logging.getLogger();
   private final Config config;
   private final LatexImageManager latexImageManager;
   private final FileManager fileManager;
 
-  public MathProcessorLatex(Logger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
-    this.logger = logger;
+  public MathProcessorLatex(Config config, LatexImageManager latexImageManager, FileManager fileManager) {
     this.config = config;
     this.latexImageManager = latexImageManager;
     this.fileManager = fileManager;
@@ -43,14 +42,12 @@ public class MathProcessorLatex extends MathProcessor {
   }
 
   public boolean isSupported() {
-    if (!(new File(config.latex)).exists()) {
-      logger.warning("LaTeX executable not found. LaTeX support disabled (looking for " + config.latex + ")");
-
+    if (!(new File(config.getLatex())).exists()) {
+      logger.warning("LaTeX executable not found. LaTeX support disabled (looking for " + config.getLatex() + ")");
       return false;
     }
-    if (!(new File(config.dvipng)).exists()) {
-      logger.warning("Dvipng executable not found. LaTeX support disabled (looking for " + config.dvipng + ")");
-
+    if (!(new File(config.getDvipng())).exists()) {
+      logger.warning("Dvipng executable not found. LaTeX support disabled (looking for " + config.getDvipng() + ")");
       return false;
     }
 

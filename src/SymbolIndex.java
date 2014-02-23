@@ -34,7 +34,7 @@ public class SymbolIndex {
 
   private final OxProject project;
   private final ClassTree classTree;
-  private final Hashtable entries; // entries, key: OxEntity, value: IndexEntry
+  private final Hashtable<OxEntity, IndexEntry> entries;
 
   /*
    * Entry in the index. Every entry is associated with an entity. For
@@ -46,18 +46,17 @@ public class SymbolIndex {
    * of a better name) will contain A::X() and B::X().
    */
   private static class IndexEntry {
-    String text = "";
-    String type = "";
-    OxEntity entity = null; // the entity associated with the index entry
-    ArrayList owningClassMembers = new ArrayList(); // the entities as
-    // members of classes
-    // (in case of
-    // inheritance)
+    final String text;
+    final String type;
+    /** the entity associated with the index entry **/
+    final OxEntity entity;
+    /** the entities as members of classes (in case of inheritance) **/
+    private final ArrayList<OxEntity> owningClassMembers = new ArrayList<OxEntity>();
 
     IndexEntry(String text, String type, OxEntity entity) {
-      this.text = text;
-      this.type = type;
-      this.entity = entity;
+      this.text = checkNotNull(text);
+      this.type = checkNotNull(type);
+      this.entity = checkNotNull(entity);
     }
   }
 
@@ -67,14 +66,13 @@ public class SymbolIndex {
     this.entries = constructIndex(project, config);
   }
 
-  private static Hashtable constructIndex(OxProject project, Config config) {
-    Hashtable entries = new Hashtable();
+  private static Hashtable<OxEntity, IndexEntry> constructIndex(OxProject project, Config config) {
+    Hashtable<OxEntity, IndexEntry> entries = new Hashtable<OxEntity, IndexEntry>();
 
-    ArrayList symbols = project.getSymbolsByDisplayName();
+    ArrayList<OxEntity> symbols = project.getSymbolsByDisplayName();
 
-    for (int i = 0; i < symbols.size(); i++) {
-      OxEntity entity = (OxEntity) symbols.get(i);
-      if ((!config.showInternals) && entity.isInternal())
+    for (OxEntity entity : symbols) {
+      if ((!config.isShowInternals()) && entity.isInternal())
         continue;
 
       if (entity instanceof OxClass)
@@ -109,14 +107,14 @@ public class SymbolIndex {
     return entries;
   }
 
-  private static IndexEntry addSingletonEntry(Hashtable entries, OxEntity entity, String type) {
+  private static IndexEntry addSingletonEntry(Hashtable<OxEntity, IndexEntry> entries, OxEntity entity, String type) {
     IndexEntry entry = new IndexEntry(entity.getName(), type, entity);
     entries.put(entity, entry);
     return entry;
   }
 
-  private static IndexEntry addGroupedEntry(Hashtable entries, OxEntity ancestorEntity, OxEntity entity, String type) {
-    IndexEntry entry = (IndexEntry) entries.get(ancestorEntity);
+  private static IndexEntry addGroupedEntry(Hashtable<OxEntity, IndexEntry> entries, OxEntity ancestorEntity, OxEntity entity, String type) {
+    IndexEntry entry = entries.get(ancestorEntity);
     if (entry == null)
       entry = new IndexEntry(ancestorEntity.getName(), type, entity);
     entry.owningClassMembers.add(entity);
@@ -124,12 +122,9 @@ public class SymbolIndex {
     return entry;
   }
 
-  private void sortEntriesByName(ArrayList indexEntries) {
-    Collections.sort(indexEntries, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        IndexEntry e1 = (IndexEntry) o1;
-        IndexEntry e2 = (IndexEntry) o2;
-
+  private void sortEntriesByName(ArrayList<IndexEntry> indexEntries) {
+    Collections.sort(indexEntries, new Comparator<IndexEntry>() {
+      public int compare(IndexEntry e1, IndexEntry e2) {
         return e1.text.toUpperCase().compareTo(e2.text.toUpperCase());
       }
     });
@@ -138,11 +133,11 @@ public class SymbolIndex {
   // this method sorts the owning class members first in decreasing order of
   // depth of the class, and subject to
   // that, by name
-  private void sortOwningClassMembers(ArrayList members) {
-    Collections.sort(members, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        OxClass e1 = ((OxEntity) o1).getParentClass();
-        OxClass e2 = ((OxEntity) o2).getParentClass();
+  private void sortOwningClassMembers(ArrayList<OxEntity> members) {
+    Collections.sort(members, new Comparator<OxEntity>() {
+      public int compare(OxEntity o1, OxEntity o2) {
+        OxClass e1 = o1.getParentClass();
+        OxClass e2 = o2.getParentClass();
 
         int depth1 = classTree.getClassDepth(e1);
         int depth2 = classTree.getClassDepth(e2);
@@ -158,7 +153,7 @@ public class SymbolIndex {
   public void write(OutputFile output) throws Exception {
 
     // store entries in an array list
-    ArrayList indexEntries = new ArrayList();
+    ArrayList<IndexEntry> indexEntries = new ArrayList<IndexEntry>();
     indexEntries.addAll(entries.values());
 
     // sort entries by name
@@ -170,22 +165,21 @@ public class SymbolIndex {
     table.specs().columnCssClasses.add("declaration");
     table.specs().columnCssClasses.add("description");
 
-    for (int i = 0; i < indexEntries.size(); i++) {
-      IndexEntry entry = (IndexEntry) indexEntries.get(i);
+    for (IndexEntry entry : indexEntries) {
       OxEntity entity = entry.entity;
       String description = entry.type;
-      if (entry.owningClassMembers.size() > 0) {
+      if (!entry.owningClassMembers.isEmpty()) {
         sortOwningClassMembers(entry.owningClassMembers);
         description += " of ";
-        for (int j = 0; j < entry.owningClassMembers.size(); j++) {
-          OxEntity memberEntity = (OxEntity) entry.owningClassMembers.get(j);
-          description += (j == 0 ? "" : ", ")
+        int index = 0;
+        for (OxEntity memberEntity : entry.owningClassMembers) {
+          description += (index == 0 ? "" : ", ")
               + project.getLinkToEntity(memberEntity, memberEntity.getParentClass().getName());
+          index++;
         }
       }
 
-      String[] row = {entity.getSmallIcon() + project.getLinkToEntity(entity), description};
-      table.addRow(row);
+      table.addRow(entity.getSmallIcon() + project.getLinkToEntity(entity), description);
     }
     output.writeln(table);
   }

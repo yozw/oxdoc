@@ -36,8 +36,8 @@ public class CommentParameterList extends BaseCommentBlock {
     String out = "<!-- parameter table --!>\n";
     out += "<table class=\"parameter_table\">\n";
 
-    for (int i = 0; i < size(); i++) {
-      String[] params = ((String) get(i)).split("[\t ]", 2);
+    for (String s : this) {
+      String[] params = s.split("[\t ]", 2);
 
       out += "<tr>\n";
       out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";

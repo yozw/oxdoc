@@ -96,8 +96,6 @@ public class StatusBar extends JPanel {
 
   /**
    * Returns the text label's current value
-   *
-   * @return
    */
   public synchronized String getText() {
     return textLbl.getText();

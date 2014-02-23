@@ -24,26 +24,31 @@ import oxdoc.FileManager;
 import oxdoc.comments.EnumComment;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static oxdoc.Utils.checkNotNull;
 
 public class OxEnum extends OxEntity {
-  private final ArrayList elements = new ArrayList();
+  private final ArrayList<OxEnumElement> elements = new ArrayList<OxEnumElement>();
   private OxClass.Visibility visibility;
 
-  public OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
+  public OxEnum(String name, List<String> elements, OxClass oxclass, OxClass.Visibility visibility) {
     super(name, oxclass, new EnumComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
     setIconType(FileManager.ENUM);
 
-    for (int i = 0; i < elements.length; i++)
-      this.elements.add(new OxEnumElement(elements[i], this));
-    this.visibility = visibility;
+    for (String element : elements) {
+      this.elements.add(new OxEnumElement(element, this));
+    }
+    this.visibility = checkNotNull(visibility);
   }
 
-  public OxEnum(String name, String[] elements, OxFile oxfile) {
+  public OxEnum(String name, List<String> elements, OxFile oxfile) {
     super(name, null, new EnumComment(oxfile.getProject()), oxfile);
 
     setIconType(FileManager.ENUM);
-    for (int i = 0; i < elements.length; i++)
-      this.elements.add(new OxEnumElement(elements[i], this));
+    for (String element : elements) {
+      this.elements.add(new OxEnumElement(element, this));
+    }
     visibility = OxClass.Visibility.Public;
   }
 
@@ -67,7 +72,7 @@ public class OxEnum extends OxEntity {
     for (int i = 0; i < elements.size(); i++) {
       if (i != 0)
         decl += ", ";
-      decl += ((OxEnumElement) elements.get(i)).getName();
+      decl += elements.get(i).getName();
     }
     return decl;
   }
@@ -84,7 +89,7 @@ public class OxEnum extends OxEntity {
     return ((EnumComment) getComment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }
 
-  public ArrayList getElements() {
+  public ArrayList<OxEnumElement> getElements() {
     return elements;
   }
 }

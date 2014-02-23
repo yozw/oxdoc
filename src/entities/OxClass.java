@@ -48,11 +48,9 @@ public class OxClass extends OxEntity {
     }
   }
 
-  ;
-
   private interface MemberFilter {
     boolean keepItem(OxEntity entity);
-  };
+  }
 
   private final OxEntityList members = new OxEntityList();
   private String superClassName = null;
@@ -76,46 +74,45 @@ public class OxClass extends OxEntity {
     return (OxField) members.add(new OxField(name, this, vis));
   }
 
-  public OxEnum addEnum(String alternativeName, ArrayList elements, Visibility vis) {
+  public OxEnum addEnum(String alternativeName, ArrayList<OxEnumElement> elements, Visibility vis) {
     if ((alternativeName == null) || (alternativeName.length() == 0)) {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-    String[] elementArray = new String[elements.size()];
-    for (int i = 0; i < elements.size(); i++)
-      elementArray[i] = elements.get(i).toString();
-    return (OxEnum) members.add(new OxEnum(alternativeName, elementArray, this, vis));
+    ArrayList<String> stringElements = new ArrayList<String>();
+    for (Object element : elements) {
+      stringElements.add(element.toString());
+    }
+    return (OxEnum) members.add(new OxEnum(alternativeName, stringElements, this, vis));
   }
 
-  public ArrayList getMembers() {
+  public ArrayList<OxEntity> getMembers() {
     return members.sortedList();
   }
 
-  public ArrayList filterMembers(MemberFilter filter) {
-    ArrayList members = getMembers();
-    ArrayList list = new ArrayList();
+  public ArrayList<OxEntity> filterMembers(MemberFilter filter) {
+    ArrayList<OxEntity> members = getMembers();
+    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
 
-    for (int i = 0; i < members.size(); i++) {
-      OxEntity entity = (OxEntity) members.get(i);
+    for (OxEntity member : members) {
+      if (filter.keepItem(member))
+        list.add(member);
+    }
+    return list;
+  }
+
+  public ArrayList<OxEntity> filterInheritedMembers(MemberFilter filter) {
+    ArrayList<OxEntity> members = getInheritedMembers();
+    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
+
+    for (OxEntity entity : members) {
       if (filter.keepItem(entity))
         list.add(entity);
     }
     return list;
   }
 
-  public ArrayList filterInheritedMembers(MemberFilter filter) {
-    ArrayList members = getInheritedMembers();
-    ArrayList list = new ArrayList();
-
-    for (int i = 0; i < members.size(); i++) {
-      OxEntity entity = (OxEntity) members.get(i);
-      if (filter.keepItem(entity))
-        list.add(entity);
-    }
-    return list;
-  }
-
-  public ArrayList getPrivateFields() {
+  public ArrayList<OxEntity> getPrivateFields() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Private));
@@ -123,7 +120,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getProtectedFields() {
+  public ArrayList<OxEntity> getProtectedFields() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Protected));
@@ -131,7 +128,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getPublicFields() {
+  public ArrayList<OxEntity> getPublicFields() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Public));
@@ -139,7 +136,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getMethods() {
+  public ArrayList<OxEntity> getMethods() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxMethod);
@@ -147,7 +144,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getMethodsAndFields() {
+  public ArrayList<OxEntity> getMethodsAndFields() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxMethod) || (entity instanceof OxField);
@@ -155,7 +152,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getEnums() {
+  public ArrayList<OxEntity> getEnums() {
     return filterMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxEnum);
@@ -163,7 +160,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getInheritedFields() throws Exception {
+  public ArrayList<OxEntity> getInheritedFields() throws Exception {
     return filterInheritedMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxField);
@@ -171,7 +168,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getInheritedMethods() throws Exception {
+  public ArrayList<OxEntity> getInheritedMethods() throws Exception {
     return filterInheritedMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxMethod);
@@ -179,7 +176,7 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getInheritedEnums() throws Exception {
+  public ArrayList<OxEntity> getInheritedEnums() throws Exception {
     return filterInheritedMembers(new MemberFilter() {
       public boolean keepItem(OxEntity entity) {
         return (entity instanceof OxEnum);
@@ -187,8 +184,8 @@ public class OxClass extends OxEntity {
     });
   }
 
-  public ArrayList getSuperClasses() {
-    ArrayList list = new ArrayList();
+  public ArrayList<OxClass> getSuperClasses() {
+    ArrayList<OxClass> list = new ArrayList<OxClass>();
     OxClass currentClass = this;
 
     while (true) {
@@ -206,13 +203,13 @@ public class OxClass extends OxEntity {
     return list;
   }
 
-  public ArrayList getInheritedMembers() {
-    ArrayList list = new ArrayList();
+  public ArrayList<OxEntity> getInheritedMembers() {
+    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
     OxClass currentClass = this;
-    HashSet seenMemberNames = new HashSet();
-    ArrayList members = getMembers();
-    for (int i = 0; i < members.size(); i++) {
-      OxEntity member = (OxEntity) members.get(i);
+    HashSet<String> seenMemberNames = new HashSet<String>();
+    ArrayList<OxEntity> members = getMembers();
+
+    for (OxEntity member : members) {
       seenMemberNames.add(member.getName());
     }
 
@@ -228,26 +225,25 @@ public class OxClass extends OxEntity {
 
       members = currentClass.getMembers();
 
-      for (int i = 0; i < members.size(); i++) {
-        OxEntity member = (OxEntity) members.get(i);
+      for (OxEntity member : members) {
         if (seenMemberNames.contains(member.getName()))
           continue;
         seenMemberNames.add(member.getName());
 
         if (member instanceof OxMethod) {
           OxMethod oxMethod = (OxMethod) member;
-          if (oxMethod.getVisibility() != OxClass.Visibility.Private)
+          if (oxMethod.getVisibility() != Visibility.Private)
             list.add(oxMethod);
         } else if (member instanceof OxField) {
           OxField oxField = (OxField) member;
-          if (oxField.getVisibility() != OxClass.Visibility.Private)
+          if (oxField.getVisibility() != Visibility.Private)
             list.add(oxField);
         } else if (member instanceof OxEnum) {
           OxEnum oxEnum = (OxEnum) member;
-          if (oxEnum.getVisibility() != OxClass.Visibility.Private)
+          if (oxEnum.getVisibility() != Visibility.Private)
             list.add(oxEnum);
         } else
-          throw new java.lang.Error("Class member has unexpected class: " + member);
+          throw new Error("Class member has unexpected class: " + member);
       }
     }
     return list;
@@ -255,10 +251,6 @@ public class OxClass extends OxEntity {
 
   public OxMethod getMethodByName(String s) {
     return (OxMethod) members.get(s);
-  }
-
-  public OxField getFieldByName(String s) {
-    return (OxField) members.get(s);
   }
 
   public String getSuperClassName() {
@@ -274,7 +266,6 @@ public class OxClass extends OxEntity {
 
   public String getUrl() {
     return getParentFile().getUrl() + "#" + getName();
-    /** Modfied by CF **/
   }
 
   public String toString() {

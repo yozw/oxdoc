@@ -40,7 +40,7 @@ import java.util.Comparator;
  * AlphanumComparator());
  */
 public class AlphanumComparator implements Comparator {
-  private final boolean isDigit(char ch) {
+  private boolean isDigit(char ch) {
     return ch >= 48 && ch <= 57;
   }
 
@@ -48,7 +48,7 @@ public class AlphanumComparator implements Comparator {
    * Length of string is passed in for improved efficiency (only need to
    * calculate it once)
    */
-  private final String getChunk(String s, int slength, int marker) {
+  private String getChunk(String s, int slength, int marker) {
     StringBuilder chunk = new StringBuilder();
     char c = s.charAt(marker);
     chunk.append(c);
@@ -91,7 +91,7 @@ public class AlphanumComparator implements Comparator {
       thatMarker += thatChunk.length();
 
       // If both chunks contain numeric characters, sort them numerically
-      int result = 0;
+      int result;
       if (isDigit(thisChunk.charAt(0)) && isDigit(thatChunk.charAt(0))) {
         // Simple chunk comparison by length.
         int thisChunkLength = thisChunk.length();

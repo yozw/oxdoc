@@ -68,7 +68,7 @@ public class PathMatcher {
   public static Iterable<File> scan(String pattern) {
 
     // check for Windows
-    isWindows = System.getProperty("os.name", "generic").toLowerCase().indexOf("win") >= 0;
+    isWindows = System.getProperty("os.name", "generic").toLowerCase().contains("win");
 
     // if we are on Windows, we want case-insensitive matching
     caseSensitive = !isWindows;

@@ -29,20 +29,22 @@ public class CommentSeeAlsoList extends BaseCommentBlock {
     super(project);
   }
 
-  public boolean add(Object o) {
-    String[] references = o.toString().split(",");
-    for (int j = 0; j < references.length; j++)
-      super.add(references[j].trim());
+  public boolean add(String o) {
+    String[] references = o.split(",");
+    for (String reference : references)
+      super.add(reference.trim());
 
     return true;
   }
 
   protected String renderHTML() {
     String out = "";
-    for (int j = 0; j < size(); j++) {
-      if (j > 0)
+    int index = 0;
+    for (String s : this) {
+      if (index > 0)
         out += ", ";
-      out += project.getLinkToSymbol(get(j).toString());
+      out += project.getLinkToSymbol(s);
+      index++;
     }
 
     return out;

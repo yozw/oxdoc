@@ -36,7 +36,8 @@ public class LogFileLogger implements Logger {
     try {
       System.out.println(message);
       logFile.writeln(message);
-    } catch (IOException E) {
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
@@ -45,7 +46,8 @@ public class LogFileLogger implements Logger {
     try {
       System.out.println("Warning: " + message);
       logFile.writeln("Warning: " + message);
-    } catch (IOException E) {
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 }

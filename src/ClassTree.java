@@ -21,6 +21,7 @@
 package oxdoc;
 
 import oxdoc.entities.OxClass;
+import oxdoc.entities.OxEntity;
 import oxdoc.entities.OxEntityList;
 
 import java.util.ArrayList;
@@ -31,73 +32,63 @@ import static oxdoc.Utils.checkNotNull;
 public class ClassTree {
 
   private class Node {
-    OxClass oxClass;
-    ArrayList children = new ArrayList();
+    private final OxClass oxClass;
+    private final ArrayList<Node> children = new ArrayList<Node>();
     int depth = 0;
+
+    private Node() {
+      this.oxClass = null;
+    }
+
+    private Node(OxClass oxClass) {
+      this.oxClass = checkNotNull(oxClass);
+    }
   }
 
-  private final OxProject project;
   private final Node rootNode = new Node();
-  private final Hashtable nodes = new Hashtable(); // keys: OxClass, values: Node
+  private final Hashtable<OxClass, Node> nodes = new Hashtable<OxClass, Node>();
   private int maxDepth = 0;
 
-  public ClassTree(OxProject project, OxEntityList classes) {
-    this.project = checkNotNull(project);
-
-    ArrayList classList = classes.sortedList();
+  public ClassTree(OxEntityList classes) {
+    ArrayList<OxEntity> classList = classes.sortedList();
 
     // first, construct all nodes
-    for (int i = 0; i < classList.size(); i++) {
-      OxClass oxClass = (OxClass) classList.get(i);
-      Node node = new Node();
-      node.oxClass = oxClass;
-      nodes.put(oxClass, node);
+    for (OxEntity entity : classList) {
+      if (entity instanceof OxClass) {
+        OxClass oxClass = (OxClass) entity;
+        nodes.put(oxClass, new Node(oxClass));
+      }
     }
 
     // next, construct parent-child relationships
-    for (int i = 0; i < classList.size(); i++) {
-      OxClass oxClass = (OxClass) classList.get(i);
-      OxClass parentClass = oxClass.getSuperClass();
+    for (OxEntity entity : classList) {
+      if (entity instanceof OxClass) {
+        OxClass oxClass = (OxClass) entity;
+        OxClass parentClass = oxClass.getSuperClass();
 
-      Node classNode = (Node) nodes.get(oxClass);
-      Node parentNode = (parentClass != null) ? (Node) nodes.get(parentClass) : rootNode;
+        Node classNode = nodes.get(oxClass);
+        Node parentNode = (parentClass != null) ? nodes.get(parentClass) : rootNode;
 
-      parentNode.children.add(classNode);
+        parentNode.children.add(classNode);
+      }
     }
 
     updateDepths();
   }
 
-  private void addChildrenToHtmlList(StringBuffer text, Node node) {
-    if (node.children.size() == 0)
-      return;
-    text.append("<ul>\n");
-    for (int i = 0; i < node.children.size(); i++) {
-      Node child = (Node) node.children.get(i);
-      if (i < node.children.size() - 1)
-        text.append("<li>");
-      else
-        text.append("<li class=\"last\">");
-      text.append("<span class=\"label\">" + project.getLinkToEntity(child.oxClass) + "</span><span class=\"text\">"
-          + child.oxClass.getDescription() + "</span>\n");
-      addChildrenToHtmlList(text, child);
-    }
-    text.append("</ul>\n");
-  }
-
-  public ArrayList getTopClasses() {
+  public ArrayList<OxClass> getTopClasses() {
     return getChildClasses(rootNode);
   }
 
-  private ArrayList getChildClasses(Node node) {
-    ArrayList children = new ArrayList();
+  private ArrayList<OxClass> getChildClasses(Node node) {
+    ArrayList<OxClass> children = new ArrayList<OxClass>();
     for (int i = 0; i < node.children.size(); i++)
-      children.add(((Node) node.children.get(i)).oxClass);
+      children.add(node.children.get(i).oxClass);
     return children;
   }
 
-  public ArrayList getChildren(OxClass oxClass) {
-    Node node = (Node) nodes.get(oxClass);
+  public ArrayList<OxClass> getChildren(OxClass oxClass) {
+    Node node = nodes.get(oxClass);
     return getChildClasses(node);
   }
 
@@ -112,22 +103,13 @@ public class ClassTree {
 
   private void updateDepths(Node node, int depth) {
     node.depth = depth;
-    if (depth > maxDepth)
-      maxDepth = depth;
-    for (int i = 0; i < node.children.size(); i++) {
-      Node child = (Node) node.children.get(i);
+    maxDepth = Math.max(depth, maxDepth);
+    for (Node child : node.children) {
       updateDepths(child, depth + 1);
     }
   }
 
   public int getClassDepth(OxClass oxClass) {
-    Node node = (Node) nodes.get(oxClass);
-    return node.depth;
-  }
-
-  public String toHtmlList() {
-    StringBuffer buf = new StringBuffer();
-    addChildrenToHtmlList(buf, rootNode);
-    return buf.toString();
+    return nodes.get(oxClass).depth;
   }
 }

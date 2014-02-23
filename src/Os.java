@@ -26,13 +26,7 @@ public class Os {
     Win32, Linux, Solaris, Mac, Unknown
   }
 
-  ;
-
   private Os() {
-  }
-
-  public static String getOsName() {
-    return System.getProperty("os.name", "unknown");
   }
 
   public static OperatingSystem getOperatingSystem() {

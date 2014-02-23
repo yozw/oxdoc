@@ -40,9 +40,9 @@ public class BaseComment {
   private final CommentSeeAlsoList see;
   private final CommentList ref;
   private final CommentList toDo;
-  private final HashMap sections = new HashMap();
-  private final HashMap modifiers = new HashMap(); // modifiers have 0 parameters
-  private final HashMap settings = new HashMap(); // settings have 1 parameter
+  private final HashMap<String, Integer> sections = new HashMap<String, Integer>();
+  private final HashMap<String, Integer> modifiers = new HashMap<String, Integer>(); // modifiers have 0 parameters
+  private final HashMap<String, Integer> settings = new HashMap<String, Integer>(); // settings have 1 parameter
   private final OxProject project;
 
   public BaseComment(OxProject project) {
@@ -64,28 +64,28 @@ public class BaseComment {
     registerSetting("sortkey", SECTION_SORTKEY);
   }
 
-  protected void registerSection(String name, int SectionId) {
-    sections.put(name, new Integer(SectionId));
+  protected void registerSection(String name, int sectionId) {
+    sections.put(name, sectionId);
   }
 
-  protected void registerSetting(String name, int SettingId) {
-    settings.put(name, new Integer(SettingId));
+  protected void registerSetting(String name, int settingId) {
+    settings.put(name, settingId);
   }
 
-  protected void registerModifier(String name, int ModifierId) {
-    modifiers.put(name, new Integer(ModifierId));
+  protected void registerModifier(String name, int modifierId) {
+    modifiers.put(name, modifierId);
   }
 
   protected int getSectionId(String name) {
-    return (Integer) sections.get(name);
+    return sections.get(name);
   }
 
   protected int getModifierId(String name) {
-    return (Integer) modifiers.get(name);
+    return modifiers.get(name);
   }
 
   protected int getSettingId(String name) {
-    return (Integer) settings.get(name);
+    return settings.get(name);
   }
 
   /**
@@ -93,8 +93,8 @@ public class BaseComment {
    * directly. It is used by SetText. Override this method to add more
    * sections.
    */
-  protected boolean addToSection(int SectionId, String text) {
-    switch (SectionId) {
+  protected boolean addToSection(int sectionId, String text) {
+    switch (sectionId) {
       case SECTION_COMMENTS:
         comments.add(text);
         break;

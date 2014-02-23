@@ -22,13 +22,12 @@ package oxdoc;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import static oxdoc.Utils.checkNotNull;
 
 public class Preprocessor {
 
-  private static final Collection ignoredFiles = new ArrayList();
+  private static final ArrayList<String> ignoredFiles = new ArrayList<String>();
   private static final int PLAINLINE = 0;
   private static final int ENDIF = 1;
   private static final int ELSE = 2;
@@ -39,7 +38,7 @@ public class Preprocessor {
   private static final int IMPORT = 64;
 
   private final Logger logger = Logging.getLogger();
-  private final ArrayList defines = new ArrayList();
+  private final ArrayList<String> defines = new ArrayList<String>();
   private final Writer outputStream;
   private final Config config;
 
@@ -59,26 +58,26 @@ public class Preprocessor {
     } catch (IOException E) {
       throw new Exception("Could not open file " + file);
     }
-    processBlock(reader, 0, true, file, mainFile);
+    processBlock(reader, 0, true, mainFile);
     outputStream.flush();
   }
 
-  private void ignoreIncludeFiles(String fileName, ArrayList tryFiles) {
+  private void ignoreIncludeFiles(String fileName, ArrayList<File> tryFiles) {
     if (!ignoredFiles.contains(fileName)) {
       ignoredFiles.add(fileName);
       String warning = "Included file " + fileName + " could not be opened. File will be ignored.";
 
-      if (config.verbose) {
+      if (config.isVerbose()) {
         warning += "\n-- Looked for the following files:";
 
-        for (int i = 0; i < tryFiles.size(); i++)
-          warning += "\n   " + ((File) tryFiles.get(i)).getAbsoluteFile();
+        for (File file : tryFiles)
+          warning += "\n   " + file.getAbsoluteFile();
       }
       logger.warning(warning);
     }
   }
 
-  private int getCommand(String line, ArrayList params) throws Exception {
+  private int getCommand(String line, ArrayList<String> params) throws Exception {
     params.clear();
 
     String cmd = line.trim();
@@ -110,11 +109,11 @@ public class Preprocessor {
     throw new Exception("Unknown preprocessor directive: " + cmd);
   }
 
-  private boolean listContainsString(ArrayList list, String str) {
+  private boolean listContainsString(ArrayList<String> list, String str) {
     if (list == null)
       return false;
-    for (int i = 0; i < list.size(); i++)
-      if (((String) list.get(i)).equals(str))
+    for (String entry : list)
+      if (entry.equals(str))
         return true;
     return false;
   }
@@ -123,29 +122,29 @@ public class Preprocessor {
     return listContainsString(defines, define);
   }
 
-  private String preprocessLine(String line) {
+  private String preProcessLine(String line) {
     return line;
   }
 
-  private int processBlock(BufferedReader is, int endMarkers, boolean active, File file, File mainFile)
+  private int processBlock(BufferedReader is, int endMarkers, boolean active, File mainFile)
       throws Exception {
 
     String line;
-    ArrayList params = new ArrayList();
+    ArrayList<String> params = new ArrayList<String>();
     while ((line = is.readLine()) != null) {
 
-      line = preprocessLine(line);
+      line = preProcessLine(line);
       int cmd = getCommand(line, params);
       switch (cmd) {
         case IFDEF:
         case IFNDEF:
-          boolean write = isDefined(((String) params.get(0)).trim());
+          boolean write = isDefined(params.get(0).trim());
           if (cmd == IFNDEF)
             write = !write;
 
-          int lastCmd = processBlock(is, ELSE | ENDIF, write && active, file, mainFile);
+          int lastCmd = processBlock(is, ELSE | ENDIF, write && active, mainFile);
           if (lastCmd == ELSE)
-            processBlock(is, ENDIF, (!write) && active, file, mainFile);
+            processBlock(is, ENDIF, (!write) && active, mainFile);
           continue;
         case ELSE:
           if ((endMarkers & ELSE) == 0)
@@ -163,7 +162,7 @@ public class Preprocessor {
           if (params.size() != 1)
             throw new IOException("#define requires 1 argument");
           if (active)
-            defines.add(((String) params.get(0)).trim());
+            defines.add(params.get(0).trim());
           break;
         case IMPORT:
           break;
@@ -172,7 +171,7 @@ public class Preprocessor {
             throw new IOException(((cmd == IMPORT) ? "#import" : "#include") + " requires 1 argument");
           if (active) {
             boolean lookLocal;
-            String fileSpec = (String) params.get(0);
+            String fileSpec = params.get(0);
             char firstChar = fileSpec.charAt(0);
             char lastChar = fileSpec.charAt(fileSpec.length() - 1);
             if ((firstChar == '"') && (lastChar == '"'))
@@ -184,35 +183,28 @@ public class Preprocessor {
               break;
             }
             String fileName = fileSpec.substring(1, fileSpec.length() - 1);
-            // if (cmd == IMPORT)
-            // fileName += ".h";
 
             // specify search paths as described in Ox Syntax guide
-            ArrayList tryFiles = new ArrayList();
+            ArrayList<File> tryFiles = new ArrayList<File>();
             if (lookLocal) {
-              // * in the directory containing the source file (if
-              // just a filename, or a filename
-              // with a relative path is specified), or in the
-              // specified directory (if the filename has an absolute
-              // path);
+              /* in the directory containing the source file (if just a filename, or a filename with a relative path is
+                specified), or in the specified directory (if the filename has an absolute path); */
               String basePath = mainFile.getAbsoluteFile().getParent();
               tryFiles.add(new File(basePath + File.separatorChar + fileName));
             }
 
             // * the directories specified on the compiler command line
             // (if any);
-            for (int i = 0; i < config.includePaths.length; i++)
-              tryFiles.add(new File(config.includePaths[i] + File.separatorChar + fileName));
+            for (String path : config.getIncludePaths()) {
+              tryFiles.add(new File(path + File.separatorChar + fileName));
+            }
             // * in the current directory.
             tryFiles.add(new File(fileName));
 
             boolean done = false;
-            for (int i = 0; i < tryFiles.size(); i++) {
-              File tryFile = (File) tryFiles.get(i);
-              // System.out.println("DEBUG INFO: Trying file " +
-              // tryFile);
-              if (tryFile.exists()) {
-                processFile(tryFile, mainFile);
+            for (File file : tryFiles) {
+              if (file.exists()) {
+                processFile(file, mainFile);
                 done = true;
                 break;
               }

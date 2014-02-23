@@ -30,11 +30,13 @@ public class CommentTextBlock extends BaseCommentBlock {
   }
 
   protected String renderHTML() {
-    String out = "";
+    StringBuilder stringBuffer = new StringBuilder();
 
-    for (int i = 0; i < size(); i++)
-      out += ((String) get(i)).trim() + "\n";
+    for (String s : this) {
+      stringBuffer.append(s.trim());
+      stringBuffer.append("\n");
+    }
 
-    return out;
+    return stringBuffer.toString();
   }
 }

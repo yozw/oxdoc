@@ -38,11 +38,11 @@ public class FileComment extends BaseComment {
     registerSection("version", SECTION_VERSION);
   }
 
-  protected boolean addToSection(int SectionId, String text) {
-    if (super.addToSection(SectionId, text))
+  protected boolean addToSection(int sectionId, String text) {
+    if (super.addToSection(sectionId, text))
       return true;
 
-    switch (SectionId) {
+    switch (sectionId) {
       case SECTION_AUTHOR:
         author += text;
         break;

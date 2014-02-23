@@ -27,8 +27,8 @@ import static oxdoc.Utils.checkNotNull;
 public class DefinitionList extends Element {
 
   private final String cssClass;
-  private final ArrayList labels = new ArrayList();
-  private final ArrayList definitions = new ArrayList();
+  private final ArrayList<String> labels = new ArrayList<String>();
+  private final ArrayList<String> definitions = new ArrayList<String>();
 
   public DefinitionList(String cssClass) {
     this.cssClass = checkNotNull(cssClass);
@@ -43,8 +43,8 @@ public class DefinitionList extends Element {
   protected void render(StringBuffer buffer) {
     buffer.append(String.format("<dl%s>\n", classAttr(cssClass)));
     for (int i = 0; i < labels.size(); i++) {
-      String label = (String) labels.get(i);
-      String definition = (String) definitions.get(i);
+      String label = labels.get(i);
+      String definition = definitions.get(i);
 
       buffer.append(String.format("<dt>%s</dt><dd>%s</dd>\n", label, definition));
     }

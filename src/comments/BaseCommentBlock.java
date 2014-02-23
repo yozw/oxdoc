@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import static oxdoc.Utils.checkNotNull;
 
-public class BaseCommentBlock extends ArrayList {
+public class BaseCommentBlock extends ArrayList<String> {
   private static final long serialVersionUID = 1L;
 
   protected final OxProject project;
