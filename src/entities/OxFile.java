@@ -47,17 +47,12 @@ public class OxFile extends OxEntity {
     return (OxField) variables.add(new OxField(name, this));
   }
 
-  public OxEnum addEnum(String alternativeName, ArrayList<OxEnumElement> elements) {
+  public OxEnum addEnum(String alternativeName, ArrayList<String> elements) {
     if ((alternativeName == null) || (alternativeName.length() == 0)) {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-
-    ArrayList<String> stringElements = new ArrayList<String>();
-    for (Object element : elements) {
-      stringElements.add(element.toString());
-    }
-    return (OxEnum) enums.add(new OxEnum(alternativeName, stringElements, this));
+    return (OxEnum) enums.add(new OxEnum(alternativeName, elements, this));
   }
 
   public OxClass addClass(String name) {

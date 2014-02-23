@@ -292,7 +292,7 @@ Token EnumElement() : { Token name; }
   { return name; }
 }
 
-void EnumDeclaration() : { ArrayList elements = new ArrayList(); Token enumToken, el; }
+void EnumDeclaration() : { ArrayList<String> elements = new ArrayList<String>(); Token enumToken, el; }
 {
 	enumToken = <ENUM> 
     "{" 
