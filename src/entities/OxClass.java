@@ -55,18 +55,15 @@ public class OxClass extends OxEntity {
   };
 
   private final OxEntityList members = new OxEntityList();
-  private final OxFile parentFile;
   private String superClassName = null;
 
   OxClass(String name, OxFile parentFile) {
     super(name, null, new ClassComment(parentFile.project()), parentFile);
-    this.parentFile = parentFile;
     setIconType(FileManager.CLASS);
   }
 
   OxClass(String name, String superClassName, OxFile parentFile) {
     super(name, null, new ClassComment(parentFile.project()), parentFile);
-    this.parentFile = parentFile;
     setIconType(FileManager.CLASS);
     this.superClassName = superClassName;
   }
@@ -266,10 +263,6 @@ public class OxClass extends OxEntity {
 
   public OxField fieldByName(String s) {
     return (OxField) members.get(s);
-  }
-
-  public OxFile parentFile() {
-    return parentFile;
   }
 
   public String superClassName() {

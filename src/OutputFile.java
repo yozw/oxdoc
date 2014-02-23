@@ -21,22 +21,26 @@
 package oxdoc;
 
 import oxdoc.html.Header;
+import oxdoc.html.RenderContext;
 
 import java.io.*;
 import java.text.MessageFormat;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class OutputFile {
-  private OxProject project;
+  private final RenderContext renderContext;
+  private final OxProject project;
   private final Config config;
   private final String fileName;
   private final FileManager fileManager;
+  private final StringBuffer content = new StringBuffer(); // main content
+  private final StringBuffer css = new StringBuffer(); // extra css style
+
   private int iconType = 0;
   private String title = "";
 
-  private StringBuffer content = new StringBuffer(); // main content
-  private StringBuffer css = new StringBuffer(); // extra css style
-
-  class ExtBufferedWriter extends BufferedWriter {
+  private class ExtBufferedWriter extends BufferedWriter {
     ExtBufferedWriter(Writer out) {
       super(out);
     }
@@ -49,12 +53,13 @@ public class OutputFile {
 
   // create an HTML file
   public OutputFile(String fileName, String title, int iconType, OxProject project, Config config, FileManager fileManager) throws IOException {
-    this.project = project;
-    this.config = config;
-    this.title = title;
+    this.project = checkNotNull(project);
+    this.config = checkNotNull(config);
+    this.title = checkNotNull(title);
     this.iconType = iconType;
-    this.fileName = fileName;
-    this.fileManager = fileManager;
+    this.fileName = checkNotNull(fileName);
+    this.fileManager = checkNotNull(fileManager);
+    this.renderContext = new RenderContext(fileManager);
   }
 
   public void close() throws IOException {
@@ -113,7 +118,7 @@ public class OutputFile {
     output.writeln(" | " + fileManager.smallIcon(FileManager.HIERARCHY)
         + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
 
-    Header h1 = new Header(1, iconType, title);
+    Header h1 = new Header(1, iconType, title, renderContext);
     output.writeln(h1);
   }
 

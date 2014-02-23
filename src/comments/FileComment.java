@@ -25,9 +25,10 @@ import oxdoc.OxProject;
 import java.text.MessageFormat;
 
 public class FileComment extends BaseComment {
-  private String _author = "";
-  private String _version = "";
-  final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+  public static final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+
+  private String author = "";
+  private String version = "";
 
   public FileComment(OxProject project) {
     super(project);
@@ -43,10 +44,10 @@ public class FileComment extends BaseComment {
 
     switch (SectionId) {
       case SECTION_AUTHOR:
-        _author += text;
+        author += text;
         break;
       case SECTION_VERSION:
-        _version += text;
+        version += text;
         break;
       default:
         return false;
@@ -67,8 +68,8 @@ public class FileComment extends BaseComment {
   public String toString() {
     String extraInfo = "";
 
-    extraInfo += generateSection("Author", "author", _author);
-    extraInfo += generateSection("Version", "version", _version);
+    extraInfo += generateSection("Author", "author", author);
+    extraInfo += generateSection("Version", "version", version);
 
     extraInfo += generateSection("Example", "example", example());
     extraInfo += generateSection("Comments", "comments", comments());

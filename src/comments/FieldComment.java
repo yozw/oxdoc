@@ -26,7 +26,8 @@ import java.text.MessageFormat;
 
 public class FieldComment extends BaseComment {
   private final static int MODIFIER_INTERNAL = 300;
-  private boolean _hasInternalModifier = false;
+
+  private boolean hasInternalModifier = false;
 
   public FieldComment(OxProject project) {
     super(project);
@@ -47,7 +48,7 @@ public class FieldComment extends BaseComment {
     if (super.processModifier(ModifierId))
       return true;
     if (ModifierId == MODIFIER_INTERNAL) {
-      _hasInternalModifier = true;
+      hasInternalModifier = true;
       return true;
     }
     return false;
@@ -67,6 +68,6 @@ public class FieldComment extends BaseComment {
   }
 
   public boolean hasInternalModifier() {
-    return _hasInternalModifier;
+    return hasInternalModifier;
   }
 }

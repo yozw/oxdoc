@@ -24,8 +24,7 @@ import oxdoc.FileManager;
 import oxdoc.comments.FieldComment;
 
 public class OxField extends OxEntity {
-  public String Declaration;
-  public OxClass.Visibility _visibility;
+  public OxClass.Visibility visibility;
   public boolean Static = false;
   public boolean Constant = false;
 
@@ -33,13 +32,13 @@ public class OxField extends OxEntity {
     super(name, null, new FieldComment(parentFile.project()), parentFile);
 
     setIconType(FileManager.FIELD);
-    _visibility = OxClass.Visibility.Public;
+    visibility = OxClass.Visibility.Public;
   }
 
   OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
     super(name, oxclass, new FieldComment(oxclass.parentFile().project()), oxclass.parentFile());
     setIconType(FileManager.FIELD);
-    _visibility = visibility;
+    this.visibility = visibility;
   }
 
   public String url() {
@@ -68,7 +67,7 @@ public class OxField extends OxEntity {
   }
 
   public OxClass.Visibility visibility() {
-    return _visibility;
+    return visibility;
   }
 
   public String toString() {

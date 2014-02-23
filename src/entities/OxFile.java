@@ -27,13 +27,11 @@ import oxdoc.comments.FileComment;
 import java.util.ArrayList;
 
 public class OxFile extends OxEntity {
-  private OxEntityList _functions = new OxEntityList();
-  private OxEntityList _classes = new OxEntityList();
-  private OxEntityList _variables = new OxEntityList();
-  private OxEntityList _enums = new OxEntityList();
-  /**
-   * added by CF *
-   */
+  private final OxEntityList functions = new OxEntityList();
+  private final OxEntityList classes = new OxEntityList();
+  private final OxEntityList variables = new OxEntityList();
+  private final OxEntityList enums = new OxEntityList();
+
   private int enumCounter = 0;
 
   public OxFile(String fileName, OxProject project) {
@@ -42,11 +40,11 @@ public class OxFile extends OxEntity {
   }
 
   public OxMethod addFunction(String name) {
-    return (OxMethod) _functions.add(new OxMethod(name, this));
+    return (OxMethod) functions.add(new OxMethod(name, this));
   }
 
   public OxField addVariable(String name) {
-    return (OxField) _variables.add(new OxField(name, this));
+    return (OxField) variables.add(new OxField(name, this));
   }
 
   public OxEnum addEnum(String alternativeName, ArrayList elements) {
@@ -57,42 +55,42 @@ public class OxFile extends OxEntity {
     String[] _elements = new String[elements.size()];
     for (int i = 0; i < elements.size(); i++)
       _elements[i] = elements.get(i).toString();
-    return (OxEnum) _enums.add(new OxEnum(alternativeName, _elements, this));
+    return (OxEnum) enums.add(new OxEnum(alternativeName, _elements, this));
   }
 
   public OxClass addClass(String name) {
-    return (OxClass) _classes.add(new OxClass(name, this));
+    return (OxClass) classes.add(new OxClass(name, this));
   }
 
-  public OxClass addClass(String name, String parentclassname) {
-    return (OxClass) _classes.add(new OxClass(name, parentclassname, this));
+  public OxClass addClass(String name, String parentClassName) {
+    return (OxClass) classes.add(new OxClass(name, parentClassName, this));
   }
 
   public OxClass getClass(String name) {
-    return (OxClass) _classes.get(name);
+    return (OxClass) classes.get(name);
   }
 
   public ArrayList functions() {
-    return _functions.sortedList();
+    return functions.sortedList();
   }
 
   public ArrayList enums() {
-    return _enums.sortedList();
+    return enums.sortedList();
   }
 
   public ArrayList variables() {
-    return _variables.sortedList();
+    return variables.sortedList();
   }
 
   public ArrayList functionsAndVariables() {
     OxEntityList newList = new OxEntityList();
-    newList.addAll(_functions);
-    newList.addAll(_variables);
+    newList.addAll(functions);
+    newList.addAll(variables);
     return newList.sortedList();
   }
 
   public ArrayList classes() {
-    return _classes.sortedList();
+    return classes.sortedList();
   }
 
   public String url() {

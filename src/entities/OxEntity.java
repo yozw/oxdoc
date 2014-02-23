@@ -24,28 +24,32 @@ import oxdoc.FileManager;
 import oxdoc.OxProject;
 import oxdoc.comments.BaseComment;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class OxEntity {
+  public String declaration;
+
+  protected final OxFile parentFile;
+
   private final String name;
   private final BaseComment comment;
   private final OxProject project;
   private final OxClass parentClass;
-  protected final OxFile _parentFile;
-  public String declaration;
   private int iconType = FileManager.NONE;
 
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
-    this.name = name;
-    this.project = project;
-    this.comment = comment;
+    this.name = checkNotNull(name);
+    this.project = checkNotNull(project);
+    this.comment = checkNotNull(comment);
     this.parentClass = parentClass;
-    _parentFile = null;
+    parentFile = null;
   }
 
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
-    this.name = name;
-    project = parentFile.project();
-    this.comment = comment;
-    _parentFile = parentFile;
+    this.name = checkNotNull(name);
+    this.project = parentFile.project();
+    this.comment = checkNotNull(comment);
+    this.parentFile = parentFile;
     this.parentClass = parentClass;
   }
 
@@ -88,7 +92,7 @@ public class OxEntity {
   }
 
   protected String parentFileUrl() {
-    return (_parentFile == null) ? "" : _parentFile.url();
+    return (parentFile == null) ? "" : parentFile.url();
   }
 
   public BaseComment setComment(String comment) throws Exception {
@@ -139,4 +143,7 @@ public class OxEntity {
     return comment().sortKey();
   }
 
+  public OxFile parentFile() {
+    return parentFile;
+  }
 }

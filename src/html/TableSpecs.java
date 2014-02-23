@@ -24,5 +24,5 @@ import java.util.ArrayList;
 
 public class TableSpecs {
   public String cssClass = null;
-  public ArrayList columnCssClasses = new ArrayList();
+  public final ArrayList columnCssClasses = new ArrayList();
 }

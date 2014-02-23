@@ -24,17 +24,17 @@ import oxdoc.OxProject;
 import java.text.MessageFormat;
 
 public class FunctionComment extends BaseComment {
-  private BaseCommentBlock _params;
-  private BaseCommentBlock _returns;
-  private boolean _hasInternalModifier = false;
+  public static final int SECTION_PARAM = 200, SECTION_RETURNS = 201;
+  public static final int MODIFIER_INTERNAL = 300;
 
-  final int SECTION_PARAM = 200, SECTION_RETURNS = 201;
-  final int MODIFIER_INTERNAL = 300;
+  private BaseCommentBlock params;
+  private BaseCommentBlock returns;
+  private boolean hasInternalModifier = false;
 
   public FunctionComment(OxProject project) {
     super(project);
-    _params = new CommentParameterList(project);
-    _returns = new CommentTextBlock(project);
+    params = new CommentParameterList(project);
+    returns = new CommentTextBlock(project);
 
     registerSection("param", SECTION_PARAM);
     registerSection("params", SECTION_PARAM);
@@ -49,10 +49,10 @@ public class FunctionComment extends BaseComment {
 
     switch (SectionId) {
       case SECTION_PARAM:
-        _params.add(text);
+        params.add(text);
         break;
       case SECTION_RETURNS:
-        _returns.add(text);
+        returns.add(text);
         break;
       default:
         return false;
@@ -75,7 +75,7 @@ public class FunctionComment extends BaseComment {
     if (super.processModifier(ModifierId))
       return true;
     if (ModifierId == MODIFIER_INTERNAL) {
-      _hasInternalModifier = true;
+      hasInternalModifier = true;
       return true;
     }
     return false;
@@ -97,14 +97,14 @@ public class FunctionComment extends BaseComment {
   }
 
   public BaseCommentBlock params() {
-    return _params;
+    return params;
   }
 
   public BaseCommentBlock returns() {
-    return _returns;
+    return returns;
   }
 
   public boolean hasInternalModifier() {
-    return _hasInternalModifier;
+    return hasInternalModifier;
   }
 }

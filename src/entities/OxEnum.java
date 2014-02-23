@@ -26,17 +26,16 @@ import oxdoc.comments.EnumComment;
 import java.util.ArrayList;
 
 public class OxEnum extends OxEntity {
-  public String Declaration;
-  public OxClass.Visibility _visibility;
-  private ArrayList _elements = new ArrayList();
+  public OxClass.Visibility visibility;
+  private final ArrayList elements = new ArrayList();
 
   OxEnum(String name, String[] elements, OxClass oxclass, OxClass.Visibility visibility) {
     super(name, oxclass, new EnumComment(oxclass.parentFile().project()), oxclass.parentFile());
     setIconType(FileManager.ENUM);
 
     for (int i = 0; i < elements.length; i++)
-      _elements.add(new OxEnumElement(elements[i], this));
-    _visibility = visibility;
+      this.elements.add(new OxEnumElement(elements[i], this));
+    this.visibility = visibility;
   }
 
   OxEnum(String name, String[] elements, OxFile oxfile) {
@@ -44,8 +43,8 @@ public class OxEnum extends OxEntity {
 
     setIconType(FileManager.ENUM);
     for (int i = 0; i < elements.length; i++)
-      _elements.add(new OxEnumElement(elements[i], this));
-    _visibility = OxClass.Visibility.Public;
+      this.elements.add(new OxEnumElement(elements[i], this));
+    visibility = OxClass.Visibility.Public;
   }
 
   public String url() {
@@ -65,16 +64,16 @@ public class OxEnum extends OxEntity {
 
   public String elementString() {
     String decl = "";
-    for (int i = 0; i < _elements.size(); i++) {
+    for (int i = 0; i < elements.size(); i++) {
       if (i != 0)
         decl += ", ";
-      decl += ((OxEnumElement) _elements.get(i)).name();
+      decl += ((OxEnumElement) elements.get(i)).name();
     }
     return decl;
   }
 
   public OxClass.Visibility visibility() {
-    return _visibility;
+    return visibility;
   }
 
   public String toString() {
@@ -86,6 +85,6 @@ public class OxEnum extends OxEntity {
   }
 
   public ArrayList elements() {
-    return _elements;
+    return elements;
   }
 }

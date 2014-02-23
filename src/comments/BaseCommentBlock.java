@@ -24,16 +24,15 @@ import oxdoc.OxProject;
 
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class BaseCommentBlock extends ArrayList {
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 
   protected final OxProject project;
 
   public BaseCommentBlock(OxProject project) {
-    this.project = project;
+    this.project = checkNotNull(project);
   }
 
   public String toString() {

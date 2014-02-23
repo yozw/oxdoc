@@ -25,10 +25,10 @@ import oxdoc.OxProject;
 import java.text.MessageFormat;
 
 public class ClassComment extends BaseComment {
+  public final static int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
+
   private String _author = "";
   private String _version = "";
-
-  private final static int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
   public ClassComment(OxProject project) {
     super(project);

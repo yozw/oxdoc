@@ -20,12 +20,14 @@
 
 package oxdoc.html;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class Anchor extends Element {
 
   private final String name;
 
   public Anchor(String name) {
-    this.name = name;
+    this.name = checkNotNull(name);
   }
 
   @Override

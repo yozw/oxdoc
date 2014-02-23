@@ -25,17 +25,16 @@ import oxdoc.comments.BaseComment;
 import oxdoc.comments.FunctionComment;
 
 public class OxMethod extends OxEntity {
-  public String Declaration;
   public boolean Virtual = false;
   public boolean Static = false;
 
-  OxMethod(String name, OxFile parentFile) {
+  public OxMethod(String name, OxFile parentFile) {
     super(name, null, new FunctionComment(parentFile.project()), parentFile);
 
     setIconType(FileManager.FUNCTION);
   }
 
-  OxMethod(String name, OxClass oxclass) {
+  public OxMethod(String name, OxClass oxclass) {
     super(name, oxclass, new FunctionComment(oxclass.parentFile().project()), oxclass.parentFile());
 
     setIconType(FileManager.METHOD);

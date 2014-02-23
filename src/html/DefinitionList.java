@@ -22,6 +22,8 @@ package oxdoc.html;
 
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class DefinitionList extends Element {
 
   private final String cssClass;
@@ -29,7 +31,7 @@ public class DefinitionList extends Element {
   private final ArrayList definitions = new ArrayList();
 
   public DefinitionList(String cssClass) {
-    this.cssClass = cssClass;
+    this.cssClass = checkNotNull(cssClass);
   }
 
   public void addItem(String label, String definition) {

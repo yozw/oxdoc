@@ -27,7 +27,7 @@ import static oxdoc.Utils.checkNotNull;
 public class Header extends Element {
 
   private final String title;
-  private RenderContext context;
+  private final RenderContext context;
   private final int level;
   private final int iconType;
 

@@ -25,8 +25,8 @@ import oxdoc.AlphanumComparator;
 import java.util.*;
 
 public class OxEntityList {
-  Hashtable entities = new Hashtable();
-  AlphanumComparator alphanumComparator = new AlphanumComparator();
+  private static final AlphanumComparator alphanumComparator = new AlphanumComparator();
+  private final Hashtable entities = new Hashtable();
 
   public OxEntity add(OxEntity entity) {
     return add(entity.name(), entity);
@@ -73,25 +73,6 @@ public class OxEntityList {
 
   public ArrayList sortedListByDisplayName() {
     return sortedList();
-
-    // OBSOLETE CODE
-    /*
-		 * ArrayList list = new ArrayList(); for (Enumeration e =
-		 * entities.elements(); e.hasMoreElements();) list.add(e.nextElement());
-		 * 
-		 * Collections.sort(list, new Comparator() { public int compare(Object
-		 * o1, Object o2) { OxEntity e1 = (OxEntity) o1; OxEntity e2 =
-		 * (OxEntity) o2;
-		 * 
-		 * // we don't care about display name anymore, I think: maybe get rid
-		 * of functionality? return
-		 * e1.sortKey().toUpperCase().compareTo(e2.sortKey().toUpperCase());
-		 * return
-		 * e1.displayName().toUpperCase().compareTo(e2.displayName().toUpperCase
-		 * ()); } });
-		 * 
-		 * return list;
-		 */
   }
 
   public OxEntityList classes() {

@@ -22,19 +22,21 @@ package oxdoc.html;
 
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class Table extends Element {
 
-  enum RowType {
+  private static enum RowType {
     HEADER, REGULAR
   }
 
-  private class TableRow {
-    RowType type;
-    ArrayList cells = new ArrayList();
+  private static class TableRow {
+    final RowType type;
+    final ArrayList cells = new ArrayList();
     String title = "";
 
     TableRow(RowType type) {
-      this.type = type;
+      this.type = checkNotNull(type);
     }
   }
 
@@ -42,11 +44,11 @@ public class Table extends Element {
   private final ArrayList rows = new ArrayList();
 
   public Table() {
-    tableSpecs = new TableSpecs();
+    this(new TableSpecs());
   }
 
   public Table(TableSpecs tableSpecs) {
-    this.tableSpecs = tableSpecs;
+    this.tableSpecs = checkNotNull(tableSpecs);
   }
 
   public TableSpecs specs() {

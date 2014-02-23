@@ -25,8 +25,8 @@ import oxdoc.OxProject;
 public class EnumComment extends FieldComment {
   private final static int SECTION_NAME = 500, MODIFIER_INTERNAL = 300;
 
-  private String _alternativeName = "";
-  private boolean _hasInternalModifier = false;
+  private String alternativeName = "";
+  private boolean hasInternalModifier = false;
 
   public EnumComment(OxProject project) {
     super(project);
@@ -41,7 +41,7 @@ public class EnumComment extends FieldComment {
 
     switch (SectionId) {
       case SECTION_NAME:
-        _alternativeName += text;
+        alternativeName += text;
         break;
       default:
         return false;
@@ -53,18 +53,18 @@ public class EnumComment extends FieldComment {
     if (super.processModifier(ModifierId))
       return true;
     if (ModifierId == MODIFIER_INTERNAL) {
-      _hasInternalModifier = true;
+      hasInternalModifier = true;
       return true;
     }
     return false;
   }
 
   public String alternativeName() {
-    return _alternativeName;
+    return alternativeName;
   }
 
   public boolean hasInternalModifier() {
-    return _hasInternalModifier;
+    return hasInternalModifier;
   }
 
 }
