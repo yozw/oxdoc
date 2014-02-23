@@ -6,6 +6,7 @@
 * Added support for new Ox 7 features: lambda expressions, the `foreach` keyword, and 
   default function argument values.
 * Did some major refactoring and code cleaning
+* Code now uses generics, so Java 5.0 or higher is required.
 
 ### April 4th, 2012
 * Removed setup utility: not really necessary anymore because 
