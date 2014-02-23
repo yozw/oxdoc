@@ -32,13 +32,13 @@ public class LogFile {
   }
 
   private void openIfNecessary() {
-    if (output == null) {
+    if (output != null) {
       return;
     }
     try {
       File file = new File("oxdoc.log");
       output = new BufferedWriter(new FileWriter(file));
-      writeln("Log file created at " + getDate());
+      output.write("Log file created at " + getDate() + "\n");
     } catch (IOException e) {
       throw new RuntimeException("Could not open oxdoc.log for writing");
     }

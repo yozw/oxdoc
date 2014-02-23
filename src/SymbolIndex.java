@@ -34,7 +34,6 @@ public class SymbolIndex {
 
   private final OxProject project;
   private final ClassTree classTree;
-  private final Config config;
   private final Hashtable entries; // entries, key: OxEntity, value: IndexEntry
 
   /*
@@ -65,11 +64,10 @@ public class SymbolIndex {
   public SymbolIndex(OxProject project, ClassTree classTree, Config config) {
     this.project = checkNotNull(project);
     this.classTree = checkNotNull(classTree);
-    this.config = checkNotNull(config);
-    this.entries = constructIndex();
+    this.entries = constructIndex(project, config);
   }
 
-  private Hashtable constructIndex() {
+  private static Hashtable constructIndex(OxProject project, Config config) {
     Hashtable entries = new Hashtable();
 
     ArrayList symbols = project.getSymbolsByDisplayName();
@@ -80,16 +78,16 @@ public class SymbolIndex {
         continue;
 
       if (entity instanceof OxClass)
-        addSingletonEntry(entity, "Class");
+        addSingletonEntry(entries, entity, "Class");
       else if ((entity instanceof OxField) && (entity.getParentClass() == null))
-        addSingletonEntry(entity, "Global variable");
+        addSingletonEntry(entries, entity, "Global variable");
       else if (entity instanceof OxField)
-        addGroupedEntry(entity, entity, "Field");
+        addGroupedEntry(entries, entity, entity, "Field");
       else if (entity instanceof OxEnumElement) {
         OxEnumElement element = (OxEnumElement) entity;
-        addSingletonEntry(entity, "Element of enumeration " + project.getLinkToEntity(element.getParentEnum()));
+        addSingletonEntry(entries, entity, "Element of enumeration " + project.getLinkToEntity(element.getParentEnum()));
       } else if ((entity instanceof OxMethod) && (entity.getParentClass() == null))
-        addSingletonEntry(entity, "Global function");
+        addSingletonEntry(entries, entity, "Global function");
       else if (entity instanceof OxMethod) {
         OxMethod method = (OxMethod) entity;
         OxClass parentClass = method.getParentClass();
@@ -105,19 +103,19 @@ public class SymbolIndex {
             && (ancestorClass.getSuperClass().getMethodByName(method.getName()) != null))
           ancestorClass = ancestorClass.getSuperClass();
 
-        addGroupedEntry(ancestorClass.getMethodByName(method.getName()), entity, type);
+        addGroupedEntry(entries, ancestorClass.getMethodByName(method.getName()), entity, type);
       }
     }
     return entries;
   }
 
-  private IndexEntry addSingletonEntry(OxEntity entity, String type) {
+  private static IndexEntry addSingletonEntry(Hashtable entries, OxEntity entity, String type) {
     IndexEntry entry = new IndexEntry(entity.getName(), type, entity);
     entries.put(entity, entry);
     return entry;
   }
 
-  private IndexEntry addGroupedEntry(OxEntity ancestorEntity, OxEntity entity, String type) {
+  private static IndexEntry addGroupedEntry(Hashtable entries, OxEntity ancestorEntity, OxEntity entity, String type) {
     IndexEntry entry = (IndexEntry) entries.get(ancestorEntity);
     if (entry == null)
       entry = new IndexEntry(ancestorEntity.getName(), type, entity);

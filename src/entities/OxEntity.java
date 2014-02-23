@@ -38,7 +38,7 @@ public class OxEntity {
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
     this.name = checkNotNull(name);
     this.project = checkNotNull(project);
-    this.comment = checkNotNull(comment);
+    this.comment = comment;
     this.parentClass = parentClass;
     parentFile = null;
   }
@@ -46,7 +46,7 @@ public class OxEntity {
   public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
     this.name = checkNotNull(name);
     this.project = parentFile.getProject();
-    this.comment = checkNotNull(comment);
+    this.comment = comment;
     this.parentFile = parentFile;
     this.parentClass = parentClass;
   }
