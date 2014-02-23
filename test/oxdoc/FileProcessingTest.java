@@ -18,20 +18,20 @@ public class FileProcessingTest {
   private final static TextProcessor textProcessor = new TextProcessor(config);
 
   @Test
-  public void thisAlwaysPasses() throws Exception {
+  public void testExampleFile() throws Exception {
     OxProject project = new OxProject(fileManager, textProcessor);
     File file = new File("example/dist_degen.ox");
-    
-		ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
-		OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
-		Preprocessor p = new Preprocessor(config, bufferWriter);
-		p.processFile(file);
+    ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
+    OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);
 
-		ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
+    Preprocessor p = new Preprocessor(config, bufferWriter);
+    p.processFile(file);
 
-		Parser parser = new Parser(bufferIn, project.addFile(file.getName()), project);
-		parser.OxFileDefinition();
+    ByteArrayInputStream bufferIn = new ByteArrayInputStream(bufferStream.toByteArray());
+
+    Parser parser = new Parser(bufferIn, project.addFile(file.getName()), project);
+    parser.OxFileDefinition();
   }
 }
 
