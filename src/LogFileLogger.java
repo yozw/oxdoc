@@ -20,7 +20,32 @@
 
 package oxdoc;
 
-public interface Logger {
-  void info(String message);
-  void warning(String message);
+import java.io.IOException;
+
+import static oxdoc.Utils.checkNotNull;
+
+public class LogFileLogger implements Logger {
+  private LogFile logFile;
+
+  public LogFileLogger(LogFile logFile) {
+    this.logFile = checkNotNull(logFile);
+  }
+
+  @Override
+  public void info(String message) {
+    try {
+      System.out.println(message);
+      logFile.writeln(message);
+    } catch (IOException E) {
+    }
+  }
+
+  @Override
+  public void warning(String message) {
+    try {
+      System.out.println("Warning: " + message);
+      logFile.writeln("Warning: " + message);
+    } catch (IOException E) {
+    }
+  }
 }

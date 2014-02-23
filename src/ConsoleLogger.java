@@ -1,6 +1,6 @@
 /**
 
- oxdoc (c) Copyright 2005-2012 by Y. Zwols
+ oxdoc (c) Copyright 2005-2014 by Y. Zwols
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,14 @@
 
 package oxdoc;
 
-public interface Logger {
-  void info(String message);
-  void warning(String message);
+public class ConsoleLogger implements Logger {
+  @Override
+  public void info(String message) {
+    System.out.println(message);
+  }
+
+  @Override
+  public void warning(String message) {
+    System.out.println("Warning: " + message);
+  }
 }

@@ -25,31 +25,44 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LogFile {
-  Writer output = null;
+  public Writer output = null;
 
   // create a blank file
-  public LogFile() throws IOException {
-    File aFile = new File("oxdoc.log");
-    output = new BufferedWriter(new FileWriter(aFile));
-    writeln("Log file created at " + GetDate());
+  public LogFile() {
   }
 
-  private static String GetDate() {
+  private void openIfNecessary() {
+    if (output == null) {
+      return;
+    }
+    try {
+      File file = new File("oxdoc.log");
+      output = new BufferedWriter(new FileWriter(file));
+      writeln("Log file created at " + getDate());
+    } catch (IOException e) {
+      throw new RuntimeException("Could not open oxdoc.log for writing");
+    }
+  }
+
+  private static String getDate() {
     Date date = new Date();
     SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
-
     return sdf.format(date);
   }
 
   public void close() throws IOException {
-    output.close();
+    if (output != null) {
+      output.close();
+    }
   }
 
   public void write(Object s) throws IOException {
+    openIfNecessary();
     output.write(s.toString());
   }
 
   public void writeln(Object s) throws IOException {
+    openIfNecessary();
     output.write(s.toString() + "\n");
   }
 }

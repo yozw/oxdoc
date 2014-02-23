@@ -25,10 +25,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextProcessor {
-  public final OxDocLogger logger;
+  public final Logger logger;
   private Config config;
 
-  public TextProcessor(OxDocLogger logger, Config config) {
+  public TextProcessor(Logger logger, Config config) {
     this.logger = logger;
     this.config = config;
   }

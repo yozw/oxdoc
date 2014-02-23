@@ -23,7 +23,6 @@ package oxdoc.gui;
 import oxdoc.Constants;
 import oxdoc.Os;
 import oxdoc.OxDoc;
-import oxdoc.OxDocLogger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -409,7 +408,7 @@ public class MainWindow implements ActionListener {
           try {
             System.setProperty("user.dir", workingDir());
 
-            OxDoc oxdoc = new OxDoc(new OxDocLogger(cmd));
+            OxDoc oxdoc = new OxDoc(cmd);
 
             oxdoc.config.load();
             HashMap options = getOptions();
@@ -421,9 +420,9 @@ public class MainWindow implements ActionListener {
             oxdoc.addFiles(editFilenames.getText());
             oxdoc.generateDocs();
 
-            cmd.writeMessage("\nExecution succesful", 0);
+            cmd.info("Execution succesful");
           } catch (Exception E) {
-            cmd.writeMessage("\nExecution failed: \n" + E.getMessage(), 0);
+            cmd.warning("Execution failed: \n" + E.getMessage());
           }
           cmd.enableButtons(true);
         }

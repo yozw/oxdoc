@@ -45,7 +45,7 @@ public class FileManager {
       "enum", "uplevel", "hierarchy", "global", "files"};
   private static String _imageCache = "images.xml";
   private static String _tempTexFileBase = "__oxdoc";
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final Config config;
 
   // for speed reasons, register which resource we've tried to write so far
@@ -53,7 +53,7 @@ public class FileManager {
   // success)
   Hashtable resourceResults = new Hashtable();
 
-  public FileManager(OxDocLogger logger, Config config) {
+  public FileManager(Logger logger, Config config) {
     this.logger = logger;
     this.config = config;
   }
@@ -220,9 +220,9 @@ public class FileManager {
       resourceFile.close();
       output.close();
 
-      logger.message("Succesfully wrote " + fileName);
+      logger.info("Succesfully wrote " + fileName);
     } catch (Exception E) {
-      logger.message(E.getMessage());
+      logger.info(E.getMessage());
       return false;
     }
     return true;

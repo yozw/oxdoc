@@ -24,28 +24,17 @@ import oxdoc.gui.OxDocGui;
 import oxdoc.parser.ParseException;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class OxDocCmd implements Logger {
-  private OxDoc oxdoc = null;
-  private OxDocLogger logger = null;
-  private ArrayList files = new ArrayList();
-  public LogFile Logfile = null;
+public class OxDocCmd {
+  public final LogFile logFile = new LogFile();
+  public final Logger logger = new LogFileLogger(logFile);
 
-  public void writeMessage(String message, int Code) {
-    try {
-      System.out.println(message);
-      if (Logfile != null)
-        Logfile.writeln(message);
-    } catch (IOException E) {
-    }
-  }
-
-  public int parseFiles() throws Exception {
+  public int parseFiles(Iterable<String> files, OxDoc oxdoc) throws Exception {
     int totalFiles = 0;
-    for (int i = 0; i < files.size(); i++) {
-      String filename = ((String) files.get(i)).trim();
+    for (String filename : files) {
+      filename = filename.trim();
       if (filename.length() == 0)
         continue;
 
@@ -53,17 +42,18 @@ public class OxDocCmd implements Logger {
         oxdoc.addFiles(filename);
         totalFiles++;
       } catch (ParseException e) {
-        logger.message("Parsing of file " + filename + " failed");
-        logger.message(e.toString());
+        logger.info("Parsing of file " + filename + " failed");
+        logger.info(e.toString());
       } catch (FileNotFoundException e) {
-        logger.message("File not found: " + filename);
+        logger.info("File not found: " + filename);
       }
     }
 
     return totalFiles;
   }
 
-  public void examineCommandLine(String[] args) throws IllegalArgumentException {
+  public void examineCommandLine(String[] args, List<String> files, Config config)
+      throws IllegalArgumentException {
     // examine command line
     for (int i = 0; i < args.length; i++) {
       if (!args[i].startsWith("-")) {
@@ -73,14 +63,14 @@ public class OxDocCmd implements Logger {
       }
 
       String option = args[i].substring(1);
-      if (oxdoc.config.setSimpleOption(option))
+      if (config.setSimpleOption(option))
         continue;
 
       i++;
       if (i == args.length)
         throw new IllegalArgumentException("Value expected after option -" + option);
 
-      if (!oxdoc.config.setOption(option, args[i]))
+      if (!config.setOption(option, args[i]))
         throw new IllegalArgumentException("Invalid option -" + option);
     }
   }
@@ -95,9 +85,9 @@ public class OxDocCmd implements Logger {
     return true;
   }
 
-  public void run(String[] args, OxDocLogger logger) {
-    this.logger = logger;
-    oxdoc = new OxDoc(logger);
+  public void run(String[] args) {
+    OxDoc oxdoc = new OxDoc(logger);
+    List<String> files = new ArrayList<String>();
 
     if (emptyArray(args)) {
       System.out.println("\nUsage is:");
@@ -111,7 +101,7 @@ public class OxDocCmd implements Logger {
       // do configuration
       oxdoc.config.load();
       try {
-        examineCommandLine(args);
+        examineCommandLine(args, files, oxdoc.config);
       } catch (IllegalArgumentException E) {
         System.err.println("Error parsing command line. " + E.getMessage());
         return;
@@ -119,10 +109,9 @@ public class OxDocCmd implements Logger {
       oxdoc.config.validate();
 
       // execute parsing and document generation
-      Logfile = new LogFile();
-      if (parseFiles() > 0) {
+      if (parseFiles(files, oxdoc) > 0) {
         oxdoc.generateDocs();
-        Logfile.close();
+        logFile.close();
       }
     } catch (Exception e) {
       System.err.println("----------------------------------------------");
@@ -145,7 +134,7 @@ public class OxDocCmd implements Logger {
       gui.run(args);
     } else {
       OxDocCmd cmd = new OxDocCmd();
-      cmd.run(args, new OxDocLogger(cmd));
+      cmd.run(args);
     }
   }
 }

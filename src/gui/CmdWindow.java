@@ -109,8 +109,12 @@ public class CmdWindow implements ActionListener, Logger {
       }
   }
 
-  public void writeMessage(String message, int Code) {
+  public void info(String message) {
     memo.append(message + "\n");
+  }
+
+  public void warning(String message) {
+    memo.append("Warning: " + message + "\n");
   }
 
   public void show() {

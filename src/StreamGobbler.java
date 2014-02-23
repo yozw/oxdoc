@@ -27,11 +27,11 @@ import java.io.InputStreamReader;
 
 class StreamGobbler extends Thread {
   private final InputStream is;
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final boolean echo;
   private String text = "";
 
-  StreamGobbler(InputStream is, OxDocLogger logger, boolean echo) {
+  StreamGobbler(InputStream is, Logger logger, boolean echo) {
     this.is = is;
     this.logger = logger;
     this.echo = echo;
@@ -45,7 +45,7 @@ class StreamGobbler extends Thread {
       while ((line = br.readLine()) != null) {
         text += "> " + line + "\n";
         if (echo)
-          logger.message("> " + line);
+          logger.info("> " + line);
       }
     } catch (IOException ioe) {
       ioe.printStackTrace();

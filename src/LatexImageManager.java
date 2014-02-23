@@ -46,7 +46,7 @@ public class LatexImageManager extends ArrayList {
   private ImageEntryList imageEntries;
   private boolean _cacheLoaded = false;
   private int _imageCounter = 0;
-  public final OxDocLogger logger;
+  public final Logger logger;
   private FileManager fileManager;
   private Config config;
 
@@ -102,7 +102,7 @@ public class LatexImageManager extends ArrayList {
     }
   }
 
-  public LatexImageManager(OxDocLogger logger, FileManager fileManager, Config config) {
+  public LatexImageManager(Logger logger, FileManager fileManager, Config config) {
     this.logger = logger;
     this.fileManager = fileManager;
     this.config = config;
@@ -180,7 +180,7 @@ public class LatexImageManager extends ArrayList {
   }
 
   private void makeLatexFile(ImageEntry e) throws IOException {
-    logger.message("Generating image for formula \"" + e.formula() + "\"...");
+    logger.info("Generating image for formula \"" + e.formula() + "\"...");
 
     File aFile = new File(fileManager.tempTexFile());
     Writer output = new BufferedWriter(new FileWriter(aFile));
@@ -230,12 +230,12 @@ public class LatexImageManager extends ArrayList {
   }
 
   private void run(String filename, String parameters) throws IOException {
-    logger.message("   " + filename + " " + parameters);
+    logger.info("   " + filename + " " + parameters);
 
     Runtime run = Runtime.getRuntime();
     try {
       Process pp = run.exec(filename + " " + parameters);
-      logger.message("");
+      logger.info("");
 
       StreamGobbler errorGobbler = new StreamGobbler(pp.getErrorStream(), logger, false);
       StreamGobbler outputGobbler = new StreamGobbler(pp.getInputStream(), logger, true);
@@ -246,8 +246,8 @@ public class LatexImageManager extends ArrayList {
       pp.waitFor();
 
       if (errorGobbler.length() > 0) {
-        logger.message("");
-        logger.message(errorGobbler.getText());
+        logger.info("");
+        logger.info(errorGobbler.getText());
       }
 
     } catch (InterruptedException E) {

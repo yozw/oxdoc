@@ -2,6 +2,10 @@ TO DO LIST for oxdoc:
 
 * update documentation: icons  / @internal / -showinternal / #import 
 
+* Logging: current, there is an OxDocLogger and a Logger, one is wrapped in the other. Remove that. Also make Loggers non-nullable. (Implement noop-logger if necessary)
+* Header has a nasty dependency on filemanager. Move this dependency into "render". This means that we cannot use toString() anymore to render html.
+* There is also some code that is not mine. Update copyrights appropriately... See e.g. http://www.davekoelle.com/files/AlphanumComparator.java
+
 
 FIXED APRIL 4 2012:
 * Removed setup utility => not really necessary anymore because 

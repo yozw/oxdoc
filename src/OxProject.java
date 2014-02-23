@@ -30,12 +30,12 @@ import java.util.ArrayList;
 public class OxProject {
   public final FileManager fileManager;
   public final TextProcessor textProcessor;
-  public final OxDocLogger logger;
+  public final Logger logger;
   public String name = "Untitled project";
   private final OxEntityList _files = new OxEntityList();
   private final OxEntityList _symbols = new OxEntityList();
 
-  public OxProject(OxDocLogger logger, FileManager fileManager, TextProcessor textProcessor) {
+  public OxProject(Logger logger, FileManager fileManager, TextProcessor textProcessor) {
     this.logger = logger;
     this.fileManager = fileManager;
     this.textProcessor = textProcessor;

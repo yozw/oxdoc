@@ -36,12 +36,12 @@ public class Documentor {
   private final OxProject project;
   private LatexImageManager latexImageManager;
   private FileManager fileManager;
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final Config config;
 
   private ClassTree classTree;
 
-  public Documentor(OxProject project, OxDocLogger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
+  public Documentor(OxProject project, Logger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
     this.logger = logger;
     this.config = config;
     this.project = project;

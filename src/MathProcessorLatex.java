@@ -23,12 +23,12 @@ package oxdoc;
 import java.io.File;
 
 public class MathProcessorLatex extends MathProcessor {
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final Config config;
   private final LatexImageManager latexImageManager;
   private final FileManager fileManager;
 
-  public MathProcessorLatex(OxDocLogger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
+  public MathProcessorLatex(Logger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
     this.logger = logger;
     this.config = config;
     this.latexImageManager = latexImageManager;

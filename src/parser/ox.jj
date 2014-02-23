@@ -23,20 +23,20 @@ PARSER_BEGIN(Parser)
 package oxdoc.parser;
 
 import java.util.*;
-import java.io.*;
 import oxdoc.*;
 import oxdoc.entities.*;
 import oxdoc.comments.*;
+import oxdoc.Logger;
 
   public class Parser {
 
 	private OxFile file = null;
 	private OxProject project = null;
-	private OxDocLogger logger = null;
+	private Logger logger = null;
 	private OxClass currentClass = null;
 	private OxClass.Visibility currentVisibility = OxClass.Visibility.Private;
 
-  	public Parser(java.io.InputStream stream, OxDocLogger logger, OxFile file, OxProject project) {
+  	public Parser(java.io.InputStream stream, Logger logger, OxFile file, OxProject project) {
      		this(stream, null);
 		this.file = file; 
 		this.logger = logger;
@@ -393,7 +393,7 @@ void FunctionDefinition() :
 	  for(; t1 != t2; t1 = t1.next)
 	  	decl += t1.image + " ";
 	  decl += t2.image;
-	  func._declaration = decl;
+	  func.declaration = decl;
 	}
 	CompoundStatement()
 }

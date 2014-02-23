@@ -40,9 +40,9 @@ public class OxDoc {
   public final FileManager fileManager;
   public final LatexImageManager latexImageManager;
   public final TextProcessor textProcessor;
-  public final OxDocLogger logger;
+  public final Logger logger;
 
-  public OxDoc(OxDocLogger logger) {
+  public OxDoc(Logger logger) {
     this.logger = logger;
     config = new Config(logger);
     fileManager = new FileManager(logger, config);
@@ -54,11 +54,11 @@ public class OxDoc {
     config.addMathProcessor("mathjax", new MathProcessorMathjax());
     config.addMathProcessor("plain", new MathProcessorPlain());
 
-    logger.message(aboutText());
+    logger.info(aboutText());
   }
 
   public OxDoc() {
-    this(new OxDocLogger());
+    this(new ConsoleLogger());
   }
 
   public static String aboutText() {
@@ -73,7 +73,7 @@ public class OxDoc {
   }
 
   public void addFile(File file) throws Exception {
-    logger.message("Reading file " + file);
+    logger.info("Reading file " + file);
 
     ByteArrayOutputStream bufferStream = new ByteArrayOutputStream();
     OutputStreamWriter bufferWriter = new OutputStreamWriter(bufferStream);

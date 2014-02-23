@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class Config {
   public String latex = null;
   public String latexArg = "";
@@ -53,11 +55,11 @@ public class Config {
   public String imageBgColor = "rgb 1.0 1.0 1.0";
   public ArrayList latexPackages = new ArrayList();
 
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final Map mathProcessors = new HashMap();
 
-  public Config(OxDocLogger logger) {
-    this.logger = logger;
+  public Config(Logger logger) {
+    this.logger = checkNotNull(logger);
 
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
       latex = findInPath("latex.exe");
@@ -251,8 +253,7 @@ public class Config {
     File file = new File(Filename);
     if (!file.exists())
       return;
-    if (logger != null)
-      logger.message("Loading configuration file " + Filename);
+    logger.info("Loading configuration file " + Filename);
 
     try {
       // Parse the file

@@ -27,7 +27,7 @@ import java.util.Collection;
 public class Preprocessor {
 
   private final ArrayList defines = new ArrayList();
-  private final OxDocLogger logger;
+  private final Logger logger;
   private final Writer outputStream;
   private final Config config;
   private static Collection ignoredFiles = new ArrayList();
@@ -40,7 +40,7 @@ public class Preprocessor {
   private static final int INCLUDE = 32;
   private static final int IMPORT = 64;
 
-  public Preprocessor(OxDocLogger logger, Config config, Writer outputStream) {
+  public Preprocessor(Logger logger, Config config, Writer outputStream) {
     this.logger = logger;
     this.outputStream = outputStream;
     this.config = config;
