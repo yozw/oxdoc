@@ -46,10 +46,6 @@ public class OxEntityList {
     return entities.get(name);
   }
 
-  public int size() {
-    return entities.size();
-  }
-
   public ArrayList<OxEntity> sortedList() {
     ArrayList<OxEntity> list = new ArrayList<OxEntity>();
     list.addAll(entities.values());

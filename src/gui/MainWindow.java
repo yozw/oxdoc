@@ -257,7 +257,7 @@ public class MainWindow implements ActionListener {
   }
 
   private HashMap getOptions() {
-    HashMap map = new HashMap();
+    HashMap<String, String> map = new HashMap<String, String>();
 
     if (radioLatex.isSelected())
       map.put("formulas", "latex");

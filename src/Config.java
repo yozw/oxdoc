@@ -53,7 +53,7 @@ public class Config {
 
   public  static String configFile = "oxdoc.xml";
   private final List<String> latexPackages = new ArrayList<String>();
-  private final Map<String, MathProcessor> mathProcessors = new HashMap();
+  private final Map<String, MathProcessor> mathProcessors = new HashMap<String, MathProcessor>();
   private final Logger logger = Logging.getLogger();
 
   public Config() {

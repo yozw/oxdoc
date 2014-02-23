@@ -40,7 +40,6 @@ import oxdoc.Logging;
   	public Parser(java.io.InputStream stream, OxFile file, OxProject project) {
      		this(stream, null);
 		this.file = file; 
-		this.logger = logger;
 		this.project = project;
   	}
 
@@ -164,7 +163,7 @@ void GlobalVariableDeclaration() :
               firstToken = null; 
         Token name; 
         boolean Static = false, Constant = false, Extern = false;
-        ArrayList variableNames = new ArrayList(); 
+        ArrayList<Token> variableNames = new ArrayList<Token>();
 }
 {
     [externToken = <EXTERN> { Extern = true; } ] 

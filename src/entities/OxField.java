@@ -78,10 +78,6 @@ public class OxField extends OxEntity {
     return ((FieldComment) getComment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }
 
-  public void setVisibility(OxClass.Visibility visibility) {
-    this.visibility = visibility;
-  }
-
   public void setStatic(boolean aStatic) {
     isStatic = aStatic;
   }

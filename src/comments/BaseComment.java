@@ -243,20 +243,6 @@ public class BaseComment {
   }
 
   /**
-   * The reference list of the entity *
-   */
-  public CommentList ref() {
-    return ref;
-  }
-
-  /**
-   * The to do list of the entity *
-   */
-  public CommentList todo() {
-    return toDo;
-  }
-
-  /**
    * The sort key of this entity; returns null if not set. *
    */
   public String sortKey() {

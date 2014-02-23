@@ -244,11 +244,11 @@ public class SetupWindow implements ActionListener {
   }
 
   private String getLatex() {
-    return new File(editLatex.getText()).getAbsolutePath().toString();
+    return new File(editLatex.getText()).getAbsolutePath();
   }
 
   private String getDvipng() {
-    return new File(editDvipng.getText()).getAbsolutePath().toString();
+    return new File(editDvipng.getText()).getAbsolutePath();
   }
 
   public static void showException(Exception E) {
