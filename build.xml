@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="1.0alpha"/>
+  <property name="version" value="1.1-beta"/>
 
   <property name="src"      location="src"/>
   <property name="srcmisc"  location="src/misc"/>
@@ -165,7 +165,7 @@
       </classpath>    
       <batchtest>
         <fileset dir="${srctest}">
-          <include name="**/*Test*" />
+          <include name="**/*Test.java" />
         </fileset>
       </batchtest>
       <formatter type="brief" usefile="false"/>
