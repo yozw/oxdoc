@@ -28,8 +28,8 @@ public class Anchor extends Element {
     this.name = name;
   }
 
+  @Override
   protected void render(StringBuffer buffer) {
     buffer.append(String.format("<a name=\"%s\"></a>", name));
   }
-
 }

@@ -43,8 +43,8 @@ public class FileManager {
   public static final int FILES = 11;
   public static final String[] iconFiles = {"index", "project", "file", "class", "method", "function", "field",
       "enum", "uplevel", "hierarchy", "global", "files"};
-  private static String _imageCache = "images.xml";
-  private static String _tempTexFileBase = "__oxdoc";
+  private static String imageCache = "images.xml";
+  private static String tempTexFileBase = "__oxdoc";
   private final Logger logger;
   private final Config config;
 
@@ -59,7 +59,7 @@ public class FileManager {
   }
 
   public String imageCache() {
-    return outputFile(_imageCache);
+    return outputFile(imageCache);
   }
 
   public String outputFile(String filename) {
@@ -101,11 +101,11 @@ public class FileManager {
   }
 
   public String tempTexFile() {
-    return tempFile(_tempTexFileBase + ".tex");
+    return tempFile(tempTexFileBase + ".tex");
   }
 
   public String tempDviFile() {
-    return tempFile(_tempTexFileBase + ".dvi");
+    return tempFile(tempTexFileBase + ".dvi");
   }
 
   public static File getApplicationDirectory(Class clas) {

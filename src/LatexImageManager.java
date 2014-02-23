@@ -91,7 +91,7 @@ public class LatexImageManager extends ArrayList {
 
       if (filename == null)
         do
-          filename = "img" + (new Integer(++_imageCounter)).toString() + ".png";
+          filename = "img" + (Integer.toString(++_imageCounter)) + ".png";
         while (_filenames.get(filename) != null);
 
       entry = new ImageEntry(formula, filename);

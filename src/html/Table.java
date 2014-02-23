@@ -28,8 +28,6 @@ public class Table extends Element {
     HEADER, REGULAR
   }
 
-  ;
-
   private class TableRow {
     RowType type;
     ArrayList cells = new ArrayList();
@@ -82,6 +80,7 @@ public class Table extends Element {
     return colCount;
   }
 
+  @Override
   protected void render(StringBuffer buffer) {
     buffer.append(String.format("<table%s>\n", classAttr(tableSpecs.cssClass)));
 

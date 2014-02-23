@@ -20,10 +20,7 @@
 
 package oxdoc.html;
 
-public class Element {
-
-  protected void render(StringBuffer buffer) {
-  }
+public abstract class Element {
 
   protected String classAttr(String className) {
     if ((className == null) || (className.trim().length() == 0))
@@ -32,10 +29,12 @@ public class Element {
       return String.format(" class=\"%s\"", className);
   }
 
+  @Override
   public String toString() {
     StringBuffer bf = new StringBuffer();
     render(bf);
     return bf.toString();
   }
 
+  protected abstract void render(StringBuffer buffer);
 }

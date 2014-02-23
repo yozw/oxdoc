@@ -113,7 +113,7 @@ public class OutputFile {
     output.writeln(" | " + fileManager.smallIcon(FileManager.HIERARCHY)
         + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
 
-    Header h1 = new Header(1, iconType, title, fileManager, config);
+    Header h1 = new Header(1, iconType, title);
     output.writeln(h1);
   }
 

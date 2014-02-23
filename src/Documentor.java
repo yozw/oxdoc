@@ -20,33 +20,35 @@
 
 package oxdoc;
 
+import oxdoc.comments.BaseComment;
 import oxdoc.entities.OxClass;
 import oxdoc.entities.OxEntity;
 import oxdoc.entities.OxEnum;
 import oxdoc.entities.OxFile;
-import oxdoc.html.Anchor;
-import oxdoc.html.DefinitionList;
-import oxdoc.html.Header;
-import oxdoc.html.Table;
+import oxdoc.html.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static oxdoc.Utils.checkNotNull;
+
 public class Documentor {
   private final OxProject project;
-  private LatexImageManager latexImageManager;
-  private FileManager fileManager;
+  private final LatexImageManager latexImageManager;
+  private final FileManager fileManager;
   private final Logger logger;
   private final Config config;
+  private final RenderContext renderContext;
 
   private ClassTree classTree;
 
   public Documentor(OxProject project, Logger logger, Config config, LatexImageManager latexImageManager, FileManager fileManager) {
-    this.logger = logger;
-    this.config = config;
-    this.project = project;
-    this.latexImageManager = latexImageManager;
-    this.fileManager = fileManager;
+    this.logger = checkNotNull(logger);
+    this.config = checkNotNull(config);
+    this.project = checkNotNull(project);
+    this.latexImageManager = checkNotNull(latexImageManager);
+    this.fileManager = checkNotNull(fileManager);
+    this.renderContext = new RenderContext(fileManager);
     constructTableSpecs();
   }
 
@@ -80,7 +82,7 @@ public class Documentor {
     int iconType = FileManager.FILES;
     ArrayList files = project.files();
 
-    Header header = new Header(2, iconType, sectionTitle, fileManager, config);
+    Header header = new Header(2, iconType, sectionTitle, renderContext);
     output.writeln(header);
 
     Table fileTable = new Table();
@@ -188,7 +190,7 @@ public class Documentor {
     }
 
 		/* Write header */
-    Header header = new Header(2, iconType, sectionName, fileManager, config);
+    Header header = new Header(2, iconType, sectionName, renderContext);
     output.writeln(header);
 
 		/* Print comment */
@@ -292,7 +294,7 @@ public class Documentor {
 
 		/* Write if there is anything to write */
     if (table.getRowCount() > 0) {
-      Header header = new Header(2, iconType, "Global " + sectionName, fileManager, config);
+      Header header = new Header(2, iconType, "Global " + sectionName, renderContext);
       output.writeln(new Anchor("global"));
       output.writeln(header);
       output.writeln(table);
@@ -311,7 +313,7 @@ public class Documentor {
     if (enumList.size() + memberList.size() == 0)
       return;
 
-    Header header = new Header(2, iconType, sectionName, fileManager, config);
+    Header header = new Header(2, iconType, sectionName, renderContext);
     output.writeln(header);
 
     generateEnumDocs(output, oxclass, enumList);
@@ -323,7 +325,7 @@ public class Documentor {
       if (i != 0)
         output.writeln("\n<hr>");
 
-      Header h3 = new Header(3, entity.iconType(), entity.name(), fileManager, config);
+      Header h3 = new Header(3, entity.iconType(), entity.name(), renderContext);
       output.writeln(new Anchor(anchorName));
       output.writeln(h3);
 
@@ -364,8 +366,12 @@ public class Documentor {
       if ((!config.showInternals) && (entity.isInternal()))
         continue;
 
-      String[] row = {new Anchor(anchorName).toString() + entity.displayName(),
-          entity.comment().toString(), entity.elementString()};
+      Anchor anchor = new Anchor(anchorName);
+      BaseComment comment = entity.comment();
+      String[] row = {
+          anchor.toString() + entity.displayName(),
+          comment.toString(),
+          entity.elementString()};
 
       table.addRow(row);
     }

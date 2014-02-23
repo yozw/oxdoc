@@ -37,6 +37,7 @@ public class DefinitionList extends Element {
     definitions.add(definition);
   }
 
+  @Override
   protected void render(StringBuffer buffer) {
     buffer.append(String.format("<dl%s>\n", classAttr(cssClass)));
     for (int i = 0; i < labels.size(); i++) {
@@ -48,10 +49,10 @@ public class DefinitionList extends Element {
     buffer.append("</dl>\n");
   }
 
+  @Override
   public String toString() {
     StringBuffer bf = new StringBuffer();
     render(bf);
     return bf.toString();
   }
-
 }
