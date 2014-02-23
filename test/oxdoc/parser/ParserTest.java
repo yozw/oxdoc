@@ -13,14 +13,15 @@ public class ParserTest extends TestCase {
   @Test
   public void testClassDeclaration() throws Exception {
     String input = "class X : Y { decl Z; X(); W(); virtual U(); }";
-    ParserTestHelper helper = create(input).showInternals().test();
+    ParserTestHelper helper = create(input);
+    helper.test();
     assertNotNull(helper.getProject().getSymbol("X"));
     assertNotNull(helper.getProject().getSymbol("X::Z"));
     assertNull(helper.getProject().getSymbol("Y"));
   }
 
   @Test
-  public void testFunctionDeclaration() throws Exception {
+  public void testFunction() throws Exception {
     String input = "F() { }";
     ParserTestHelper helper = create(input);
     helper.test();
@@ -60,6 +61,85 @@ public class ParserTest extends TestCase {
   }
 
   @Test
+  public void testAssignment_FromVariable() throws Exception {
+    String input = "decl x = y;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
+  public void testEquality() throws Exception {
+    String input = "f() { return x == y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testStrictlyLessThan() throws Exception {
+    String input = "f() { return x < y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+  @Test
+  public void testLessThan() throws Exception {
+    String input = "f() { return x <= y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testStrictlyGreaterThan() throws Exception {
+    String input = "f() { return x > y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testGreaterThan() throws Exception {
+    String input = "f() { return x >= y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testDotEquals() throws Exception {
+    String input = "main() { println(x .== y); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testIf() throws Exception {
+    String input = "main() { if (x == y) println(x); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testIfElse() throws Exception {
+    String input = "main() { if (x == y) println(x); else println(y); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testIfElseWithBraces() throws Exception {
+    String input = "main() { if (x == y) { println(x); } else { println(y); } }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
   public void testInlineConditional() throws Exception {
     String input = "main() { decl x = u == 0 ? 0 : 1; }";
     ParserTestHelper helper = create(input);
@@ -76,15 +156,54 @@ public class ParserTest extends TestCase {
   }
 
   @Test
+  public void testFor() throws Exception {
+    String input = "main() { for (x = 0; x < 10; x++) println(x);}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testForWithInnerDeclaration() throws Exception {
+    String input = "main() { for (decl x = 0; x < 10; x++) println(x);}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testForWithBraces() throws Exception {
+    String input = "main() { for (x = 0; x < 10; x++) { println(x); } }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
   public void testForEach() throws Exception {
-    String input = "main() {foreach(x in y[0]) println(x);}";
+    String input = "main() { foreach(x in y[0]) println(x);}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
+  public void testForEachWithBraces() throws Exception {
+    String input = "main() { foreach(x in y[0]) { println(x); } }";
     ParserTestHelper helper = create(input);
     helper.test();
   }
 
   @Test
-  public void testForEachWithBraces() throws Exception {
-    String input = "main() {foreach(x in y[0]) { println(x); } }";
+  public void testLambda() throws Exception {
+    String input = "decl f = [=] (x) { return x*x; };";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testLambdaAsArgument() throws Exception {
+    String input = "main() { max([=] (x) { return x*x; }); }";
     ParserTestHelper helper = create(input);
     helper.test();
   }

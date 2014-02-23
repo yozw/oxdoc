@@ -497,11 +497,12 @@ void IterationStatement() : {}
 
 void Expression() : {}
 {
-	AssignmentExpression() 
+  AssignmentExpression()
 }
 
 void AssignmentExpression() : {}  
 {
+    "[=]" "(" [ ArgumentList() ] ")" CompoundStatement() |
 	  "[" UnaryExpression() ("," UnaryExpression())* "]" "=" AssignmentExpression() |
 	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression() |
 	  LOOKAHEAD(3) ConditionalExpression()
