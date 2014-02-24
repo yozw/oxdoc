@@ -56,6 +56,11 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
     return nameMap.get(name);
   }
 
+  @Override
+  public Iterator<T> iterator() {
+    return entitySet.iterator();
+  }
+
   public OxEntityList<T> filter(Predicate<T> filter) {
     OxEntityList<T> result = new OxEntityList<T>();
     for (T member : this) {
@@ -89,7 +94,9 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
         }
       }
       if (applies) {
-        result.add((S) entity);
+        @SuppressWarnings("unchecked")
+        S newEntity = (S) entity;
+        result.add(newEntity);
       }
     }
     return result;
@@ -102,10 +109,5 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
         return !entity.isInternal();
       }
     });
-  }
-
-  @Override
-  public Iterator<T> iterator() {
-    return entitySet.iterator();
   }
 }

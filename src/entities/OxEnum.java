@@ -20,7 +20,7 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.comments.EnumComment;
 
 import java.util.ArrayList;
@@ -32,20 +32,16 @@ public class OxEnum extends OxEntity {
   private final ArrayList<OxEnumElement> elements = new ArrayList<OxEnumElement>();
   private OxClass.Visibility visibility;
 
-  public OxEnum(String name, List<String> elements, OxClass oxclass, OxClass.Visibility visibility) {
-    super(name, oxclass, new EnumComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
-    setIconType(FileManager.ENUM);
-
+  public OxEnum(String name, List<String> elements, OxClass oxClass, OxClass.Visibility visibility) {
+    super(name, oxClass, new EnumComment(oxClass.getParentFile().getProject()), oxClass.getParentFile(), Icon.ENUM);
     for (String element : elements) {
       this.elements.add(new OxEnumElement(element, this));
     }
     this.visibility = checkNotNull(visibility);
   }
 
-  public OxEnum(String name, List<String> elements, OxFile oxfile) {
-    super(name, null, new EnumComment(oxfile.getProject()), oxfile);
-
-    setIconType(FileManager.ENUM);
+  public OxEnum(String name, List<String> elements, OxFile file) {
+    super(name, null, new EnumComment(file.getProject()), file, Icon.ENUM);
     for (String element : elements) {
       this.elements.add(new OxEnumElement(element, this));
     }

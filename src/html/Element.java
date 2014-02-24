@@ -31,10 +31,10 @@ public abstract class Element {
 
   @Override
   public String toString() {
-    StringBuffer bf = new StringBuffer();
-    render(bf);
-    return bf.toString();
+    StringBuilder stringBuilder = new StringBuilder();
+    render(stringBuilder);
+    return stringBuilder.toString();
   }
 
-  protected abstract void render(StringBuffer buffer);
+  protected abstract void render(StringBuilder buffer);
 }

@@ -26,8 +26,8 @@ import oxdoc.html.*;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
+import static oxdoc.entities.OxClass.Visibility;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class Documentor {
@@ -67,10 +67,9 @@ public class Documentor {
     String title = (project.getName().length() == 0) ? "Project home" : (project.getName() + " project home");
     String sectionTitle = (project.getName().length() == 0) ? "Files" : (project.getName() + " files");
 
-    OutputFile output = new OutputFile(fileName, title, FileManager.PROJECT, config, fileManager);
-    int iconType = FileManager.FILES;
+    OutputFile output = new OutputFile(fileName, title, Icon.PROJECT, config, fileManager);
 
-    Header header = new Header(2, iconType, sectionTitle, renderContext);
+    Header header = new Header(2, Icon.FILES, sectionTitle, renderContext);
     output.writeln(header);
 
     Table fileTable = new Table();
@@ -89,14 +88,14 @@ public class Documentor {
   }
 
   private void generateIndex(String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, config, fileManager);
+    OutputFile output = new OutputFile(fileName, "Index", Icon.INDEX, config, fileManager);
     SymbolIndex index = new SymbolIndex(project, classTree, config);
     index.write(output);
     output.close();
   }
 
   private void generateHierarchy(String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, "Class hierarchy", FileManager.HIERARCHY, config, fileManager);
+    OutputFile output = new OutputFile(fileName, "Class hierarchy", Icon.HIERARCHY, config, fileManager);
 
     ClassTreeHtml classTreeHtml = new ClassTreeHtml(project, classTree);
     classTreeHtml.writeHtml(output);
@@ -105,7 +104,7 @@ public class Documentor {
   }
 
   private void generateDoc(OxFile oxFile, String fileName) throws Exception {
-    OutputFile output = new OutputFile(fileName, oxFile.getName(), oxFile.getIconType(), config, fileManager);
+    OutputFile output = new OutputFile(fileName, oxFile.getName(), oxFile.getIcon(), config, fileManager);
     try {
       output.writeln(oxFile.getComment());
 
@@ -148,25 +147,24 @@ public class Documentor {
   }
 
   // generate header docs. Entity should be either OxClass or OxFile type
-  private void generateClassHeaderDocs(OutputFile output, OxClass oxclass) throws Exception {
-    String sectionName = oxclass.getName();
-    int iconType = FileManager.CLASS;
+  private void generateClassHeaderDocs(OutputFile output, OxClass oxClass) throws Exception {
+    String sectionName = oxClass.getName();
 
 		/* Write anchor */
     output.writeln(new Anchor(sectionName));
 
 		/* Add superclasses to section name */
-    for (OxClass superClass : oxclass.getSuperClasses()) {
+    for (OxClass superClass : oxClass.getSuperClasses()) {
       sectionName += " : " + project.getLinkToEntity(superClass);
     }
 
 		/* Write header */
-    Header header = new Header(2, iconType, sectionName, renderContext);
+    Header header = new Header(2, Icon.CLASS, sectionName, renderContext);
     output.writeln(header);
 
 		/* Print comment */
-    if (oxclass.getComment() != null)
-      output.writeln(oxclass.getComment());
+    if (oxClass.getComment() != null)
+      output.writeln(oxClass.getComment());
 
 		/* Construct a new table */
     Table table = new Table();
@@ -178,11 +176,11 @@ public class Documentor {
 		/* Determine which class members should be printed in the table */
     LinkedHashMap<String, OxEntityList<? extends OxEntity>> visMembers =
         new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
-    visMembers.put("Private fields", oxclass.getPrivateFields());
-    visMembers.put("Protected fields", oxclass.getProtectedFields());
-    visMembers.put("Public fields", oxclass.getPublicFields());
-    visMembers.put("Public methods", oxclass.getMethods());
-    visMembers.put("Enumerations", oxclass.getEnums());
+    visMembers.put("Private fields", oxClass.getFields(Visibility.Private));
+    visMembers.put("Protected fields", oxClass.getFields(Visibility.Protected));
+    visMembers.put("Public fields", oxClass.getFields(Visibility.Public));
+    visMembers.put("Public methods", oxClass.getMethods());
+    visMembers.put("Enumerations", oxClass.getEnums());
 
 		/* Add sections to table */
     for (String caption : visMembers.keySet()) {
@@ -205,9 +203,9 @@ public class Documentor {
 		/* Write inherited members */
     LinkedHashMap<String, OxEntityList<? extends OxEntity>> inhMembers =
         new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
-    inhMembers.put("Inherited methods", oxclass.getInheritedMethods());
-    inhMembers.put("Inherited fields", oxclass.getInheritedFields());
-    inhMembers.put("Inherited enumerations", oxclass.getInheritedEnums());
+    inhMembers.put("Inherited methods", oxClass.getInheritedMethods());
+    inhMembers.put("Inherited fields", oxClass.getInheritedFields());
+    inhMembers.put("Inherited enumerations", oxClass.getInheritedEnums());
 
     for (String caption : inhMembers.keySet()) {
       OxEntityList<? extends OxEntity> members = inhMembers.get(caption);
@@ -223,21 +221,14 @@ public class Documentor {
     }
   }
 
-  private void removeInternals(Map<String, OxEntityList<? extends OxEntity>> inhMembers) {
-    for (String key : inhMembers.keySet()) {
-      inhMembers.put(key, inhMembers.get(key).getNonInternal());
-    }
-  }
-
-  private void generateGlobalHeaderDocs(OutputFile output, OxFile oxfile) throws Exception {
+  private void generateGlobalHeaderDocs(OutputFile output, OxFile file) throws Exception {
     String sectionName = "";
-    int iconType = FileManager.GLOBAL;
 
     LinkedHashMap<String, OxEntityList<? extends OxEntity>> visMembers =
         new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
-    visMembers.put("Variables", oxfile.getVariables());
-    visMembers.put("Functions", oxfile.getFunctions());
-    visMembers.put("Enumerations", oxfile.getEnums());
+    visMembers.put("Variables", file.getVariables());
+    visMembers.put("Functions", file.getFunctions());
+    visMembers.put("Enumerations", file.getEnums());
 
 		/* Construct a new table */
     Table table = new Table();
@@ -267,18 +258,18 @@ public class Documentor {
 
 		/* Write if there is anything to write */
     if (table.getRowCount() > 0) {
-      Header header = new Header(2, iconType, "Global " + sectionName, renderContext);
+      Header header = new Header(2, Icon.GLOBAL, "Global " + sectionName, renderContext);
       output.writeln(new Anchor("global"));
       output.writeln(header);
       output.writeln(table);
     }
   }
 
-  private void generateClassDetailDocs(OutputFile output, OxClass oxclass, OxEntityList<OxEntity> members, OxEntityList<OxEnum> enums)
+  private void generateClassDetailDocs(OutputFile output, OxClass oxClass, OxEntityList<OxEntity> members, OxEntityList<OxEnum> enums)
       throws Exception {
-    String sectionName = (oxclass != null) ? oxclass.getName() : "Global ";
-    String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
-    int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
+    String sectionName = (oxClass != null) ? oxClass.getName() : "Global ";
+    String classPrefix = (oxClass != null) ? oxClass.getName() + "___" : "";
+    Icon icon = (oxClass != null) ? Icon.CLASS : Icon.GLOBAL;
 
     if (!config.isShowInternals()) {
       members = members.getNonInternal();
@@ -287,10 +278,10 @@ public class Documentor {
     if (enums.size() + members.size() == 0)
       return;
 
-    Header header = new Header(2, iconType, sectionName, renderContext);
+    Header header = new Header(2, icon, sectionName, renderContext);
     output.writeln(header);
 
-    generateEnumDocs(output, oxclass, enums);
+    generateEnumDocs(output, oxClass, enums);
 
     int rowIndex = 0;
     for (OxEntity entity : members) {
@@ -299,7 +290,7 @@ public class Documentor {
       if (rowIndex != 0)
         output.writeln("\n<hr>");
 
-      Header h3 = new Header(3, entity.getIconType(), entity.getName(), renderContext);
+      Header h3 = new Header(3, entity.getIcon(), entity.getName(), renderContext);
       output.writeln(new Anchor(anchorName));
       output.writeln(h3);
 
@@ -313,7 +304,7 @@ public class Documentor {
     }
   }
 
-  private void generateEnumDocs(OutputFile output, OxClass oxclass, OxEntityList<OxEnum> enums) throws Exception {
+  private void generateEnumDocs(OutputFile output, OxClass oxClass, OxEntityList<OxEnum> enums) throws Exception {
     if (!config.isShowInternals()) {
       enums = enums.getNonInternal();
     }
@@ -323,7 +314,7 @@ public class Documentor {
     }
 
     String sectionName = "Enumerations";
-    String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
+    String classPrefix = (oxClass != null) ? oxClass.getName() + "___" : "";
 
     Table table = new Table();
     table.specs().cssClass = "enum_table";

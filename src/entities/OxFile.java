@@ -20,7 +20,7 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.OxProject;
 import oxdoc.comments.FileComment;
 
@@ -35,8 +35,7 @@ public class OxFile extends OxEntity {
   private int enumCounter = 0;
 
   public OxFile(String fileName, OxProject project) {
-    super(fileName, null, new FileComment(project), project);
-    setIconType(FileManager.FILE);
+    super(fileName, null, new FileComment(project), project, Icon.FILE);
   }
 
   public OxMethod addFunction(String name) {

@@ -20,7 +20,7 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.OxProject;
 import oxdoc.comments.BaseComment;
 
@@ -32,23 +32,25 @@ public class OxEntity {
   private final BaseComment comment;
   private final OxProject project;
   private final OxClass parentClass;
+  private final Icon icon;
   private String declaration;
-  private int iconType = FileManager.NONE;
 
-  public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project) {
+  public OxEntity(String name, OxClass parentClass, BaseComment comment, OxProject project, Icon icon) {
     this.name = checkNotNull(name);
     this.project = checkNotNull(project);
     this.comment = comment;
     this.parentClass = parentClass;
+    this.icon = icon;
     parentFile = null;
   }
 
-  public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile) {
+  public OxEntity(String name, OxClass parentClass, BaseComment comment, OxFile parentFile, Icon icon) {
     this.name = checkNotNull(name);
     this.project = parentFile.getProject();
     this.comment = comment;
     this.parentFile = parentFile;
     this.parentClass = parentClass;
+    this.icon = icon;
   }
 
   public OxProject getProject() {
@@ -73,20 +75,12 @@ public class OxEntity {
     return parentClass.getName() + "::" + getName();
   }
 
-  public int getIconType() {
-    return iconType;
+  public Icon getIcon() {
+    return icon;
   }
 
   public String getSmallIcon() {
-    return getProject().getFileManager().getSmallIconHtml(iconType);
-  }
-
-  public String getLargeIcon() {
-    return getProject().getFileManager().getLargeIconHtml(iconType);
-  }
-
-  protected void setIconType(int iconType) {
-    this.iconType = iconType;
+    return getProject().getFileManager().getSmallIconHtml(icon);
   }
 
   public String getDescription() {

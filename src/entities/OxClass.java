@@ -20,50 +20,46 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.comments.ClassComment;
 import oxdoc.util.Predicate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static oxdoc.util.Utils.checkNotNull;
+
 public class OxClass extends OxEntity {
 
   private int enumCounter = 0;
 
   public enum Visibility {
-    Private {
-      public String toString() {
-        return "private";
-      }
-    },
-    Protected {
-      public String toString() {
-        return "protected";
-      }
-    },
-    Public {
-      public String toString() {
-        return "public";
-      }
+    Private("private"),
+    Protected("protected)"),
+    Public("public");
+
+    private final String name;
+
+    Visibility(String name) {
+      this.name = checkNotNull(name);
+    }
+
+    @Override
+    public String toString() {
+      return name;
     }
   }
 
-  private interface MemberFilter {
-    boolean keepItem(OxEntity entity);
-  }
-
   private final OxEntityList<OxEntity> members = new OxEntityList<OxEntity>();
-  private String superClassName = null;
+  private final String superClassName;
 
   public OxClass(String name, OxFile parentFile) {
-    super(name, null, new ClassComment(parentFile.getProject()), parentFile);
-    setIconType(FileManager.CLASS);
+    super(name, null, new ClassComment(parentFile.getProject()), parentFile, Icon.CLASS);
+    this.superClassName = null;
   }
 
   public OxClass(String name, String superClassName, OxFile parentFile) {
-    super(name, null, new ClassComment(parentFile.getProject()), parentFile);
-    setIconType(FileManager.CLASS);
+    super(name, null, new ClassComment(parentFile.getProject()), parentFile, Icon.CLASS);
     this.superClassName = superClassName;
   }
 
@@ -87,26 +83,10 @@ public class OxClass extends OxEntity {
     return members;
   }
 
-  public OxEntityList<OxField> getPrivateFields() {
+  public OxEntityList<OxField> getFields(final Visibility visibility) {
     return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
       public boolean apply(OxField entity) {
-        return entity.getVisibility() == Visibility.Private;
-      }
-    });
-  }
-
-  public OxEntityList<OxField> getProtectedFields() {
-    return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
-      public boolean apply(OxField entity) {
-        return entity.getVisibility() == Visibility.Protected;
-      }
-    });
-  }
-
-  public OxEntityList<OxField> getPublicFields() {
-    return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
-      public boolean apply(OxField entity) {
-        return entity.getVisibility() == Visibility.Public;
+        return entity.getVisibility().equals(visibility);
       }
     });
   }

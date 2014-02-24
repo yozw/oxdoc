@@ -82,7 +82,7 @@ public class Table extends Element {
   }
 
   @Override
-  protected void render(StringBuffer buffer) {
+  protected void render(StringBuilder buffer) {
     buffer.append(String.format("<table%s>\n", classAttr(tableSpecs.cssClass)));
 
     int columnCount = getColumnCount();

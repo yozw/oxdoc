@@ -20,7 +20,7 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.comments.BaseComment;
 import oxdoc.comments.FunctionComment;
 
@@ -29,15 +29,11 @@ public class OxMethod extends OxEntity {
   private boolean isStatic = false;
 
   public OxMethod(String name, OxFile parentFile) {
-    super(name, null, new FunctionComment(parentFile.getProject()), parentFile);
-
-    setIconType(FileManager.FUNCTION);
+    super(name, null, new FunctionComment(parentFile.getProject()), parentFile, Icon.FUNCTION);
   }
 
-  public OxMethod(String name, OxClass oxclass) {
-    super(name, oxclass, new FunctionComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
-
-    setIconType(FileManager.METHOD);
+  public OxMethod(String name, OxClass oxClass) {
+    super(name, oxClass, new FunctionComment(oxClass.getParentFile().getProject()), oxClass.getParentFile(), Icon.METHOD);
   }
 
   public String getUrl() {

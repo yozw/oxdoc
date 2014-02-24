@@ -20,25 +20,25 @@
 
 package oxdoc.entities;
 
-import oxdoc.FileManager;
+import oxdoc.Icon;
 import oxdoc.comments.FieldComment;
 
+import static oxdoc.entities.OxClass.Visibility;
+import static oxdoc.util.Utils.checkNotNull;
+
 public class OxField extends OxEntity {
-  private OxClass.Visibility visibility;
+  private final Visibility visibility;
   private boolean isStatic = false;
   private boolean isConstant = false;
 
   public OxField(String name, OxFile parentFile) {
-    super(name, null, new FieldComment(parentFile.getProject()), parentFile);
-
-    setIconType(FileManager.FIELD);
-    visibility = OxClass.Visibility.Public;
+    super(name, null, new FieldComment(parentFile.getProject()), parentFile, Icon.FIELD);
+    visibility = Visibility.Public;
   }
 
-  public OxField(String name, OxClass oxclass, OxClass.Visibility visibility) {
-    super(name, oxclass, new FieldComment(oxclass.getParentFile().getProject()), oxclass.getParentFile());
-    setIconType(FileManager.FIELD);
-    this.visibility = visibility;
+  public OxField(String name, OxClass oxClass, Visibility visibility) {
+    super(name, oxClass, new FieldComment(oxClass.getParentFile().getProject()), oxClass.getParentFile(), Icon.FIELD);
+    this.visibility = checkNotNull(visibility);
   }
 
   public String getUrl() {
@@ -50,23 +50,23 @@ public class OxField extends OxEntity {
   }
 
   public String getDeclaration() {
-    String decl = getModifiers() + " ";
-    decl += " decl " + getName();
+    String declaration = getModifiers() + " ";
+    declaration += " decl " + getName();
     if (getParentClass() != null)
-      decl += " [" + getVisibility() + "]";
-    return decl.trim();
+      declaration += " [" + getVisibility() + "]";
+    return declaration.trim();
   }
 
   public String getModifiers() {
-    String mod = "";
+    String modifiers = "";
     if (isStatic)
-      mod += "static ";
+      modifiers += "static ";
     if (isConstant)
-      mod += "const ";
-    return mod.trim();
+      modifiers += "const ";
+    return modifiers.trim();
   }
 
-  public OxClass.Visibility getVisibility() {
+  public Visibility getVisibility() {
     return visibility;
   }
 
@@ -74,15 +74,19 @@ public class OxField extends OxEntity {
     return "<OxField " + getReferenceName() + ">";
   }
 
+  public FieldComment getComment() {
+    return (FieldComment) super.getComment();
+  }
+
   public boolean isInternal() {
-    return ((FieldComment) getComment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
+    return getComment().hasInternalModifier() || !getVisibility().equals(Visibility.Public);
   }
 
-  public void setStatic(boolean aStatic) {
-    isStatic = aStatic;
+  public void setStatic(boolean isStatic) {
+    this.isStatic = isStatic;
   }
 
-  public void setConstant(boolean constant) {
-    isConstant = constant;
+  public void setConstant(boolean isConstant) {
+    this.isConstant = isConstant;
   }
 }

@@ -1,6 +1,6 @@
 /**
 
- oxdoc (c) Copyright 2005-2012 by Y. Zwols
+ oxdoc (c) Copyright 2005-2014 by Y. Zwols
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -18,35 +18,30 @@
 
  **/
 
-package oxdoc.entities;
+package oxdoc;
 
-import oxdoc.Icon;
+public enum Icon {
+  NONE(null),
+  INDEX("index"),
+  PROJECT("project"),
+  FILE("file"),
+  CLASS("class"),
+  METHOD("method"),
+  FUNCTION("function"),
+  FIELD("field"),
+  ENUM("enum"),
+  UPLEVEL("uplevel"),
+  HIERARCHY("hierarchy"),
+  GLOBAL("global"),
+  FILES("files");
 
-public class OxEnumElement extends OxEntity {
-  private final OxEnum oxEnum;
+  private final String fileName;
 
-  public OxEnumElement(String name, OxEnum oxEnum) {
-    super(name, null, null, oxEnum.getProject(), Icon.ENUM);
-    this.oxEnum = oxEnum;
+  private Icon(String fileName) {
+    this.fileName = fileName;
   }
 
-  public String getUrl() {
-    return oxEnum.getUrl();
-  }
-
-  public String getReferenceName() {
-    return oxEnum.getReferenceName() + "$$" + getName();
-  }
-
-  public String toString() {
-    return "<OxEnumElement " + getReferenceName() + ">";
-  }
-
-  public boolean isInternal() {
-    return oxEnum.isInternal();
-  }
-
-  public OxEnum getParentEnum() {
-    return oxEnum;
+  public String getFileName() {
+    return fileName;
   }
 }

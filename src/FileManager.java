@@ -33,21 +33,6 @@ import java.util.Hashtable;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class FileManager {
-  public static final int NONE = -1;
-  public static final int INDEX = 0;
-  public static final int PROJECT = 1;
-  public static final int FILE = 2;
-  public static final int CLASS = 3;
-  public static final int METHOD = 4;
-  public static final int FUNCTION = 5;
-  public static final int FIELD = 6;
-  public static final int ENUM = 7;
-  public static final int UPLEVEL = 8;
-  public static final int HIERARCHY = 9;
-  public static final int GLOBAL = 10;
-  public static final int FILES = 11;
-  public static final String[] iconFiles = {"index", "project", "file", "class", "method", "function", "field",
-      "enum", "uplevel", "hierarchy", "global", "files"};
   private static final Logger logger = Logging.getLogger();
   private static final String imageCache = "images.xml";
   private static final String tempTexFileBase = "__oxdoc";
@@ -146,25 +131,25 @@ public class FileManager {
     return fileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
   }
 
-  public String getLargeIconHtml(int iconType) {
+  public String getLargeIconHtml(Icon icon) {
     if (!config.isEnableIcons())
       return "";
-    if (iconType < 0)
+    if (icon.getFileName() == null)
       return "";
 
-    String fileName = "icons/" + iconFiles[iconType] + ".png";
+    String fileName = "icons/" + icon.getFileName() + ".png";
     copyFromResourceIfNotExists(fileName);
 
     return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
   }
 
-  public String getSmallIconHtml(int iconType) {
+  public String getSmallIconHtml(Icon icon) {
     if (!config.isEnableIcons())
       return "";
-    if (iconType < 0)
+    if (icon.getFileName() == null)
       return "";
 
-    String fileName = "icons/" + iconFiles[iconType] + "_s.png";
+    String fileName = "icons/" + icon.getFileName() + "_s.png";
     copyFromResourceIfNotExists(fileName);
 
     return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";

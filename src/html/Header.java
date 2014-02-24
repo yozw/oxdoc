@@ -20,6 +20,8 @@
 
 package oxdoc.html;
 
+import oxdoc.Icon;
+
 import java.text.MessageFormat;
 
 import static oxdoc.util.Utils.checkNotNull;
@@ -29,19 +31,19 @@ public class Header extends Element {
   private final String title;
   private final RenderContext context;
   private final int level;
-  private final int iconType;
+  private final Icon icon;
 
-  public Header(int level, int iconType, String title, RenderContext context) {
+  public Header(int level, Icon icon, String title, RenderContext context) {
     this.level = level;
-    this.iconType = iconType;
-    this.title = title;
+    this.icon = checkNotNull(icon);
+    this.title = checkNotNull(title);
     this.context = checkNotNull(context);
   }
 
   @Override
-  protected void render(StringBuffer buffer) {
-    String iconHtml = context.getFileManager().getLargeIconHtml(iconType);
-    Object args[] = {"" + level, iconHtml, title};
+  protected void render(StringBuilder buffer) {
+    String iconHtml = context.getFileManager().getLargeIconHtml(icon);
+    Object args[] = {Integer.toString(level), iconHtml, title};
 
     if (iconHtml.length() > 0)
       buffer.append(MessageFormat.format(

@@ -35,9 +35,8 @@ public class OutputFile {
   private final FileManager fileManager;
   private final StringBuffer content = new StringBuffer(); // main content
   private final StringBuffer css = new StringBuffer(); // extra css style
-
-  private int iconType = 0;
-  private String title = "";
+  private final Icon icon;
+  private final String title;
 
   private class ExtBufferedWriter extends BufferedWriter {
     ExtBufferedWriter(Writer out) {
@@ -51,10 +50,10 @@ public class OutputFile {
   }
 
   // create an HTML file
-  public OutputFile(String fileName, String title, int iconType, Config config, FileManager fileManager) throws IOException {
+  public OutputFile(String fileName, String title, Icon icon, Config config, FileManager fileManager) throws IOException {
     this.config = checkNotNull(config);
     this.title = checkNotNull(title);
-    this.iconType = iconType;
+    this.icon = checkNotNull(icon);
     this.fileName = checkNotNull(fileName);
     this.fileManager = checkNotNull(fileManager);
     this.renderContext = new RenderContext(fileManager);
@@ -109,16 +108,16 @@ public class OutputFile {
     output.writeln("<div class=\"header\">");
     output.write("[ ");
     if (config.isUpLevel())
-      output.writeln(fileManager.getSmallIconHtml(FileManager.UPLEVEL)
+      output.writeln(fileManager.getSmallIconHtml(Icon.UPLEVEL)
           + "<a href=\"..\\default.html\">Up Level</a> |");
     /** Added by CF **/
 
-    output.writeln(fileManager.getSmallIconHtml(FileManager.PROJECT) + "<a href=\"default.html\">Project home</a>");
-    output.writeln(" | " + fileManager.getSmallIconHtml(FileManager.INDEX) + "<a href=\"index.html\">Index</a>");
-    output.writeln(" | " + fileManager.getSmallIconHtml(FileManager.HIERARCHY)
+    output.writeln(fileManager.getSmallIconHtml(Icon.PROJECT) + "<a href=\"default.html\">Project home</a>");
+    output.writeln(" | " + fileManager.getSmallIconHtml(Icon.INDEX) + "<a href=\"index.html\">Index</a>");
+    output.writeln(" | " + fileManager.getSmallIconHtml(Icon.HIERARCHY)
         + "<a href=\"hierarchy.html\">Class hierarchy</a> ]</div>");
 
-    Header h1 = new Header(1, iconType, title, renderContext);
+    Header h1 = new Header(1, icon, title, renderContext);
     output.writeln(h1);
   }
 
