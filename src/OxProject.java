@@ -41,7 +41,9 @@ public class OxProject {
   }
 
   public OxFile addFile(String name) {
-    return (OxFile) list.add(new OxFile(name, this));
+    OxFile oxFile = new OxFile(name, this);
+    list.add(oxFile);
+    return oxFile;
   }
 
   public ArrayList<OxEntity> getFiles() {
