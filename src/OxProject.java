@@ -21,18 +21,18 @@
 package oxdoc;
 
 import oxdoc.entities.*;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
 
-import java.util.ArrayList;
-
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class OxProject {
   private final FileManager fileManager;
   private final TextProcessor textProcessor;
   private final Logger logger = Logging.getLogger();
   private final Config config;
-  private final OxEntityList list = new OxEntityList();
-  private final OxEntityList symbols = new OxEntityList();
+  private final OxEntityList<OxFile> files = new OxEntityList<OxFile>();
+  private final OxEntityList<OxEntity> symbols = new OxEntityList<OxEntity>();
 
   public OxProject(FileManager fileManager, TextProcessor textProcessor, Config config) {
     this.fileManager = checkNotNull(fileManager);
@@ -42,12 +42,12 @@ public class OxProject {
 
   public OxFile addFile(String name) {
     OxFile oxFile = new OxFile(name, this);
-    list.add(oxFile);
+    files.add(oxFile);
     return oxFile;
   }
 
-  public ArrayList<OxEntity> getFiles() {
-    return list.sortedList();
+  public OxEntityList<OxFile> getFiles() {
+    return files;
   }
 
   public OxEntity addSymbol(OxEntity entity) {
@@ -61,12 +61,12 @@ public class OxProject {
       addSymbol(element);
   }
 
-  public OxEntityList getClasses() {
-    return symbols.getClasses();
+  public OxEntityList<OxClass> getClasses() {
+    return symbols.filterByClass(OxClass.class);
   }
 
-  public ArrayList<OxEntity> getSymbolsByDisplayName() {
-    return symbols.getSortedListByDisplayName();
+  public OxEntityList<OxEntity> getSymbols() {
+    return symbols;
   }
 
   public OxEntity getSymbol(String name) {

@@ -22,8 +22,8 @@ package oxdoc.setup;
 
 import oxdoc.Config;
 import oxdoc.Constants;
-import oxdoc.Os;
 import oxdoc.OxDoc;
+import oxdoc.util.Os;
 
 import javax.swing.*;
 import java.awt.*;

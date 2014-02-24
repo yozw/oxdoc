@@ -26,7 +26,7 @@ import oxdoc.html.RenderContext;
 import java.io.*;
 import java.text.MessageFormat;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class OutputFile {
   private final RenderContext renderContext;

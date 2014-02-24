@@ -20,7 +20,7 @@
 
 package oxdoc.gui;
 
-import oxdoc.Logger;
+import oxdoc.util.Logger;
 
 import javax.swing.*;
 import java.awt.*;

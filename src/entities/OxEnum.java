@@ -26,7 +26,7 @@ import oxdoc.comments.EnumComment;
 import java.util.ArrayList;
 import java.util.List;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class OxEnum extends OxEntity {
   private final ArrayList<OxEnumElement> elements = new ArrayList<OxEnumElement>();

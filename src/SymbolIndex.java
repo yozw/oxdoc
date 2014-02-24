@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class SymbolIndex {
 
@@ -69,9 +69,7 @@ public class SymbolIndex {
   private static Hashtable<OxEntity, IndexEntry> constructIndex(OxProject project, Config config) {
     Hashtable<OxEntity, IndexEntry> entries = new Hashtable<OxEntity, IndexEntry>();
 
-    ArrayList<OxEntity> symbols = project.getSymbolsByDisplayName();
-
-    for (OxEntity entity : symbols) {
+    for (OxEntity entity : project.getSymbols()) {
       if ((!config.isShowInternals()) && entity.isInternal())
         continue;
 

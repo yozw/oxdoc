@@ -20,6 +20,9 @@
 
 package oxdoc;
 
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+
 import java.io.File;
 
 public class MathProcessorLatex extends MathProcessor {

@@ -18,12 +18,14 @@
 
  **/
 
-package oxdoc;
+package oxdoc.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static oxdoc.util.Utils.checkNotNull;
 
 public class StreamGobbler extends Thread {
   private final Logger logger = Logging.getLogger();
@@ -31,8 +33,8 @@ public class StreamGobbler extends Thread {
   private final boolean echo;
   private String text = "";
 
-  StreamGobbler(InputStream is, boolean echo) {
-    this.is = is;
+  public StreamGobbler(InputStream is, boolean echo) {
+    this.is = checkNotNull(is);
     this.echo = echo;
   }
 
@@ -51,11 +53,11 @@ public class StreamGobbler extends Thread {
     }
   }
 
-  String getText() {
+  public String getText() {
     return text;
   }
 
-  int length() {
+  public int length() {
     return text.length();
   }
 }

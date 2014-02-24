@@ -18,28 +18,29 @@
 
  **/
 
-package oxdoc.comments;
+package oxdoc.util;
 
-import oxdoc.OxProject;
+public class Os {
 
-import java.util.ArrayList;
-
-import static oxdoc.util.Utils.checkNotNull;
-
-public class BaseCommentBlock extends ArrayList<String> {
-  private static final long serialVersionUID = 1L;
-
-  protected final OxProject project;
-
-  public BaseCommentBlock(OxProject project) {
-    this.project = checkNotNull(project);
+  public enum OperatingSystem {
+    Win32, Linux, Solaris, Mac, Unknown
   }
 
-  public String toString() {
-    return project.getTextProcessor().process(renderHTML(), project);
+  private Os() {
   }
 
-  protected String renderHTML() {
-    return "";
+  public static OperatingSystem getOperatingSystem() {
+    String osname = System.getProperty("os.name", "generic").toLowerCase();
+    if (osname.startsWith("windows"))
+      return OperatingSystem.Win32;
+    else if (osname.startsWith("linux"))
+      return OperatingSystem.Linux;
+    else if (osname.startsWith("mac") || osname.startsWith("darwin"))
+      return OperatingSystem.Mac;
+    else if (osname.startsWith("sunos"))
+      return OperatingSystem.Solaris;
+    else
+      return OperatingSystem.Unknown;
   }
+
 }

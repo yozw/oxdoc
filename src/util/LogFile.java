@@ -18,7 +18,7 @@
 
  **/
 
-package oxdoc;
+package oxdoc.util;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

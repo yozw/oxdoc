@@ -21,9 +21,9 @@
 package oxdoc.gui;
 
 import oxdoc.Constants;
-import oxdoc.Logging;
-import oxdoc.Os;
 import oxdoc.OxDoc;
+import oxdoc.util.Logging;
+import oxdoc.util.Os;
 
 import javax.swing.*;
 import java.awt.*;

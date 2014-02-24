@@ -20,61 +20,92 @@
 
 package oxdoc.entities;
 
-import oxdoc.AlphanumComparator;
+import oxdoc.util.Predicate;
 
 import java.util.*;
 
-public class OxEntityList {
-  private static final AlphanumComparator alphanumComparator = new AlphanumComparator();
-  private final Hashtable<String, OxEntity> entities = new Hashtable<String, OxEntity>();
+public class OxEntityList<T extends OxEntity> implements Iterable<T> {
+  private final Map<String, T> nameMap = new HashMap<String, T>();
+  private final TreeSet<T> entitySet = new TreeSet<T>(new OxEntityComparator<T>());
 
-  public OxEntity add(OxEntity entity) {
+  public int size() {
+    return entitySet.size();
+  }
+
+  public boolean isEmpty() {
+    return entitySet.isEmpty();
+  }
+
+  public <S extends T> S add(S entity) {
     return add(entity.getName(), entity);
   }
 
-  public OxEntity add(String name, OxEntity entity) {
-    entities.put(name, entity);
+  public <S extends T> S add(String name, S entity) {
+    nameMap.put(name, entity);
+    entitySet.add(entity);
     return entity;
   }
 
-  public void addAll(OxEntityList list) {
-    for (OxEntity entity : list.entities.values())
+  public <S extends T> void addAll(OxEntityList<S> list) {
+    for (S entity : list.nameMap.values()) {
       add(entity);
+    }
   }
 
-  public OxEntity get(String name) {
-    return entities.get(name);
+  public T get(String name) {
+    return nameMap.get(name);
   }
 
-  public ArrayList<OxEntity> sortedList() {
-    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
-    list.addAll(entities.values());
+  public OxEntityList<T> filter(Predicate<T> filter) {
+    OxEntityList<T> result = new OxEntityList<T>();
+    for (T member : this) {
+      if (filter.apply(member))
+        result.add(member);
+    }
+    return result;
+  }
 
-    Collections.sort(list, new Comparator<OxEntity>() {
-      public int compare(OxEntity e1, OxEntity e2) {
-        String key1 = e1.getSortKey().toUpperCase();
-        String key2 = e2.getSortKey().toUpperCase();
-        return alphanumComparator.compare(key1, key2);
+  public <S extends T> OxEntityList<S> filterByClass(Class<? extends S> clazz) {
+    Set<Class<? extends S>> classSet = new HashSet<Class<? extends S>>();
+    classSet.add(clazz);
+    return filterByClass(classSet);
+  }
+
+  public <S extends T> OxEntityList<S> filterByClass(Class<? extends S> clazz1, Class<? extends S> clazz2) {
+    Set<Class<? extends S>> classSet = new HashSet<Class<? extends S>>();
+    classSet.add(clazz1);
+    classSet.add(clazz2);
+    return filterByClass(classSet);
+  }
+
+  public <S extends T> OxEntityList<S> filterByClass(Iterable<Class<? extends S>> classes) {
+    OxEntityList<S> result = new OxEntityList<S>();
+    for (T entity : this) {
+      boolean applies = false;
+      for (Class<? extends S> clazz : classes) {
+        if (clazz.isInstance(entity)) {
+          applies = true;
+          break;
+        }
+      }
+      if (applies) {
+        result.add((S) entity);
+      }
+    }
+    return result;
+  }
+
+  public OxEntityList<T> getNonInternal() {
+    return filter(new Predicate<T>() {
+      @Override
+      public boolean apply(T entity) {
+        return !entity.isInternal();
       }
     });
-
-    return list;
   }
 
-  public ArrayList<OxEntity> getSortedListByDisplayName() {
-    return sortedList();
-  }
-
-  public OxEntityList getClasses() {
-    OxEntityList list = new OxEntityList();
-
-    for (Map.Entry<String, OxEntity> entry : entities.entrySet()) {
-      OxEntity entity = entry.getValue();
-      String name = entry.getKey();
-      if (entity instanceof OxClass)
-        list.add(name, entity);
-    }
-
-    return list;
+  @Override
+  public Iterator<T> iterator() {
+    return entitySet.iterator();
   }
 }

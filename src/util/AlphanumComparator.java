@@ -22,7 +22,7 @@
  *
  */
 
-package oxdoc;
+package oxdoc.util;
 
 import java.util.Comparator;
 
@@ -30,14 +30,18 @@ import java.util.Comparator;
  * This is an updated version with enhancements made by Daniel Migowski, Andre
  * Bogus, and David Koelle
  * <p/>
- * To convert to use Templates (Java 1.5+): - Change "implements Comparator" to
- * "implements Comparator<String>" - Change "compare(Object o1, Object o2)" to
- * "compare(String s1, String s2)" - Remove the type checking and casting in
- * compare().
+ * To convert to use Templates (Java 1.5+):
+ * <ul>
+ * <li>Change "implements Comparator" to "implements Comparator<String>"
+ * <li>Change "compare(Object o1, Object o2)" to "compare(String s1, String s2)"
+ * <li>Remove the type checking and casting in compare().
+ * </ul>
  * <p/>
  * To use this class: Use the static "sort" method from the
- * java.util.Collections class: Collections.sort(your list, new
- * AlphanumComparator());
+ * {@link java.util.Collections} class:
+ * <code>
+ * Collections.sort(your list, new AlphanumComparator());
+ * </code>
  */
 public class AlphanumComparator implements Comparator {
   private boolean isDigit(char ch) {
@@ -45,8 +49,7 @@ public class AlphanumComparator implements Comparator {
   }
 
   /**
-   * Length of string is passed in for improved efficiency (only need to
-   * calculate it once)
+   * Length of string is passed in for improved efficiency (only need to calculate it once)
    */
   private String getChunk(String s, int slength, int marker) {
     StringBuilder chunk = new StringBuilder();

@@ -21,11 +21,10 @@
 package oxdoc;
 
 import oxdoc.entities.OxClass;
+import oxdoc.entities.OxEntityList;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-
-import static oxdoc.Utils.checkNotNull;
+import static java.text.MessageFormat.format;
+import static oxdoc.util.Utils.checkNotNull;
 
 class ClassTreeHtml {
 
@@ -75,7 +74,7 @@ class ClassTreeHtml {
     output.writeln(SCRIPT);
   }
 
-  private void writeTree(OutputFile output, ArrayList<OxClass> classes, String prependText, int remainingColumns) {
+  private void writeTree(OutputFile output, OxEntityList<OxClass> classes, String prependText, int remainingColumns) {
     String labelWrapper = "<td style=\"height:1px; width:auto;\" colspan=\"{1}\" class=\"fffix\">\n"
         + "<table class=\"labelwrapper\">\n" + "   <tbody><tr><td class=\"label\">{0}</td></tr>\n"
         + "   <tr class=\"bottom\"><td class=\"line\">{2}</td></tr>\n" + "</tbody></table>\n" + "</td>";
@@ -86,10 +85,10 @@ class ClassTreeHtml {
 
     for (OxClass oxClass : classes) {
       boolean isLast = (index == classes.size() - 1);
-      ArrayList<OxClass> childClasses = classTree.getChildren(oxClass);
+      OxEntityList<OxClass> childClasses = classTree.getChildren(oxClass);
 
       String lineText;
-      if (childClasses.size() > 0)
+      if (!childClasses.isEmpty())
         lineText = "<div class=\"vline\">&nbsp;</div>";
       else
         lineText = "&nbsp;";
@@ -101,11 +100,8 @@ class ClassTreeHtml {
       else
         output.writeln("<td class=\"line\"><div class=\"vline last\"><div class=\"hline\">&nbsp;</div></div></td>");
 
-      Object[] labelArgs = {project.getLinkToEntity(oxClass), remainingColumns - 1, lineText};
-      output.writeln(MessageFormat.format(labelWrapper, labelArgs));
-
-      Object[] textArgs = {oxClass.getDescription()};
-      output.writeln(MessageFormat.format(textWrapper, textArgs));
+      output.writeln(format(labelWrapper, project.getLinkToEntity(oxClass), remainingColumns - 1, lineText));
+      output.writeln(format(textWrapper, oxClass.getDescription()));
       output.writeln("</tr>");
 
       String addPrependText;

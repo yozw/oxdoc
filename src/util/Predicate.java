@@ -17,13 +17,9 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
  **/
-package oxdoc;
 
-public class Utils {
-  public static <T> T checkNotNull(T object) {
-    if (object == null) {
-      throw new NullPointerException();
-    }
-    return object;
-  }
+package oxdoc.util;
+
+public interface Predicate<T> {
+  boolean apply(T object);
 }

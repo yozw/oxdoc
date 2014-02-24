@@ -26,8 +26,8 @@ import java.util.*;
 import oxdoc.*;
 import oxdoc.entities.*;
 import oxdoc.comments.*;
-import oxdoc.Logger;
-import oxdoc.Logging;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
 
   public class Parser {
 

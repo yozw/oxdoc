@@ -23,6 +23,9 @@ package oxdoc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+import oxdoc.util.StreamGobbler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,7 +40,7 @@ import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class LatexImageManager {
   private final Logger logger = Logging.getLogger();

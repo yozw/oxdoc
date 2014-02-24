@@ -23,7 +23,7 @@ package oxdoc.html;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class Table extends Element {
 

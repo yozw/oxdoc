@@ -1,6 +1,6 @@
 /**
 
- oxdoc (c) Copyright 2005-2012 by Y. Zwols
+ oxdoc (c) Copyright 2005-2014 by Y. Zwols
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -17,33 +17,13 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
  **/
+package oxdoc.util;
 
-package oxdoc;
-
-import static oxdoc.Utils.checkNotNull;
-
-public class Logging {
-
-  private static Logger logger = new ConsoleLogger();
-
-  private static final Logger FORWARDING_LOGGER = new Logger() {
-    @Override
-    public void info(String message) {
-      logger.info(message);
+public class Utils {
+  public static <T> T checkNotNull(T object) {
+    if (object == null) {
+      throw new NullPointerException();
     }
-
-    @Override
-    public void warning(String message) {
-      logger.warning(message);
-    }
-  };
-
-  public static Logger getLogger() {
-    return FORWARDING_LOGGER;
+    return object;
   }
-
-  public static void setLogger(Logger logger) {
-    Logging.logger = checkNotNull(logger);
-  }
-
 }

@@ -20,7 +20,7 @@
 
 package oxdoc.html;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class Anchor extends Element {
 

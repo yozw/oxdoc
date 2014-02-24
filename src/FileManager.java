@@ -20,6 +20,9 @@
 
 package oxdoc;
 
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,7 +30,7 @@ import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.Hashtable;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class FileManager {
   public static final int NONE = -1;

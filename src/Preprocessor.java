@@ -20,10 +20,13 @@
 
 package oxdoc;
 
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+
 import java.io.*;
 import java.util.ArrayList;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class Preprocessor {
 

@@ -18,11 +18,11 @@
 
  **/
 
-package oxdoc;
+package oxdoc.util;
 
 import java.io.IOException;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class LogFileLogger implements Logger {
   private LogFile logFile;

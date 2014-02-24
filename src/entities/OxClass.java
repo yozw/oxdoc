@@ -22,6 +22,7 @@ package oxdoc.entities;
 
 import oxdoc.FileManager;
 import oxdoc.comments.ClassComment;
+import oxdoc.util.Predicate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,7 +53,7 @@ public class OxClass extends OxEntity {
     boolean keepItem(OxEntity entity);
   }
 
-  private final OxEntityList members = new OxEntityList();
+  private final OxEntityList<OxEntity> members = new OxEntityList<OxEntity>();
   private String superClassName = null;
 
   public OxClass(String name, OxFile parentFile) {
@@ -67,11 +68,11 @@ public class OxClass extends OxEntity {
   }
 
   public OxMethod addMethod(String name) {
-    return (OxMethod) members.add(new OxMethod(name, this));
+    return members.add(new OxMethod(name, this));
   }
 
   public OxField addField(String name, Visibility vis) {
-    return (OxField) members.add(new OxField(name, this, vis));
+    return members.add(new OxField(name, this, vis));
   }
 
   public OxEnum addEnum(String alternativeName, ArrayList<String> elements, Visibility vis) {
@@ -79,109 +80,63 @@ public class OxClass extends OxEntity {
       enumCounter++;
       alternativeName = "Anonymous enum " + enumCounter;
     }
-    return (OxEnum) members.add(new OxEnum(alternativeName, elements, this, vis));
+    return members.add(new OxEnum(alternativeName, elements, this, vis));
   }
 
-  public ArrayList<OxEntity> getMembers() {
-    return members.sortedList();
+  public OxEntityList<OxEntity> getMembers() {
+    return members;
   }
 
-  public ArrayList<OxEntity> filterMembers(MemberFilter filter) {
-    ArrayList<OxEntity> members = getMembers();
-    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
-
-    for (OxEntity member : members) {
-      if (filter.keepItem(member))
-        list.add(member);
-    }
-    return list;
-  }
-
-  public ArrayList<OxEntity> filterInheritedMembers(MemberFilter filter) {
-    ArrayList<OxEntity> members = getInheritedMembers();
-    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
-
-    for (OxEntity entity : members) {
-      if (filter.keepItem(entity))
-        list.add(entity);
-    }
-    return list;
-  }
-
-  public ArrayList<OxEntity> getPrivateFields() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Private));
+  public OxEntityList<OxField> getPrivateFields() {
+    return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
+      public boolean apply(OxField entity) {
+        return entity.getVisibility() == Visibility.Private;
       }
     });
   }
 
-  public ArrayList<OxEntity> getProtectedFields() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Protected));
+  public OxEntityList<OxField> getProtectedFields() {
+    return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
+      public boolean apply(OxField entity) {
+        return entity.getVisibility() == Visibility.Protected;
       }
     });
   }
 
-  public ArrayList<OxEntity> getPublicFields() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return ((entity instanceof OxField) && (((OxField) entity).getVisibility() == Visibility.Public));
+  public OxEntityList<OxField> getPublicFields() {
+    return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
+      public boolean apply(OxField entity) {
+        return entity.getVisibility() == Visibility.Public;
       }
     });
   }
 
-  public ArrayList<OxEntity> getMethods() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxMethod);
-      }
-    });
+  public OxEntityList<OxMethod> getMethods() {
+    return members.filterByClass(OxMethod.class);
   }
 
-  public ArrayList<OxEntity> getMethodsAndFields() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxMethod) || (entity instanceof OxField);
-      }
-    });
+  public OxEntityList<OxEntity> getMethodsAndFields() {
+    return members.filterByClass(OxMethod.class, OxField.class);
   }
 
-  public ArrayList<OxEntity> getEnums() {
-    return filterMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxEnum);
-      }
-    });
+  public OxEntityList<OxEnum> getEnums() {
+    return members.filterByClass(OxEnum.class);
   }
 
-  public ArrayList<OxEntity> getInheritedFields() throws Exception {
-    return filterInheritedMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxField);
-      }
-    });
+  public OxEntityList<OxField> getInheritedFields() throws Exception {
+    return getInheritedMembers().filterByClass(OxField.class);
   }
 
-  public ArrayList<OxEntity> getInheritedMethods() throws Exception {
-    return filterInheritedMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxMethod);
-      }
-    });
+  public OxEntityList<OxMethod> getInheritedMethods() throws Exception {
+    return getInheritedMembers().filterByClass(OxMethod.class);
   }
 
-  public ArrayList<OxEntity> getInheritedEnums() throws Exception {
-    return filterInheritedMembers(new MemberFilter() {
-      public boolean keepItem(OxEntity entity) {
-        return (entity instanceof OxEnum);
-      }
-    });
+  public OxEntityList<OxEnum> getInheritedEnums() throws Exception {
+    return getInheritedMembers().filterByClass(OxEnum.class);
   }
 
-  public ArrayList<OxClass> getSuperClasses() {
-    ArrayList<OxClass> list = new ArrayList<OxClass>();
+  public OxEntityList<OxClass> getSuperClasses() {
+    OxEntityList<OxClass> list = new OxEntityList<OxClass>();
     OxClass currentClass = this;
 
     while (true) {
@@ -199,11 +154,11 @@ public class OxClass extends OxEntity {
     return list;
   }
 
-  public ArrayList<OxEntity> getInheritedMembers() {
-    ArrayList<OxEntity> list = new ArrayList<OxEntity>();
+  public OxEntityList<OxEntity> getInheritedMembers() {
+    OxEntityList<OxEntity> result = new OxEntityList<OxEntity>();
     OxClass currentClass = this;
     HashSet<String> seenMemberNames = new HashSet<String>();
-    ArrayList<OxEntity> members = getMembers();
+    OxEntityList<OxEntity> members = getMembers();
 
     for (OxEntity member : members) {
       seenMemberNames.add(member.getName());
@@ -229,20 +184,20 @@ public class OxClass extends OxEntity {
         if (member instanceof OxMethod) {
           OxMethod oxMethod = (OxMethod) member;
           if (oxMethod.getVisibility() != Visibility.Private)
-            list.add(oxMethod);
+            result.add(oxMethod);
         } else if (member instanceof OxField) {
           OxField oxField = (OxField) member;
           if (oxField.getVisibility() != Visibility.Private)
-            list.add(oxField);
+            result.add(oxField);
         } else if (member instanceof OxEnum) {
           OxEnum oxEnum = (OxEnum) member;
           if (oxEnum.getVisibility() != Visibility.Private)
-            list.add(oxEnum);
+            result.add(oxEnum);
         } else
           throw new Error("Class member has unexpected class: " + member);
       }
     }
-    return list;
+    return result;
   }
 
   public OxMethod getMethodByName(String s) {

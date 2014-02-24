@@ -21,13 +21,12 @@
 package oxdoc;
 
 import oxdoc.entities.OxClass;
-import oxdoc.entities.OxEntity;
 import oxdoc.entities.OxEntityList;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class ClassTree {
 
@@ -49,45 +48,37 @@ public class ClassTree {
   private final Hashtable<OxClass, Node> nodes = new Hashtable<OxClass, Node>();
   private int maxDepth = 0;
 
-  public ClassTree(OxEntityList classes) {
-    ArrayList<OxEntity> classList = classes.sortedList();
-
+  public ClassTree(OxEntityList<OxClass> classes) {
     // first, construct all nodes
-    for (OxEntity entity : classList) {
-      if (entity instanceof OxClass) {
-        OxClass oxClass = (OxClass) entity;
-        nodes.put(oxClass, new Node(oxClass));
-      }
+    for (OxClass oxClass : classes) {
+      nodes.put(oxClass, new Node(oxClass));
     }
 
     // next, construct parent-child relationships
-    for (OxEntity entity : classList) {
-      if (entity instanceof OxClass) {
-        OxClass oxClass = (OxClass) entity;
-        OxClass parentClass = oxClass.getSuperClass();
+    for (OxClass oxClass : classes) {
+      OxClass parentClass = oxClass.getSuperClass();
 
-        Node classNode = nodes.get(oxClass);
-        Node parentNode = (parentClass != null) ? nodes.get(parentClass) : rootNode;
+      Node classNode = nodes.get(oxClass);
+      Node parentNode = (parentClass != null) ? nodes.get(parentClass) : rootNode;
 
-        parentNode.children.add(classNode);
-      }
+      parentNode.children.add(classNode);
     }
 
     updateDepths();
   }
 
-  public ArrayList<OxClass> getTopClasses() {
+  public OxEntityList<OxClass> getTopClasses() {
     return getChildClasses(rootNode);
   }
 
-  private ArrayList<OxClass> getChildClasses(Node node) {
-    ArrayList<OxClass> children = new ArrayList<OxClass>();
+  private OxEntityList<OxClass> getChildClasses(Node node) {
+    OxEntityList<OxClass> children = new OxEntityList<OxClass>();
     for (Node child : node.children)
       children.add(child.oxClass);
     return children;
   }
 
-  public ArrayList<OxClass> getChildren(OxClass oxClass) {
+  public OxEntityList<OxClass> getChildren(OxClass oxClass) {
     Node node = nodes.get(oxClass);
     return getChildClasses(node);
   }

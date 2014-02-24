@@ -21,6 +21,9 @@
 package oxdoc;
 
 import oxdoc.parser.Parser;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+import oxdoc.util.PathMatcher;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

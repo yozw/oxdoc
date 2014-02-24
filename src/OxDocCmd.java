@@ -22,6 +22,10 @@ package oxdoc;
 
 import oxdoc.gui.OxDocGui;
 import oxdoc.parser.ParseException;
+import oxdoc.util.LogFile;
+import oxdoc.util.LogFileLogger;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -94,7 +98,6 @@ public class OxDocCmd {
       System.out.println("\nUsage is:");
       System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
       Config.listOptions();
-
       return;
     }
 

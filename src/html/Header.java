@@ -22,7 +22,7 @@ package oxdoc.html;
 
 import java.text.MessageFormat;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class Header extends Element {
 

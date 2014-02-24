@@ -18,7 +18,7 @@
 
  **/
 
-package oxdoc;
+package oxdoc.util;
 
 public interface Logger {
   void info(String message);

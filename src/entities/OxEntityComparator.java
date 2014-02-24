@@ -18,16 +18,18 @@
 
  **/
 
-package oxdoc;
+package oxdoc.entities;
 
-public class ConsoleLogger implements Logger {
-  @Override
-  public void info(String message) {
-    System.out.println(message);
-  }
+import oxdoc.util.AlphanumComparator;
 
-  @Override
-  public void warning(String message) {
-    System.out.println("Warning: " + message);
+import java.util.Comparator;
+
+public class OxEntityComparator<T extends OxEntity> implements Comparator<T> {
+  private static final AlphanumComparator ALPHANUM_COMPARATOR = new AlphanumComparator();
+
+  public int compare(T e1, T e2) {
+    String key1 = e1.getSortKey().toUpperCase();
+    String key2 = e2.getSortKey().toUpperCase();
+    return ALPHANUM_COMPARATOR.compare(key1, key2);
   }
 }

@@ -24,7 +24,7 @@ import oxdoc.FileManager;
 import oxdoc.OxProject;
 import oxdoc.comments.BaseComment;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class OxEntity {
   private final String name;

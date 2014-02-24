@@ -18,29 +18,32 @@
 
  **/
 
-package oxdoc;
+package oxdoc.util;
 
-public class Os {
+import static oxdoc.util.Utils.checkNotNull;
 
-  public enum OperatingSystem {
-    Win32, Linux, Solaris, Mac, Unknown
+public class Logging {
+
+  private static Logger logger = new ConsoleLogger();
+
+  private static final Logger FORWARDING_LOGGER = new Logger() {
+    @Override
+    public void info(String message) {
+      logger.info(message);
+    }
+
+    @Override
+    public void warning(String message) {
+      logger.warning(message);
+    }
+  };
+
+  public static Logger getLogger() {
+    return FORWARDING_LOGGER;
   }
 
-  private Os() {
-  }
-
-  public static OperatingSystem getOperatingSystem() {
-    String osname = System.getProperty("os.name", "generic").toLowerCase();
-    if (osname.startsWith("windows"))
-      return OperatingSystem.Win32;
-    else if (osname.startsWith("linux"))
-      return OperatingSystem.Linux;
-    else if (osname.startsWith("mac") || osname.startsWith("darwin"))
-      return OperatingSystem.Mac;
-    else if (osname.startsWith("sunos"))
-      return OperatingSystem.Solaris;
-    else
-      return OperatingSystem.Unknown;
+  public static void setLogger(Logger logger) {
+    Logging.logger = checkNotNull(logger);
   }
 
 }

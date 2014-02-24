@@ -2,7 +2,7 @@ package oxdoc.html;
 
 import oxdoc.FileManager;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class RenderContext {
   private final FileManager fileManager;

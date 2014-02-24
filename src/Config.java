@@ -23,6 +23,9 @@ package oxdoc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
+import oxdoc.util.Os;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

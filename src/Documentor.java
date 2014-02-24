@@ -21,18 +21,14 @@
 package oxdoc;
 
 import oxdoc.comments.BaseComment;
-import oxdoc.entities.OxClass;
-import oxdoc.entities.OxEntity;
-import oxdoc.entities.OxEnum;
-import oxdoc.entities.OxFile;
+import oxdoc.entities.*;
 import oxdoc.html.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.Map;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class Documentor {
   private final OxProject project;
@@ -94,9 +90,7 @@ public class Documentor {
 
   private void generateIndex(String fileName) throws Exception {
     OutputFile output = new OutputFile(fileName, "Index", FileManager.INDEX, config, fileManager);
-
     SymbolIndex index = new SymbolIndex(project, classTree, config);
-
     index.write(output);
     output.close();
   }
@@ -133,16 +127,7 @@ public class Documentor {
     }
   }
 
-  private void removeInternals(List<OxEntity> entityList) {
-    int k = 0;
-    while (k < entityList.size())
-      if (entityList.get(k).isInternal())
-        entityList.remove(k);
-      else
-        k++;
-  }
-
-  private void formatInheritedMembers(DefinitionList list, ArrayList<OxEntity> inheritedMembers, String label) {
+  private void formatInheritedMembers(DefinitionList list, OxEntityList<? extends OxEntity> inheritedMembers, String label) {
     String curLabel = "";
     String curItems = "";
     OxClass lastClass = null;
@@ -191,21 +176,21 @@ public class Documentor {
     table.specs().columnCssClasses.add("description");
 
 		/* Determine which class members should be printed in the table */
-    LinkedHashMap<String, ArrayList<OxEntity>> visMembers = new LinkedHashMap<String, ArrayList<OxEntity>>();
+    LinkedHashMap<String, OxEntityList<? extends OxEntity>> visMembers =
+        new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
     visMembers.put("Private fields", oxclass.getPrivateFields());
     visMembers.put("Protected fields", oxclass.getProtectedFields());
     visMembers.put("Public fields", oxclass.getPublicFields());
     visMembers.put("Public methods", oxclass.getMethods());
     visMembers.put("Enumerations", oxclass.getEnums());
 
-		/* Filter any members that are marked as internal */
-    if (!config.isShowInternals())
-      for (List<OxEntity> visMember : visMembers.values())
-        removeInternals(visMember);
-
 		/* Add sections to table */
     for (String caption : visMembers.keySet()) {
-      ArrayList<OxEntity> entities = visMembers.get(caption);
+      OxEntityList<? extends OxEntity> entities = visMembers.get(caption);
+      if (!config.isShowInternals()) {
+        entities = entities.getNonInternal();
+      }
+
       if (!entities.isEmpty()) {
         table.addHeaderRow(caption);
         for (OxEntity entity : entities) {
@@ -218,21 +203,29 @@ public class Documentor {
       output.writeln(table);
 
 		/* Write inherited members */
-    LinkedHashMap<String, ArrayList<OxEntity>> inhMembers = new LinkedHashMap<String, ArrayList<OxEntity>>();
+    LinkedHashMap<String, OxEntityList<? extends OxEntity>> inhMembers =
+        new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
     inhMembers.put("Inherited methods", oxclass.getInheritedMethods());
     inhMembers.put("Inherited fields", oxclass.getInheritedFields());
     inhMembers.put("Inherited enumerations", oxclass.getInheritedEnums());
 
-    if (!config.isShowInternals())
-      for (List<OxEntity> inhMember : inhMembers.values())
-        removeInternals(inhMember);
-
     for (String caption : inhMembers.keySet()) {
-      if (inhMembers.get(caption).size() > 0) {
+      OxEntityList<? extends OxEntity> members = inhMembers.get(caption);
+      if (!config.isShowInternals()) {
+        members = members.getNonInternal();
+      }
+
+      if (members.size() > 0) {
         DefinitionList dl = new DefinitionList("inherited");
-        formatInheritedMembers(dl, inhMembers.get(caption), caption);
+        formatInheritedMembers(dl, members, caption);
         output.writeln(dl);
       }
+    }
+  }
+
+  private void removeInternals(Map<String, OxEntityList<? extends OxEntity>> inhMembers) {
+    for (String key : inhMembers.keySet()) {
+      inhMembers.put(key, inhMembers.get(key).getNonInternal());
     }
   }
 
@@ -240,15 +233,11 @@ public class Documentor {
     String sectionName = "";
     int iconType = FileManager.GLOBAL;
 
-    LinkedHashMap<String, ArrayList<OxEntity>> visMembers = new LinkedHashMap<String, ArrayList<OxEntity>>();
+    LinkedHashMap<String, OxEntityList<? extends OxEntity>> visMembers =
+        new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
     visMembers.put("Variables", oxfile.getVariables());
     visMembers.put("Functions", oxfile.getFunctions());
     visMembers.put("Enumerations", oxfile.getEnums());
-
-		/* Filter any members that are marked as internal */
-    if (!config.isShowInternals())
-      for (ArrayList<OxEntity> visMember : visMembers.values())
-        removeInternals(visMember);
 
 		/* Construct a new table */
     Table table = new Table();
@@ -259,7 +248,11 @@ public class Documentor {
 
 		/* Add sections to table */
     for (String caption : visMembers.keySet()) {
-      List<OxEntity> entities = visMembers.get(caption);
+      OxEntityList<? extends OxEntity> entities = visMembers.get(caption);
+      if (!config.isShowInternals()) {
+        entities = entities.getNonInternal();
+      }
+
       if (!entities.isEmpty()) {
         if (sectionName.length() > 0)
           sectionName += ", ";
@@ -281,25 +274,26 @@ public class Documentor {
     }
   }
 
-  private void generateClassDetailDocs(OutputFile output, OxClass oxclass, ArrayList<OxEntity> memberList, ArrayList<OxEntity> enumList)
+  private void generateClassDetailDocs(OutputFile output, OxClass oxclass, OxEntityList<OxEntity> members, OxEntityList<OxEnum> enums)
       throws Exception {
     String sectionName = (oxclass != null) ? oxclass.getName() : "Global ";
     String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
     int iconType = (oxclass != null) ? FileManager.CLASS : FileManager.GLOBAL;
 
-    if (!config.isShowInternals())
-      removeInternals(memberList);
+    if (!config.isShowInternals()) {
+      members = members.getNonInternal();
+    }
 
-    if (enumList.size() + memberList.size() == 0)
+    if (enums.size() + members.size() == 0)
       return;
 
     Header header = new Header(2, iconType, sectionName, renderContext);
     output.writeln(header);
 
-    generateEnumDocs(output, oxclass, enumList);
+    generateEnumDocs(output, oxclass, enums);
 
     int rowIndex = 0;
-    for (OxEntity entity : memberList) {
+    for (OxEntity entity : members) {
       String anchorName = classPrefix + entity.getDisplayName();
 
       if (rowIndex != 0)
@@ -319,16 +313,14 @@ public class Documentor {
     }
   }
 
-  private void generateEnumDocs(OutputFile output, OxClass oxclass, ArrayList<OxEntity> memberList) throws Exception {
-    int count = 0;
-    for (OxEntity entity : memberList) {
-      OxEnum oxEnum = (OxEnum) entity;
-      if ((!config.isShowInternals()) && (oxEnum.isInternal()))
-        continue;
-      count++;
+  private void generateEnumDocs(OutputFile output, OxClass oxclass, OxEntityList<OxEnum> enums) throws Exception {
+    if (!config.isShowInternals()) {
+      enums = enums.getNonInternal();
     }
-    if (count == 0)
+
+    if (enums.isEmpty()) {
       return;
+    }
 
     String sectionName = "Enumerations";
     String classPrefix = (oxclass != null) ? oxclass.getName() + "___" : "";
@@ -340,21 +332,13 @@ public class Documentor {
     table.specs().columnCssClasses.add("elements");
 
     table.addHeaderRow(sectionName);
-    for (OxEntity oxEntity : memberList) {
-      OxEnum oxEnum = (OxEnum) oxEntity;
+    for (OxEnum oxEnum : enums) {
       String anchorName = classPrefix + oxEnum.getName();
-
-      if ((!config.isShowInternals()) && (oxEnum.isInternal()))
-        continue;
-
       Anchor anchor = new Anchor(anchorName);
       BaseComment comment = oxEnum.getComment();
-      String[] row = {
-          anchor.toString() + oxEnum.getDisplayName(),
+      table.addRow(anchor.toString() + oxEnum.getDisplayName(),
           comment.toString(),
-          oxEnum.getElementString()};
-
-      table.addRow(row);
+          oxEnum.getElementString());
     }
 
     if (table.getRowCount() > 1)

@@ -22,7 +22,7 @@ package oxdoc.html;
 
 import java.util.ArrayList;
 
-import static oxdoc.Utils.checkNotNull;
+import static oxdoc.util.Utils.checkNotNull;
 
 public class DefinitionList extends Element {
 
