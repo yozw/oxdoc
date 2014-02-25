@@ -25,6 +25,8 @@ import oxdoc.util.Logging;
 
 import java.io.File;
 
+import static oxdoc.util.Utils.checkNotNull;
+
 public class MathProcessorLatex extends MathProcessor {
   private final Logger logger = Logging.getLogger();
   private final Config config;
@@ -32,9 +34,9 @@ public class MathProcessorLatex extends MathProcessor {
   private final FileManager fileManager;
 
   public MathProcessorLatex(Config config, LatexImageManager latexImageManager, FileManager fileManager) {
-    this.config = config;
-    this.latexImageManager = latexImageManager;
-    this.fileManager = fileManager;
+    this.config = checkNotNull(config);
+    this.latexImageManager = checkNotNull(latexImageManager);
+    this.fileManager = checkNotNull(fileManager);
   }
 
   public String processFormula(String formula, boolean isInline) {
