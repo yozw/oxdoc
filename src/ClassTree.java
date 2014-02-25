@@ -57,10 +57,8 @@ public class ClassTree {
     // next, construct parent-child relationships
     for (OxClass oxClass : classes) {
       OxClass parentClass = oxClass.getSuperClass();
-
       Node classNode = nodes.get(oxClass);
       Node parentNode = (parentClass != null) ? nodes.get(parentClass) : rootNode;
-
       parentNode.children.add(classNode);
     }
 
