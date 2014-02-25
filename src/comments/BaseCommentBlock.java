@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import static oxdoc.util.Utils.checkNotNull;
 
+// TODO(yori): Don't inherit from ArrayList
 public class BaseCommentBlock extends ArrayList<String> {
   private static final long serialVersionUID = 1L;
 
