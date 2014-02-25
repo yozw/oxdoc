@@ -23,8 +23,6 @@ package oxdoc.comments;
 import oxdoc.OxProject;
 
 public class CommentList extends BaseCommentBlock {
-  private static final long serialVersionUID = 1L;
-
   public CommentList(OxProject project) {
     super(project);
   }

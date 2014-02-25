@@ -24,7 +24,8 @@ import oxdoc.entities.OxClass;
 import oxdoc.entities.OxEntityList;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static oxdoc.util.Utils.checkNotNull;
 
@@ -45,7 +46,7 @@ public class ClassTree {
   }
 
   private final Node rootNode = new Node();
-  private final Hashtable<OxClass, Node> nodes = new Hashtable<OxClass, Node>();
+  private final Map<OxClass, Node> nodes = new HashMap<OxClass, Node>();
   private int maxDepth = 0;
 
   public ClassTree(OxEntityList<OxClass> classes) {

@@ -33,8 +33,8 @@ public class OutputFile {
   private final Config config;
   private final String fileName;
   private final FileManager fileManager;
-  private final StringBuffer content = new StringBuffer(); // main content
-  private final StringBuffer css = new StringBuffer(); // extra css style
+  private final StringBuilder content = new StringBuilder(); // main content
+  private final StringBuilder css = new StringBuilder(); // extra css style
   private final Icon icon;
   private final String title;
 

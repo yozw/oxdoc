@@ -37,8 +37,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.text.MessageFormat;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static oxdoc.util.Utils.checkNotNull;
 
@@ -71,10 +71,10 @@ public class LatexImageManager {
   }
 
   private class ImageEntryList {
-    private final Hashtable<String, ImageEntry> formulas = new Hashtable<String, ImageEntry>();
-    private final Hashtable<String, ImageEntry> filenames = new Hashtable<String, ImageEntry>();
+    private final Map<String, ImageEntry> formulas = new HashMap<String, ImageEntry>();
+    private final Map<String, ImageEntry> filenames = new HashMap<String, ImageEntry>();
 
-    public Hashtable<String, ImageEntry> getFormulas() {
+    public Map<String, ImageEntry> getFormulas() {
       return formulas;
     }
 
@@ -121,11 +121,10 @@ public class LatexImageManager {
       Element root = doc.createElement("cache");
       doc.appendChild(root);
 
-      for (Enumeration elements = imageEntries.getFormulas().elements(); elements.hasMoreElements(); ) {
-        ImageEntry e = (ImageEntry) elements.nextElement();
+      for (ImageEntry entry : imageEntries.getFormulas().values()) {
         Element newElement = doc.createElement("image");
-        newElement.setAttribute("formula", e.getFormula());
-        newElement.setAttribute("filename", e.getFilename());
+        newElement.setAttribute("formula", entry.getFormula());
+        newElement.setAttribute("filename", entry.getFilename());
         root.appendChild(newElement);
       }
 
@@ -171,10 +170,9 @@ public class LatexImageManager {
   }
 
   public void makeLatexFiles() throws IOException {
-    for (Enumeration elements = imageEntries.getFormulas().elements(); elements.hasMoreElements(); ) {
-      ImageEntry e = (ImageEntry) elements.nextElement();
-      if (e.needsGenerating)
-        makeLatexFile(e);
+    for (ImageEntry entry : imageEntries.getFormulas().values()) {
+      if (entry.needsGenerating)
+        makeLatexFile(entry);
     }
     saveCache();
   }

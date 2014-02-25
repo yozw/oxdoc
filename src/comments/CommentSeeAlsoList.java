@@ -23,18 +23,15 @@ package oxdoc.comments;
 import oxdoc.OxProject;
 
 public class CommentSeeAlsoList extends BaseCommentBlock {
-  private static final long serialVersionUID = 1L;
-
   public CommentSeeAlsoList(OxProject project) {
     super(project);
   }
 
-  public boolean add(String o) {
+  @Override
+  public void add(String o) {
     String[] references = o.split(",");
     for (String reference : references)
       super.add(reference.trim());
-
-    return true;
   }
 
   protected String renderHTML() {

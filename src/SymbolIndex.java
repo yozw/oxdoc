@@ -23,10 +23,7 @@ package oxdoc;
 import oxdoc.entities.*;
 import oxdoc.html.Table;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Hashtable;
+import java.util.*;
 
 import static oxdoc.util.Utils.checkNotNull;
 
@@ -34,8 +31,7 @@ public class SymbolIndex {
 
   private final OxProject project;
   private final ClassTree classTree;
-  // TODO(yori): Replace by HashMap (faster) -- also in other classes
-  private final Hashtable<OxEntity, IndexEntry> entries;
+  private final Map<OxEntity, IndexEntry> entries;
 
   /*
    * Entry in the index. Every entry is associated with an entity. For
@@ -67,8 +63,8 @@ public class SymbolIndex {
     this.entries = constructIndex(project, config);
   }
 
-  private static Hashtable<OxEntity, IndexEntry> constructIndex(OxProject project, Config config) {
-    Hashtable<OxEntity, IndexEntry> entries = new Hashtable<OxEntity, IndexEntry>();
+  private static Map<OxEntity, IndexEntry> constructIndex(OxProject project, Config config) {
+    Map<OxEntity, IndexEntry> entries = new HashMap<OxEntity, IndexEntry>();
 
     for (OxEntity entity : project.getSymbols()) {
       if ((!config.isShowInternals()) && entity.isInternal())
@@ -106,13 +102,13 @@ public class SymbolIndex {
     return entries;
   }
 
-  private static IndexEntry addSingletonEntry(Hashtable<OxEntity, IndexEntry> entries, OxEntity entity, String type) {
+  private static IndexEntry addSingletonEntry(Map<OxEntity, IndexEntry> entries, OxEntity entity, String type) {
     IndexEntry entry = new IndexEntry(entity.getName(), type, entity);
     entries.put(entity, entry);
     return entry;
   }
 
-  private static IndexEntry addGroupedEntry(Hashtable<OxEntity, IndexEntry> entries, OxEntity ancestorEntity, OxEntity entity, String type) {
+  private static IndexEntry addGroupedEntry(Map<OxEntity, IndexEntry> entries, OxEntity ancestorEntity, OxEntity entity, String type) {
     IndexEntry entry = entries.get(ancestorEntity);
     if (entry == null)
       entry = new IndexEntry(ancestorEntity.getName(), type, entity);

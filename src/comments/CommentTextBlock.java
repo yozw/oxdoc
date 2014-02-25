@@ -23,20 +23,16 @@ package oxdoc.comments;
 import oxdoc.OxProject;
 
 public class CommentTextBlock extends BaseCommentBlock {
-  private static final long serialVersionUID = 1L;
-
   public CommentTextBlock(OxProject project) {
     super(project);
   }
 
   protected String renderHTML() {
-    StringBuilder stringBuffer = new StringBuilder();
-
+    StringBuilder stringBuilder = new StringBuilder();
     for (String s : this) {
-      stringBuffer.append(s.trim());
-      stringBuffer.append("\n");
+      stringBuilder.append(s.trim());
+      stringBuilder.append("\n");
     }
-
-    return stringBuffer.toString();
+    return stringBuilder.toString();
   }
 }

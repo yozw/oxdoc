@@ -25,13 +25,14 @@ import oxdoc.util.Logging;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static oxdoc.util.Utils.checkNotNull;
 
 public class Preprocessor {
 
-  // TODO(yori): Replace by HashSet
-  private static final ArrayList<String> ignoredFiles = new ArrayList<String>();
+  private static final Set<String> ignoredFiles = new HashSet<String>();
   private static final int PLAINLINE = 0;
   private static final int ENDIF = 1;
   private static final int ELSE = 2;
@@ -42,8 +43,7 @@ public class Preprocessor {
   private static final int IMPORT = 64;
 
   private final Logger logger = Logging.getLogger();
-  // TODO(yori): Replace this by a HashSet
-  private final ArrayList<String> defines = new ArrayList<String>();
+  private final Set<String> defines = new HashSet<String>();
   private final Writer outputStream;
   private final Config config;
 
@@ -114,17 +114,8 @@ public class Preprocessor {
     throw new Exception("Unknown preprocessor directive: " + cmd);
   }
 
-  private boolean listContainsString(ArrayList<String> list, String str) {
-    if (list == null)
-      return false;
-    for (String entry : list)
-      if (entry.equals(str))
-        return true;
-    return false;
-  }
-
   private boolean isDefined(String define) {
-    return listContainsString(defines, define);
+    return defines.contains(define);
   }
 
   private String preProcessLine(String line) {

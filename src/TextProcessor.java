@@ -37,28 +37,25 @@ public class TextProcessor {
     return (S.trim().length() == 0);
   }
 
-  // TODO(yori): Replace string concatenating by StringBuilder
   public String process(String text, OxProject project) {
-    String output = filterReferences(filterLatexExpressions(text), project);
+    StringBuilder output = new StringBuilder();
 
-    String[] lines = output.split("(?m)^");
+    String[] lines = filterReferences(filterLatexExpressions(text), project).split("(?m)^");
 
-    output = "";
     for (int i = 0; i < lines.length; i++)
       if ((i > 0) && (i < lines.length - 1) && isEmptyLine(lines[i]) && !isEmptyLine(lines[i - 1])
           && !isEmptyLine(lines[i + 1]))
-        output += "<P/>\n";
+        output.append("<P/>\n");
       else
-        output += lines[i];
+        output.append(lines[i]);
 
-    return output;
+    return output.toString();
   }
 
   private String filterReferences(String text, OxProject project) {
     String pattern = "`([^`]+)`";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
-    // TODO(yori): Replace by StringBuilder
     StringBuffer myStringBuffer = new StringBuffer();
 
     while (m.find()) {
@@ -73,8 +70,7 @@ public class TextProcessor {
     String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
-    // TODO(yori): Replace by StringBuilder
-    StringBuffer myStringBuffer = new StringBuffer();
+    StringBuffer stringBuffer = new StringBuffer();
 
     while (m.find()) {
       boolean isInline = true;
@@ -89,9 +85,9 @@ public class TextProcessor {
 
       Object[] args = {isInline ? "expression" : "equation", replacement};
       replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);
-      m.appendReplacement(myStringBuffer, Matcher.quoteReplacement(replacement));
+      m.appendReplacement(stringBuffer, Matcher.quoteReplacement(replacement));
     }
 
-    return m.appendTail(myStringBuffer).toString();
+    return m.appendTail(stringBuffer).toString();
   }
 }

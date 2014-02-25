@@ -28,7 +28,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static oxdoc.util.Utils.checkNotNull;
 
@@ -41,7 +42,7 @@ public class FileManager {
   // for speed reasons, register which resource we've tried to write so far
   // key: String (filename + "||" + resourcename), value: integer (0 =
   // success)
-  private final Hashtable<String, Boolean> resourceResults = new Hashtable<String, Boolean>();
+  private final Map<String, Boolean> resourceResults = new HashMap<String, Boolean>();
 
   public FileManager(Config config) {
     this.config = checkNotNull(config);

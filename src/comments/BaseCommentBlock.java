@@ -23,21 +23,34 @@ package oxdoc.comments;
 import oxdoc.OxProject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static oxdoc.util.Utils.checkNotNull;
 
-// TODO(yori): Don't inherit from ArrayList
-public class BaseCommentBlock extends ArrayList<String> {
-  private static final long serialVersionUID = 1L;
-
+public class BaseCommentBlock implements Iterable<String> {
   protected final OxProject project;
+  private final ArrayList<String> lines = new ArrayList<String>();
 
   public BaseCommentBlock(OxProject project) {
     this.project = checkNotNull(project);
   }
 
+  @Override
+  public Iterator<String> iterator() {
+    return lines.iterator();
+  }
+
+  public void add(String line) {
+    lines.add(line);
+  }
+
+  @Override
   public String toString() {
     return project.getTextProcessor().process(renderHTML(), project);
+  }
+
+  public int size() {
+    return lines.size();
   }
 
   protected String renderHTML() {

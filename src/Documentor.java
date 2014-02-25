@@ -23,6 +23,8 @@ package oxdoc;
 import oxdoc.comments.BaseComment;
 import oxdoc.entities.*;
 import oxdoc.html.*;
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -31,6 +33,7 @@ import static oxdoc.entities.OxClass.Visibility;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class Documentor {
+  private final static Logger logger = Logging.getLogger();
   private final OxProject project;
   private final LatexImageManager latexImageManager;
   private final FileManager fileManager;
@@ -57,7 +60,6 @@ public class Documentor {
     generateStartPage("default.html");
     generateIndex("index.html");
     generateHierarchy("hierarchy.html");
-
     writeCss();
 
     latexImageManager.makeLatexFiles();
