@@ -30,6 +30,7 @@ import static oxdoc.util.Utils.checkNotNull;
 
 public class Preprocessor {
 
+  // TODO(yori): Replace by HashSet
   private static final ArrayList<String> ignoredFiles = new ArrayList<String>();
   private static final int PLAINLINE = 0;
   private static final int ENDIF = 1;
