@@ -42,7 +42,6 @@ public class MathProcessorLatex extends MathProcessor {
   public String processFormula(String formula, boolean isInline) {
     String extFormula = (isInline ? "\\textstyle{}" : "\\displaystyle{}") + formula;
     String filename = latexImageManager.getFormulaFilename(extFormula);
-
     return "<img class=\"latex\" src=\"" + fileManager.getImageUrl(filename) + "\" alt=\"" + formula + "\">";
   }
 
@@ -55,7 +54,6 @@ public class MathProcessorLatex extends MathProcessor {
       logger.warning("Dvipng executable not found. LaTeX support disabled (looking for " + config.getDvipng() + ")");
       return false;
     }
-
     return true;
   }
 
