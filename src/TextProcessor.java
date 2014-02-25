@@ -37,6 +37,7 @@ public class TextProcessor {
     return (S.trim().length() == 0);
   }
 
+  // TODO(yori): Replace string concatenating by StringBuilder
   public String process(String text, OxProject project) {
     String output = filterReferences(filterLatexExpressions(text), project);
 
@@ -57,6 +58,7 @@ public class TextProcessor {
     String pattern = "`([^`]+)`";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
+    // TODO(yori): Replace by StringBuilder
     StringBuffer myStringBuffer = new StringBuffer();
 
     while (m.find()) {
@@ -71,6 +73,7 @@ public class TextProcessor {
     String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
     Pattern p = Pattern.compile(pattern);
     Matcher m = p.matcher(text);
+    // TODO(yori): Replace by StringBuilder
     StringBuffer myStringBuffer = new StringBuffer();
 
     while (m.find()) {
