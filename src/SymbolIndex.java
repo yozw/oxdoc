@@ -34,6 +34,7 @@ public class SymbolIndex {
 
   private final OxProject project;
   private final ClassTree classTree;
+  // TODO(yori): Replace by HashMap (faster) -- also in other classes
   private final Hashtable<OxEntity, IndexEntry> entries;
 
   /*
@@ -149,7 +150,6 @@ public class SymbolIndex {
   }
 
   public void write(OutputFile output) throws Exception {
-
     // store entries in an array list
     ArrayList<IndexEntry> indexEntries = new ArrayList<IndexEntry>();
     indexEntries.addAll(entries.values());
