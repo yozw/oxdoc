@@ -117,9 +117,7 @@ public class Config {
 
       return out.trim();
     } catch (Exception e) {
-      if (logger != null)
-        logger.warning("Color specification " + color + " invalid. Ignored. (" + e.toString() + ")");
-
+      logger.warning("Color specification " + color + " invalid. Ignored. (" + e.toString() + ")");
       return null;
     }
   }
@@ -173,8 +171,7 @@ public class Config {
       else
         return false;
     } catch (Exception E) {
-      if (logger != null)
-        logger.warning(E.getMessage());
+      logger.warning(E.getMessage());
     }
 
     return true;
