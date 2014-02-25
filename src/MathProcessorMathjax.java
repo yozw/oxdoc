@@ -35,5 +35,4 @@ public class MathProcessorMathjax extends MathProcessor {
   public String getExtraFooter() {
     return "Math typesetting by <a href=\"http://www.mathjax.org/\">Mathjax</a>";
   }
-
 }
