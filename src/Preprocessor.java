@@ -41,6 +41,7 @@ public class Preprocessor {
   private static final int IMPORT = 64;
 
   private final Logger logger = Logging.getLogger();
+  // TODO(yori): Replace this by a HashSet
   private final ArrayList<String> defines = new ArrayList<String>();
   private final Writer outputStream;
   private final Config config;
