@@ -1,6 +1,6 @@
 /**
 
- oxdoc (c) Copyright 2005-2012 by Y. Zwols
+ oxdoc (c) Copyright 2005-2014 by Y. Zwols
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
