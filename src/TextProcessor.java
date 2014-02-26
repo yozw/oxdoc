@@ -53,14 +53,14 @@ public class TextProcessor {
       if (newLineIndex < 0) {
         line = input.substring(index);
         index = input.length();
+      } else if (newLineIndex > 0 && input.charAt(newLineIndex - 1) == '\r') {
+        line = input.substring(index, newLineIndex - 1) + "\n";
+        index = newLineIndex + 1;
       } else {
-        if (newLineIndex > 0 && input.charAt(newLineIndex - 1) == '\r') {
-          line = input.substring(index, newLineIndex - 1) + "\n";
-        } else {
-          line = input.substring(index, newLineIndex + 1);
-        }
+        line = input.substring(index, newLineIndex + 1);
         index = newLineIndex + 1;
       }
+
       if (isEmptyLine(line)) {
         newParRequired = true;
         continue;

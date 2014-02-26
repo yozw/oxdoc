@@ -30,7 +30,7 @@ import static oxdoc.util.Utils.checkNotNull;
 
 public class Preprocessor {
 
-  private static final Set<String> ignoredFiles = new HashSet<String>();
+  private final Set<String> ignoredFiles = new HashSet<String>();
 
   private static enum LineType {
     PLAINLINE, EOF, ENDIF, ELSE, IFDEF, IFNDEF, DEFINE, INCLUDE, IMPORT
