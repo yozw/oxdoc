@@ -70,8 +70,9 @@ public class OxEntity {
   }
 
   public String getReferenceName() {
-    if (parentClass == null)
+    if (parentClass == null) {
       return getName();
+    }
     return parentClass.getName() + "::" + getName();
   }
 
@@ -113,11 +114,13 @@ public class OxEntity {
   }
 
   public String getLink() {
-    if (getUrl().length() == 0)
+    if (getUrl().length() == 0) {
       return getDisplayName();
-    else
+    } else
 
+    {
       return "<a href=\"" + getUrl() + "\">" + getDisplayName() + "</a>";
+    }
   }
 
   public String toString() {
@@ -133,8 +136,9 @@ public class OxEntity {
   }
 
   public String getSortKey() {
-    if ((getComment() == null) || (getComment().sortKey() == null))
+    if ((getComment() == null) || (getComment().sortKey() == null)) {
       return getName();
+    }
     return getComment().sortKey();
   }
 

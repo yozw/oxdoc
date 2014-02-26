@@ -37,15 +37,17 @@ public class OxMethod extends OxEntity {
   }
 
   public String getUrl() {
-    if (getParentClass() != null)
+    if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
-    else
+    } else {
       return getParentFileUrl() + "#" + getDisplayName();
+    }
   }
 
   public String getDeclaration() {
-    if (super.getDeclaration() == null)
+    if (super.getDeclaration() == null) {
       return null;
+    }
     return (getModifiers() + " " + super.getDeclaration()).trim();
   }
 
@@ -56,18 +58,21 @@ public class OxMethod extends OxEntity {
 
   public String getModifiers() {
     String mod = "";
-    if (isVirtual)
+    if (isVirtual) {
       mod += "virtual ";
-    if (isStatic)
+    }
+    if (isStatic) {
       mod += "static ";
+    }
     return mod.trim();
   }
 
   public BaseComment getComment() {
     BaseComment superComment = super.getComment();
 
-    if (superComment.isEmpty() && superMethod() != null)
+    if (superComment.isEmpty() && superMethod() != null) {
       return superMethod().getComment();
+    }
 
     return superComment;
   }
@@ -77,8 +82,9 @@ public class OxMethod extends OxEntity {
   }
 
   public OxMethod superMethod() {
-    if (getParentClass() == null || getParentClass().getSuperClass() == null)
+    if (getParentClass() == null || getParentClass().getSuperClass() == null) {
       return null;
+    }
 
     return getParentClass().getSuperClass().getMethodByName(getDisplayName());
   }

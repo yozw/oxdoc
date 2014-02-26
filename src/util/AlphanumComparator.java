@@ -56,28 +56,32 @@ public class AlphanumComparator implements Comparator {
     char c = s.charAt(marker);
     chunk.append(c);
     marker++;
-    if (isDigit(c))
+    if (isDigit(c)) {
       while (marker < slength) {
         c = s.charAt(marker);
-        if (!isDigit(c))
+        if (!isDigit(c)) {
           break;
+        }
         chunk.append(c);
         marker++;
       }
-    else
+    } else {
       while (marker < slength) {
         c = s.charAt(marker);
-        if (isDigit(c))
+        if (isDigit(c)) {
           break;
+        }
         chunk.append(c);
         marker++;
       }
+    }
     return chunk.toString();
   }
 
   public int compare(Object o1, Object o2) {
-    if (!(o1 instanceof String) || !(o2 instanceof String))
+    if (!(o1 instanceof String) || !(o2 instanceof String)) {
       return 0;
+    }
     String s1 = (String) o1;
     String s2 = (String) o2;
 
@@ -100,17 +104,21 @@ public class AlphanumComparator implements Comparator {
         int thisChunkLength = thisChunk.length();
         result = thisChunkLength - thatChunk.length();
         // If equal, the first different number counts
-        if (result == 0)
+        if (result == 0) {
           for (int i = 0; i < thisChunkLength; i++) {
             result = thisChunk.charAt(i) - thatChunk.charAt(i);
-            if (result != 0)
+            if (result != 0) {
               return result;
+            }
           }
-      } else
+        }
+      } else {
         result = thisChunk.compareTo(thatChunk);
+      }
 
-      if (result != 0)
+      if (result != 0) {
         return result;
+      }
     }
 
     return s1Length - s2Length;

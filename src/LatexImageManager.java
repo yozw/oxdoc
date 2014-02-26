@@ -87,13 +87,16 @@ public class LatexImageManager {
       formula = formula.trim().replace('\n', ' ').replace('\r', ' ');
 
       ImageEntry entry = getFormulas().get(formula);
-      if (entry != null)
+      if (entry != null) {
         return entry;
+      }
 
-      if (filename == null)
-        do
+      if (filename == null) {
+        do {
           filename = "img" + (Integer.toString(++imageCounter)) + ".png";
+        }
         while (filenames.get(filename) != null);
+      }
 
       entry = new ImageEntry(formula, filename);
       formulas.put(formula, entry);
@@ -146,8 +149,9 @@ public class LatexImageManager {
   private void loadCache() {
     try {
       File file = new File(fileManager.getImageCache().trim());
-      if (!file.exists())
+      if (!file.exists()) {
         return;
+      }
 
       // Parse the file
       DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -171,8 +175,9 @@ public class LatexImageManager {
 
   public void makeLatexFiles() throws IOException {
     for (ImageEntry entry : imageEntries.getFormulas().values()) {
-      if (entry.needsGenerating)
+      if (entry.needsGenerating) {
         makeLatexFile(entry);
+      }
     }
     saveCache();
   }
@@ -203,9 +208,10 @@ public class LatexImageManager {
 
     File tempDir = new File(fileManager.getTempDir());
     File curDir = new File(".");
-    if (!tempDir.equals(curDir))
+    if (!tempDir.equals(curDir)) {
       latexParams += MessageFormat.format(" -aux-directory={1} -output-directory={1}",
           fileManager.getTempDir());
+    }
 
     run(config.getLatex(), latexParams + " " + fileManager.getTempFilename("__oxdoc.tex"));
 

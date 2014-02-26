@@ -34,20 +34,24 @@ public class TextProcessor {
   }
 
   private boolean isEmptyLine(String S) {
-    return (S.trim().length() == 0);
+    return (S.length() == 0) || (S.trim().length() == 0);
   }
 
   public String process(String text, OxProject project) {
     StringBuilder output = new StringBuilder();
 
-    String[] lines = filterReferences(filterLatexExpressions(text), project).split("(?m)^");
+    String processed = filterReferences(filterLatexExpressions(text), project);
+    String[] lines = processed.split("(?m)^");
 
-    for (int i = 0; i < lines.length; i++)
+    for (int i = 0; i < lines.length; i++) {
       if ((i > 0) && (i < lines.length - 1) && isEmptyLine(lines[i]) && !isEmptyLine(lines[i - 1])
-          && !isEmptyLine(lines[i + 1]))
+          && !isEmptyLine(lines[i + 1])) {
         output.append("<P/>\n");
-      else
+      } else {
         output.append(lines[i]);
+      }
+    }
+    System.out.println(output.toString());
 
     return output.toString();
   }
@@ -78,8 +82,9 @@ public class TextProcessor {
       if (formula.startsWith("$$")) {
         formula = text.substring(m.start() + 2, m.end() - 2);
         isInline = false;
-      } else
+      } else {
         formula = text.substring(m.start() + 1, m.end() - 1);
+      }
 
       String replacement = config.getMathProcessor().processFormula(formula, isInline);
 

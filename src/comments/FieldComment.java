@@ -36,8 +36,9 @@ public class FieldComment extends BaseComment {
 
   private String generateSection(String name, String classname, Object o) {
     String text = o.toString();
-    if (text.length() == 0)
+    if (text.length() == 0) {
       return "";
+    }
 
     Object[] args = {classname, name, text};
 
@@ -45,8 +46,9 @@ public class FieldComment extends BaseComment {
   }
 
   protected boolean processModifier(int ModifierId) {
-    if (super.processModifier(ModifierId))
+    if (super.processModifier(ModifierId)) {
       return true;
+    }
     if (ModifierId == MODIFIER_INTERNAL) {
       hasInternalModifier = true;
       return true;
@@ -61,8 +63,9 @@ public class FieldComment extends BaseComment {
     extraInfo += generateSection("Comments", "comments", comments());
     extraInfo += generateSection("See also", "seealso", see());
 
-    if (extraInfo.length() > 0)
+    if (extraInfo.length() > 0) {
       extraInfo = "\n<dl>" + extraInfo + "</dl>";
+    }
 
     return longdescription() + extraInfo;
   }

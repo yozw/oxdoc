@@ -36,8 +36,9 @@ public class EnumComment extends FieldComment {
   }
 
   protected boolean addToSection(int sectionId, String text) {
-    if (super.addToSection(sectionId, text))
+    if (super.addToSection(sectionId, text)) {
       return true;
+    }
 
     switch (sectionId) {
       case SECTION_NAME:
@@ -50,8 +51,9 @@ public class EnumComment extends FieldComment {
   }
 
   protected boolean processModifier(int ModifierId) {
-    if (super.processModifier(ModifierId))
+    if (super.processModifier(ModifierId)) {
       return true;
+    }
     if (ModifierId == MODIFIER_INTERNAL) {
       hasInternalModifier = true;
       return true;

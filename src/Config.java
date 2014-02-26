@@ -54,7 +54,7 @@ public class Config {
   // color in the form "rgb <r> <g> <b>", or null for transparent
   private String imageBgColor = "rgb 1.0 1.0 1.0";
 
-  public  static String configFile = "oxdoc.xml";
+  public static String configFile = "oxdoc.xml";
   private final List<String> latexPackages = new ArrayList<String>();
   private final Map<String, MathProcessor> mathProcessors = new HashMap<String, MathProcessor>();
   private final Logger logger = Logging.getLogger();
@@ -79,25 +79,27 @@ public class Config {
 
     for (String path : paths) {
       File file = new File(path + File.separatorChar + fileName);
-      if (file.exists())
+      if (file.exists()) {
         return file.getAbsolutePath();
+      }
     }
     return fileName;
   }
 
   public boolean setSimpleOption(String name) {
-    if (name.equals("icons"))
+    if (name.equals("icons")) {
       setOption("icons", "1");
-    else if (name.equals("noicons"))
+    } else if (name.equals("noicons")) {
       setOption("icons", "0");
-    else if (name.equals("showinternals"))
+    } else if (name.equals("showinternals")) {
       setOption("showinternals", "1");
-    else if (name.equals("verbose"))
+    } else if (name.equals("verbose")) {
       setOption("verbose", "1");
-    else if (name.equals("uplevel"))
+    } else if (name.equals("uplevel")) {
       setOption("uplevel", "1");
-    else
+    } else {
       return false;
+    }
 
     return true;
   }
@@ -105,8 +107,9 @@ public class Config {
   public String htmlColorToLatex(String color) {
     try {
       String value = color.trim();
-      if (value.startsWith("#"))
+      if (value.startsWith("#")) {
         value = value.substring(1);
+      }
 
       String out = "rgb ";
       for (int i = 0; i < 3; i++) {
@@ -124,52 +127,55 @@ public class Config {
 
   public MathProcessor toMathProcessor(String value) throws Exception {
     MathProcessor processor = mathProcessors.get(value);
-    if (processor == null)
+    if (processor == null) {
       throw new Exception("Formula specification " + value + " invalid. Ignored.");
+    }
     return processor;
   }
 
   public boolean setOption(String name, String value) {
     try {
-      if (name.equals("latex"))
+      if (name.equals("latex")) {
         latex = FileManager.toNativeFileName(value);
-      else if (name.equals("dvipng"))
+      } else if (name.equals("dvipng")) {
         dvipng = FileManager.toNativeFileName(value);
-      else if (name.equals("tempdir"))
+      } else if (name.equals("tempdir")) {
         tempDir = toNativePath(value);
-      else if (name.equals("outputdir"))
+      } else if (name.equals("outputdir")) {
         outputDir = toNativePath(value);
-      else if (name.equals("include")) {
+      } else if (name.equals("include")) {
         Collections.addAll(includePaths, value.split(File.pathSeparator));
       } else if (name.equals("imagebgcolor")) {
-        if (value.trim().equalsIgnoreCase("transparent"))
+        if (value.trim().equalsIgnoreCase("transparent")) {
           imageBgColor = null;
-        else {
+        } else {
           String latexColor = htmlColorToLatex(value);
-          if (latexColor != null)
+          if (latexColor != null) {
             imageBgColor = latexColor;
+          }
         }
-      } else if (name.equals("imagepath"))
+      } else if (name.equals("imagepath")) {
         imagePath = value;
-      else if (name.equals("latexpackages")) {
+      } else if (name.equals("latexpackages")) {
         String[] packages = value.split("[,;]");
         Collections.addAll(latexPackages, packages);
-      } else if (name.equals("formulas"))
+      } else if (name.equals("formulas")) {
         mathProcessor = toMathProcessor(value);
-      else if (name.equals("icons"))
+      } else if (name.equals("icons")) {
         enableIcons = toBoolean(value);
-      else if (name.equals("showinternals"))
+      } else if (name.equals("showinternals")) {
         showInternals = toBoolean(value);
-      else if (name.equals("projectname"))
+      } else if (name.equals("projectname")) {
         projectName = value;
-      else if (name.equals("windowtitle"))
+      } else if (name.equals("windowtitle")) {
         windowTitle = value;
-      else if (name.equals("verbose"))
+      } else if (name.equals("verbose")) {
         verbose = toBoolean(value);
-      else if (name.equals("uplevel"))
+      } else if (name.equals("uplevel")) {
         upLevel = toBoolean(value);
-      else
+      } else {
         return false;
+      }
     } catch (Exception E) {
       logger.warning(E.getMessage());
     }
@@ -210,12 +216,15 @@ public class Config {
 
   public void validate() {
     if (mathProcessor == null)
-      // auto select Mathjax
+    // auto select Mathjax
+    {
       mathProcessor = new MathProcessorMathjax();
+    }
 
     // if the selected math processor is not supported, choose plain
-    if (!mathProcessor.isSupported())
+    if (!mathProcessor.isSupported()) {
       mathProcessor = new MathProcessorPlain();
+    }
 
     mathProcessor.start();
   }
@@ -225,10 +234,11 @@ public class Config {
   }
 
   public static String userHomeConfigFile() {
-    if (Os.getOperatingSystem() == Os.OperatingSystem.Win32)
+    if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
       return FileManager.getAppDirFilename(configFile);
-    else
+    } else {
       return System.getProperty("user.home") + File.separator + ".oxdoc" + File.separator + configFile;
+    }
   }
 
   public void load() {
@@ -238,8 +248,9 @@ public class Config {
 
   public void load(String filename) {
     File file = new File(filename);
-    if (!file.exists())
+    if (!file.exists()) {
       return;
+    }
     logger.info("Loading configuration file " + filename);
 
     try {

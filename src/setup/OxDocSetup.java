@@ -30,10 +30,11 @@ public class OxDocSetup {
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         try {
-          if (fancyLook)
+          if (fancyLook) {
             JFrame.setDefaultLookAndFeelDecorated(true);
-          else
+          } else {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+          }
         } catch (Exception e) {
           throw new RuntimeException(e);
         }

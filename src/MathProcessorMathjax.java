@@ -22,10 +22,11 @@ package oxdoc;
 
 public class MathProcessorMathjax extends MathProcessor {
   public String processFormula(String formula, boolean isInline) {
-    if (isInline)
+    if (isInline) {
       return "\\(" + formula + "\\)";
-    else
+    } else {
       return "$$" + formula + "$$";
+    }
   }
 
   public String getExtraHeader() {

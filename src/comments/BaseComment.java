@@ -146,11 +146,13 @@ public class BaseComment {
     while ((i = text.indexOf(".", i + 1)) != -1) {
       // short description ends with space followed by whitespace, cr, lf,
       // or tab
-      if (i == text.length())
+      if (i == text.length()) {
         return text;
+      }
       char nextChar = text.charAt(i + 1);
-      if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r') || (nextChar == '\t'))
+      if ((nextChar == ' ') || (nextChar == '\n') || (nextChar == '\r') || (nextChar == '\t')) {
         return text.substring(0, i + 1);
+      }
     }
 
     return text;
@@ -162,8 +164,9 @@ public class BaseComment {
    * @<section name> blocks and passes the contents to AddToSection.
    */
   public void setText(String text) throws Exception {
-    if (!text.startsWith("/**") || !text.endsWith("**/"))
+    if (!text.startsWith("/**") || !text.endsWith("**/")) {
       return;
+    }
     text = text.substring(3, text.length() - 3).trim();
     this.text = text;
 
@@ -176,29 +179,31 @@ public class BaseComment {
     for (String section : sections) {
       String textLine;
 
-      if (index == 0)
+      if (index == 0) {
         textLine = sections[0];
-      else {
+      } else {
         String[] words = section.split("[\t\n ]", 2);
         String commandName = words[0];
         textLine = (words.length > 1) ? words[1] : "";
 
-        if (isModifier(commandName))
+        if (isModifier(commandName)) {
           processModifier(getModifierId(commandName));
-        else if (isSetting(commandName)) {
+        } else if (isSetting(commandName)) {
           words = section.split("[\t\n ]", 3);
           textLine = (words.length > 2) ? words[2] : "";
           processSetting(getSettingId(commandName), words[1]);
-        } else if (isSection(commandName))
+        } else if (isSection(commandName)) {
           curSection = getSectionId(commandName);
-        else
+        } else {
           textLine = "@" + commandName + " " + textLine;
+        }
       }
 
-      if (curSection == -1)
+      if (curSection == -1) {
         description += textLine + " ";
-      else
+      } else {
         addToSection(curSection, textLine);
+      }
       index++;
     }
 

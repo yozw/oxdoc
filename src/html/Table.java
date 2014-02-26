@@ -75,8 +75,9 @@ public class Table extends Element {
   public int getColumnCount() {
     int colCount = 0;
     for (TableRow row : rows) {
-      if (row.cells.size() > colCount)
+      if (row.cells.size() > colCount) {
         colCount = row.cells.size();
+      }
     }
     return colCount;
   }

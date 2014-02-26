@@ -28,8 +28,9 @@ public class CommentParameterList extends BaseCommentBlock {
   }
 
   protected String renderHTML() {
-    if (size() == 0)
+    if (size() == 0) {
       return "";
+    }
 
     String out = "<!-- parameter table --!>\n";
     out += "<table class=\"parameter_table\">\n";
@@ -39,8 +40,9 @@ public class CommentParameterList extends BaseCommentBlock {
 
       out += "<tr>\n";
       out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
-      if (params.length > 1)
+      if (params.length > 1) {
         out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
+      }
       out += "</tr>\n";
     }
     out += "</table>\n";

@@ -30,16 +30,18 @@ public class CommentSeeAlsoList extends BaseCommentBlock {
   @Override
   public void add(String o) {
     String[] references = o.split(",");
-    for (String reference : references)
+    for (String reference : references) {
       super.add(reference.trim());
+    }
   }
 
   protected String renderHTML() {
     String out = "";
     int index = 0;
     for (String s : this) {
-      if (index > 0)
+      if (index > 0) {
         out += ", ";
+      }
       out += project.getLinkToSymbol(s);
       index++;
     }

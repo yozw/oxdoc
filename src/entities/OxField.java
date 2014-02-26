@@ -42,27 +42,31 @@ public class OxField extends OxEntity {
   }
 
   public String getUrl() {
-    if (getParentClass() != null)
+    if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
-    else
+    } else {
       return getParentFileUrl() + "#" + getDisplayName();
+    }
 
   }
 
   public String getDeclaration() {
     String declaration = getModifiers() + " ";
     declaration += " decl " + getName();
-    if (getParentClass() != null)
+    if (getParentClass() != null) {
       declaration += " [" + getVisibility() + "]";
+    }
     return declaration.trim();
   }
 
   public String getModifiers() {
     String modifiers = "";
-    if (isStatic)
+    if (isStatic) {
       modifiers += "static ";
-    if (isConstant)
+    }
+    if (isConstant) {
       modifiers += "const ";
+    }
     return modifiers.trim();
   }
 

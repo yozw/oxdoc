@@ -85,10 +85,12 @@ public class CmdWindow implements ActionListener, Logger {
   }
 
   public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equals(actionClose))
+    if (e.getActionCommand().equals(actionClose)) {
       hide();
-    if (e.getActionCommand().equals(actionSave))
+    }
+    if (e.getActionCommand().equals(actionSave)) {
       runSaveLog();
+    }
   }
 
   public void enableButtons(boolean enabled) {
@@ -99,7 +101,7 @@ public class CmdWindow implements ActionListener, Logger {
   public void runSaveLog() {
     JFileChooser fc = new JFileChooser(new File("."));
     fc.setSelectedFile(new File("oxdoc.log"));
-    if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION)
+    if (fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
       try {
         Writer output = new BufferedWriter(new FileWriter(fc.getSelectedFile()));
         output.write(memo.getText());
@@ -107,6 +109,7 @@ public class CmdWindow implements ActionListener, Logger {
       } catch (Exception E) {
         MainWindow.showException(E);
       }
+    }
   }
 
   public void info(String message) {

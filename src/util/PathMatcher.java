@@ -43,18 +43,20 @@ public class PathMatcher {
     public WildcardFilter(String pattern) {
       // turn the pattern into a regular expression
       pattern = pattern.replace("\\", "\\\\").replace(".", "\\.").replace("?", ".?").replace("*", ".*");
-      if (caseSensitive)
+      if (caseSensitive) {
         regexPattern = Pattern.compile(pattern);
-      else
+      } else {
         regexPattern = Pattern.compile(pattern.toLowerCase());
+      }
     }
 
     public boolean accept(File dir, String fileName) {
       // check whether the file name matches the regular expression
-      if (caseSensitive)
+      if (caseSensitive) {
         return this.regexPattern.matcher(fileName).matches();
-      else
+      } else {
         return this.regexPattern.matcher(fileName.toLowerCase()).matches();
+      }
     }
 
   }
@@ -86,8 +88,9 @@ public class PathMatcher {
     boolean isFirst = true;
     while (true) {
       String item = iterator.next();
-      if (!iterator.hasNext() || containsWildcards(item))
+      if (!iterator.hasNext() || containsWildcards(item)) {
         break;
+      }
       leadingPath += (isFirst ? "" : File.separator) + item;
       isFirst = false;
     }
@@ -110,8 +113,9 @@ public class PathMatcher {
     // Find next (non-empty) pattern. If no such pattern exists, exit.
     String pattern = "";
     while (pattern.length() == 0) {
-      if (!patternIterator.hasNext())
+      if (!patternIterator.hasNext()) {
         return;
+      }
       pattern = patternIterator.next();
     }
 
@@ -122,10 +126,11 @@ public class PathMatcher {
 
       // If there is no next pattern, then add the file to the list.
       // Otherwise, make a recursive call
-      if (!patternIterator.hasNext())
+      if (!patternIterator.hasNext()) {
         fileList.add(file);
-      else if (file.isDirectory())
+      } else if (file.isDirectory()) {
         doScan(file, patternIterator, fileList);
+      }
     }
 
     // Return the pattern iterator to its original position

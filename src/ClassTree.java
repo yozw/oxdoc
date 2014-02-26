@@ -72,8 +72,9 @@ public class ClassTree {
 
   private OxEntityList<OxClass> getChildClasses(Node node) {
     OxEntityList<OxClass> children = new OxEntityList<OxClass>();
-    for (Node child : node.children)
+    for (Node child : node.children) {
       children.add(child.oxClass);
+    }
     return children;
   }
 

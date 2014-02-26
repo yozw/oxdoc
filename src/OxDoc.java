@@ -67,8 +67,9 @@ public class OxDoc {
 
   public void addFiles(String filespec) throws Exception {
     Iterable<File> files = PathMatcher.scan(filespec);
-    for (File file : files)
+    for (File file : files) {
       addFile(file);
+    }
   }
 
   public void addFile(File file) throws Exception {

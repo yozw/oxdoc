@@ -62,8 +62,9 @@ class ClassTreeHtml {
 
     output.writeln("<table class=\"tree\">");
     output.writeln("<tbody><tr>");
-    for (int i = 0; i < column_count; i++)
+    for (int i = 0; i < column_count; i++) {
       output.write("<td style=\"width: 32px;\"></td>");
+    }
     output.writeln("<td style=\"width: 100%;\"></td>");
     output.writeln("</tr>");
 
@@ -88,27 +89,30 @@ class ClassTreeHtml {
       OxEntityList<OxClass> childClasses = classTree.getChildren(oxClass);
 
       String lineText;
-      if (!childClasses.isEmpty())
+      if (!childClasses.isEmpty()) {
         lineText = "<div class=\"vline\">&nbsp;</div>";
-      else
+      } else {
         lineText = "&nbsp;";
+      }
 
       output.writeln("<tr>");
       output.write(prependText);
-      if (!isLast)
+      if (!isLast) {
         output.writeln("<td class=\"line\"><div class=\"vline\"><div class=\"hline\">&nbsp;</div></div></td>");
-      else
+      } else {
         output.writeln("<td class=\"line\"><div class=\"vline last\"><div class=\"hline\">&nbsp;</div></div></td>");
+      }
 
       output.writeln(format(labelWrapper, project.getLinkToEntity(oxClass), remainingColumns - 1, lineText));
       output.writeln(format(textWrapper, oxClass.getDescription()));
       output.writeln("</tr>");
 
       String addPrependText;
-      if (!isLast)
+      if (!isLast) {
         addPrependText = "<td class=\"line\"><div class=\"vline\">&nbsp;</div></td>";
-      else
+      } else {
         addPrependText = "<td class=\"line\">&nbsp;</td>";
+      }
 
       writeTree(output, childClasses, prependText + addPrependText + "\n", remainingColumns - 1);
       index++;

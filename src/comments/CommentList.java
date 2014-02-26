@@ -30,8 +30,9 @@ public class CommentList extends BaseCommentBlock {
   protected String renderHTML() {
     String out = "<ul>";
 
-    for (String s : this)
+    for (String s : this) {
       out += "<li>" + s.trim() + "\n";
+    }
     out += "</li>";
 
     return out;

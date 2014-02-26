@@ -45,9 +45,13 @@ public class SymbolIndex {
   private static class IndexEntry {
     final String text;
     final String type;
-    /** the entity associated with the index entry **/
+    /**
+     * the entity associated with the index entry *
+     */
     final OxEntity entity;
-    /** the entities as members of classes (in case of inheritance) **/
+    /**
+     * the entities as members of classes (in case of inheritance) *
+     */
     private final ArrayList<OxEntity> owningClassMembers = new ArrayList<OxEntity>();
 
     IndexEntry(String text, String type, OxEntity entity) {
@@ -67,34 +71,37 @@ public class SymbolIndex {
     Map<OxEntity, IndexEntry> entries = new HashMap<OxEntity, IndexEntry>();
 
     for (OxEntity entity : project.getSymbols()) {
-      if ((!config.isShowInternals()) && entity.isInternal())
+      if ((!config.isShowInternals()) && entity.isInternal()) {
         continue;
+      }
 
-      if (entity instanceof OxClass)
+      if (entity instanceof OxClass) {
         addSingletonEntry(entries, entity, "Class");
-      else if ((entity instanceof OxField) && (entity.getParentClass() == null))
+      } else if ((entity instanceof OxField) && (entity.getParentClass() == null)) {
         addSingletonEntry(entries, entity, "Global variable");
-      else if (entity instanceof OxField)
+      } else if (entity instanceof OxField) {
         addGroupedEntry(entries, entity, entity, "Field");
-      else if (entity instanceof OxEnumElement) {
+      } else if (entity instanceof OxEnumElement) {
         OxEnumElement element = (OxEnumElement) entity;
         addSingletonEntry(entries, entity, "Element of enumeration " + project.getLinkToEntity(element.getParentEnum()));
-      } else if ((entity instanceof OxMethod) && (entity.getParentClass() == null))
+      } else if ((entity instanceof OxMethod) && (entity.getParentClass() == null)) {
         addSingletonEntry(entries, entity, "Global function");
-      else if (entity instanceof OxMethod) {
+      } else if (entity instanceof OxMethod) {
         OxMethod method = (OxMethod) entity;
         OxClass parentClass = method.getParentClass();
         String type = "Method";
-        if (method.getName().compareTo(parentClass.getName()) == 0)
+        if (method.getName().compareTo(parentClass.getName()) == 0) {
           type = "Constructor";
-        else if (method.getName().compareTo("~" + parentClass.getName()) == 0)
+        } else if (method.getName().compareTo("~" + parentClass.getName()) == 0) {
           type = "Destructor";
+        }
 
         // now, find furthest ancestor class that has the same method
         OxClass ancestorClass = parentClass;
         while ((ancestorClass.getSuperClass() != null)
-            && (ancestorClass.getSuperClass().getMethodByName(method.getName()) != null))
+            && (ancestorClass.getSuperClass().getMethodByName(method.getName()) != null)) {
           ancestorClass = ancestorClass.getSuperClass();
+        }
 
         addGroupedEntry(entries, ancestorClass.getMethodByName(method.getName()), entity, type);
       }
@@ -110,8 +117,9 @@ public class SymbolIndex {
 
   private static IndexEntry addGroupedEntry(Map<OxEntity, IndexEntry> entries, OxEntity ancestorEntity, OxEntity entity, String type) {
     IndexEntry entry = entries.get(ancestorEntity);
-    if (entry == null)
+    if (entry == null) {
       entry = new IndexEntry(ancestorEntity.getName(), type, entity);
+    }
     entry.owningClassMembers.add(entity);
     entries.put(ancestorEntity, entry);
     return entry;
@@ -137,8 +145,9 @@ public class SymbolIndex {
         int depth1 = classTree.getClassDepth(e1);
         int depth2 = classTree.getClassDepth(e2);
 
-        if (depth1 != depth2)
+        if (depth1 != depth2) {
           return depth2 - depth1;
+        }
 
         return e1.getName().toUpperCase().compareTo(e2.getName().toUpperCase());
       }

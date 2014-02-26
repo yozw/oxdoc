@@ -64,8 +64,9 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
   public OxEntityList<T> filter(Predicate<T> filter) {
     OxEntityList<T> result = new OxEntityList<T>();
     for (T member : this) {
-      if (filter.apply(member))
+      if (filter.apply(member)) {
         result.add(member);
+      }
     }
     return result;
   }

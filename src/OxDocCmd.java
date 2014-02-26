@@ -39,8 +39,9 @@ public class OxDocCmd {
     int totalFiles = 0;
     for (String filename : files) {
       filename = filename.trim();
-      if (filename.length() == 0)
+      if (filename.length() == 0) {
         continue;
+      }
 
       try {
         oxdoc.addFiles(filename);
@@ -67,24 +68,29 @@ public class OxDocCmd {
       }
 
       String option = args[i].substring(1);
-      if (config.setSimpleOption(option))
+      if (config.setSimpleOption(option)) {
         continue;
+      }
 
       i++;
-      if (i == args.length)
+      if (i == args.length) {
         throw new IllegalArgumentException("Value expected after option -" + option);
+      }
 
-      if (!config.setOption(option, args[i]))
+      if (!config.setOption(option, args[i])) {
         throw new IllegalArgumentException("Invalid option -" + option);
+      }
     }
   }
 
   // We need this function in order to circumvent a bug in gcj:
   // even an empty commandline will pass non-empty args to main
   public static boolean emptyArray(String[] x) {
-    for (String entry : x)
-      if (entry.trim().length() > 0)
+    for (String entry : x) {
+      if (entry.trim().length() > 0) {
         return false;
+      }
+    }
 
     return true;
   }
@@ -129,8 +135,9 @@ public class OxDocCmd {
   public static void main(String[] args) {
     boolean runGui = false;
 
-    if ((args.length == 1) && (args[0].compareTo("--gui") == 0))
+    if ((args.length == 1) && (args[0].compareTo("--gui") == 0)) {
       runGui = true;
+    }
 
     if (runGui) {
       OxDocGui gui = new OxDocGui();

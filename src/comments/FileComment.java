@@ -39,8 +39,9 @@ public class FileComment extends BaseComment {
   }
 
   protected boolean addToSection(int sectionId, String text) {
-    if (super.addToSection(sectionId, text))
+    if (super.addToSection(sectionId, text)) {
       return true;
+    }
 
     switch (sectionId) {
       case SECTION_AUTHOR:
@@ -57,8 +58,9 @@ public class FileComment extends BaseComment {
 
   private String generateSection(String name, String classname, Object o) {
     String text = o.toString();
-    if (text.length() == 0)
+    if (text.length() == 0) {
       return "";
+    }
 
     Object[] args = {classname, name, text};
 
@@ -75,8 +77,9 @@ public class FileComment extends BaseComment {
     extraInfo += generateSection("Comments", "comments", comments());
     extraInfo += generateSection("See also", "seealso", see());
 
-    if (extraInfo.length() > 0)
+    if (extraInfo.length() > 0) {
       extraInfo = "\n<dl>" + extraInfo + "</dl>";
+    }
 
     return longdescription() + extraInfo;
   }

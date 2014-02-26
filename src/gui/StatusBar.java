@@ -72,8 +72,9 @@ public class StatusBar extends JPanel {
    * @throws IllegalArgumentException Thrown if <TT>null</TT> <TT>Font</TT> passed.
    */
   public synchronized void setFont(Font font) {
-    if (font == null)
+    if (font == null) {
       throw new IllegalArgumentException("Font == null");
+    }
     super.setFont(font);
     _font = font;
     updateSubcomponentsFont(this);
@@ -86,12 +87,14 @@ public class StatusBar extends JPanel {
    */
   public synchronized void setText(String text) {
     String myText = null;
-    if (text != null)
+    if (text != null) {
       myText = text.trim();
-    if (myText != null && myText.length() > 0)
+    }
+    if (myText != null && myText.length() > 0) {
       textLbl.setText(myText);
-    else
+    } else {
       clearText();
+    }
   }
 
   /**
@@ -107,17 +110,20 @@ public class StatusBar extends JPanel {
 
   public synchronized void setTextWhenEmpty(String value) {
     final boolean wasEmpty = textLbl.getText().equals(msgWhenEmpty);
-    if (value != null && value.length() > 0)
+    if (value != null && value.length() > 0) {
       msgWhenEmpty = value;
-    else
+    } else {
       msgWhenEmpty = " ";
-    if (wasEmpty)
+    }
+    if (wasEmpty) {
       clearText();
+    }
   }
 
   public synchronized void addJComponent(JComponent comp) {
-    if (comp == null)
+    if (comp == null) {
       throw new IllegalArgumentException("JComponent == null");
+    }
     comp.setBorder(createComponentBorder());
     if (_font != null) {
       comp.setFont(_font);
@@ -162,8 +168,9 @@ public class StatusBar extends JPanel {
     Component[] comps = cont.getComponents();
     for (Component comp : comps) {
       comp.setFont(_font);
-      if (comp instanceof Container)
+      if (comp instanceof Container) {
         updateSubcomponentsFont((Container) comp);
+      }
     }
   }
 
@@ -178,10 +185,11 @@ public class StatusBar extends JPanel {
     progressBar.setMaximum(maximum);
     progressBar.setValue(value);
 
-    if (null != msg)
+    if (null != msg) {
       progressBar.setString(msg);
-    else
+    } else {
       progressBar.setString("");
+    }
   }
 
   public void setStatusBarProgressFinished() {

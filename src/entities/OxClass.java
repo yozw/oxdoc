@@ -121,12 +121,14 @@ public class OxClass extends OxEntity {
 
     while (true) {
       String superClassName = currentClass.getSuperClassName();
-      if (superClassName == null)
+      if (superClassName == null) {
         break;
+      }
 
       OxEntity entity = getProject().getSymbol(superClassName);
-      if ((entity == null) || !(entity instanceof OxClass))
+      if ((entity == null) || !(entity instanceof OxClass)) {
         break;
+      }
 
       currentClass = (OxClass) entity;
       list.add(currentClass);
@@ -146,35 +148,42 @@ public class OxClass extends OxEntity {
 
     while (true) {
       String superClassName = currentClass.getSuperClassName();
-      if (superClassName == null)
+      if (superClassName == null) {
         break;
+      }
 
       OxEntity entity = getProject().getSymbol(superClassName);
-      if ((entity == null) || !(entity instanceof OxClass))
+      if ((entity == null) || !(entity instanceof OxClass)) {
         break;
+      }
       currentClass = (OxClass) entity;
 
       members = currentClass.getMembers();
 
       for (OxEntity member : members) {
-        if (seenMemberNames.contains(member.getName()))
+        if (seenMemberNames.contains(member.getName())) {
           continue;
+        }
         seenMemberNames.add(member.getName());
 
         if (member instanceof OxMethod) {
           OxMethod oxMethod = (OxMethod) member;
-          if (oxMethod.getVisibility() != Visibility.Private)
+          if (oxMethod.getVisibility() != Visibility.Private) {
             result.add(oxMethod);
+          }
         } else if (member instanceof OxField) {
           OxField oxField = (OxField) member;
-          if (oxField.getVisibility() != Visibility.Private)
+          if (oxField.getVisibility() != Visibility.Private) {
             result.add(oxField);
+          }
         } else if (member instanceof OxEnum) {
           OxEnum oxEnum = (OxEnum) member;
-          if (oxEnum.getVisibility() != Visibility.Private)
+          if (oxEnum.getVisibility() != Visibility.Private) {
             result.add(oxEnum);
-        } else
+          }
+        } else {
           throw new Error("Class member has unexpected class: " + member);
+        }
       }
     }
     return result;
@@ -189,8 +198,9 @@ public class OxClass extends OxEntity {
   }
 
   public OxClass getSuperClass() {
-    if (superClassName == null)
+    if (superClassName == null) {
       return null;
+    }
 
     return (OxClass) getParentFile().getProject().getSymbol(superClassName);
   }

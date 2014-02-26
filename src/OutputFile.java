@@ -95,10 +95,11 @@ public class OutputFile {
       output.writeln("</style>");
     }
 
-    if (config.isEnableIcons())
+    if (config.isEnableIcons()) {
       output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
-    else
+    } else {
       output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc-noicons.css\">");
+    }
     output.writeln("<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"print.css\">");
     output.writeln(config.getMathProcessor().getExtraHeader());
     output.writeln("<title>" + title
@@ -107,9 +108,10 @@ public class OutputFile {
     output.writeln("<body>");
     output.writeln("<div class=\"header\">");
     output.write("[ ");
-    if (config.isUpLevel())
+    if (config.isUpLevel()) {
       output.writeln(fileManager.getSmallIconHtml(Icon.UPLEVEL)
           + "<a href=\"..\\default.html\">Up Level</a> |");
+    }
     /** Added by CF **/
 
     output.writeln(fileManager.getSmallIconHtml(Icon.PROJECT) + "<a href=\"default.html\">Project home</a>");

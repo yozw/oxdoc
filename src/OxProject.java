@@ -51,14 +51,16 @@ public class OxProject {
   }
 
   public OxEntity addSymbol(OxEntity entity) {
-    if (getSymbol(entity.getReferenceName()) != null)
+    if (getSymbol(entity.getReferenceName()) != null) {
       logger.warning("Multiple declarations of symbol '" + entity.getReferenceName() + "'");
+    }
     return symbols.add(entity.getReferenceName(), entity);
   }
 
   public void addSymbolEnumElements(OxEnum oxenum) {
-    for (OxEnumElement element : oxenum.getElements())
+    for (OxEnumElement element : oxenum.getElements()) {
       addSymbol(element);
+    }
   }
 
   public OxEntityList<OxClass> getClasses() {
@@ -92,10 +94,11 @@ public class OxProject {
   }
 
   public String getLinkToEntity(OxEntity entity, boolean useDisplayName) {
-    if (useDisplayName)
+    if (useDisplayName) {
       return "<a href=\"" + entity.getUrl() + "\">" + entity.getDisplayName() + "</a>";
-    else
+    } else {
       return "<a href=\"" + entity.getUrl() + "\">" + entity.getName() + "</a>";
+    }
   }
 
   public String getName() {

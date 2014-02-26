@@ -23,10 +23,11 @@ package oxdoc.html;
 public abstract class Element {
 
   protected String classAttr(String className) {
-    if ((className == null) || (className.trim().length() == 0))
+    if ((className == null) || (className.trim().length() == 0)) {
       return "";
-    else
+    } else {
       return String.format(" class=\"%s\"", className);
+    }
   }
 
   @Override

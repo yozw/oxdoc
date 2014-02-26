@@ -45,11 +45,12 @@ public class Header extends Element {
     String iconHtml = context.getFileManager().getLargeIconHtml(icon);
     Object args[] = {Integer.toString(level), iconHtml, title};
 
-    if (iconHtml.length() > 0)
+    if (iconHtml.length() > 0) {
       buffer.append(MessageFormat.format(
           "<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n", args));
-    else
+    } else {
       buffer.append(MessageFormat.format("<h{0}><span class=\"text\">{2}</span></h{0}>\n", args));
+    }
   }
 
 }

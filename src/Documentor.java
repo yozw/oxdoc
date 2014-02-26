@@ -134,18 +134,21 @@ public class Documentor {
     OxClass lastClass = null;
     for (OxEntity member : inheritedMembers) {
       if (member.getParentClass() != lastClass) {
-        if (lastClass != null)
+        if (lastClass != null) {
           list.addItem(curLabel, curItems);
+        }
         lastClass = member.getParentClass();
         curLabel = String.format("%s from %s:", label, project.getLinkToEntity(member.getParentClass()));
         curItems = "";
       }
-      if (curItems.length() > 0)
+      if (curItems.length() > 0) {
         curItems += ", ";
+      }
       curItems += project.getLinkToEntity(member);
     }
-    if (curLabel.length() > 0)
+    if (curLabel.length() > 0) {
       list.addItem(curLabel, curItems);
+    }
   }
 
   // generate header docs. Entity should be either OxClass or OxFile type
@@ -165,8 +168,9 @@ public class Documentor {
     output.writeln(header);
 
 		/* Print comment */
-    if (oxClass.getComment() != null)
+    if (oxClass.getComment() != null) {
       output.writeln(oxClass.getComment());
+    }
 
 		/* Construct a new table */
     Table table = new Table();
@@ -199,8 +203,9 @@ public class Documentor {
       }
     }
 
-    if (table.getRowCount() > 0)
+    if (table.getRowCount() > 0) {
       output.writeln(table);
+    }
 
 		/* Write inherited members */
     LinkedHashMap<String, OxEntityList<? extends OxEntity>> inhMembers =
@@ -247,8 +252,9 @@ public class Documentor {
       }
 
       if (!entities.isEmpty()) {
-        if (sectionName.length() > 0)
+        if (sectionName.length() > 0) {
           sectionName += ", ";
+        }
         sectionName += caption.toLowerCase();
 
         table.addHeaderRow(caption);
@@ -277,8 +283,9 @@ public class Documentor {
       members = members.getNonInternal();
     }
 
-    if (enums.size() + members.size() == 0)
+    if (enums.size() + members.size() == 0) {
       return;
+    }
 
     Header header = new Header(2, icon, sectionName, renderContext);
     output.writeln(header);
@@ -289,15 +296,17 @@ public class Documentor {
     for (OxEntity entity : members) {
       String anchorName = classPrefix + entity.getDisplayName();
 
-      if (rowIndex != 0)
+      if (rowIndex != 0) {
         output.writeln("\n<hr>");
+      }
 
       Header h3 = new Header(3, entity.getIcon(), entity.getName(), renderContext);
       output.writeln(new Anchor(anchorName));
       output.writeln(h3);
 
-      if (entity.getDeclaration() != null)
+      if (entity.getDeclaration() != null) {
         output.writeln("<span class=\"declaration\">" + entity.getDeclaration() + "</span>");
+      }
 
       output.writeln("<dl><dd>");
       output.writeln(entity.getComment());
@@ -334,15 +343,17 @@ public class Documentor {
           oxEnum.getElementString());
     }
 
-    if (table.getRowCount() > 1)
+    if (table.getRowCount() > 1) {
       output.writeln(table);
+    }
   }
 
   private void writeCss() throws IOException {
-    if (config.isEnableIcons())
+    if (config.isEnableIcons()) {
       fileManager.copyFromResourceIfNotExists("oxdoc.css");
-    else
+    } else {
       fileManager.copyFromResourceIfNotExists("oxdoc-noicons.css");
+    }
     fileManager.copyFromResourceIfNotExists("print.css");
   }
 }

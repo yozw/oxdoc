@@ -88,16 +88,19 @@ public class FileManager {
 
   public static File getApplicationDirectory(Class clas) {
     ProtectionDomain pd = clas.getProtectionDomain();
-    if (pd == null)
+    if (pd == null) {
       return null;
+    }
 
     CodeSource cs = pd.getCodeSource();
-    if (cs == null)
+    if (cs == null) {
       return null;
+    }
 
     URL url = cs.getLocation();
-    if (url == null)
+    if (url == null) {
       return null;
+    }
 
     return new File(url.getFile()).getParentFile();
   }
@@ -110,20 +113,24 @@ public class FileManager {
 
   public static String toNativePath(String path) {
     String out = path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-    if (out.length() == 0)
+    if (out.length() == 0) {
       return out;
-    if (!out.endsWith(File.separator))
+    }
+    if (!out.endsWith(File.separator)) {
       out += File.separator;
+    }
 
     return out;
   }
 
   public static String toUnixPath(String path) {
     String out = path.replace('\\', '/');
-    if (out.length() == 0)
+    if (out.length() == 0) {
       return out;
-    if (!out.endsWith("/"))
+    }
+    if (!out.endsWith("/")) {
       out += "/";
+    }
 
     return out;
   }
@@ -133,10 +140,12 @@ public class FileManager {
   }
 
   public String getLargeIconHtml(Icon icon) {
-    if (!config.isEnableIcons())
+    if (!config.isEnableIcons()) {
       return "";
-    if (icon.getFileName() == null)
+    }
+    if (icon.getFileName() == null) {
       return "";
+    }
 
     String fileName = "icons/" + icon.getFileName() + ".png";
     copyFromResourceIfNotExists(fileName);
@@ -145,10 +154,12 @@ public class FileManager {
   }
 
   public String getSmallIconHtml(Icon icon) {
-    if (!config.isEnableIcons())
+    if (!config.isEnableIcons()) {
       return "";
-    if (icon.getFileName() == null)
+    }
+    if (icon.getFileName() == null) {
       return "";
+    }
 
     String fileName = "icons/" + icon.getFileName() + "_s.png";
     copyFromResourceIfNotExists(fileName);
@@ -164,8 +175,9 @@ public class FileManager {
   public boolean copyFromResourceIfNotExists(String fileName, String resourceName) {
     // check if we've requested this resource before
     String key = fileName + "||" + resourceName;
-    if (resourceResults.containsKey(key))
+    if (resourceResults.containsKey(key)) {
       return resourceResults.get(key);
+    }
 
     boolean result = doCopyFromResourceIfNotExists(fileName, resourceName);
     resourceResults.put(key, result);
@@ -174,8 +186,9 @@ public class FileManager {
 
   private boolean doCopyFromResourceIfNotExists(String fileName, String resourceName) {
     try {
-      if (outputFileExists(fileName))
+      if (outputFileExists(fileName)) {
         return true;
+      }
 
       InputStream resourceFile = OxDoc.class.getResourceAsStream(resourceName);
       if (resourceFile == null) {
@@ -189,8 +202,9 @@ public class FileManager {
 
       while (true) {
         int bytesRead = resourceFile.read(buffer, 0, buffer.length);
-        if (bytesRead < 0)
+        if (bytesRead < 0) {
           break;
+        }
         output.write(buffer, bytesRead);
       }
       resourceFile.close();

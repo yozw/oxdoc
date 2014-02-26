@@ -49,17 +49,19 @@ public class OxEnum extends OxEntity {
   }
 
   public String getUrl() {
-    if (getParentClass() != null)
+    if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
-    else
+    } else {
       return getParentFileUrl() + "#" + getDisplayName();
+    }
   }
 
   public String getDeclaration() {
     String decl = "";
     decl += " enum { " + getElementString() + " }";
-    if (getParentClass() != null)
+    if (getParentClass() != null) {
       decl += " [" + getVisibility() + "]";
+    }
     return decl;
   }
 
@@ -67,8 +69,9 @@ public class OxEnum extends OxEntity {
     String decl = "";
     int index = 0;
     for (OxEnumElement element : elements) {
-      if (index != 0)
+      if (index != 0) {
         decl += ", ";
+      }
       decl += element.getName();
       index++;
     }

@@ -45,8 +45,9 @@ public class StreamGobbler extends Thread {
       String line;
       while ((line = br.readLine()) != null) {
         text += "> " + line + "\n";
-        if (echo)
+        if (echo) {
           logger.info("> " + line);
+        }
       }
     } catch (IOException ioe) {
       ioe.printStackTrace();
