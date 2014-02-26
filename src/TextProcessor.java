@@ -33,26 +33,45 @@ public class TextProcessor {
     this.config = checkNotNull(config);
   }
 
-  private boolean isEmptyLine(String S) {
+  private static boolean isEmptyLine(String S) {
     return (S.length() == 0) || (S.trim().length() == 0);
   }
 
   public String process(String text, OxProject project) {
+    String processed = filterReferences(filterLatexExpressions(text), project);
+    return formatParagraphs(processed);
+  }
+
+  static String formatParagraphs(String input) {
     StringBuilder output = new StringBuilder();
 
-    String processed = filterReferences(filterLatexExpressions(text), project);
-    String[] lines = processed.split("(?m)^");
-
-    for (int i = 0; i < lines.length; i++) {
-      if ((i > 0) && (i < lines.length - 1) && isEmptyLine(lines[i]) && !isEmptyLine(lines[i - 1])
-          && !isEmptyLine(lines[i + 1])) {
-        output.append("<P/>\n");
+    int index = 0;
+    boolean newParRequired = false;
+    while (index < input.length()) {
+      String line;
+      int newLineIndex = input.indexOf('\n', index);
+      if (newLineIndex < 0) {
+        line = input.substring(index);
+        index = input.length();
       } else {
-        output.append(lines[i]);
+        if (newLineIndex > 0 && input.charAt(newLineIndex - 1) == '\r') {
+          line = input.substring(index, newLineIndex - 1) + "\n";
+        } else {
+          line = input.substring(index, newLineIndex + 1);
+        }
+        index = newLineIndex + 1;
       }
-    }
-    System.out.println(output.toString());
+      if (isEmptyLine(line)) {
+        newParRequired = true;
+        continue;
+      }
 
+      if (newParRequired) {
+        output.append("<P/>");
+        newParRequired = false;
+      }
+      output.append(line);
+    }
     return output.toString();
   }
 
