@@ -166,14 +166,12 @@ public class Preprocessor {
             throw new IOException("#include requires 1 argument");
           }
           if (active) {
-            boolean lookLocal;
+            boolean lookLocally;
             String fileSpec = params.get(0);
-            char firstChar = fileSpec.charAt(0);
-            char lastChar = fileSpec.charAt(fileSpec.length() - 1);
-            if ((firstChar == '"') && (lastChar == '"')) {
-              lookLocal = true;
-            } else if ((firstChar == '<') && (lastChar == '>')) {
-              lookLocal = false;
+            if (fileSpec.startsWith("\"") && fileSpec.endsWith("\"")) {
+              lookLocally = true;
+            } else if (fileSpec.startsWith("<") && fileSpec.endsWith(">")) {
+              lookLocally = false;
             } else {
               logger.warning("Invalid preprocessor clause: " + line);
               break;
@@ -182,7 +180,7 @@ public class Preprocessor {
 
             // specify search paths as described in Ox Syntax guide
             ArrayList<File> tryFiles = new ArrayList<File>();
-            if (lookLocal) {
+            if (lookLocally) {
               /* in the directory containing the source file (if just a filename, or a filename with a relative path is
                 specified), or in the specified directory (if the filename has an absolute path); */
               String basePath = mainFile.getAbsoluteFile().getParent();
@@ -196,16 +194,16 @@ public class Preprocessor {
             // * in the current directory.
             tryFiles.add(new File(fileName));
 
-            boolean done = false;
+            boolean success = false;
             for (File file : tryFiles) {
               if (file.exists()) {
                 processFile(file, mainFile);
-                done = true;
+                success = true;
                 break;
               }
             }
 
-            if (!done) {
+            if (!success) {
               ignoreIncludeFiles(fileName, tryFiles);
             }
           }
