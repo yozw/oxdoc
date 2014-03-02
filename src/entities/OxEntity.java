@@ -145,4 +145,21 @@ public class OxEntity {
   public OxFile getParentFile() {
     return parentFile;
   }
+
+  @Override
+  public int hashCode() {
+    return getReferenceName().hashCode() + 2 * getClass().hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!obj.getClass().equals(this.getClass())) {
+      return false;
+    }
+    OxEntity other = (OxEntity) obj;
+    return other.getReferenceName().equals(this.getReferenceName());
+  }
 }

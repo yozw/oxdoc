@@ -20,11 +20,17 @@
 
 package oxdoc.entities;
 
+import oxdoc.util.Logger;
+import oxdoc.util.Logging;
 import oxdoc.util.Predicate;
 
 import java.util.*;
 
+import static oxdoc.util.Utils.checkNotNull;
+
 public class OxEntityList<T extends OxEntity> implements Iterable<T> {
+  private final Logger logger = Logging.getLogger();
+
   private final Map<String, T> nameMap = new HashMap<String, T>();
   private final TreeSet<T> entitySet = new TreeSet<T>(new OxEntityComparator<T>());
 
@@ -41,6 +47,13 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
   }
 
   public <S extends T> S add(String name, S entity) {
+    checkNotNull(entity);
+    OxEntity currentEntity = nameMap.get(name);
+    if (currentEntity != null && !currentEntity.equals(entity)) {
+      logger.warning("Name collision: registering the symbol " + name + " multiple times.");
+      return entity;
+    }
+
     nameMap.put(name, entity);
     entitySet.add(entity);
     return entity;
@@ -63,9 +76,9 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
 
   public OxEntityList<T> filter(Predicate<T> filter) {
     OxEntityList<T> result = new OxEntityList<T>();
-    for (T member : this) {
-      if (filter.apply(member)) {
-        result.add(member);
+    for (Map.Entry<String, T> entry : nameMap.entrySet()) {
+      if (filter.apply(entry.getValue())) {
+        result.add(entry.getKey(), entry.getValue());
       }
     }
     return result;
@@ -86,18 +99,18 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
 
   public <S extends T> OxEntityList<S> filterByClass(Iterable<Class<? extends S>> classes) {
     OxEntityList<S> result = new OxEntityList<S>();
-    for (T entity : this) {
+    for (Map.Entry<String, T> entry : nameMap.entrySet()) {
       boolean applies = false;
       for (Class<? extends S> clazz : classes) {
-        if (clazz.isInstance(entity)) {
+        if (clazz.isInstance(entry.getValue())) {
           applies = true;
           break;
         }
       }
       if (applies) {
         @SuppressWarnings("unchecked")
-        S newEntity = (S) entity;
-        result.add(newEntity);
+        S newEntity = (S) entry.getValue();
+        result.add(entry.getKey(), newEntity);
       }
     }
     return result;

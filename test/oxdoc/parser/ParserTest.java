@@ -182,7 +182,7 @@ public class ParserTest {
 
   @Test
   public void testForEach() throws Exception {
-    String input = "main() { foreach(x in y[0]) println(x);}";
+    String input = "main() { foreach ( x in y[0]) println(x);}";
     ParserTestHelper helper = create(input);
     helper.test();
     assertNotNull(helper.getProject().getSymbol("main"));
@@ -205,6 +205,13 @@ public class ParserTest {
   @Test
   public void testLambdaAsArgument() throws Exception {
     String input = "main() { max([=] (x) { return x*x; }); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVariableNamedIn() throws Exception {
+    String input = "main() { decl in = 5; }";
     ParserTestHelper helper = create(input);
     helper.test();
   }

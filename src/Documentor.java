@@ -23,11 +23,12 @@ package oxdoc;
 import oxdoc.comments.BaseComment;
 import oxdoc.entities.*;
 import oxdoc.html.*;
+import oxdoc.util.HashMultimap;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 import static oxdoc.entities.OxClass.Visibility;
 import static oxdoc.util.Utils.checkNotNull;
@@ -128,43 +129,45 @@ public class Documentor {
     }
   }
 
-  private void formatInheritedMembers(DefinitionList list, OxEntityList<? extends OxEntity> inheritedMembers, String label) {
-    String curLabel = "";
-    String curItems = "";
-    OxClass lastClass = null;
+  private void formatInheritedMembers(DefinitionList list, OxClass oxClass, OxEntityList<? extends OxEntity> inheritedMembers, String label) {
+    HashMultimap<OxClass, OxEntity> entityMap = new HashMultimap<OxClass, OxEntity>();
     for (OxEntity member : inheritedMembers) {
-      if (member.getParentClass() != lastClass) {
-        if (lastClass != null) {
-          list.addItem(curLabel, curItems);
-        }
-        lastClass = member.getParentClass();
-        curLabel = String.format("%s from %s:", label, project.getLinkToEntity(member.getParentClass()));
-        curItems = "";
-      }
-      if (curItems.length() > 0) {
-        curItems += ", ";
-      }
-      curItems += project.getLinkToEntity(member);
+      entityMap.put(member.getParentClass(), member);
     }
-    if (curLabel.length() > 0) {
-      list.addItem(curLabel, curItems);
+
+    for (OxClass parentClass : oxClass.getSuperClasses()) {
+      Set<OxEntity> members = entityMap.get(parentClass);
+      if (members == null) {
+        continue;
+      }
+      String classLabel = String.format("%s from %s:", label, project.getLinkToEntity(parentClass));
+      StringBuilder classItems = new StringBuilder();
+      for (OxEntity member : members) {
+        if (classItems.length() > 0) {
+          classItems.append(", ");
+        }
+        classItems.append(project.getLinkToEntity(member));
+      }
+      list.addItem(classLabel, classItems.toString());
     }
   }
 
   // generate header docs. Entity should be either OxClass or OxFile type
   private void generateClassHeaderDocs(OutputFile output, OxClass oxClass) throws Exception {
-    String sectionName = oxClass.getName();
 
 		/* Write anchor */
-    output.writeln(new Anchor(sectionName));
+    output.writeln(new Anchor(oxClass.getName()));
 
 		/* Add superclasses to section name */
+    StringBuilder sectionName = new StringBuilder();
+    sectionName.append(oxClass.getName());
     for (OxClass superClass : oxClass.getSuperClasses()) {
-      sectionName += " : " + project.getLinkToEntity(superClass);
+      sectionName.append(" : ");
+      sectionName.append(project.getLinkToEntity(superClass));
     }
 
 		/* Write header */
-    Header header = new Header(2, Icon.CLASS, sectionName, renderContext);
+    Header header = new Header(2, Icon.CLASS, sectionName.toString(), renderContext);
     output.writeln(header);
 
 		/* Print comment */
@@ -222,14 +225,14 @@ public class Documentor {
 
       if (members.size() > 0) {
         DefinitionList dl = new DefinitionList("inherited");
-        formatInheritedMembers(dl, members, caption);
+        formatInheritedMembers(dl, oxClass, members, caption);
         output.writeln(dl);
       }
     }
   }
 
   private void generateGlobalHeaderDocs(OutputFile output, OxFile file) throws Exception {
-    String sectionName = "";
+    StringBuilder sectionName = new StringBuilder();
 
     LinkedHashMap<String, OxEntityList<? extends OxEntity>> visMembers =
         new LinkedHashMap<String, OxEntityList<? extends OxEntity>>();
@@ -253,9 +256,9 @@ public class Documentor {
 
       if (!entities.isEmpty()) {
         if (sectionName.length() > 0) {
-          sectionName += ", ";
+          sectionName.append(", ");
         }
-        sectionName += caption.toLowerCase();
+        sectionName.append(caption.toLowerCase());
 
         table.addHeaderRow(caption);
         for (OxEntity entity : entities) {
@@ -266,7 +269,7 @@ public class Documentor {
 
 		/* Write if there is anything to write */
     if (table.getRowCount() > 0) {
-      Header header = new Header(2, Icon.GLOBAL, "Global " + sectionName, renderContext);
+      Header header = new Header(2, Icon.GLOBAL, "Global " + sectionName.toString(), renderContext);
       output.writeln(new Anchor("global"));
       output.writeln(header);
       output.writeln(table);
