@@ -32,21 +32,27 @@ public class CommentParameterList extends BaseCommentBlock {
       return "";
     }
 
-    String out = "<!-- parameter table --!>\n";
-    out += "<table class=\"parameter_table\">\n";
+    StringBuilder result = new StringBuilder();
+
+    result.append("<!-- parameter table --!>\n");
+    result.append("<table class=\"parameter_table\">\n");
 
     for (String s : this) {
       String[] params = s.split("[\t ]", 2);
 
-      out += "<tr>\n";
-      out += "<td class=\"declaration\" valign=\"baseline\">" + params[0] + "</td>\n";
+      result.append("<tr>\n");
+      result.append("<td class=\"declaration\" valign=\"baseline\">");
+      result.append(params[0]);
+      result.append("</td>\n");
       if (params.length > 1) {
-        out += "<td class=\"description\" valign=\"baseline\">" + params[1] + "</td>\n";
+        result.append("<td class=\"description\" valign=\"baseline\">");
+        result.append(params[1]);
+        result.append("</td>\n");
       }
-      out += "</tr>\n";
+      result.append("</tr>\n");
     }
-    out += "</table>\n";
+    result.append("</table>\n");
 
-    return out;
+    return result.toString();
   }
 }

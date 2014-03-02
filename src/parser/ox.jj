@@ -391,11 +391,13 @@ void FunctionDefinition() :
 	{
 	  t2 = getToken(0);
 
-	  String decl = "";
-	  for(; t1 != t2; t1 = t1.next)
-	  	decl += t1.image + " ";
-	  decl += t2.image;
-	  func.setDeclaration(decl);
+	  StringBuilder declaration = new StringBuilder();
+	  for(; t1 != t2; t1 = t1.next) {
+	  	declaration.append(t1.image.trim());
+	    declaration.append(" ");
+	  }
+	  declaration.append(t2.image.trim());
+	  func.setDeclaration(declaration.toString());
 	}
 	CompoundStatement()
 }

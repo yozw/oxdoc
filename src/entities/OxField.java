@@ -51,23 +51,32 @@ public class OxField extends OxEntity {
   }
 
   public String getDeclaration() {
-    String declaration = getModifiers() + " ";
-    declaration += " decl " + getName();
-    if (getParentClass() != null) {
-      declaration += " [" + getVisibility() + "]";
+    StringBuilder declaration = new StringBuilder();
+    declaration.append(getModifiers());
+    if (declaration.length() > 0) {
+      declaration.append(" ");
     }
-    return declaration.trim();
+
+    declaration.append("decl ");
+    declaration.append(getName());
+
+    if (getParentClass() != null) {
+      declaration.append(" [");
+      declaration.append(getVisibility());
+      declaration.append("]");
+    }
+    return declaration.toString();
   }
 
   public String getModifiers() {
-    String modifiers = "";
+    StringBuilder modifiers = new StringBuilder();
     if (isStatic) {
-      modifiers += "static ";
+      modifiers.append("static ");
     }
     if (isConstant) {
-      modifiers += "const ";
+      modifiers.append("const ");
     }
-    return modifiers.trim();
+    return modifiers.toString().trim();
   }
 
   public Visibility getVisibility() {

@@ -57,14 +57,14 @@ public class OxMethod extends OxEntity {
   }
 
   public String getModifiers() {
-    String mod = "";
+    StringBuilder modifiers = new StringBuilder();
     if (isVirtual) {
-      mod += "virtual ";
+      modifiers.append("virtual ");
     }
     if (isStatic) {
-      mod += "static ";
+      modifiers.append("static ");
     }
-    return mod.trim();
+    return modifiers.toString().trim();
   }
 
   public BaseComment getComment() {

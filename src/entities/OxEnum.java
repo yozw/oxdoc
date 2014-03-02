@@ -57,25 +57,28 @@ public class OxEnum extends OxEntity {
   }
 
   public String getDeclaration() {
-    String decl = "";
-    decl += " enum { " + getElementString() + " }";
+    StringBuilder declaration = new StringBuilder();
+    declaration.append(" enum { ");
+    declaration.append(getElementString());
+    declaration.append(" }");
+
     if (getParentClass() != null) {
-      decl += " [" + getVisibility() + "]";
+      declaration.append(" [");
+      declaration.append(getVisibility());
+      declaration.append("]");
     }
-    return decl;
+    return declaration.toString();
   }
 
   public String getElementString() {
-    String decl = "";
-    int index = 0;
+    StringBuilder elementStr = new StringBuilder();
     for (OxEnumElement element : elements) {
-      if (index != 0) {
-        decl += ", ";
+      if (elementStr.length() > 0) {
+        elementStr.append(", ");
       }
-      decl += element.getName();
-      index++;
+      elementStr.append(element.getName());
     }
-    return decl;
+    return elementStr.toString();
   }
 
   public OxClass.Visibility getVisibility() {

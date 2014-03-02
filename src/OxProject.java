@@ -24,6 +24,9 @@ import oxdoc.entities.*;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static oxdoc.util.Utils.checkNotNull;
 
 public class OxProject {
@@ -33,6 +36,7 @@ public class OxProject {
   private final Config config;
   private final OxEntityList<OxFile> files = new OxEntityList<OxFile>();
   private final OxEntityList<OxEntity> symbols = new OxEntityList<OxEntity>();
+  private final Set<String> referenceWarningIssued = new HashSet<String>();
 
   public OxProject(FileManager fileManager, TextProcessor textProcessor, Config config) {
     this.fileManager = checkNotNull(fileManager);
@@ -54,7 +58,7 @@ public class OxProject {
     if (getSymbol(entity.getReferenceName()) != null) {
       logger.warning("Multiple declarations of symbol '" + entity.getReferenceName() + "'");
     }
-    return symbols.add(entity.getReferenceName(), entity);
+    return symbols.add(entity);
   }
 
   public void addSymbolEnumElements(OxEnum oxenum) {
@@ -78,7 +82,10 @@ public class OxProject {
   public String getLinkToSymbol(String name) {
     OxEntity entity = getSymbol(name);
     if (entity == null) {
-      logger.warning("Symbol '" + name + "' referenced, but not found");
+      if (!referenceWarningIssued.contains(name)) {
+        logger.warning("Symbol '" + name + "' referenced, but not found");
+        referenceWarningIssued.add(name);
+      }
       return name;
     } else {
       return getLinkToEntity(entity);

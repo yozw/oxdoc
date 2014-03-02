@@ -28,7 +28,10 @@ import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static oxdoc.entities.OxClass.Visibility;
 import static oxdoc.util.Utils.checkNotNull;
@@ -129,29 +132,6 @@ public class Documentor {
     }
   }
 
-  private void formatInheritedMembers(DefinitionList list, OxClass oxClass, OxEntityList<? extends OxEntity> inheritedMembers, String label) {
-    HashMultimap<OxClass, OxEntity> entityMap = new HashMultimap<OxClass, OxEntity>();
-    for (OxEntity member : inheritedMembers) {
-      entityMap.put(member.getParentClass(), member);
-    }
-
-    for (OxClass parentClass : oxClass.getSuperClasses()) {
-      Set<OxEntity> members = entityMap.get(parentClass);
-      if (members == null) {
-        continue;
-      }
-      String classLabel = String.format("%s from %s:", label, project.getLinkToEntity(parentClass));
-      StringBuilder classItems = new StringBuilder();
-      for (OxEntity member : members) {
-        if (classItems.length() > 0) {
-          classItems.append(", ");
-        }
-        classItems.append(project.getLinkToEntity(member));
-      }
-      list.addItem(classLabel, classItems.toString());
-    }
-  }
-
   // generate header docs. Entity should be either OxClass or OxFile type
   private void generateClassHeaderDocs(OutputFile output, OxClass oxClass) throws Exception {
 
@@ -228,6 +208,33 @@ public class Documentor {
         formatInheritedMembers(dl, oxClass, members, caption);
         output.writeln(dl);
       }
+    }
+  }
+
+  private void formatInheritedMembers(DefinitionList list, OxClass oxClass, OxEntityList<? extends OxEntity> inheritedMembers, String label) {
+    Map<OxClass, OxEntityList<OxEntity>> entityMap = new HashMap<OxClass, OxEntityList<OxEntity>>();
+    for (OxEntity member : inheritedMembers) {
+      OxClass parentClass = member.getParentClass();
+      if (!entityMap.containsKey(parentClass)) {
+        entityMap.put(parentClass, new OxEntityList<OxEntity>());
+      }
+      entityMap.get(parentClass).add(member);
+    }
+
+    for (OxClass parentClass : oxClass.getSuperClasses()) {
+      OxEntityList<OxEntity> members = entityMap.get(parentClass);
+      if (members == null) {
+        continue;
+      }
+      String classLabel = String.format("%s from %s:", label, project.getLinkToEntity(parentClass));
+      StringBuilder classItems = new StringBuilder();
+      for (OxEntity member : members) {
+        if (classItems.length() > 0) {
+          classItems.append(", ");
+        }
+        classItems.append(project.getLinkToEntity(member));
+      }
+      list.addItem(classLabel, classItems.toString());
     }
   }
 

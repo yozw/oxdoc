@@ -26,4 +26,17 @@ public class Utils {
     }
     return object;
   }
+
+  public static boolean isNullOrEmpty(String string) {
+    return string == null || string.isEmpty();
+  }
+
+  public static boolean allNullOrEmpty(String... strings) {
+    for (String string : strings) {
+      if (!isNullOrEmpty(string)) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

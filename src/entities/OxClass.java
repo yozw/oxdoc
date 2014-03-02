@@ -115,8 +115,8 @@ public class OxClass extends OxEntity {
     return getInheritedMembers().filterByClass(OxEnum.class);
   }
 
-  public OxEntityList<OxClass> getSuperClasses() {
-    OxEntityList<OxClass> list = new OxEntityList<OxClass>();
+  public ArrayList<OxClass> getSuperClasses() {
+    ArrayList<OxClass> list = new ArrayList<OxClass>();
     OxClass currentClass = this;
 
     while (true) {
@@ -190,7 +190,7 @@ public class OxClass extends OxEntity {
   }
 
   public OxMethod getMethodByName(String s) {
-    return (OxMethod) members.get(s);
+    return (OxMethod) members.get(getName() + "::" + s);
   }
 
   public String getSuperClassName() {

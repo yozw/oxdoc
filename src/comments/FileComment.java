@@ -24,11 +24,13 @@ import oxdoc.OxProject;
 
 import java.text.MessageFormat;
 
+import static oxdoc.util.Utils.allNullOrEmpty;
+
 public class FileComment extends BaseComment {
   public static final int SECTION_AUTHOR = 100, SECTION_VERSION = 101;
 
-  private String author = "";
-  private String version = "";
+  private StringBuilder author = new StringBuilder();
+  private StringBuilder version = new StringBuilder();
 
   public FileComment(OxProject project) {
     super(project);
@@ -45,10 +47,10 @@ public class FileComment extends BaseComment {
 
     switch (sectionId) {
       case SECTION_AUTHOR:
-        author += text;
+        author.append(text);
         break;
       case SECTION_VERSION:
-        version += text;
+        version.append(text);
         break;
       default:
         return false;
@@ -68,19 +70,24 @@ public class FileComment extends BaseComment {
   }
 
   public String toString() {
-    String extraInfo = "";
+    String authorStr = generateSection("Author", "author", author.toString());
+    String versionStr = generateSection("Version", "version", version.toString());
+    String exampleStr = generateSection("Example", "example", example());
+    String commentStr = generateSection("Comments", "comments", comments());
+    String seeAlsoStr = generateSection("See also", "seealso", see());
 
-    extraInfo += generateSection("Author", "author", author);
-    extraInfo += generateSection("Version", "version", version);
-
-    extraInfo += generateSection("Example", "example", example());
-    extraInfo += generateSection("Comments", "comments", comments());
-    extraInfo += generateSection("See also", "seealso", see());
-
-    if (extraInfo.length() > 0) {
-      extraInfo = "\n<dl>" + extraInfo + "</dl>";
+    StringBuilder result = new StringBuilder();
+    result.append(longdescription());
+    if (!allNullOrEmpty(authorStr, versionStr, exampleStr, commentStr, seeAlsoStr)) {
+      result.append("\n<dl>");
+      result.append(authorStr);
+      result.append(versionStr);
+      result.append(exampleStr);
+      result.append(commentStr);
+      result.append(seeAlsoStr);
+      result.append("</dl>");
     }
 
-    return longdescription() + extraInfo;
+    return result.toString();
   }
 }

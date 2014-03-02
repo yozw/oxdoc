@@ -43,11 +43,7 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
   }
 
   public <S extends T> S add(S entity) {
-    return add(entity.getName(), entity);
-  }
-
-  public <S extends T> S add(String name, S entity) {
-    checkNotNull(entity);
+    String name = entity.getReferenceName();
     OxEntity currentEntity = nameMap.get(name);
     if (currentEntity != null && !currentEntity.equals(entity)) {
       logger.warning("Name collision: registering the symbol " + name + " multiple times.");
@@ -78,7 +74,7 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
     OxEntityList<T> result = new OxEntityList<T>();
     for (Map.Entry<String, T> entry : nameMap.entrySet()) {
       if (filter.apply(entry.getValue())) {
-        result.add(entry.getKey(), entry.getValue());
+        result.add(entry.getValue());
       }
     }
     return result;
@@ -110,7 +106,7 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
       if (applies) {
         @SuppressWarnings("unchecked")
         S newEntity = (S) entry.getValue();
-        result.add(entry.getKey(), newEntity);
+        result.add(newEntity);
       }
     }
     return result;

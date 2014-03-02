@@ -24,6 +24,8 @@ import oxdoc.OxProject;
 
 import java.text.MessageFormat;
 
+import static oxdoc.util.Utils.allNullOrEmpty;
+
 public class FieldComment extends BaseComment {
   private final static int MODIFIER_INTERNAL = 300;
 
@@ -57,17 +59,22 @@ public class FieldComment extends BaseComment {
   }
 
   public String toString() {
-    String extraInfo = "";
+    String exampleStr = generateSection("Example", "example", example());
+    String commentStr = generateSection("Comments", "comments", comments());
+    String seeAlsoStr = generateSection("See also", "seealso", see());
 
-    extraInfo += generateSection("Example", "example", example());
-    extraInfo += generateSection("Comments", "comments", comments());
-    extraInfo += generateSection("See also", "seealso", see());
+    StringBuilder result = new StringBuilder();
+    result.append(longdescription());
 
-    if (extraInfo.length() > 0) {
-      extraInfo = "\n<dl>" + extraInfo + "</dl>";
+    if (!allNullOrEmpty(exampleStr, commentStr, seeAlsoStr)) {
+      result.append("\n<dl>");
+      result.append(exampleStr);
+      result.append(commentStr);
+      result.append(seeAlsoStr);
+      result.append("</dl>");
     }
 
-    return longdescription() + extraInfo;
+    return result.toString();
   }
 
   public boolean hasInternalModifier() {

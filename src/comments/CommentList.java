@@ -28,13 +28,16 @@ public class CommentList extends BaseCommentBlock {
   }
 
   protected String renderHTML() {
-    String out = "<ul>";
+    StringBuilder out = new StringBuilder();
+    out.append("<ul>");
 
     for (String s : this) {
-      out += "<li>" + s.trim() + "\n";
+      out.append("<li>");
+      out.append(s.trim());
+      out.append("\n");
     }
-    out += "</li>";
+    out.append("</li>");
 
-    return out;
+    return out.toString();
   }
 }

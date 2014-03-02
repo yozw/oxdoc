@@ -67,7 +67,7 @@ public class TextProcessor {
       }
 
       if (newParRequired) {
-        output.append("<P/>");
+        output.append("<P/>\n");
         newParRequired = false;
       }
       output.append(line);

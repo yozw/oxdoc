@@ -172,7 +172,7 @@ public class BaseComment {
 
     String[] sections = text.split("@");
 
-    String description = "";
+    StringBuilder description = new StringBuilder();
     int curSection = -1;
     int index = 0;
 
@@ -200,15 +200,17 @@ public class BaseComment {
       }
 
       if (curSection == -1) {
-        description += textLine + " ";
+        description.append(textLine);
+        description.append(" ");
       } else {
         addToSection(curSection, textLine);
       }
       index++;
     }
 
-    this.description = extractShortDescription(description);
-    longDescription.add(description);
+    String descriptionString = description.toString();
+    this.description = extractShortDescription(descriptionString);
+    longDescription.add(descriptionString);
   }
 
   /**

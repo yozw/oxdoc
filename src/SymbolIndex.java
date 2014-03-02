@@ -170,19 +170,21 @@ public class SymbolIndex {
 
     for (IndexEntry entry : indexEntries) {
       OxEntity entity = entry.entity;
-      String description = entry.type;
+      StringBuilder description = new StringBuilder();
+      description.append(entry.type);
       if (!entry.owningClassMembers.isEmpty()) {
         sortOwningClassMembers(entry.owningClassMembers);
-        description += " of ";
+        description.append(" of ");
         int index = 0;
         for (OxEntity memberEntity : entry.owningClassMembers) {
-          description += (index == 0 ? "" : ", ")
-              + project.getLinkToEntity(memberEntity, memberEntity.getParentClass().getName());
-          index++;
+          if (index++ > 0) {
+            description.append(", ");
+          }
+          description.append(project.getLinkToEntity(memberEntity, memberEntity.getParentClass().getName()));
         }
       }
 
-      table.addRow(entity.getSmallIcon() + project.getLinkToEntity(entity), description);
+      table.addRow(entity.getSmallIcon() + project.getLinkToEntity(entity), description.toString());
     }
     output.writeln(table);
   }

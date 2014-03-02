@@ -12,11 +12,11 @@ public class TextProcessorTest extends TestCase {
     assertEquals("", TextProcessor.formatParagraphs("\r\n\r\n"));
     assertEquals("hello world", TextProcessor.formatParagraphs("hello world"));
     assertEquals("hello\nworld", TextProcessor.formatParagraphs("hello\nworld"));
-    assertEquals("hello\n<P/>world", TextProcessor.formatParagraphs("hello\n\nworld"));
-    assertEquals("hello\n<P/>world", TextProcessor.formatParagraphs("hello\n\n\n\nworld"));
+    assertEquals("hello\n<P/>\nworld", TextProcessor.formatParagraphs("hello\n\nworld"));
+    assertEquals("hello\n<P/>\nworld", TextProcessor.formatParagraphs("hello\n\n\n\nworld"));
     assertEquals("hello\nworld", TextProcessor.formatParagraphs("hello\r\nworld"));
-    assertEquals("hello\n<P/>world", TextProcessor.formatParagraphs("hello\r\n\r\nworld"));
-    assertEquals("hello\n<P/>world\n", TextProcessor.formatParagraphs("hello\r\n\r\nworld\n"));
-    assertEquals("hello\n<P/>world\n", TextProcessor.formatParagraphs("hello\r\n\r\nworld\n\n\n"));
+    assertEquals("hello\n<P/>\nworld", TextProcessor.formatParagraphs("hello\r\n\r\nworld"));
+    assertEquals("hello\n<P/>\nworld\n", TextProcessor.formatParagraphs("hello\r\n\r\nworld\n"));
+    assertEquals("hello\n<P/>\nworld\n", TextProcessor.formatParagraphs("hello\r\n\r\nworld\n\n\n"));
   }
 }

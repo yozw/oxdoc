@@ -36,16 +36,15 @@ public class CommentSeeAlsoList extends BaseCommentBlock {
   }
 
   protected String renderHTML() {
-    String out = "";
+    StringBuilder out = new StringBuilder();
     int index = 0;
     for (String s : this) {
-      if (index > 0) {
-        out += ", ";
+      if (index++ > 0) {
+        out.append(", ");
       }
-      out += project.getLinkToSymbol(s);
-      index++;
+      out.append(project.getLinkToSymbol(s));
     }
 
-    return out;
+    return out.toString();
   }
 }

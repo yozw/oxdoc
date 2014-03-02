@@ -23,6 +23,8 @@ import oxdoc.OxProject;
 
 import java.text.MessageFormat;
 
+import static oxdoc.util.Utils.allNullOrEmpty;
+
 public class FunctionComment extends BaseComment {
   public static final int SECTION_PARAM = 200, SECTION_RETURNS = 201;
   public static final int MODIFIER_INTERNAL = 300;
@@ -85,19 +87,26 @@ public class FunctionComment extends BaseComment {
   }
 
   public String toString() {
-    String extraInfo = "";
+    String parameterStr = generateSection("Parameters", "parameters", params());
+    String returnStr = generateSection("Returns", "returns", returns());
+    String exampleStr = generateSection("Example", "example", example());
+    String commentStr = generateSection("Comments", "comments", comments());
+    String seeAlsoStr = generateSection("See also", "seealso", see());
 
-    extraInfo += generateSection("Parameters", "parameters", params());
-    extraInfo += generateSection("Returns", "returns", returns());
-    extraInfo += generateSection("Example", "example", example());
-    extraInfo += generateSection("Comments", "comments", comments());
-    extraInfo += generateSection("See also", "seealso", see());
+    StringBuilder result = new StringBuilder();
+    result.append(longdescription());
 
-    if (extraInfo.length() > 0) {
-      extraInfo = "\n<dl>" + extraInfo + "</dl>";
+    if (!allNullOrEmpty(parameterStr, returnStr, exampleStr, commentStr, seeAlsoStr)) {
+      result.append("\n<dl>");
+      result.append(parameterStr);
+      result.append(returnStr);
+      result.append(exampleStr);
+      result.append(commentStr);
+      result.append(seeAlsoStr);
+      result.append("</dl>");
     }
 
-    return longdescription() + extraInfo;
+    return result.toString();
   }
 
   public BaseCommentBlock params() {
