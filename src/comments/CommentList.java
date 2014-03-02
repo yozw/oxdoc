@@ -27,6 +27,7 @@ public class CommentList extends BaseCommentBlock {
     super(project);
   }
 
+  @Override
   protected String renderHTML() {
     StringBuilder out = new StringBuilder();
     out.append("<ul>");

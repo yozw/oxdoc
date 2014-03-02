@@ -80,8 +80,4 @@ public class OxEntityListTest extends TestCase {
     assertEquals(2, fields.size());
     assertEquals(1, methods.size());
   }
-
-  public void testGetNonInternal() throws Exception {
-
-  }
 }

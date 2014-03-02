@@ -40,6 +40,7 @@ public class ClassComment extends BaseComment {
     registerSection("version", SECTION_VERSION);
   }
 
+  @Override
   protected boolean addToSection(int sectionId, String text) {
     if (super.addToSection(sectionId, text)) {
       return true;
@@ -69,6 +70,7 @@ public class ClassComment extends BaseComment {
     return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
   }
 
+  @Override
   public String toString() {
 
     String authorStr = generateSection("Author", "author", author.toString());

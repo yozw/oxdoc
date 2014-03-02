@@ -48,6 +48,7 @@ public class OxEnum extends OxEntity {
     visibility = OxClass.Visibility.Public;
   }
 
+  @Override
   public String getUrl() {
     if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
@@ -56,6 +57,7 @@ public class OxEnum extends OxEntity {
     }
   }
 
+  @Override
   public String getDeclaration() {
     StringBuilder declaration = new StringBuilder();
     declaration.append(" enum { ");
@@ -85,10 +87,12 @@ public class OxEnum extends OxEntity {
     return visibility;
   }
 
+  @Override
   public String toString() {
     return "<OxEnum " + getReferenceName() + ">";
   }
 
+  @Override
   public boolean isInternal() {
     return ((EnumComment) getComment()).hasInternalModifier() || (getVisibility() != OxClass.Visibility.Public);
   }

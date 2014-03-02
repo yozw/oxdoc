@@ -26,8 +26,6 @@ import oxdoc.util.Predicate;
 
 import java.util.*;
 
-import static oxdoc.util.Utils.checkNotNull;
-
 public class OxEntityList<T extends OxEntity> implements Iterable<T> {
   private final Logger logger = Logging.getLogger();
 

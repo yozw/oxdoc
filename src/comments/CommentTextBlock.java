@@ -27,6 +27,7 @@ public class CommentTextBlock extends BaseCommentBlock {
     super(project);
   }
 
+  @Override
   protected String renderHTML() {
     StringBuilder stringBuilder = new StringBuilder();
     for (String s : this) {

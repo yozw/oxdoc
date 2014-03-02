@@ -30,18 +30,22 @@ public class OxEnumElement extends OxEntity {
     this.oxEnum = oxEnum;
   }
 
+  @Override
   public String getUrl() {
     return oxEnum.getUrl();
   }
 
+  @Override
   public String getReferenceName() {
     return oxEnum.getReferenceName() + "$$" + getName();
   }
 
+  @Override
   public String toString() {
     return "<OxEnumElement " + getReferenceName() + ">";
   }
 
+  @Override
   public boolean isInternal() {
     return oxEnum.isInternal();
   }

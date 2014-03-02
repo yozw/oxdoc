@@ -35,6 +35,7 @@ public class CommentSeeAlsoList extends BaseCommentBlock {
     }
   }
 
+  @Override
   protected String renderHTML() {
     StringBuilder out = new StringBuilder();
     int index = 0;

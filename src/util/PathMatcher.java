@@ -50,6 +50,7 @@ public class PathMatcher {
       }
     }
 
+    @Override
     public boolean accept(File dir, String fileName) {
       // check whether the file name matches the regular expression
       if (caseSensitive) {

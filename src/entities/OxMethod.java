@@ -36,6 +36,7 @@ public class OxMethod extends OxEntity {
     super(name, oxClass, new FunctionComment(oxClass.getParentFile().getProject()), oxClass.getParentFile(), Icon.METHOD);
   }
 
+  @Override
   public String getUrl() {
     if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
@@ -44,6 +45,7 @@ public class OxMethod extends OxEntity {
     }
   }
 
+  @Override
   public String getDeclaration() {
     if (super.getDeclaration() == null) {
       return null;
@@ -56,6 +58,7 @@ public class OxMethod extends OxEntity {
     // every method is public in the current version of Ox
   }
 
+  @Override
   public String getModifiers() {
     StringBuilder modifiers = new StringBuilder();
     if (isVirtual) {
@@ -67,6 +70,7 @@ public class OxMethod extends OxEntity {
     return modifiers.toString().trim();
   }
 
+  @Override
   public BaseComment getComment() {
     BaseComment superComment = super.getComment();
 
@@ -77,6 +81,7 @@ public class OxMethod extends OxEntity {
     return superComment;
   }
 
+  @Override
   public boolean isInternal() {
     return ((FunctionComment) getComment()).hasInternalModifier();
   }
@@ -89,6 +94,7 @@ public class OxMethod extends OxEntity {
     return getParentClass().getSuperClass().getMethodByName(getDisplayName());
   }
 
+  @Override
   public String toString() {
     return "<OxMethod " + getReferenceName() + ">";
   }

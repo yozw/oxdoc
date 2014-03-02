@@ -35,6 +35,7 @@ public class EnumComment extends FieldComment {
     registerModifier("internal", MODIFIER_INTERNAL);
   }
 
+  @Override
   protected boolean addToSection(int sectionId, String text) {
     if (super.addToSection(sectionId, text)) {
       return true;
@@ -65,6 +66,7 @@ public class EnumComment extends FieldComment {
     return alternativeName.toString();
   }
 
+  @Override
   public boolean hasInternalModifier() {
     return hasInternalModifier;
   }

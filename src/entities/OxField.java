@@ -41,6 +41,7 @@ public class OxField extends OxEntity {
     this.visibility = checkNotNull(visibility);
   }
 
+  @Override
   public String getUrl() {
     if (getParentClass() != null) {
       return getParentFileUrl() + "#" + getParentClass().getName() + "___" + getDisplayName();
@@ -68,6 +69,7 @@ public class OxField extends OxEntity {
     return declaration.toString();
   }
 
+  @Override
   public String getModifiers() {
     StringBuilder modifiers = new StringBuilder();
     if (isStatic) {
@@ -83,14 +85,17 @@ public class OxField extends OxEntity {
     return visibility;
   }
 
+  @Override
   public String toString() {
     return "<OxField " + getReferenceName() + ">";
   }
 
+  @Override
   public FieldComment getComment() {
     return (FieldComment) super.getComment();
   }
 
+  @Override
   public boolean isInternal() {
     return getComment().hasInternalModifier() || !getVisibility().equals(Visibility.Public);
   }

@@ -58,6 +58,7 @@ public class FieldComment extends BaseComment {
     return false;
   }
 
+  @Override
   public String toString() {
     String exampleStr = generateSection("Example", "example", example());
     String commentStr = generateSection("Comments", "comments", comments());

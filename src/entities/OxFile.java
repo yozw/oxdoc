@@ -89,10 +89,12 @@ public class OxFile extends OxEntity {
     return classes;
   }
 
+  @Override
   public String getUrl() {
     return getName() + ".html";
   }
 
+  @Override
   public String toString() {
     return "<OxFile " + getName() + ">";
   }

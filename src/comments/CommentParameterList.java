@@ -27,6 +27,7 @@ public class CommentParameterList extends BaseCommentBlock {
     super(project);
   }
 
+  @Override
   protected String renderHTML() {
     if (size() == 0) {
       return "";

@@ -29,8 +29,8 @@ public class FunctionComment extends BaseComment {
   public static final int SECTION_PARAM = 200, SECTION_RETURNS = 201;
   public static final int MODIFIER_INTERNAL = 300;
 
-  private BaseCommentBlock params;
-  private BaseCommentBlock returns;
+  private final BaseCommentBlock params;
+  private final BaseCommentBlock returns;
   private boolean hasInternalModifier = false;
 
   public FunctionComment(OxProject project) {
@@ -45,6 +45,7 @@ public class FunctionComment extends BaseComment {
     registerModifier("internal", MODIFIER_INTERNAL);
   }
 
+  @Override
   protected boolean addToSection(int sectionId, String text) {
     if (super.addToSection(sectionId, text)) {
       return true;
@@ -75,6 +76,7 @@ public class FunctionComment extends BaseComment {
     return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
   }
 
+  @Override
   protected boolean processModifier(int ModifierId) {
     if (super.processModifier(ModifierId)) {
       return true;
@@ -86,6 +88,7 @@ public class FunctionComment extends BaseComment {
     return false;
   }
 
+  @Override
   public String toString() {
     String parameterStr = generateSection("Parameters", "parameters", params());
     String returnStr = generateSection("Returns", "returns", returns());

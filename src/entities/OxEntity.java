@@ -123,6 +123,7 @@ public class OxEntity {
     }
   }
 
+  @Override
   public String toString() {
     return "<OxEntity " + getName() + ">";
   }

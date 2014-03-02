@@ -85,6 +85,7 @@ public class OxClass extends OxEntity {
 
   public OxEntityList<OxField> getFields(final Visibility visibility) {
     return members.filterByClass(OxField.class).filter(new Predicate<OxField>() {
+      @Override
       public boolean apply(OxField entity) {
         return entity.getVisibility().equals(visibility);
       }
@@ -205,10 +206,12 @@ public class OxClass extends OxEntity {
     return (OxClass) getParentFile().getProject().getSymbol(superClassName);
   }
 
+  @Override
   public String getUrl() {
     return getParentFile().getUrl() + "#" + getName();
   }
 
+  @Override
   public String toString() {
     return "<OxClass " + getName() + ">";
   }
