@@ -20,6 +20,7 @@
 
 package oxdoc;
 
+import oxdoc.util.FileUtils;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 
@@ -58,16 +59,25 @@ public class Preprocessor {
   }
 
   public void processFile(File file) throws Exception {
+    // See if there is a <filename>.oxdoc file; if so, parse it
+    File oxdocAuxFile = FileUtils.changeFileExtension(file, ".oxdoc");
+    if (oxdocAuxFile.exists()) {
+      processFile(oxdocAuxFile, file);
+    }
+
+    // Continue processing the main file
     processFile(file, file);
   }
 
   private void processFile(File file, File mainFile) throws Exception {
     BufferedReader reader;
+
     try {
       reader = new BufferedReader(new FileReader(file));
     } catch (IOException E) {
       throw new Exception("Could not open file " + file);
     }
+
     processBlock(reader, true, mainFile);
     outputStream.flush();
   }

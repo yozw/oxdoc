@@ -1,5 +1,10 @@
 # Changes
 
+### March 4th, 2014
+* Did a lot of refactoring and performance optimizations
+* Oxdoc now automatically reads the "<filename>.oxdoc" file before processing "<filename>.ox" (if it exists).
+Note that this happens only for main ".ox" files, and not for files that are included using the `#include` directive.
+
 ### February 23rd, 2014
 * Migrated to github
 * Added a few unit tests
