@@ -22,10 +22,13 @@ package oxdoc;
 
 import oxdoc.html.Header;
 import oxdoc.html.RenderContext;
+import oxdoc.util.FileUtils;
 
 import java.io.*;
 import java.text.MessageFormat;
 
+import static oxdoc.util.FileUtils.joinPath;
+import static oxdoc.util.FileUtils.toUnixPath;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class OutputFile {
@@ -95,11 +98,8 @@ public class OutputFile {
       output.writeln("</style>");
     }
 
-    if (config.isEnableIcons()) {
-      output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc.css\">");
-    } else {
-      output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"oxdoc-noicons.css\">");
-    }
+    output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
+        toUnixPath(joinPath(config.getCssPath(), config.getCssFilename())) + "\">");
     output.writeln("<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"print.css\">");
     output.writeln(config.getMathProcessor().getExtraHeader());
     output.writeln("<title>" + title

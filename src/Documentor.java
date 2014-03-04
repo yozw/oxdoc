@@ -23,7 +23,9 @@ package oxdoc;
 import oxdoc.comments.BaseComment;
 import oxdoc.entities.*;
 import oxdoc.html.*;
+import oxdoc.util.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -354,11 +356,11 @@ public class Documentor {
   }
 
   private void writeCss() throws IOException {
-    if (config.isEnableIcons()) {
-      fileManager.copyFromResourceIfNotExists("oxdoc.css");
-    } else {
-      fileManager.copyFromResourceIfNotExists("oxdoc-noicons.css");
-    }
-    fileManager.copyFromResourceIfNotExists("print.css");
+    String outputCssFile = FileUtils.joinPath(config.getCssPath(), config.getCssFilename());
+    String templateCss = config.isEnableIcons() ? "oxdoc.css" : "oxdoc-noicons.css";
+    fileManager.copyFromResourceIfNotExists(outputCssFile, templateCss);
+
+    String outputPrintCssFile = FileUtils.joinPath(config.getCssPath(), "print.css");
+    fileManager.copyFromResourceIfNotExists(outputPrintCssFile, "print.css");
   }
 }

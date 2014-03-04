@@ -25,6 +25,7 @@ import junit.framework.TestCase;
 import java.io.File;
 
 import static oxdoc.util.FileUtils.changeFileExtension;
+import static oxdoc.util.FileUtils.joinPath;
 
 public class FileUtilsTest extends TestCase {
 
@@ -35,8 +36,17 @@ public class FileUtilsTest extends TestCase {
     assertEquals(new File("file.ox.h"), changeFileExtension(new File("file.ox.ox"), ".h"));
     assertEquals(new File("file.ox.h"), changeFileExtension(new File("file.ox."), ".h"));
     assertEquals(new File(".h"), changeFileExtension(new File(".ox"), ".h"));
-
     assertEquals(new File("/tmp/file.h"), changeFileExtension(new File("/tmp/file.ox"), ".h"));
     assertEquals(new File("/tmp/file.h"), changeFileExtension(new File("/tmp/file"), ".h"));
+  }
+
+  public void testJoinPath() {
+    assertEquals("file", joinPath("file"));
+    assertEquals("dir/file", joinPath("dir", "file"));
+    assertEquals("dir/file", joinPath("dir/", "file"));
+    assertEquals("/dir/file", joinPath("/dir", "file"));
+    assertEquals("/dir/file", joinPath("/dir/", "file"));
+    assertEquals("dir/dir/", joinPath("dir", "dir/"));
+    assertEquals("dir/dir/", joinPath("dir/", "dir/"));
   }
 }

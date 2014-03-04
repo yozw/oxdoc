@@ -40,4 +40,46 @@ public class FileUtils {
 
     return new File(filename.substring(0, extensionIndex) + newExtension);
   }
+
+  public static String toNativePath(String path) {
+    String out = path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+    if (out.length() == 0) {
+      return out;
+    }
+    if (!out.endsWith(File.separator)) {
+      out += File.separator;
+    }
+
+    return out;
+  }
+
+  public static String toUnixPath(String path) {
+    String out = path.replace('\\', '/');
+    if (out.length() == 0) {
+      return out;
+    }
+    if (!out.endsWith("/")) {
+      out += "/";
+    }
+
+    return out;
+  }
+
+  public static String toNativeFileName(String fileName) {
+    return fileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
+  }
+
+  public static String joinPath(String... paths) {
+    boolean needsSeparator = false;
+
+    StringBuilder result = new StringBuilder();
+    for (String path : paths) {
+      if (needsSeparator) {
+        result.append(separator);
+      }
+      result.append(path);
+      needsSeparator = !path.endsWith(separator);
+    }
+    return result.toString();
+  }
 }

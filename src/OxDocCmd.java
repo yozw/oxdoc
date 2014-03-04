@@ -103,6 +103,7 @@ public class OxDocCmd {
     if (emptyArray(args)) {
       System.out.println("\nUsage is:");
       System.out.println("    java oxdoc [options] inputfile [inputfile ...]");
+      System.out.println("");
       Config.listOptions();
       return;
     }

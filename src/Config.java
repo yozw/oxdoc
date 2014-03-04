@@ -23,6 +23,7 @@ package oxdoc;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import oxdoc.util.FileUtils;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 import oxdoc.util.Os;
@@ -32,7 +33,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.*;
 
-import static oxdoc.FileManager.toNativePath;
+import static oxdoc.util.FileUtils.toNativePath;
 
 public class Config {
 
@@ -58,6 +59,7 @@ public class Config {
   private final List<String> latexPackages = new ArrayList<String>();
   private final Map<String, MathProcessor> mathProcessors = new HashMap<String, MathProcessor>();
   private final Logger logger = Logging.getLogger();
+  private String cssPath = ".";
 
   public Config() {
     if (Os.getOperatingSystem() == Os.OperatingSystem.Win32) {
@@ -136,9 +138,9 @@ public class Config {
   public boolean setOption(String name, String value) {
     try {
       if (name.equals("latex")) {
-        latex = FileManager.toNativeFileName(value);
+        latex = FileUtils.toNativeFileName(value);
       } else if (name.equals("dvipng")) {
-        dvipng = FileManager.toNativeFileName(value);
+        dvipng = FileUtils.toNativeFileName(value);
       } else if (name.equals("tempdir")) {
         tempDir = toNativePath(value);
       } else if (name.equals("outputdir")) {
@@ -156,6 +158,8 @@ public class Config {
         }
       } else if (name.equals("imagepath")) {
         imagePath = value;
+      } else if (name.equals("csspath")) {
+        cssPath = value;
       } else if (name.equals("latexpackages")) {
         String[] packages = value.split("[,;]");
         Collections.addAll(latexPackages, packages);
@@ -188,12 +192,14 @@ public class Config {
     System.out.println("    -include \"paths\"       Provides include search path");
     System.out.println("");
     System.out.println("Options for output:");
+    System.out.println("    -csspath <path>        The directory in which CSS files are to be found (if");
+    System.out.println("                           not found, they will be written).");
+    System.out.println("                           Default: `." + File.separator + "' in the output directory.");
     System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
     System.out.println("                           methods are: latex, mathml, mathjax, plain");
     System.out.println("                           (default=mathjax)");
     System.out.println("    -noicons               Disables icons");
-    System.out
-        .println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
+    System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
     System.out.println("    -projectname \"name\"    Specifies the name of the project");
     System.out.println("    -showinternals         Enables documentation of internal methods/fields");
     System.out.println("    -uplevel               Adds a link \"Up level\" in the header");
@@ -205,8 +211,7 @@ public class Config {
     System.out.println("                           The color is either an HTML color code of");
     System.out.println("                           the form #RRGGBB, or 'transparent'");
     System.out.println("    -imagepath <path>      The directory in which LaTeX images will be written.");
-    System.out.println("                           Default: `images" + File.separator
-        + "' in the output directory.");
+    System.out.println("                           Default: `images" + File.separator + "' in the output directory.");
     System.out.println("    -latex <executable>    Provides the path to the LaTeX executable");
     System.out.println("    -latexpackages <...>   Provides a list of LaTeX packages to");
     System.out.println("                           import using \\usepackage");
@@ -338,5 +343,17 @@ public class Config {
 
   public List<String> getLatexPackages() {
     return latexPackages;
+  }
+
+  public String getCssFilename() {
+    if (isEnableIcons()) {
+      return "oxdoc.css";
+    } else {
+      return "oxdoc-noicons.css";
+    }
+  }
+
+  public String getCssPath() {
+    return cssPath;
   }
 }

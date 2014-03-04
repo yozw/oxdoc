@@ -20,6 +20,7 @@
 
 package oxdoc;
 
+import oxdoc.util.FileUtils;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
 
@@ -53,23 +54,23 @@ public class FileManager {
   }
 
   public String getOutputFilename(String filename) {
-    return toNativePath(config.getOutputDir()) + filename;
+    return FileUtils.toNativePath(config.getOutputDir()) + filename;
   }
 
   public String getImageFilename(String filename) {
-    return toNativePath(config.getOutputDir()) + toNativePath(config.getImagePath()) + filename;
+    return FileUtils.toNativePath(config.getOutputDir()) + FileUtils.toNativePath(config.getImagePath()) + filename;
   }
 
   public String getTempDir() {
-    return toNativePath(config.getTempDir());
+    return FileUtils.toNativePath(config.getTempDir());
   }
 
   public String getTempFilename(String filename) {
-    return toNativePath(getTempDir()) + filename;
+    return FileUtils.toNativePath(getTempDir()) + filename;
   }
 
   public String getImageUrl(String filename) {
-    return toUnixPath(config.getImagePath()) + filename;
+    return FileUtils.toUnixPath(config.getImagePath()) + filename;
   }
 
   public boolean outputFileExists(String fileName) {
@@ -111,34 +112,6 @@ public class FileManager {
     return appDir.toString().replaceAll("%20", " ") + File.separator + fileName;
   }
 
-  public static String toNativePath(String path) {
-    String out = path.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-    if (out.length() == 0) {
-      return out;
-    }
-    if (!out.endsWith(File.separator)) {
-      out += File.separator;
-    }
-
-    return out;
-  }
-
-  public static String toUnixPath(String path) {
-    String out = path.replace('\\', '/');
-    if (out.length() == 0) {
-      return out;
-    }
-    if (!out.endsWith("/")) {
-      out += "/";
-    }
-
-    return out;
-  }
-
-  public static String toNativeFileName(String fileName) {
-    return fileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
-  }
-
   public String getLargeIconHtml(Icon icon) {
     if (!config.isEnableIcons()) {
       return "";
@@ -148,7 +121,7 @@ public class FileManager {
     }
 
     String fileName = "icons/" + icon.getFileName() + ".png";
-    copyFromResourceIfNotExists(fileName);
+    copyFromResourceIfNotExists(fileName, fileName);
 
     return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
   }
@@ -162,13 +135,9 @@ public class FileManager {
     }
 
     String fileName = "icons/" + icon.getFileName() + "_s.png";
-    copyFromResourceIfNotExists(fileName);
+    copyFromResourceIfNotExists(fileName, fileName);
 
     return "<img class=\"icon\" src=\"" + fileName + "\">&nbsp;";
-  }
-
-  public boolean copyFromResourceIfNotExists(String fileName) {
-    return copyFromResourceIfNotExists(fileName, fileName);
   }
 
   // this is a cached version of doCopyFromResourceIfNotExists
