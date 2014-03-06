@@ -24,7 +24,6 @@ import oxdoc.comments.BaseComment;
 import oxdoc.entities.*;
 import oxdoc.html.*;
 import oxdoc.util.FileUtils;
-import oxdoc.util.Stopwatch;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -112,11 +111,9 @@ public class Documentor {
 
       generateGlobalHeaderDocs(output, oxFile);
 
-      Stopwatch stopwatch = new Stopwatch();
       for (OxEntity entity : oxFile.getClasses()) {
         generateClassHeaderDocs(output, (OxClass) entity);
       }
-      System.out.println("Generated header docs in  " + stopwatch.elapsedMsec());
 
       generateClassDetailDocs(output, null, oxFile.getFunctionsAndVariables(), oxFile.getEnums());
 
@@ -134,8 +131,6 @@ public class Documentor {
 
 		/* Write anchor */
     output.writeln(new Anchor(oxClass.getName()));
-
-    System.out.println("Writing class headers for " + oxClass);
 
 		/* Add superclasses to section name */
     StringBuilder sectionName = new StringBuilder();
