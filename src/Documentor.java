@@ -24,8 +24,8 @@ import oxdoc.comments.BaseComment;
 import oxdoc.entities.*;
 import oxdoc.html.*;
 import oxdoc.util.FileUtils;
+import oxdoc.util.Stopwatch;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -80,10 +80,9 @@ public class Documentor {
     fileTable.specs().columnCssClasses.add("file");
     fileTable.specs().columnCssClasses.add("description");
 
-    for (OxEntity entity : project.getFiles()) {
-      OxFile file = (OxFile) entity;
-      String[] row = {file.getSmallIcon() + project.getLinkToEntity(file), file.getDescription()};
-      fileTable.addRow(row);
+    for (OxFile file : project.getFiles()) {
+      String smallIconHtml = fileManager.getSmallIconHtml(file.getIcon());
+      fileTable.addRow(smallIconHtml + project.getLinkToEntity(file), file.getDescription());
     }
     output.writeln(fileTable);
 
@@ -93,7 +92,7 @@ public class Documentor {
   private void generateIndex(String fileName) throws Exception {
     OutputFile output = new OutputFile(fileName, "Index", Icon.INDEX, config, fileManager);
     SymbolIndex index = new SymbolIndex(project, classTree, config);
-    index.write(output);
+    index.write(output, fileManager);
     output.close();
   }
 
@@ -113,9 +112,11 @@ public class Documentor {
 
       generateGlobalHeaderDocs(output, oxFile);
 
+      Stopwatch stopwatch = new Stopwatch();
       for (OxEntity entity : oxFile.getClasses()) {
         generateClassHeaderDocs(output, (OxClass) entity);
       }
+      System.out.println("Generated header docs in  " + stopwatch.elapsedMsec());
 
       generateClassDetailDocs(output, null, oxFile.getFunctionsAndVariables(), oxFile.getEnums());
 
@@ -123,7 +124,6 @@ public class Documentor {
         OxClass oxClass = (OxClass) entity;
         generateClassDetailDocs(output, oxClass, oxClass.getMethodsAndFields(), oxClass.getEnums());
       }
-
     } finally {
       output.close();
     }
@@ -134,6 +134,8 @@ public class Documentor {
 
 		/* Write anchor */
     output.writeln(new Anchor(oxClass.getName()));
+
+    System.out.println("Writing class headers for " + oxClass);
 
 		/* Add superclasses to section name */
     StringBuilder sectionName = new StringBuilder();
@@ -178,7 +180,8 @@ public class Documentor {
       if (!entities.isEmpty()) {
         table.addHeaderRow(caption);
         for (OxEntity entity : entities) {
-          table.addRow(entity.getSmallIcon() + entity.getLink(), entity.getModifiers(), entity.getDescription());
+          String smallIconHtml = fileManager.getSmallIconHtml(entity.getIcon());
+          table.addRow(smallIconHtml + entity.getLink(), entity.getModifiers(), entity.getDescription());
         }
       }
     }
@@ -266,7 +269,8 @@ public class Documentor {
 
         table.addHeaderRow(caption);
         for (OxEntity entity : entities) {
-          table.addRow(entity.getSmallIcon() + entity.getLink(), entity.getModifiers(), entity.getDescription());
+          String smallIconHtml = fileManager.getSmallIconHtml(entity.getIcon());
+          table.addRow(smallIconHtml + entity.getLink(), entity.getModifiers(), entity.getDescription());
         }
       }
     }

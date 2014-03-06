@@ -32,6 +32,8 @@ public class Anchor extends Element {
 
   @Override
   protected void render(StringBuilder buffer) {
-    buffer.append(String.format("<a name=\"%s\"></a>", name));
+    buffer.append("<a name=\"");
+    buffer.append(name);
+    buffer.append("\"></a>");
   }
 }

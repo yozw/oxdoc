@@ -20,21 +20,19 @@
 
 package oxdoc;
 
-import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static oxdoc.util.Utils.checkNotNull;
 
 public class TextProcessor {
+  private static final Pattern REFERENCE_PATTERN = Pattern.compile("`([^`]+)`");
+  private static final Pattern LATEX_EXPRESSION_PATTERN = Pattern.compile("(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)");
+
   private final Config config;
 
   public TextProcessor(Config config) {
     this.config = checkNotNull(config);
-  }
-
-  private static boolean isEmptyLine(String S) {
-    return (S.length() == 0) || (S.trim().length() == 0);
   }
 
   public String process(String text, OxProject project) {
@@ -42,6 +40,11 @@ public class TextProcessor {
     return formatParagraphs(processed);
   }
 
+  private static boolean isEmptyLine(String S) {
+    return (S.length() == 0) || (S.trim().length() == 0);
+  }
+
+  // Visible for testing only
   static String formatParagraphs(String input) {
     StringBuilder output = new StringBuilder();
 
@@ -76,40 +79,41 @@ public class TextProcessor {
   }
 
   private String filterReferences(String text, OxProject project) {
-    String pattern = "`([^`]+)`";
-    Pattern p = Pattern.compile(pattern);
-    Matcher m = p.matcher(text);
-    StringBuffer myStringBuffer = new StringBuffer();
+    Matcher m = REFERENCE_PATTERN.matcher(text);
+    StringBuffer stringBuffer = new StringBuffer();
 
     while (m.find()) {
       String ref = text.substring(m.start() + 1, m.end() - 1);
-      m.appendReplacement(myStringBuffer, project.getLinkToSymbol(ref));
+      m.appendReplacement(stringBuffer, project.getLinkToSymbol(ref));
     }
 
-    return m.appendTail(myStringBuffer).toString();
+    return m.appendTail(stringBuffer).toString();
   }
 
   private String filterLatexExpressions(String text) {
-    String pattern = "(\\$([^\\$]+)\\$)|(\\$\\$[^\\$]+\\$\\$)";
-    Pattern p = Pattern.compile(pattern);
-    Matcher m = p.matcher(text);
+    Matcher m = LATEX_EXPRESSION_PATTERN.matcher(text);
     StringBuffer stringBuffer = new StringBuffer();
 
     while (m.find()) {
       boolean isInline = true;
       String formula = text.substring(m.start(), m.end());
+      String cssClass;
       if (formula.startsWith("$$")) {
         formula = text.substring(m.start() + 2, m.end() - 2);
+        cssClass = "equation";
         isInline = false;
       } else {
+        cssClass = "expressions";
         formula = text.substring(m.start() + 1, m.end() - 1);
       }
 
-      String replacement = config.getMathProcessor().processFormula(formula, isInline);
-
-      Object[] args = {isInline ? "expression" : "equation", replacement};
-      replacement = MessageFormat.format("<span class=\"{0}\">{1}</span>", args);
-      m.appendReplacement(stringBuffer, Matcher.quoteReplacement(replacement));
+      StringBuilder replacement = new StringBuilder();
+      replacement.append("<span class=\"");
+      replacement.append(cssClass);
+      replacement.append("\">");
+      replacement.append(config.getMathProcessor().processFormula(formula, isInline));
+      replacement.append("</span>");
+      m.appendReplacement(stringBuffer, Matcher.quoteReplacement(replacement.toString()));
     }
 
     return m.appendTail(stringBuffer).toString();

@@ -22,8 +22,6 @@ package oxdoc.comments;
 
 import oxdoc.OxProject;
 
-import java.text.MessageFormat;
-
 import static oxdoc.util.Utils.allNullOrEmpty;
 
 public class FileComment extends BaseComment {
@@ -57,17 +55,6 @@ public class FileComment extends BaseComment {
         return false;
     }
     return true;
-  }
-
-  private String generateSection(String name, String classname, Object o) {
-    String text = o.toString();
-    if (text.length() == 0) {
-      return "";
-    }
-
-    Object[] args = {classname, name, text};
-
-    return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
   }
 
   @Override

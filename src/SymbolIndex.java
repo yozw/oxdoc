@@ -154,7 +154,7 @@ public class SymbolIndex {
     });
   }
 
-  public void write(OutputFile output) throws Exception {
+  public void write(OutputFile output, FileManager fileManager) throws Exception {
     // store entries in an array list
     ArrayList<IndexEntry> indexEntries = new ArrayList<IndexEntry>();
     indexEntries.addAll(entries.values());
@@ -184,7 +184,8 @@ public class SymbolIndex {
         }
       }
 
-      table.addRow(entity.getSmallIcon() + project.getLinkToEntity(entity), description.toString());
+      String smallIconHtml = fileManager.getSmallIconHtml(entity.getIcon());
+      table.addRow(smallIconHtml + project.getLinkToEntity(entity), description.toString());
     }
     output.writeln(table);
   }

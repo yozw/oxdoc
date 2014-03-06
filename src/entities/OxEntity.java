@@ -80,10 +80,6 @@ public class OxEntity {
     return icon;
   }
 
-  public String getSmallIcon() {
-    return getProject().getFileManager().getSmallIconHtml(icon);
-  }
-
   public String getDescription() {
     return getProject().getTextProcessor().process(getComment().description(), getProject());
   }

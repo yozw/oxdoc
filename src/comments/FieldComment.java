@@ -22,8 +22,6 @@ package oxdoc.comments;
 
 import oxdoc.OxProject;
 
-import java.text.MessageFormat;
-
 import static oxdoc.util.Utils.allNullOrEmpty;
 
 public class FieldComment extends BaseComment {
@@ -34,17 +32,6 @@ public class FieldComment extends BaseComment {
   public FieldComment(OxProject project) {
     super(project);
     registerModifier("internal", MODIFIER_INTERNAL);
-  }
-
-  private String generateSection(String name, String classname, Object o) {
-    String text = o.toString();
-    if (text.length() == 0) {
-      return "";
-    }
-
-    Object[] args = {classname, name, text};
-
-    return MessageFormat.format("<dt class=\"{0}\">{1}:</dt><dd class=\"{0}\">{2}</dd>\n", args);
   }
 
   protected boolean processModifier(int ModifierId) {

@@ -70,9 +70,9 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
 
   public OxEntityList<T> filter(Predicate<T> filter) {
     OxEntityList<T> result = new OxEntityList<T>();
-    for (Map.Entry<String, T> entry : nameMap.entrySet()) {
-      if (filter.apply(entry.getValue())) {
-        result.add(entry.getValue());
+    for (T entity : nameMap.values()) {
+      if (filter.apply(entity)) {
+        result.add(entity);
       }
     }
     return result;
@@ -93,17 +93,17 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
 
   public <S extends T> OxEntityList<S> filterByClass(Iterable<Class<? extends S>> classes) {
     OxEntityList<S> result = new OxEntityList<S>();
-    for (Map.Entry<String, T> entry : nameMap.entrySet()) {
+    for (T entity : nameMap.values()) {
       boolean applies = false;
       for (Class<? extends S> clazz : classes) {
-        if (clazz.isInstance(entry.getValue())) {
+        if (clazz.isInstance(entity)) {
           applies = true;
           break;
         }
       }
       if (applies) {
         @SuppressWarnings("unchecked")
-        S newEntity = (S) entry.getValue();
+        S newEntity = (S) entity;
         result.add(newEntity);
       }
     }

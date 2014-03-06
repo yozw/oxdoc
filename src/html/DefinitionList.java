@@ -41,12 +41,18 @@ public class DefinitionList extends Element {
 
   @Override
   protected void render(StringBuilder buffer) {
-    buffer.append(String.format("<dl%s>\n", classAttr(cssClass)));
+    buffer.append("<dl");
+    buffer.append(classAttr(cssClass));
+    buffer.append(">\n");
     for (int i = 0; i < labels.size(); i++) {
       String label = labels.get(i);
       String definition = definitions.get(i);
 
-      buffer.append(String.format("<dt>%s</dt><dd>%s</dd>\n", label, definition));
+      buffer.append("<dt>");
+      buffer.append(label);
+      buffer.append("</dt><dd>");
+      buffer.append(definition);
+      buffer.append("</dd>\n");
     }
     buffer.append("</dl>\n");
   }

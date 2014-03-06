@@ -22,8 +22,6 @@ package oxdoc.html;
 
 import oxdoc.Icon;
 
-import java.text.MessageFormat;
-
 import static oxdoc.util.Utils.checkNotNull;
 
 public class Header extends Element {
@@ -43,14 +41,19 @@ public class Header extends Element {
   @Override
   protected void render(StringBuilder buffer) {
     String iconHtml = context.getFileManager().getLargeIconHtml(icon);
-    Object args[] = {Integer.toString(level), iconHtml, title};
 
+    buffer.append("<h");
+    buffer.append(Integer.toString(level));
+    buffer.append(">");
     if (iconHtml.length() > 0) {
-      buffer.append(MessageFormat.format(
-          "<h{0}><span class=\"icon\">{1}</span><span class=\"text\">{2}</span></h{0}>\n", args));
-    } else {
-      buffer.append(MessageFormat.format("<h{0}><span class=\"text\">{2}</span></h{0}>\n", args));
+      buffer.append("<span class=\"icon\">");
+      buffer.append(iconHtml);
+      buffer.append("</span>");
     }
+    buffer.append("<span class=\"text\">");
+    buffer.append(title);
+    buffer.append("</span></h");
+    buffer.append(Integer.toString(level));
+    buffer.append(">\n");
   }
-
 }

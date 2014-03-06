@@ -262,4 +262,24 @@ public class BaseComment {
   public boolean isEmpty() {
     return text.trim().length() == 0;
   }
+
+  protected String generateSection(String name, String classname, Object o) {
+    String text = o.toString();
+    if (text.length() == 0) {
+      return "";
+    }
+
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("<dt class=\"");
+    stringBuilder.append(classname);
+    stringBuilder.append("\">");
+    stringBuilder.append(name);
+    stringBuilder.append(":</dt><dd class=\"");
+    stringBuilder.append(classname);
+    stringBuilder.append("\">");
+    stringBuilder.append(text);
+    stringBuilder.append("</dd>\n");
+
+    return stringBuilder.toString();
+  }
 }

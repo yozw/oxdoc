@@ -65,6 +65,14 @@ public class FileUtils {
     return out;
   }
 
+  public static String toUnixFileName(String path) {
+    String out = path.replace('\\', '/');
+    if (out.length() == 0) {
+      return out;
+    }
+    return out;
+  }
+
   public static String toNativeFileName(String fileName) {
     return fileName.replace('/', File.separatorChar).replace('\\', File.separatorChar);
   }
@@ -76,6 +84,15 @@ public class FileUtils {
     for (String path : paths) {
       if (needsSeparator) {
         result.append(separator);
+      }
+      if (path.equals(".")) {
+        continue;
+      }
+      while (path.startsWith("." + File.separatorChar)) {
+        path = path.substring(2);
+      }
+      if (path.isEmpty()) {
+        continue;
       }
       result.append(path);
       needsSeparator = !path.endsWith(separator);

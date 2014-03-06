@@ -30,7 +30,6 @@ import java.util.Set;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class OxProject {
-  private final FileManager fileManager;
   private final TextProcessor textProcessor;
   private final Logger logger = Logging.getLogger();
   private final Config config;
@@ -38,8 +37,7 @@ public class OxProject {
   private final OxEntityList<OxEntity> symbols = new OxEntityList<OxEntity>();
   private final Set<String> referenceWarningIssued = new HashSet<String>();
 
-  public OxProject(FileManager fileManager, TextProcessor textProcessor, Config config) {
-    this.fileManager = checkNotNull(fileManager);
+  public OxProject(TextProcessor textProcessor, Config config) {
     this.textProcessor = checkNotNull(textProcessor);
     this.config = checkNotNull(config);
   }
@@ -114,9 +112,5 @@ public class OxProject {
 
   public TextProcessor getTextProcessor() {
     return textProcessor;
-  }
-
-  public FileManager getFileManager() {
-    return fileManager;
   }
 }

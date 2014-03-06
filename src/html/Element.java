@@ -26,7 +26,7 @@ public abstract class Element {
     if ((className == null) || (className.trim().length() == 0)) {
       return "";
     } else {
-      return String.format(" class=\"%s\"", className);
+      return " class=\"" + className + "\"";
     }
   }
 

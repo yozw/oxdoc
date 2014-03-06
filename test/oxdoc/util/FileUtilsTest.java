@@ -48,5 +48,7 @@ public class FileUtilsTest extends TestCase {
     assertEquals("/dir/file", joinPath("/dir/", "file"));
     assertEquals("dir/dir/", joinPath("dir", "dir/"));
     assertEquals("dir/dir/", joinPath("dir/", "dir/"));
+    assertEquals("file", joinPath("./", "file"));
+    assertEquals("file", joinPath("./", "./file"));
   }
 }

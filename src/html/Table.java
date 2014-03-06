@@ -84,26 +84,38 @@ public class Table extends Element {
 
   @Override
   protected void render(StringBuilder buffer) {
-    buffer.append(String.format("<table%s>\n", classAttr(tableSpecs.cssClass)));
+    String[] evenOddClassAttr = {classAttr("even"), classAttr("odd")};
+
+    buffer.append("<table");
+    buffer.append(classAttr(tableSpecs.cssClass));
+    buffer.append(">\n");
 
     int columnCount = getColumnCount();
-
     int rowIndex = 0;
     for (TableRow row : rows) {
       switch (row.type) {
         case HEADER:
-          buffer.append(String.format("<tr><td colspan=\"%d\" class=\"header\" valign=\"top\">%s</td></tr>",
-              columnCount, row.title));
+          buffer.append("<tr><td colspan=\"");
+          buffer.append(Integer.toString(columnCount));
+          buffer.append("\" class=\"header\" valign=\"top\">");
+          buffer.append(row.title);
+          buffer.append("</td></tr>");
           break;
 
         case REGULAR:
-          buffer.append(String.format("<tr%s>\n", classAttr((rowIndex % 2 == 1) ? "even" : "odd")));
+          buffer.append("<tr");
+          buffer.append(evenOddClassAttr[rowIndex % 2]);
+          buffer.append(">\n");
           for (int c = 0; c < columnCount; c++) {
             String text = (c < row.cells.size()) ? row.cells.get(c) : "&nbsp;";
             String cssClass = (c < tableSpecs.columnCssClasses.size()) ? tableSpecs.columnCssClasses
                 .get(c) : null;
 
-            buffer.append(String.format("<td%s>%s</td>\n", classAttr(cssClass), text));
+            buffer.append("<td");
+            buffer.append(classAttr(cssClass));
+            buffer.append(">");
+            buffer.append(text);
+            buffer.append("</td>\n");
           }
           buffer.append("</tr>\n");
       }

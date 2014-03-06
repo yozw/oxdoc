@@ -22,13 +22,12 @@ package oxdoc;
 
 import oxdoc.html.Header;
 import oxdoc.html.RenderContext;
-import oxdoc.util.FileUtils;
 
 import java.io.*;
 import java.text.MessageFormat;
 
 import static oxdoc.util.FileUtils.joinPath;
-import static oxdoc.util.FileUtils.toUnixPath;
+import static oxdoc.util.FileUtils.toUnixFileName;
 import static oxdoc.util.Utils.checkNotNull;
 
 public class OutputFile {
@@ -99,7 +98,7 @@ public class OutputFile {
     }
 
     output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
-        toUnixPath(joinPath(config.getCssPath(), config.getCssFilename())) + "\">");
+        toUnixFileName(joinPath(config.getCssPath(), config.getCssFilename())) + "\">");
     output.writeln("<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"print.css\">");
     output.writeln(config.getMathProcessor().getExtraHeader());
     output.writeln("<title>" + title
