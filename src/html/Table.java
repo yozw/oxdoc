@@ -84,7 +84,7 @@ public class Table extends Element {
 
   @Override
   protected void render(StringBuilder buffer) {
-    String[] evenOddClassAttr = {classAttr("even"), classAttr("odd")};
+    String[] evenOddClassAttr = {classAttr("odd"), classAttr("even")};
 
     buffer.append("<table");
     buffer.append(classAttr(tableSpecs.cssClass));
