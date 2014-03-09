@@ -27,8 +27,8 @@ import oxdoc.util.Logging;
 import java.util.Comparator;
 
 public class OxEntityComparator<T extends OxEntity> implements Comparator<T> {
-  private static final AlphanumComparator ALPHANUM_COMPARATOR = new AlphanumComparator();
-  private final Logger logger = Logging.getLogger();
+  private static final AlphanumComparator ALPHANUM_COMPARATOR_NO_CASE = new AlphanumComparator(true);
+  private static final AlphanumComparator ALPHANUM_COMPARATOR = new AlphanumComparator(false);
 
   public int compare(T e1, T e2) {
     if (e1.equals(e2)) {
@@ -37,7 +37,7 @@ public class OxEntityComparator<T extends OxEntity> implements Comparator<T> {
 
     String key1 = e1.getSortKey();
     String key2 = e2.getSortKey();
-    int bySortKeyNoCase = ALPHANUM_COMPARATOR.compare(key1.toUpperCase(), key2.toUpperCase());
+    int bySortKeyNoCase = ALPHANUM_COMPARATOR_NO_CASE.compare(key1, key2);
     if (bySortKeyNoCase != 0) {
       return bySortKeyNoCase;
     }
@@ -52,7 +52,7 @@ public class OxEntityComparator<T extends OxEntity> implements Comparator<T> {
       return byReferenceName;
     }
 
-    logger.warning("Encountered two supposedly different entities with the same reference name: something is wrong!");
-    return 1;
+    throw new IllegalStateException("Encountered two supposedly different entities with the same reference name: " +
+        "something is wrong!");
   }
 }

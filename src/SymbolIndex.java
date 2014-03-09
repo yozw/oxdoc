@@ -29,9 +29,15 @@ import static oxdoc.util.Utils.checkNotNull;
 
 public class SymbolIndex {
 
+  public static final Comparator<IndexEntry> COMPARATOR_BY_NAME = new Comparator<IndexEntry>() {
+    public int compare(IndexEntry e1, IndexEntry e2) {
+      return e1.text.compareToIgnoreCase(e2.text);
+    }
+  };
   private final OxProject project;
   private final ClassTree classTree;
   private final Map<OxEntity, IndexEntry> entries;
+  private final Comparator<OxEntity> compareByDepthAndName;
 
   /*
    * Entry in the index. Every entry is associated with an entity. For
@@ -65,6 +71,25 @@ public class SymbolIndex {
     this.project = checkNotNull(project);
     this.classTree = checkNotNull(classTree);
     this.entries = constructIndex(project, config);
+    this.compareByDepthAndName = createCompareByDepthAndName();
+  }
+
+  private  Comparator<OxEntity> createCompareByDepthAndName() {
+    return new Comparator<OxEntity>() {
+      public int compare(OxEntity o1, OxEntity o2) {
+        OxClass e1 = o1.getParentClass();
+        OxClass e2 = o2.getParentClass();
+
+        int depth1 = classTree.getClassDepth(e1);
+        int depth2 = classTree.getClassDepth(e2);
+
+        if (depth1 != depth2) {
+          return depth2 - depth1;
+        }
+
+        return e1.getName().compareToIgnoreCase(e2.getName());
+      }
+    };
   }
 
   private static Map<OxEntity, IndexEntry> constructIndex(OxProject project, Config config) {
@@ -126,32 +151,14 @@ public class SymbolIndex {
   }
 
   private void sortEntriesByName(ArrayList<IndexEntry> indexEntries) {
-    Collections.sort(indexEntries, new Comparator<IndexEntry>() {
-      public int compare(IndexEntry e1, IndexEntry e2) {
-        return e1.text.toUpperCase().compareTo(e2.text.toUpperCase());
-      }
-    });
+    Collections.sort(indexEntries, COMPARATOR_BY_NAME);
   }
 
   // this method sorts the owning class members first in decreasing order of
   // depth of the class, and subject to
   // that, by name
   private void sortOwningClassMembers(ArrayList<OxEntity> members) {
-    Collections.sort(members, new Comparator<OxEntity>() {
-      public int compare(OxEntity o1, OxEntity o2) {
-        OxClass e1 = o1.getParentClass();
-        OxClass e2 = o2.getParentClass();
-
-        int depth1 = classTree.getClassDepth(e1);
-        int depth2 = classTree.getClassDepth(e2);
-
-        if (depth1 != depth2) {
-          return depth2 - depth1;
-        }
-
-        return e1.getName().toUpperCase().compareTo(e2.getName().toUpperCase());
-      }
-    });
+    Collections.sort(members, compareByDepthAndName);
   }
 
   public void write(OutputFile output, FileManager fileManager) throws Exception {

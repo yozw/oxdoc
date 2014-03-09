@@ -44,6 +44,12 @@ import java.util.Comparator;
  * </code>
  */
 public class AlphanumComparator implements Comparator {
+  private final boolean ignoreCase;
+
+  public AlphanumComparator(boolean ignoreCase) {
+    this.ignoreCase = ignoreCase;
+  }
+
   private boolean isDigit(char ch) {
     return ch >= 48 && ch <= 57;
   }
@@ -114,7 +120,7 @@ public class AlphanumComparator implements Comparator {
           }
         }
       } else {
-        result = thisChunk.compareTo(thatChunk);
+        result = ignoreCase ? thisChunk.compareToIgnoreCase(thatChunk) : thisChunk.compareTo(thatChunk);
       }
 
       if (result != 0) {
