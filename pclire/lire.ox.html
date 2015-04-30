@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>lire.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">lire.ox</span></h1>
+Main LiRE class
+
+<dl><dt class="author">Author:</dt><dd class="author">S. Mavroeidis, Y. Zwols</dd>
+</dl>
+<a name="LiRE"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE </span></h2>
+Main LiRE class.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___Debugging">Debugging</a>
+</td><td class="description" valign="top">
+Checks whether debugging is turned on or off.</td><td class="modifiers" valign="top">
+static</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___LiRE">LiRE</a>
+</td><td class="description" valign="top">
+Create a new LiRE object
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___Model">Model</a>
+</td><td class="description" valign="top">
+Returns the model object
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___PrintHeader">PrintHeader</a>
+</td><td class="description" valign="top">
+Print the LiRE header with version and copyright information  </td><td class="modifiers" valign="top">
+static</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___SetDebug">SetDebug</a>
+</td><td class="description" valign="top">
+Turns on or off debugging mode
+  </td><td class="modifiers" valign="top">
+static</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___SetSolver">SetSolver</a>
+</td><td class="description" valign="top">
+Specifies a solver
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___Solve">Solve</a>
+</td><td class="description" valign="top">
+Solve the model specified by Model() by means of the solver specified
+by Solver()
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="lire.ox.html#LiRE___Solver">Solver</a>
+</td><td class="description" valign="top">
+Returns the solver object that is going to be used to solve the model.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE details</span></h2>
+<a name="LiRE___Debugging"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Debugging</span></h3>
+<span class="declaration">static LiRE :: Debugging ( )</span>
+<dl>
+<dd>Checks whether debugging is turned on or off. This is
+a static method, and the debugging switch is also static, which means
+that debugging is a global setting
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___LiRE"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE</span></h3>
+<span class="declaration">LiRE :: LiRE ( const cDimY , const cDimZ )</span>
+<dl>
+<dd>Create a new LiRE object
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cY</td>
+<td class="description" valign="baseline">the dimension of the the <span class="expression">\(y_t\)</span> vector in the model
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cZ</td>
+<td class="description" valign="baseline">the dimension of the the <span class="expression">\(z_t\)</span> vector in the model</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___Model"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Model</span></h3>
+<span class="declaration">LiRE :: Model ( )</span>
+<dl>
+<dd>Returns the model object
+<dl>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="model.ox.html#LiRE_Model">LiRE_Model</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___PrintHeader"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PrintHeader</span></h3>
+<span class="declaration">static LiRE :: PrintHeader ( )</span>
+<dl>
+<dd>Print the LiRE header with version and copyright information
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___SetDebug"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetDebug</span></h3>
+<span class="declaration">static LiRE :: SetDebug ( const bDebug )</span>
+<dl>
+<dd>Turns on or off debugging mode
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">bDebug</td>
+<td class="description" valign="baseline">a boolean specifying whether debug mode has to be turned
+on or not</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___SetSolver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetSolver</span></h3>
+<span class="declaration">LiRE :: SetSolver ( const solver )</span>
+<dl>
+<dd>Specifies a solver
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">oSolver</td>
+<td class="description" valign="baseline">This can be either an object derived from <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a>, or one
+of the following constants:
+<table>
+   <tr><td class="declaration">SOLVER_AUTO</td><td>Let LiRE choose a suitable solver</td></tr>
+   <tr><td class="declaration">SOLVER_GENERIC</td><td>Use the generic solver without indeterminacy. This solver
+   is based on a predetermined/non-predetermined partition of variables.</td></tr>
+   <tr><td class="declaration">SOLVER_SIMS</td><td>Use the Sims solver. This solver handles indeterminacy, but
+   suitable for less general models.</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a>, <a href="solver_generic.ox.html#LiRE_GenericSolver">LiRE_GenericSolver</a>, <a href="solver_sims.ox.html#LiRE_SimsSolver">LiRE_SimsSolver</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___Solve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Solve</span></h3>
+<span class="declaration">LiRE :: Solve ( )</span>
+<dl>
+<dd>Solve the model specified by Model() by means of the solver specified
+by Solver()
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">A solution of class <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="lire.ox.html#LiRE___SetSolver">SetSolver</a>, <a href="lire.ox.html#LiRE___Solver">Solver</a>, <a href="lire.ox.html#LiRE___Model">Model</a>, <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE___Solver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Solver</span></h3>
+<span class="declaration">LiRE :: Solver ( )</span>
+<dl>
+<dd>Returns the solver object that is going to be used to solve the model. If
+SOLVER_AUTO has been selected in <a href="lire.ox.html#LiRE___SetSolver">SetSolver</a> (the default case), Solver()
+determines a suitable solver by inspecting the model.
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">A <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a> object
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a>, <a href="lire.ox.html#LiRE___SetSolver">SetSolver</a></dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

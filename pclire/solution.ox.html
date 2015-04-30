@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>solution.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">solution.ox</span></h1>
+Provides the class <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a>
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="LiRE_Solution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Solution  : <a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a></span></h2>
+Represents a solution to a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> model. The solution is of the form:<br>
+<table style="margin-left:120px">
+  <tr>
+    <td>State space:</td>
+    <td><span class="expression">\(\Theta_y(0) \mathbf{y}_t = c_y + \sum_{i=1}^k \Theta_y(i) \mathbf{y}_{t-i} + \sum_{i=0}^l \Theta_z(i) z_{t-i} + \Theta_\varepsilon M_1 \varepsilon_t + \Theta_\zeta \zeta_t\)</span>,</td>
+  </tr>
+  <tr>
+	<td>Observation:</td>
+    <td><span class="expression">\(y_t = A\mathbf{y_t}\)</span></td>
+  </tr>
+  <tr>
+    <td>Driving process:</td>
+    <td><span class="expression">\(z_t = c_z + \Phi z_{t-1} + \varepsilon_t\)</span>, <span class="expression">\(\varepsilon_t\)</span> exogenous, i.i.d.</td>
+  </tr>
+  <tr>
+    <td>Sunspot process:</td>
+	<td><span class="expression">\(\zeta_t\)</span> exogenous.</td>
+  </tr>
+</table>
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___A">A</a>
+</td><td class="description" valign="top">
+Gets the matrix <span class="expression">\(A\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ConstY">ConstY</a>
+</td><td class="description" valign="top">
+Gets the vector <span class="expression">\(c_y\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___DimZeta">DimZeta</a>
+</td><td class="description" valign="top">
+Sets coefficient <span class="expression">\(M_2\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generate a realization of this solution.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ImpulseResponse">ImpulseResponse</a>
+</td><td class="description" valign="top">
+Calculates the impulse response function for <span class="expression">\(\varepsilon_t\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ImpulseResponseZeta">ImpulseResponseZeta</a>
+</td><td class="description" valign="top">
+Calculates the impulse response function for <span class="expression">\(\zeta_t\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___LiRE_Solution">LiRE_Solution</a>
+</td><td class="description" valign="top">
+Creates a new LiRE_Solution object.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___M1">M1</a>
+</td><td class="description" valign="top">
+Gets the coefficient <span class="expression">\(M_1\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___MaxLagY">MaxLagY</a>
+</td><td class="description" valign="top">
+Gets the number of lagged values for <span class="expression">\(\mathbf{y}_t\)</span> in the model, i.e.&nbsp;the parameter <span class="expression">\(k\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___MaxLagZ">MaxLagZ</a>
+</td><td class="description" valign="top">
+Gets the number of lagged values for <span class="expression">\(z_t\)</span> in the model, i.e.&nbsp;the parameter <span class="expression">\(l\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___Print">Print</a>
+</td><td class="description" valign="top">
+Print solution  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ReadCoefficientMatrix">ReadCoefficientMatrix</a>
+</td><td class="description" valign="top">
+<i>(internal method used by SetThetaY and SetThetaZ)</i>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetA">SetA</a>
+</td><td class="description" valign="top">
+Sets the matrix <span class="expression">\(A\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetConstY">SetConstY</a>
+</td><td class="description" valign="top">
+Sets constant <span class="expression">\(c_y\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetM1">SetM1</a>
+</td><td class="description" valign="top">
+Sets coefficient <span class="expression">\(M_1\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetSolverName">SetSolverName</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetStartupTime">SetStartupTime</a>
+</td><td class="description" valign="top">
+Sets the start up time for generation of realizations from the model.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetThetaEpsilon">SetThetaEpsilon</a>
+</td><td class="description" valign="top">
+Sets coefficient <span class="expression">\(\Theta_\varepsilon\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetThetaY">SetThetaY</a>
+</td><td class="description" valign="top">
+Sets coefficients <span class="expression">\(\Theta_y(i)\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetThetaZ">SetThetaZ</a>
+</td><td class="description" valign="top">
+Sets coefficients <span class="expression">\(\Theta_z(i)\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetThetaZeta">SetThetaZeta</a>
+</td><td class="description" valign="top">
+Sets coefficient <span class="expression">\(\Theta_\zeta\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SetZetaDistribution">SetZetaDistribution</a>
+</td><td class="description" valign="top">
+Specifies the distribution for <span class="expression">\(\zeta_t\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___SolverName">SolverName</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ThetaEpsilon">ThetaEpsilon</a>
+</td><td class="description" valign="top">
+Gets the coefficient <span class="expression">\(\Theta_\varepsilon\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ThetaY">ThetaY</a>
+</td><td class="description" valign="top">
+Gets the matrix <span class="expression">\(\Theta_y(i)\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ThetaZ">ThetaZ</a>
+</td><td class="description" valign="top">
+Gets the matrix <span class="expression">\(\Theta_Z(i)\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solution.ox.html#LiRE_Solution___ThetaZeta">ThetaZeta</a>
+</td><td class="description" valign="top">
+Gets the coefficient <span class="expression">\(\Theta_\zeta\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a>:</dt><dd>
+<a href="basemodel.ox.html#LiRE_BaseModel___ClearParameters">ClearParameters</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ConstZ">ConstZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___CopyElementDescriptors">CopyElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___CopyExogenous">CopyExogenous</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimEpsilon">DimEpsilon</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimY">DimY</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimZ">DimZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ElementName">ElementName</a>, <a href="basemodel.ox.html#LiRE_BaseModel___EpsilonDistribution">EpsilonDistribution</a>, <a href="basemodel.ox.html#LiRE_BaseModel___GetElementDescriptors">GetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___LiRE_BaseModel">LiRE_BaseModel</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Name">Name</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Names">Names</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Phi">Phi</a>, <a href="basemodel.ox.html#LiRE_BaseModel___PrintElementDescriptors">PrintElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ResetElementDescriptors">ResetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetConstZ">SetConstZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetElementDescriptors">SetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetEpsilonDistribution">SetEpsilonDistribution</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetName">SetName</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetPhi">SetPhi</a></dd>
+</dl>
+
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Solution details</span></h2>
+<a name="LiRE_Solution___A"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">A</span></h3>
+<span class="declaration">LiRE_Solution :: A ( )</span>
+<dl>
+<dd>Gets the matrix <span class="expression">\(A\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ConstY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ConstY</span></h3>
+<span class="declaration">LiRE_Solution :: ConstY ( )</span>
+<dl>
+<dd>Gets the vector <span class="expression">\(c_y\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___DimZeta"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DimZeta</span></h3>
+<span class="declaration">LiRE_Solution :: DimZeta ( )</span>
+<dl>
+<dd>Sets coefficient <span class="expression">\(M_2\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">LiRE_Solution :: Generate ( const cT , ... )</span>
+<dl>
+<dd>Generate a realization of this solution.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cT</td>
+<td class="description" valign="baseline">Desired length of sample
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">my0</td>
+<td class="description" valign="baseline">The initial condition for <span class="expression">\(\mathbf{y}_t\)</span>.  The initial conditions
+are specified in the form <span class="expression">\((\mathbf{y}_{-p}, \mathbf{y}_{-p+1}, \cdots, \mathbf{y}_{-1}, \mathbf{y}_0})\)</span>,
+where <span class="expression">\(p\)</span> is the number of desired initial conditions.  If less
+initial conditions <span class="expression">\(p\)</span> are specified than necessary, the remaining
+conditions are taken to be <span class="expression">\(0\)</span>.
+<P/>
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A DimY() times cT matrix with realizations
+</dd>
+<dt class="example">Example:</dt><dd class="example"><pre>
+solution.Generate(1000, <>);   // generates 1000 realizations with
+                               // initial conditions all set to 0
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ImpulseResponse"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ImpulseResponse</span></h3>
+<span class="declaration">LiRE_Solution :: ImpulseResponse ( const cT , const vDirection )</span>
+<dl>
+<dd>Calculates the impulse response function for <span class="expression">\(\varepsilon_t\)</span>. The impulse response function <span class="expression">\(I_\varepsilon(p)\)</span>
+in the direction <span class="expression">\(v\)</span> is given by
+<span class="expression">\(I_\varepsilon(p) = \frac{\partial y_{t+p}}{\partial \varepsilon_t}v.\)</span>
+The columns of the returned matrix consist of the values of this function for fixed <span class="expression">\(v\)</span>, for <span class="expression">\(p\)</span> running
+from 0 to cT-1.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cT</td>
+<td class="description" valign="baseline">The number of lags to calculate
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">vDirection</td>
+<td class="description" valign="baseline">The direction of the impulse. This should be a vector of dimension DimZ().
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A DimY() times cT matrix
+</dd>
+<dt class="example">Example:</dt><dd class="example">For a solution to a model with a two-dimensional disturbance term, the following code
+gives the impulse response of the second component of <span class="expression">\(\varepsilon_t\)</span>.
+<pre>
+decl IR = solution.ImpulseResponse(30, <0; 1>);
+Draw(0, X);
+ShowDrawWindow();
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ImpulseResponseZeta"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ImpulseResponseZeta</span></h3>
+<span class="declaration">LiRE_Solution :: ImpulseResponseZeta ( const cT , const vDirection )</span>
+<dl>
+<dd>Calculates the impulse response function for <span class="expression">\(\zeta_t\)</span>. The impulse response function <span class="expression">\(I_\zeta(p)\)</span>
+in the direction <span class="expression">\(v\)</span> is given by
+<span class="expression">\(I_\zeta(p) = \frac{\partial y_{t+p}}{\partial \zeta_t}v.\)</span>
+The columns of the returned matrix consist of the values of this function for fixed <span class="expression">\(v\)</span>, for <span class="expression">\(p\)</span> running
+from 0 to cT-1.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cT</td>
+<td class="description" valign="baseline">The number of lags to calculate
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">vDirection</td>
+<td class="description" valign="baseline">The direction of the impulse. This should be a vector of dimension DimZ().
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A DimY() times cT matrix
+</dd>
+<dt class="example">Example:</dt><dd class="example">For a solution to a model with a two-dimensional disturbance term, the following code
+gives the impulse response of the second component of <span class="expression">\(\zeta_t\)</span>.
+<pre>
+decl IR = solution.ImpulseResponseZeta(30, <0; 1>);
+Draw(0, X);
+ShowDrawWindow();
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___LiRE_Solution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_Solution</span></h3>
+<span class="declaration">LiRE_Solution :: LiRE_Solution ( const model )</span>
+<dl>
+<dd>Creates a new LiRE_Solution object.  As a parameter, the model to which it is a solution has
+to be given. This information is used to determine the dimension of <span class="expression">\(\mathbf{y}_t\)</span>, and the parameters to
+the exogenous process <span class="expression">\(z_t\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___M1"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">M1</span></h3>
+<span class="declaration">LiRE_Solution :: M1 ( )</span>
+<dl>
+<dd>Gets the coefficient <span class="expression">\(M_1\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___MaxLagY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">MaxLagY</span></h3>
+<span class="declaration">LiRE_Solution :: MaxLagY ( )</span>
+<dl>
+<dd>Gets the number of lagged values for <span class="expression">\(\mathbf{y}_t\)</span> in the model, i.e.&nbsp;the parameter <span class="expression">\(k\)</span>.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___MaxLagZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">MaxLagZ</span></h3>
+<span class="declaration">LiRE_Solution :: MaxLagZ ( )</span>
+<dl>
+<dd>Gets the number of lagged values for <span class="expression">\(z_t\)</span> in the model, i.e.&nbsp;the parameter <span class="expression">\(l\)</span>.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___Print"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Print</span></h3>
+<span class="declaration">LiRE_Solution :: Print ( )</span>
+<dl>
+<dd>Print solution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ReadCoefficientMatrix"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ReadCoefficientMatrix</span></h3>
+<span class="declaration">LiRE_Solution :: ReadCoefficientMatrix ( const X , const rows , cols )</span>
+<dl>
+<dd><i>(internal method used by SetThetaY and SetThetaZ)</i>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetA"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetA</span></h3>
+<span class="declaration">LiRE_Solution :: SetA ( const mA )</span>
+<dl>
+<dd>Sets the matrix <span class="expression">\(A\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetConstY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetConstY</span></h3>
+<span class="declaration">LiRE_Solution :: SetConstY ( const vCy )</span>
+<dl>
+<dd>Sets constant <span class="expression">\(c_y\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetM1"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetM1</span></h3>
+<span class="declaration">LiRE_Solution :: SetM1 ( const mM1 )</span>
+<dl>
+<dd>Sets coefficient <span class="expression">\(M_1\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetSolverName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetSolverName</span></h3>
+<span class="declaration">LiRE_Solution :: SetSolverName ( const sSolverName )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetStartupTime"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetStartupTime</span></h3>
+<span class="declaration">LiRE_Solution :: SetStartupTime ( const cStartupTime )</span>
+<dl>
+<dd>Sets the start up time for generation of realizations from the model.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetThetaEpsilon"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetThetaEpsilon</span></h3>
+<span class="declaration">LiRE_Solution :: SetThetaEpsilon ( const mThetaEpsilon )</span>
+<dl>
+<dd>Sets coefficient <span class="expression">\(\Theta_\varepsilon\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetThetaY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetThetaY</span></h3>
+<span class="declaration">LiRE_Solution :: SetThetaY ( ... )</span>
+<dl>
+<dd>Sets coefficients <span class="expression">\(\Theta_y(i)\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetThetaZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetThetaZ</span></h3>
+<span class="declaration">LiRE_Solution :: SetThetaZ ( ... )</span>
+<dl>
+<dd>Sets coefficients <span class="expression">\(\Theta_z(i)\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetThetaZeta"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetThetaZeta</span></h3>
+<span class="declaration">LiRE_Solution :: SetThetaZeta ( const mThetaZeta )</span>
+<dl>
+<dd>Sets coefficient <span class="expression">\(\Theta_\zeta\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SetZetaDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetZetaDistribution</span></h3>
+<span class="declaration">LiRE_Solution :: SetZetaDistribution ( const oZetaDist )</span>
+<dl>
+<dd>Specifies the distribution for <span class="expression">\(\zeta_t\)</span>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">ZetaDist</td>
+<td class="description" valign="baseline">an object of a class derived from <a href="distribution.ox.html#Distribution">Distribution</a>. For example, <a href="stddist.ox.html#NormalDistribution">NormalDistribution</a>. 
+</td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example">To set up a one-dimensional standard normal distribution for <span class="expression">\(\zeta_t\)</span>, 
+the following code is appropriate:
+<pre>
+model.SetZetaDistribution(new NormalDistribution(0, 1));
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___SolverName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SolverName</span></h3>
+<span class="declaration">LiRE_Solution :: SolverName ( )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ThetaEpsilon"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ThetaEpsilon</span></h3>
+<span class="declaration">LiRE_Solution :: ThetaEpsilon ( )</span>
+<dl>
+<dd>Gets the coefficient <span class="expression">\(\Theta_\varepsilon\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ThetaY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ThetaY</span></h3>
+<span class="declaration">LiRE_Solution :: ThetaY ( const i )</span>
+<dl>
+<dd>Gets the matrix <span class="expression">\(\Theta_y(i)\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ThetaZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ThetaZ</span></h3>
+<span class="declaration">LiRE_Solution :: ThetaZ ( const i )</span>
+<dl>
+<dd>Gets the matrix <span class="expression">\(\Theta_Z(i)\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solution___ThetaZeta"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ThetaZeta</span></h3>
+<span class="declaration">LiRE_Solution :: ThetaZeta ( )</span>
+<dl>
+<dd>Gets the coefficient <span class="expression">\(\Theta_\zeta\)</span>
+<dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>auxiliary.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">auxiliary.ox</span></h1>
+Auxiliary functions for error handling, debugging, string formatting, etc.
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="Global"> </a>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global </span></h2>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Functions</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#assert">assert</a>
+</td><td class="description" valign="top">
+Raises an error if a condition is not met.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#condE">condE</a>
+</td><td class="description" valign="top">
+Represents a conditional expectation <span class="expression">\(y_{t+j-i|t-i}\)</span> as a string
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#decschurgen_errormessage">decschurgen_errormessage</a>
+</td><td class="description" valign="top">
+Converts the error code returned by <tt>decschurgen</tt> into a readable message
+      </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#error">error</a>
+</td><td class="description" valign="top">
+Raises a runtime error and prints a stack trace.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#expectIndex">expectIndex</a>
+</td><td class="description" valign="top">
+Raises an error if the specified index is not within a given range.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#expectMatrix">expectMatrix</a>
+</td><td class="description" valign="top">
+Raises an error if the specified matrix does not have the expected dimensions.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#first">first</a>
+</td><td class="description" valign="top">
+Takes the first element from an array
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#formatErrorMessage">formatErrorMessage</a>
+</td><td class="description" valign="top">
+Format a standard error message
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#last">last</a>
+</td><td class="description" valign="top">
+Takes the last element from an array
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#makeBanner">makeBanner</a>
+</td><td class="description" valign="top">
+Make a text banner 
+      </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#MatrixStr">MatrixStr</a>
+</td><td class="description" valign="top">
+Formats	the name of a matrix with subscript
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#newLine">newLine</a>
+</td><td class="description" valign="top">
+Prints an empty line  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#printBanner">printBanner</a>
+</td><td class="description" valign="top">
+Print a text banner 
+      </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#printlnDebug">printlnDebug</a>
+</td><td class="description" valign="top">
+Print a string if debugging is enabled
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#relTime">relTime</a>
+</td><td class="description" valign="top">
+Formats a 'relative time' string <span class="expression">\(t-i\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#repStr">repStr</a>
+</td><td class="description" valign="top">
+Repeat a string a specified number of times
+      </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#sprintArray">sprintArray</a>
+</td><td class="description" valign="top">
+Take an array and concatenate all its elements 
+      </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#warning">warning</a>
+</td><td class="description" valign="top">
+Print a warning message.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#writeCsvMatrix">writeCsvMatrix</a>
+</td><td class="description" valign="top">
+Write a matrix to a file in comma separated value (CSV) format
+     </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#writeMatlabMatrix">writeMatlabMatrix</a>
+</td><td class="description" valign="top">
+Write a matrix to a file in Matlab script format
+     </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#__profilereport">__profilereport</a>
+</td><td class="description" valign="top">
+Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#__registertimer">__registertimer</a>
+</td><td class="description" valign="top">
+Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#__starttimer">__starttimer</a>
+</td><td class="description" valign="top">
+Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="auxiliary.ox.html#__stoptimer">__stoptimer</a>
+</td><td class="description" valign="top">
+Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global functions details</span></h2>
+<a name="assert"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">assert</span></h3>
+<span class="declaration">assert ( const b , ... )</span>
+<dl>
+<dd>Raises an error if a condition is not met.
+    An optional message can be specified.
+<dl>
+<dt class="example">Example:</dt><dd class="example"><pre>
+assert(a != 0, "a has to be nonzero");
+b = c / a;</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="condE"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">condE</span></h3>
+<span class="declaration">condE ( const sVar , const i , const j )</span>
+<dl>
+<dd>Represents a conditional expectation <span class="expression">\(y_{t+j-i|t-i}\)</span> as a string
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">sVar</td>
+<td class="description" valign="baseline">name of the variable
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">i</td>
+<td class="description" valign="baseline">the expectational lag
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">j</td>
+<td class="description" valign="baseline">the expectational lead</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="decschurgen_errormessage"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">decschurgen_errormessage</span></h3>
+<span class="declaration">decschurgen_errormessage ( const errorcode )</span>
+<dl>
+<dd>Converts the error code returned by <tt>decschurgen</tt> into a readable message
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">errorcode</td>
+<td class="description" valign="baseline">the errorcode returned by <tt>decschurgen</tt>
+	</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A string containing an error message
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="error"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">error</span></h3>
+<span class="declaration">error ( const message , ... )</span>
+<dl>
+<dd>Raises a runtime error and prints a stack trace. The program is stopped.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="expectIndex"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">expectIndex</span></h3>
+<span class="declaration">expectIndex ( const sName , const cIndex , const cMin , const cMax )</span>
+<dl>
+<dd>Raises an error if the specified index is not within a given range.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">sName</td>
+<td class="description" valign="baseline">name of index variable
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cIndex</td>
+<td class="description" valign="baseline">value  to be checked
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cMin</td>
+<td class="description" valign="baseline">minimum value for cIndex
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cMax</td>
+<td class="description" valign="baseline">maximum value for cIndex</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="expectMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">expectMatrix</span></h3>
+<span class="declaration">expectMatrix ( const sName , const mMatrix , const cRows , const cCols )</span>
+<dl>
+<dd>Raises an error if the specified matrix does not have the expected dimensions.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">sName</td>
+<td class="description" valign="baseline">name of matrix
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">mMatrix</td>
+<td class="description" valign="baseline">matrix to be checked
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cRows</td>
+<td class="description" valign="baseline">number of expected rows
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cCols</td>
+<td class="description" valign="baseline">number of expected columns</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="first"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">first</span></h3>
+<span class="declaration">first ( const X )</span>
+<dl>
+<dd>Takes the first element from an array
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">The first element of X
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">If X is not an array, an error is raised.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="formatErrorMessage"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">formatErrorMessage</span></h3>
+<span class="declaration">formatErrorMessage ( const str , const arr )</span>
+<dl>
+<dd>Format a standard error message
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">A string
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="last"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">last</span></h3>
+<span class="declaration">last ( const X )</span>
+<dl>
+<dd>Takes the last element from an array
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">The last element of X
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">If X is not an array, an error is raised.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="makeBanner"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">makeBanner</span></h3>
+<span class="declaration">makeBanner ( const text , const width )</span>
+<dl>
+<dd>Make a text banner
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">text</td>
+<td class="description" valign="baseline">text to make a banner from
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">width</td>
+<td class="description" valign="baseline">desired text width
+	</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A string containing the banner
+</dd>
+<dt class="example">Example:</dt><dd class="example"><pre>makeBanner("LiRE", 20)</pre> results in
+             <tt>----- LiRE ------</tt>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="MatrixStr"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">MatrixStr</span></h3>
+<span class="declaration">MatrixStr ( const sVar , ... )</span>
+<dl>
+<dd>Formats	the name of a matrix with subscript
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">sVar</td>
+<td class="description" valign="baseline">Variable name
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">...</td>
+<td class="description" valign="baseline">Subscripts
+</td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example"><tt>MatrixStr("A", 5, 3)</tt> returns "A[5,3]"
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="newLine"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">newLine</span></h3>
+<span class="declaration">newLine ( )</span>
+<dl>
+<dd>Prints an empty line
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="printBanner"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">printBanner</span></h3>
+<span class="declaration">printBanner ( const str , ... )</span>
+<dl>
+<dd>Print a text banner
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">text</td>
+<td class="description" valign="baseline">text to make a banner from
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">width</td>
+<td class="description" valign="baseline">desired text width
+    </td>
+</tr>
+</table>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="auxiliary.ox.html#makeBanner">makeBanner</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="printlnDebug"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">printlnDebug</span></h3>
+<span class="declaration">printlnDebug ( const str , ... )</span>
+<dl>
+<dd>Print a string if debugging is enabled
+<dl>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="lire.ox.html#LiRE___Debugging">Debugging</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="relTime"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">relTime</span></h3>
+<span class="declaration">relTime ( i )</span>
+<dl>
+<dd>Formats a 'relative time' string <span class="expression">\(t-i\)</span>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">i</td>
+<td class="description" valign="baseline">The lag (if negative) or lead (if positive)
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">If i equals zero, "t" is returned. If i is positive, "t+" plus the lead is returned. If
+i is negative "t-" plus the lag is returned.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="repStr"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">repStr</span></h3>
+<span class="declaration">repStr ( const s , const n )</span>
+<dl>
+<dd>Repeat a string a specified number of times
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">s</td>
+<td class="description" valign="baseline">string to be repeated
+    </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">n</td>
+<td class="description" valign="baseline">number of repetitions
+    </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">returns a string that consists of n repetitions of x
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="sprintArray"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">sprintArray</span></h3>
+<span class="declaration">sprintArray ( const X )</span>
+<dl>
+<dd>Take an array and concatenate all its elements
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">array</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="warning"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">warning</span></h3>
+<span class="declaration">warning ( const message , ... )</span>
+<dl>
+<dd>Print a warning message. The program is not stopped.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="writeCsvMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">writeCsvMatrix</span></h3>
+<span class="declaration">writeCsvMatrix ( const fFile , const mX )</span>
+<dl>
+<dd>Write a matrix to a file in comma separated value (CSV) format
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">fFile</td>
+<td class="description" valign="baseline">file handle, or file name. If a string is specified, it is regarded as a file name. A new file will
+   be created (any existing file will be overwritten), the matrix is written to the file, and it will be closed again.
+   </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">mX</td>
+<td class="description" valign="baseline">matrix to be exported</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="writeMatlabMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">writeMatlabMatrix</span></h3>
+<span class="declaration">writeMatlabMatrix ( const fFile , const sVariableName , const mX )</span>
+<dl>
+<dd>Write a matrix to a file in Matlab script format
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">fFile</td>
+<td class="description" valign="baseline">file handle, or file name. If a string is specified, it is regarded as a file name. A new file will
+   be created (any existing file will be overwritten), the matrix is written to the file, and it will be closed again.
+   </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">sVariableName</td>
+<td class="description" valign="baseline">name of variable to be exported
+   </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">mX</td>
+<td class="description" valign="baseline">matrix to be exported
+   </td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example">The code
+<pre>
+writeMatlabMatrix("unit.m", "U", unit(4));
+</pre>
+results in a file <tt>unit.m</tt> that looks like
+<pre>
+U = [1 0;
+     0 1];
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="__profilereport"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">__profilereport</span></h3>
+<span class="declaration">__profilereport ( )</span>
+<dl>
+<dd>Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="__registertimer"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">__registertimer</span></h3>
+<span class="declaration">__registertimer ( const name )</span>
+<dl>
+<dd>Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="__starttimer"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">__starttimer</span></h3>
+<span class="declaration">__starttimer ( const i )</span>
+<dl>
+<dd>Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="__stoptimer"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">__stoptimer</span></h3>
+<span class="declaration">__stoptimer ( const i )</span>
+<dl>
+<dd>Vacuous function that replaces the OxProfiler equivalent whenever
+OxProfiler is disabled.
+<dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>solver_canonical.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">solver_canonical.ox</span></h1>
+Code for solving canonical form models.  
+Solves models of the form
+   <span class="expression">\(M_{00} y_t + M_{10} y_{t+1|t} = Q z_t\)</span>
+
+<dl><dt class="author">Author:</dt><dd class="author">S. Mavroeidis, Y. Zwols</dd>
+</dl>
+<a name="LiRE_CanonicalSolver"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_CanonicalSolver  : <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a></span></h2>
+Code for solving canonical form models.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___CanSolve">CanSolve</a>
+</td><td class="description" valign="top">
+Checks whether this solver can solve the specified model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___CheckSolutionSpace">CheckSolutionSpace</a>
+</td><td class="description" valign="top">
+Checks whether a solution exists and if so, if it is unique.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___ClassName">ClassName</a>
+</td><td class="description" valign="top">
+Returns the name of the solver class  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___DoSchurDecomposition">DoSchurDecomposition</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___LiRE_CanonicalSolver">LiRE_CanonicalSolver</a>
+</td><td class="description" valign="top">
+Create a new LiRE_CanonicalSolver object  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___PerformSolve">PerformSolve</a>
+</td><td class="description" valign="top">
+Solve the model
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_canonical.ox.html#LiRE_CanonicalSolver___SolveCanonicalForm">SolveCanonicalForm</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a>:</dt><dd>
+<a href="solver.ox.html#LiRE_Solver___CanSolve">CanSolve</a>, <a href="solver.ox.html#LiRE_Solver___CheckSolutionSpace">CheckSolutionSpace</a>, <a href="solver.ox.html#LiRE_Solver___ClassName">ClassName</a>, <a href="solver.ox.html#LiRE_Solver___isSolver">isSolver</a>, <a href="solver.ox.html#LiRE_Solver___isThisSolver">isThisSolver</a>, <a href="solver.ox.html#LiRE_Solver___LiRE_Solver">LiRE_Solver</a>, <a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a>, <a href="solver.ox.html#LiRE_Solver___Solve">Solve</a></dd>
+</dl>
+
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_CanonicalSolver details</span></h2>
+<a name="LiRE_CanonicalSolver___CanSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CanSolve</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: CanSolve ( const model )</span>
+<dl>
+<dd>Checks whether this solver can solve the specified model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___CheckSolutionSpace"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CheckSolutionSpace</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: CheckSolutionSpace ( const model )</span>
+<dl>
+<dd>Checks whether a solution exists and if so, if it is unique.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">The dimension of the solution space.  It returns -1 if no solution exists,
+          0 if the solution is unique, or a number greater than 0 than indicates
+		  the degree of indeterminacy.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___ClassName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ClassName</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: ClassName ( )</span>
+<dl>
+<dd>Returns the name of the solver class
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___DoSchurDecomposition"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DoSchurDecomposition</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: DoSchurDecomposition ( const model )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___LiRE_CanonicalSolver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_CanonicalSolver</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: LiRE_CanonicalSolver ( )</span>
+<dl>
+<dd>Create a new LiRE_CanonicalSolver object
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___PerformSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PerformSolve</span></h3>
+<span class="declaration">LiRE_CanonicalSolver :: PerformSolve ( const model )</span>
+<dl>
+<dd>Solve the model
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">a solution in the form a <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a> object or, in case of an error, a <a href="solveerror.ox.html#LiRE_SolveError">LiRE_SolveError</a> object
+containing an error message and roots if available
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">Solving is done in a number of steps:
+<ul>
+<li>Write the model in the form <span class="expression">\(A_c y_{t+1|t} = B_c y_t + Q_c z_t\)</span>
+<li>Do a Schur decomposition
+<li>Write the non-predetermined variables as a function of the predetermined variables
+</ul>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_CanonicalSolver___SolveCanonicalForm"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SolveCanonicalForm</span></h3>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

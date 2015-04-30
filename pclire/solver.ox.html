@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>solver.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">solver.ox</span></h1>
+Provides base class <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a> that serves as a basis for
+LiRE solvers
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="LiRE_Solver"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Solver </span></h2>
+LiRE_Solver is the base class for LiRE solvers. It contains common
+functionality for any LiRE solver. <p>
+<P/>
+To create and use a new solver, the following steps have to be taken:
+<ol>
+<li>Derive a class from LiRE_Solver
+<li>Override the methods <a href="solver.ox.html#LiRE_Solver___ClassName">ClassName</a>, <a href="solver.ox.html#LiRE_Solver___CanSolve">CanSolve</a>, and <a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a>.
+<li>Create a new instance of your newly derived class
+<li>Use <a href="lire.ox.html#LiRE___SetSolver">SetSolver</a> to install this solver into LiRE
+</ol>
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___CanSolve">CanSolve</a>
+</td><td class="description" valign="top">
+Check whether the specified model can be solved by this solver
+   </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___CheckSolutionSpace">CheckSolutionSpace</a>
+</td><td class="description" valign="top">
+Checks whether a solution exists and if so, if it is unique.</td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___ClassName">ClassName</a>
+</td><td class="description" valign="top">
+Returns the name of the solver class.</td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___isSolver">isSolver</a>
+</td><td class="description" valign="top">
+Checks whether a certain object is a solver.</td><td class="modifiers" valign="top">
+static</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___isThisSolver">isThisSolver</a>
+</td><td class="description" valign="top">
+Checks whether a certain object is derived from this solver.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___LiRE_Solver">LiRE_Solver</a>
+</td><td class="description" valign="top">
+Creates a new LiRE_Solver object.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a>
+</td><td class="description" valign="top">
+Perform the actual solving of the specified model
+   </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver.ox.html#LiRE_Solver___Solve">Solve</a>
+</td><td class="description" valign="top">
+Solve the specified model.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Solver details</span></h2>
+<a name="LiRE_Solver___CanSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CanSolve</span></h3>
+<span class="declaration">virtual LiRE_Solver :: CanSolve ( const model )</span>
+<dl>
+<dd>Check whether the specified model can be solved by this solver
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">TRUE if the solver can solve this problem, FALSE if not
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver.ox.html#LiRE_Solver___Solve">Solve</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___CheckSolutionSpace"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CheckSolutionSpace</span></h3>
+<span class="declaration">virtual LiRE_Solver :: CheckSolutionSpace ( const model )</span>
+<dl>
+<dd>Checks whether a solution exists and if so, if it is unique.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">The dimension of the solution space.  It returns -1 if no solution exists,
+          0 if the solution is unique, or a number greater than 0 than indicates
+		  the degree of indeterminacy.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___ClassName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ClassName</span></h3>
+<span class="declaration">virtual LiRE_Solver :: ClassName ( )</span>
+<dl>
+<dd>Returns the name of the solver class. This method has to be overridden by
+classes derived from LiRE_Solver.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___isSolver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">isSolver</span></h3>
+<span class="declaration">static LiRE_Solver :: isSolver ( const oObject )</span>
+<dl>
+<dd>Checks whether a certain object is a solver.
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">TRUE or FALSE
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___isThisSolver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">isThisSolver</span></h3>
+<span class="declaration">LiRE_Solver :: isThisSolver ( const oObject )</span>
+<dl>
+<dd>Checks whether a certain object is derived from this solver.
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">TRUE or FALSE
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___LiRE_Solver"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_Solver</span></h3>
+<span class="declaration">LiRE_Solver :: LiRE_Solver ( )</span>
+<dl>
+<dd>Creates a new LiRE_Solver object.
+<dl>
+<dt class="comments">Comments:</dt><dd class="comments">Do not use the LiRE_Solver directly. It is only used as a base class.
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver_canonical.ox.html#LiRE_CanonicalSolver">LiRE_CanonicalSolver</a>, <a href="solver_contemp.ox.html#LiRE_ContemporaneousSolver">LiRE_ContemporaneousSolver</a>, <a href="solver_backdated.ox.html#LiRE_BackdatedSolver">LiRE_BackdatedSolver</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___PerformSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PerformSolve</span></h3>
+<span class="declaration">virtual LiRE_Solver :: PerformSolve ( const model )</span>
+<dl>
+<dd>Perform the actual solving of the specified model
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">a <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a> object that represents the solution.
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Solver___Solve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Solve</span></h3>
+<span class="declaration">LiRE_Solver :: Solve ( const model )</span>
+<dl>
+<dd>Solve the specified model.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">a <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a> object that represents the solution.
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments"><tt>Solve</tt> checks whether the inputs are correct, and whether the solver
+ can actually solve the problem. Then, PerformSolve is executed, and its result is checked.
+ The resulting solution is given the name 'Solution to ....', and the variable names are
+ copied from the original model.
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a></dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>basemodel.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">basemodel.ox</span></h1>
+Provides the <a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a> class that contains basic model
+functionality.
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="LiRE_BaseModel"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_BaseModel </span></h2>
+Representation of an abstract model in an <span class="expression">\(n\)</span>-vector valued variable with
+an AR(1) disturbance term.
+<P/>
+LiRE_BaseModel contains basic functionality for describing the
+elements of the vector in terms of conditional expectations of other, more
+basic, variables. This is done by means of "element descriptors".
+An element descriptor describes one element of the vector <span class="expression">\(y_t\)</span> in
+a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object. So, for an <span class="expression">\(n\)</span>-dimensional vector <span class="expression">\(y_t\)</span>, <span class="expression">\(n\)</span>
+element descriptors are required.
+<P/>
+The disturbance term <span class="expression">\(z_t\)</span> follows <span class="expression">\(z_t = c_z + \Phi z_{t-1} + \varepsilon_t\)</span> with
+<span class="expression">\(\varepsilon_t\)</span> i.i.d.  The distribution of <span class="expression">\(\varepsilon_t\)</span> can be set as well.
+
+<dl><dt class="example">Example:</dt><dd class="example">To describe a 3-dimensional vector <span class="expression">\((x_t, x_{t+1|t}, z_{t-1})\)</span>, one can use the following code:
+<pre>
+// set up element descriptors
+model.SetElementDescriptors({"x", 0, 0}, {"x", 0, 1}, {"z", 1, 0});
+<P/>
+println(model.ElementName(0));     // prints "x[t]"
+println(model.ElementName(1));     // prints "x[t+1|t]"
+println(model.ElementName(2));     // prints "z[t-1]"
+</pre>
+</dd>
+</dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___ClearParameters">ClearParameters</a>
+</td><td class="description" valign="top">
+Resets the model parameters to their default values  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___ConstZ">ConstZ</a>
+</td><td class="description" valign="top">
+Gets the constant for <span class="expression">\(z\)</span> in the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___CopyElementDescriptors">CopyElementDescriptors</a>
+</td><td class="description" valign="top">
+Copies the element descriptors from another LiRE_BaseModel object  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___CopyExogenous">CopyExogenous</a>
+</td><td class="description" valign="top">
+Copies the parameters for the exogenous processes from another model object
+  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___DimEpsilon">DimEpsilon</a>
+</td><td class="description" valign="top">
+Returns the dimension of <span class="expression">\(\varepsilon_t\)</span> as specified in the constructor  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___DimY">DimY</a>
+</td><td class="description" valign="top">
+Returns the dimension of <span class="expression">\(y_t\)</span> as specified in the constructor  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___DimZ">DimZ</a>
+</td><td class="description" valign="top">
+Returns the dimension of <span class="expression">\(z_t\)</span> as specified in the constructor  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___ElementName">ElementName</a>
+</td><td class="description" valign="top">
+Represents the name of an element as a string
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___EpsilonDistribution">EpsilonDistribution</a>
+</td><td class="description" valign="top">
+Gets the <a href="distribution.ox.html#Distribution">Distribution</a> object that represent the distribution of <span class="expression">\(\varepsilon_t\)</span>
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___GetElementDescriptors">GetElementDescriptors</a>
+</td><td class="description" valign="top">
+Gets an array of element descriptors.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___LiRE_BaseModel">LiRE_BaseModel</a>
+</td><td class="description" valign="top">
+Creates a new LiRE_BaseModel object
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___Name">Name</a>
+</td><td class="description" valign="top">
+Gets the name of the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___Names">Names</a>
+</td><td class="description" valign="top">
+Gets the names of all elements in Y  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___Phi">Phi</a>
+</td><td class="description" valign="top">
+Gets the <span class="expression">\(\Phi\)</span> matrix of the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___PrintElementDescriptors">PrintElementDescriptors</a>
+</td><td class="description" valign="top">
+Prints the element descriptors.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___ResetElementDescriptors">ResetElementDescriptors</a>
+</td><td class="description" valign="top">
+Initializes the variable descriptors
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___SetConstZ">SetConstZ</a>
+</td><td class="description" valign="top">
+Sets up the parameter <span class="expression">\(c_z\)</span> the exogenous process <span class="expression">\(z_t\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___SetElementDescriptors">SetElementDescriptors</a>
+</td><td class="description" valign="top">
+Sets up the variable descriptors 
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___SetEpsilonDistribution">SetEpsilonDistribution</a>
+</td><td class="description" valign="top">
+Specifies the distribution for <span class="expression">\(\varepsilon_t\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___SetName">SetName</a>
+</td><td class="description" valign="top">
+Sets up the name of the model
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="basemodel.ox.html#LiRE_BaseModel___SetPhi">SetPhi</a>
+</td><td class="description" valign="top">
+Sets up the parameter <span class="expression">\(\Phi\)</span> the exogenous process <span class="expression">\(z_t\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_BaseModel details</span></h2>
+<a name="LiRE_BaseModel___ClearParameters"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ClearParameters</span></h3>
+<span class="declaration">virtual LiRE_BaseModel :: ClearParameters ( )</span>
+<dl>
+<dd>Resets the model parameters to their default values
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___ConstZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ConstZ</span></h3>
+<span class="declaration">LiRE_BaseModel :: ConstZ ( )</span>
+<dl>
+<dd>Gets the constant for <span class="expression">\(z\)</span> in the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___CopyElementDescriptors"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CopyElementDescriptors</span></h3>
+<span class="declaration">LiRE_BaseModel :: CopyElementDescriptors ( const model )</span>
+<dl>
+<dd>Copies the element descriptors from another LiRE_BaseModel object
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___CopyExogenous"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CopyExogenous</span></h3>
+<span class="declaration">virtual LiRE_BaseModel :: CopyExogenous ( const model )</span>
+<dl>
+<dd>Copies the parameters for the exogenous processes from another model object
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">A LiRE_BaseModel object</td>
+</tr>
+</table>
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">CopyExogenous copies the parameters <span class="expression">\(\Phi\)</span> and <span class="expression">\(c_z\)</span> for the process <span class="expression">\(z_t\)</span>.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___DimEpsilon"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DimEpsilon</span></h3>
+<span class="declaration">LiRE_BaseModel :: DimEpsilon ( )</span>
+<dl>
+<dd>Returns the dimension of <span class="expression">\(\varepsilon_t\)</span> as specified in the constructor
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___DimY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DimY</span></h3>
+<span class="declaration">LiRE_BaseModel :: DimY ( )</span>
+<dl>
+<dd>Returns the dimension of <span class="expression">\(y_t\)</span> as specified in the constructor
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___DimZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DimZ</span></h3>
+<span class="declaration">LiRE_BaseModel :: DimZ ( )</span>
+<dl>
+<dd>Returns the dimension of <span class="expression">\(z_t\)</span> as specified in the constructor
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___ElementName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ElementName</span></h3>
+<span class="declaration">LiRE_BaseModel :: ElementName ( const i )</span>
+<dl>
+<dd>Represents the name of an element as a string
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">i</td>
+<td class="description" valign="baseline">index of the element, starting from 0</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___EpsilonDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">EpsilonDistribution</span></h3>
+<span class="declaration">LiRE_BaseModel :: EpsilonDistribution ( )</span>
+<dl>
+<dd>Gets the <a href="distribution.ox.html#Distribution">Distribution</a> object that represent the distribution of <span class="expression">\(\varepsilon_t\)</span>
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">A <a href="distribution.ox.html#Distribution">Distribution</a> object
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___GetElementDescriptors"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">GetElementDescriptors</span></h3>
+<span class="declaration">LiRE_BaseModel :: GetElementDescriptors ( )</span>
+<dl>
+<dd>Gets an array of element descriptors.
+<dl>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="basemodel.ox.html#LiRE_BaseModel___SetElementDescriptors">SetElementDescriptors</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___LiRE_BaseModel"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_BaseModel</span></h3>
+<span class="declaration">LiRE_BaseModel :: LiRE_BaseModel ( const cDimY , const cDimZ , const cInit )</span>
+<dl>
+<dd>Creates a new LiRE_BaseModel object
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cDimY</td>
+<td class="description" valign="baseline">the dimension of the vector <span class="expression">\(y_t\)</span>
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cDimZ</td>
+<td class="description" valign="baseline">the dimension of the vector <span class="expression">\(z_t\)</span>
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cInit</td>
+<td class="description" valign="baseline">Boolean that specifies whether or not to initialize matrices.  If set to
+false, it is up to the use to correctly specify matrices. Failing to do so may
+lead to run-time errors.</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___Name"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Name</span></h3>
+<span class="declaration">LiRE_BaseModel :: Name ( )</span>
+<dl>
+<dd>Gets the name of the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___Names"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Names</span></h3>
+<span class="declaration">LiRE_BaseModel :: Names ( )</span>
+<dl>
+<dd>Gets the names of all elements in Y
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___Phi"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Phi</span></h3>
+<span class="declaration">LiRE_BaseModel :: Phi ( )</span>
+<dl>
+<dd>Gets the <span class="expression">\(\Phi\)</span> matrix of the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___PrintElementDescriptors"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PrintElementDescriptors</span></h3>
+<span class="declaration">LiRE_BaseModel :: PrintElementDescriptors ( )</span>
+<dl>
+<dd>Prints the element descriptors.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___ResetElementDescriptors"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ResetElementDescriptors</span></h3>
+<span class="declaration">LiRE_BaseModel :: ResetElementDescriptors ( const sVarname )</span>
+<dl>
+<dd>Initializes the variable descriptors
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">varname</td>
+<td class="description" valign="baseline">basename for the variable. E.g. if varname = 'x', the variables will be named 'x1', 'x2', ...
+</td>
+</tr>
+</table>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="basemodel.ox.html#LiRE_BaseModel___SetElementDescriptors">SetElementDescriptors</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___SetConstZ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetConstZ</span></h3>
+<span class="declaration">LiRE_BaseModel :: SetConstZ ( const vConstZ )</span>
+<dl>
+<dd>Sets up the parameter <span class="expression">\(c_z\)</span> the exogenous process <span class="expression">\(z_t\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___SetElementDescriptors"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetElementDescriptors</span></h3>
+<span class="declaration">LiRE_BaseModel :: SetElementDescriptors ( const aElemDesc )</span>
+<dl>
+<dd>Sets up the variable descriptors
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">aYnames</td>
+<td class="description" valign="baseline">Array of the form <tt>{ {name1, i1, j1}, {name2, i2, j2}, ... }</tt>. Each
+element of this array describes one row in the vector. Here, <var>i</var> is the informational lag,
+and <var>j</var> is the lead. I.e. the variable described is <span class="expression">\(E[\mbox{name}_{t+j-i}\ |\ \mathcal{F}_{t-i}]\)</span>.</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___SetEpsilonDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetEpsilonDistribution</span></h3>
+<span class="declaration">LiRE_BaseModel :: SetEpsilonDistribution ( const EpsilonDist )</span>
+<dl>
+<dd>Specifies the distribution for <span class="expression">\(\varepsilon_t\)</span>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">EpsilonDist</td>
+<td class="description" valign="baseline">an object of a class derived from <a href="distribution.ox.html#Distribution">Distribution</a>. For example, <a href="stddist.ox.html#NormalDistribution">NormalDistribution</a>. 
+</td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example">To set up a one-dimensional standard normal distribution for <span class="expression">\(\varepsilon_t\)</span>, 
+the following code is appropriate:
+<pre>
+model.SetEpsilonDistribution(new NormalDistribution(0, 1));
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___SetName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetName</span></h3>
+<span class="declaration">LiRE_BaseModel :: SetName ( const sName )</span>
+<dl>
+<dd>Sets up the name of the model
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">name</td>
+<td class="description" valign="baseline">String containing the name of the model</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BaseModel___SetPhi"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetPhi</span></h3>
+<span class="declaration">LiRE_BaseModel :: SetPhi ( const mPhi )</span>
+<dl>
+<dd>Sets up the parameter <span class="expression">\(\Phi\)</span> the exogenous process <span class="expression">\(z_t\)</span>
+<dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

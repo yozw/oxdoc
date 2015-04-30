@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>equation.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">equation.ox</span></h1>
+Provides the <a href="equation.ox.html#LiRE_Equation">LiRE_Equation</a> class
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="LiRE_Equation"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Equation </span></h2>
+Equation offers functionality for formatting linear equations suitable for output. Equations consist
+of left hand side and right hand side terms, each term consisting of a coefficient, a variable, and
+an optional value. Terms that include coefficients identically zero are removed, and term with unit coefficients
+are simplified.
+
+<dl><dt class="example">Example:</dt><dd class="example">To represent the equation <span class="expression">\(z_t = c + z_{t-1} + u_t\)</span>, one may use:
+<pre>
+decl eqnZ = new LiRE_Equation();
+decl c = ... ;
+decl Phi = ... ;
+<P/>
+eqnZ.AddTerm(LHS, "z[t]", "", <1>);
+eqnZ.AddTerm(RHS, "", "c", c);
+eqnZ.AddTerm(RHS, "z[t-1]", "Phi", Phi);
+eqnZ.AddTerm(RHS, "u[t]", "", <1>);
+eqnZ.Print();
+</pre>
+</dd>
+</dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___AddTerm">AddTerm</a>
+</td><td class="description" valign="top">
+Adds a term to the equation
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___FormatEquation">FormatEquation</a>
+</td><td class="description" valign="top">
+Formats the equation as a string
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___FormatEquationSide">FormatEquationSide</a>
+</td><td class="description" valign="top">
+Formats one side of the equation
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___FormatValues">FormatValues</a>
+</td><td class="description" valign="top">
+Formats the parameter values of the equation.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___LiRE_Equation">LiRE_Equation</a>
+</td><td class="description" valign="top">
+Create a new LiRE_Equation object  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___Print">Print</a>
+</td><td class="description" valign="top">
+Prints the equation and the parameter values.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___PrintEquation">PrintEquation</a>
+</td><td class="description" valign="top">
+Prints just the equation.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="equation.ox.html#LiRE_Equation___PrintValues">PrintValues</a>
+</td><td class="description" valign="top">
+Prints just the parameter values.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Equation details</span></h2>
+<a name="LiRE_Equation___AddTerm"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">AddTerm</span></h3>
+<span class="declaration">LiRE_Equation :: AddTerm ( const Side , const Var , Coeff , Values )</span>
+<dl>
+<dd>Adds a term to the equation
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">Side</td>
+<td class="description" valign="baseline">either <tt>LHS</tt> or <tt>RHS</tt>, standing for left hand side, and right hand side, respectively
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">Var</td>
+<td class="description" valign="baseline">name of the variable
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">Coeff</td>
+<td class="description" valign="baseline">the coefficient in front of the variable
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">Value</td>
+<td class="description" valign="baseline">the optional value of the coefficient.</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___FormatEquation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">FormatEquation</span></h3>
+<span class="declaration">LiRE_Equation :: FormatEquation ( )</span>
+<dl>
+<dd>Formats the equation as a string
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">The equation as a string, i.e. the string "left hand side = right hand side".
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___FormatEquationSide"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">FormatEquationSide</span></h3>
+<span class="declaration">LiRE_Equation :: FormatEquationSide ( const formatSide )</span>
+<dl>
+<dd>Formats one side of the equation
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">Side</td>
+<td class="description" valign="baseline">either <tt>LHS</tt> or <tt>RHS</tt>, standing for left hand side, and right hand side, respectively
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">A string containing one side of the equation
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___FormatValues"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">FormatValues</span></h3>
+<span class="declaration">LiRE_Equation :: FormatValues ( )</span>
+<dl>
+<dd>Formats the parameter values of the equation.
+<dl>
+<dt class="returns">Returns:</dt><dd class="returns">A string giving all known and relevant values of parameters appearing in the
+equation given by <a href="equation.ox.html#LiRE_Equation___FormatEquation">FormatEquation</a>.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___LiRE_Equation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_Equation</span></h3>
+<span class="declaration">LiRE_Equation :: LiRE_Equation ( )</span>
+<dl>
+<dd>Create a new LiRE_Equation object
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___Print"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Print</span></h3>
+<span class="declaration">LiRE_Equation :: Print ( )</span>
+<dl>
+<dd>Prints the equation and the parameter values.
+This method prints the output from <a href="equation.ox.html#LiRE_Equation___PrintEquation">PrintEquation</a> and <a href="equation.ox.html#LiRE_Equation___PrintValues">PrintValues</a>.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___PrintEquation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PrintEquation</span></h3>
+<span class="declaration">LiRE_Equation :: PrintEquation ( )</span>
+<dl>
+<dd>Prints just the equation.
+This method prints the output from <a href="equation.ox.html#LiRE_Equation___FormatEquation">FormatEquation</a>.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Equation___PrintValues"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PrintValues</span></h3>
+<span class="declaration">LiRE_Equation :: PrintValues ( )</span>
+<dl>
+<dd>Prints just the parameter values.
+This method prints the output from <a href="equation.ox.html#LiRE_Equation___FormatValues">FormatValues</a>.
+<dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

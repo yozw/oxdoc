@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>stddist.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">stddist.ox</span></h1>
+Provides standard distributions
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="EmpiricalDistribution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">EmpiricalDistribution  : <a href="distribution.ox.html#Distribution">Distribution</a></span></h2>
+The empirical distribution. This distribution takes a matrix and samples with replacement
+from this matrix.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#EmpiricalDistribution___Dim">Dim</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#EmpiricalDistribution___EmpiricalDistribution">EmpiricalDistribution</a>
+</td><td class="description" valign="top">
+Create a new EmpiricalDistribution object with the given data.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#EmpiricalDistribution___Expectation">Expectation</a>
+</td><td class="description" valign="top">
+Returns the expected value of a random draw of this distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#EmpiricalDistribution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="distribution.ox.html#Distribution">Distribution</a>:</dt><dd>
+<a href="distribution.ox.html#Distribution___Dim">Dim</a>, <a href="distribution.ox.html#Distribution___Distribution">Distribution</a>, <a href="distribution.ox.html#Distribution___Expectation">Expectation</a>, <a href="distribution.ox.html#Distribution___Generate">Generate</a>, <a href="distribution.ox.html#Distribution___isDistribution">isDistribution</a></dd>
+</dl>
+
+<a name="FixedDistribution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">FixedDistribution  : <a href="distribution.ox.html#Distribution">Distribution</a></span></h2>
+The fixed distribution. This distribution takes a matrix and returns the exact elements whenever
+asked to generate realizations.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#FixedDistribution___Dim">Dim</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#FixedDistribution___Expectation">Expectation</a>
+</td><td class="description" valign="top">
+Returns the expected value of a random draw of this distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#FixedDistribution___FixedDistribution">FixedDistribution</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#FixedDistribution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="distribution.ox.html#Distribution">Distribution</a>:</dt><dd>
+<a href="distribution.ox.html#Distribution___Dim">Dim</a>, <a href="distribution.ox.html#Distribution___Distribution">Distribution</a>, <a href="distribution.ox.html#Distribution___Expectation">Expectation</a>, <a href="distribution.ox.html#Distribution___Generate">Generate</a>, <a href="distribution.ox.html#Distribution___isDistribution">isDistribution</a></dd>
+</dl>
+
+<a name="NormalDistribution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">NormalDistribution  : <a href="distribution.ox.html#Distribution">Distribution</a></span></h2>
+The multivariate Normal distribution <span class="expression">\(\mathcal{N}(\mu, \Sigma)\)</span>.
+
+<dl><dt class="example">Example:</dt><dd class="example">To generate 20 samples from a standard normal distribution, the following code
+can be used:
+<pre>
+decl Dist = new NormalDistribution(0, 1);
+decl Z = Dist.Generate(20);
+</pre>
+</dd>
+</dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#NormalDistribution___Dim">Dim</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#NormalDistribution___Expectation">Expectation</a>
+</td><td class="description" valign="top">
+Returns the expected value of a random draw of this distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#NormalDistribution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#NormalDistribution___NormalDistribution">NormalDistribution</a>
+</td><td class="description" valign="top">
+Create a new instance of the NormalDistribution class with parameters <span class="expression">\(\mu\)</span> and <span class="expression">\(\Sigma\)</span>
+  </td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="distribution.ox.html#Distribution">Distribution</a>:</dt><dd>
+<a href="distribution.ox.html#Distribution___Dim">Dim</a>, <a href="distribution.ox.html#Distribution___Distribution">Distribution</a>, <a href="distribution.ox.html#Distribution___Expectation">Expectation</a>, <a href="distribution.ox.html#Distribution___Generate">Generate</a>, <a href="distribution.ox.html#Distribution___isDistribution">isDistribution</a></dd>
+</dl>
+
+<a name="tDistribution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">tDistribution  : <a href="distribution.ox.html#Distribution">Distribution</a></span></h2>
+The multivariate Student-t distribution <span class="expression">\(t_{df}(\mu, \Sigma)\)</span>.
+
+<dl><dt class="example">Example:</dt><dd class="example">To generate 20 samples from a Student-t distribution with 20 degrees freedom, the following code
+can be used:
+<pre>
+decl Dist = new tDistribution(20, 0, 1);
+decl t = Dist.Generate(20);
+</pre>
+</dd>
+</dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#tDistribution___Df">Df</a>
+</td><td class="description" valign="top">
+Returns the degrees of freedom.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#tDistribution___Dim">Dim</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#tDistribution___Expectation">Expectation</a>
+</td><td class="description" valign="top">
+Returns the expected value of a random draw of this distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#tDistribution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#tDistribution___tDistribution">tDistribution</a>
+</td><td class="description" valign="top">
+Create a new instance of the tDistribution class with parameters <span class="expression">\(Df\)</span>, <span class="expression">\(\mu\)</span> and <span class="expression">\(\Sigma\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="distribution.ox.html#Distribution">Distribution</a>:</dt><dd>
+<a href="distribution.ox.html#Distribution___Dim">Dim</a>, <a href="distribution.ox.html#Distribution___Distribution">Distribution</a>, <a href="distribution.ox.html#Distribution___Expectation">Expectation</a>, <a href="distribution.ox.html#Distribution___Generate">Generate</a>, <a href="distribution.ox.html#Distribution___isDistribution">isDistribution</a></dd>
+</dl>
+
+<a name="UniformDistribution"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">UniformDistribution  : <a href="distribution.ox.html#Distribution">Distribution</a></span></h2>
+The uniform distribution <span class="expression">\(U(a,b)\)</span>.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#UniformDistribution___Dim">Dim</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#UniformDistribution___Expectation">Expectation</a>
+</td><td class="description" valign="top">
+Returns the expected value of a random draw of this distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#UniformDistribution___Generate">Generate</a>
+</td><td class="description" valign="top">
+Generates a random sample from the distribution  </td><td class="modifiers" valign="top">
+virtual</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="stddist.ox.html#UniformDistribution___UniformDistribution">UniformDistribution</a>
+</td><td class="description" valign="top">
+Create a new instance of the UniformDistribution class with range <span class="expression">\([l, u]\)</span>.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="distribution.ox.html#Distribution">Distribution</a>:</dt><dd>
+<a href="distribution.ox.html#Distribution___Dim">Dim</a>, <a href="distribution.ox.html#Distribution___Distribution">Distribution</a>, <a href="distribution.ox.html#Distribution___Expectation">Expectation</a>, <a href="distribution.ox.html#Distribution___Generate">Generate</a>, <a href="distribution.ox.html#Distribution___isDistribution">isDistribution</a></dd>
+</dl>
+
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">EmpiricalDistribution details</span></h2>
+<a name="EmpiricalDistribution___Dim"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Dim</span></h3>
+<span class="declaration">virtual EmpiricalDistribution :: Dim ( )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="EmpiricalDistribution___EmpiricalDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">EmpiricalDistribution</span></h3>
+<span class="declaration">EmpiricalDistribution :: EmpiricalDistribution ( const mData )</span>
+<dl>
+<dd>Create a new EmpiricalDistribution object with the given data.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">mData</td>
+<td class="description" valign="baseline">a <span class="expression">\(T\times n\)</span> matrix, where <span class="expression">\(T\)</span> is the number of realizations, and <span class="expression">\(n\)</span> is the dimension of
+the random variable that this distribution represents.</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="EmpiricalDistribution___Expectation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Expectation</span></h3>
+<span class="declaration">virtual EmpiricalDistribution :: Expectation ( )</span>
+<dl>
+<dd>Returns the expected value of a random draw of this distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="EmpiricalDistribution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">virtual EmpiricalDistribution :: Generate ( const cT )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">FixedDistribution details</span></h2>
+<a name="FixedDistribution___Dim"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Dim</span></h3>
+<span class="declaration">virtual FixedDistribution :: Dim ( )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="FixedDistribution___Expectation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Expectation</span></h3>
+<span class="declaration">virtual FixedDistribution :: Expectation ( )</span>
+<dl>
+<dd>Returns the expected value of a random draw of this distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="FixedDistribution___FixedDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">FixedDistribution</span></h3>
+<span class="declaration">FixedDistribution :: FixedDistribution ( const mData )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="FixedDistribution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">virtual FixedDistribution :: Generate ( const cT )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">NormalDistribution details</span></h2>
+<a name="NormalDistribution___Dim"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Dim</span></h3>
+<span class="declaration">virtual NormalDistribution :: Dim ( )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="NormalDistribution___Expectation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Expectation</span></h3>
+<span class="declaration">virtual NormalDistribution :: Expectation ( )</span>
+<dl>
+<dd>Returns the expected value of a random draw of this distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="NormalDistribution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">virtual NormalDistribution :: Generate ( const cT )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="NormalDistribution___NormalDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">NormalDistribution</span></h3>
+<span class="declaration">NormalDistribution :: NormalDistribution ( vMu , mSigma )</span>
+<dl>
+<dd>Create a new instance of the NormalDistribution class with parameters <span class="expression">\(\mu\)</span> and <span class="expression">\(\Sigma\)</span>
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">vMu</td>
+<td class="description" valign="baseline">a number or a column vector containing the expectated value
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">mSigma</td>
+<td class="description" valign="baseline">a number or a positive definite symmetric matrix that represents the variance-covariance matrix</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">tDistribution details</span></h2>
+<a name="tDistribution___Df"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Df</span></h3>
+<span class="declaration">tDistribution :: Df ( )</span>
+<dl>
+<dd>Returns the degrees of freedom.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="tDistribution___Dim"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Dim</span></h3>
+<span class="declaration">virtual tDistribution :: Dim ( )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="tDistribution___Expectation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Expectation</span></h3>
+<span class="declaration">virtual tDistribution :: Expectation ( )</span>
+<dl>
+<dd>Returns the expected value of a random draw of this distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="tDistribution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">virtual tDistribution :: Generate ( const cT )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="tDistribution___tDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">tDistribution</span></h3>
+<span class="declaration">tDistribution :: tDistribution ( const Df , const vMu , const mSigma )</span>
+<dl>
+<dd>Create a new instance of the tDistribution class with parameters <span class="expression">\(Df\)</span>, <span class="expression">\(\mu\)</span> and <span class="expression">\(\Sigma\)</span>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">Df</td>
+<td class="description" valign="baseline">the degrees of freedom
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">vMu</td>
+<td class="description" valign="baseline">a number or a column vector containing the expectated value
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">mSigma</td>
+<td class="description" valign="baseline">a number or a positive definite symmetric matrix that represents the variance-covariance matrix</td>
+</tr>
+</table>
+</dd>
+</dl></dd>
+</dl>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">UniformDistribution details</span></h2>
+<a name="UniformDistribution___Dim"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Dim</span></h3>
+<span class="declaration">virtual UniformDistribution :: Dim ( )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="UniformDistribution___Expectation"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Expectation</span></h3>
+<span class="declaration">virtual UniformDistribution :: Expectation ( )</span>
+<dl>
+<dd>Returns the expected value of a random draw of this distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="UniformDistribution___Generate"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Generate</span></h3>
+<span class="declaration">virtual UniformDistribution :: Generate ( const cT )</span>
+<dl>
+<dd>Generates a random sample from the distribution
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="UniformDistribution___UniformDistribution"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">UniformDistribution</span></h3>
+<span class="declaration">UniformDistribution :: UniformDistribution ( vL , vU )</span>
+<dl>
+<dd>Create a new instance of the UniformDistribution class with range <span class="expression">\([l, u]\)</span>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">vMin</td>
+<td class="description" valign="baseline">a number or a column vector containing the lower bounds.
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">vMax</td>
+<td class="description" valign="baseline">a number or a column vector containing the upper bounds.
+<P/>
+</td>
+</tr>
+</table>
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">If <span class="expression">\(l\)</span> and <span class="expression">\(u\)</span> are specified as vectors, the realizations will
+element-wise be taken from uniform distributions, e.g. <span class="expression">\(l = (0, 10), u = (1, 20)\)</span>
+will generate vectors <span class="expression">\((x,y)\)</span> where <span class="expression">\(x\)</span> comes from a <span class="expression">\(U(0,1)\)</span> distribution and
+<span class="expression">\(y\)</span> comes from a <span class="expression">\(U(1,20)\)</span> distribution.
+</dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

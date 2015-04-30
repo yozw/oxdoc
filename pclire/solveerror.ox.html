@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>solveerror.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">solveerror.ox</span></h1>
+Provides the LiRE_SolveError class, which represents information about an error that
+occurred while solving a model.
+
+<dl></dl>
+<a name="Global"> </a>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global </span></h2>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Functions</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="solveerror.ox.html#isSolveError">isSolveError</a>
+</td><td class="description" valign="top">
+A function to check whether the return value of a Solve() statement is an error object.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<a name="LiRE_SolveError"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_SolveError </span></h2>
+The LiRE_SolveError class represents information about an error that
+occurred while solving a model.  It is returned by solvers. 
+Solvers only return LiRE_SolveError when they are unable to return a solution.  For example,
+the LiRE_GenericSolver can not handle indeterminacy and will return a LiRE_SolveError
+object with code SOLVE_ERROR_NOT_UNIQUE. It is still possible to read the model's roots.
+
+<dl><dt class="example">Example:</dt><dd class="example">The following code demonstrates the use of LiRE_SolveError
+<pre>
+decl LiRE = new LiRE(2,2);
+...
+decl result = LiRE.Solve();
+if (isSolveError(result)) {
+   if (result.Code() == SOLVE_ERROR_NO_SOLUTION) {
+      println("The model has no solution!");
+   }
+   println(result.Message());
+   exit(0);
+}
+else {
+   decl solution = result;
+   ...
+}
+</pre>
+</dd>
+</dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___ErrorCode">ErrorCode</a>
+</td><td class="description" valign="top">
+Returns the error code.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___LiRE_SolveError">LiRE_SolveError</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___Message">Message</a>
+</td><td class="description" valign="top">
+Returns an error message returned by the solver.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___Print">Print</a>
+</td><td class="description" valign="top">
+Print the error message and exit the program.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___Roots">Roots</a>
+</td><td class="description" valign="top">
+Returns the roots of the LiRE model for which a solving error occurred (whenever they are available).</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solveerror.ox.html#LiRE_SolveError___SetRoots">SetRoots</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global functions details</span></h2>
+<a name="isSolveError"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">isSolveError</span></h3>
+<span class="declaration">isSolveError ( const object )</span>
+<dl>
+<dd>A function to check whether the return value of a Solve() statement is an error object.
+<dl>
+<dt class="example">Example:</dt><dd class="example">The following code demonstrates the use of isSolverError()
+<pre>
+decl LiRE = new LiRE(2,2);
+...
+decl result = LiRE.Solve();
+if (isSolveError(result)) {
+   ...
+}
+</pre>
+</dd>
+</dl></dd>
+</dl>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_SolveError details</span></h2>
+<a name="LiRE_SolveError___ErrorCode"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ErrorCode</span></h3>
+<span class="declaration">LiRE_SolveError :: ErrorCode ( )</span>
+<dl>
+<dd>Returns the error code.  The error code can have one of the following values, or a custom
+value defined by specific solvers:
+<P/>
+<table>
+<tr><td>SOLVE_ERROR_NO_SOLUTION</td><td>No solution exists</td></tr>
+<tr><td>SOLVE_ERROR_NOT_UNIQUE</td><td>The solution is not unique</td></tr>
+<tr><td>SOLVE_ERROR_SCHUR_FAILED</td><td>The Schur decomposition failed</td></tr>
+</table>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_SolveError___LiRE_SolveError"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_SolveError</span></h3>
+<span class="declaration">LiRE_SolveError :: LiRE_SolveError ( const errorcode , const message )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_SolveError___Message"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Message</span></h3>
+<span class="declaration">LiRE_SolveError :: Message ( )</span>
+<dl>
+<dd>Returns an error message returned by the solver.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_SolveError___Print"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Print</span></h3>
+<span class="declaration">LiRE_SolveError :: Print ( )</span>
+<dl>
+<dd>Print the error message and exit the program.  This is useful for shorter programs in which
+the user is only interested in setting up a model, solving it, and printing the solution.
+<dl>
+<dt class="example">Example:</dt><dd class="example">The following code demonstrates the use of Print()
+<pre>
+decl LiRE = new LiRE(2,2);
+...
+decl result = LiRE.Solve();
+result.Print();
+</pre>
+Note that this is in fact a case of abuse of language: the Print() method refers to either
+the <a href="solution.ox.html#LiRE_Solution___Print">Print</a> method, or the <a href="solveerror.ox.html#LiRE_SolveError___Print">Print</a> method, depending on
+whether an error occurred or not.  In any case, if the solver returns a solution, this
+program will print the solution.  If an error occurred, it will print the error message
+and exit.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_SolveError___Roots"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Roots</span></h3>
+<span class="declaration">LiRE_SolveError :: Roots ( )</span>
+<dl>
+<dd>Returns the roots of the LiRE model for which a solving error occurred (whenever they are available).
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_SolveError___SetRoots"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetRoots</span></h3>
+<span class="declaration">LiRE_SolveError :: SetRoots ( const roots )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

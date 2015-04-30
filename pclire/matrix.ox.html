@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>matrix.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">matrix.ox</span></h1>
+General matrix functions
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="Global"> </a>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global </span></h2>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Functions</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#assertEqual">assertEqual</a>
+</td><td class="description" valign="top">
+Asserts that two matrices are equal up to epsilon
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#colvector">colvector</a>
+</td><td class="description" valign="top">
+Converts a vector, array, double, or integer to a column vector
+    </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#countnonneg">countnonneg</a>
+</td><td class="description" valign="top">
+Counts the number of nonnegative elements in a matrix or vector
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#isfUnitMatrix">isfUnitMatrix</a>
+</td><td class="description" valign="top">
+Checks whether a matrix is a unit matrix (with fuzziness)
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#isfzero">isfzero</a>
+</td><td class="description" valign="top">
+Check whether a matrix is fuzzily zero  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#isSquare">isSquare</a>
+</td><td class="description" valign="top">
+Checks whether a matrix is square
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#isUnitMatrix">isUnitMatrix</a>
+</td><td class="description" valign="top">
+Checks whether a matrix is a unit matrix
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#matricesIdentical">matricesIdentical</a>
+</td><td class="description" valign="top">
+Checks whether matrices are identical
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#partition">partition</a>
+</td><td class="description" valign="top">
+Partitions a matrix
+    </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#rowvector">rowvector</a>
+</td><td class="description" valign="top">
+Converts a vector, array, double, or integer to a row vector
+    </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#submatrix">submatrix</a>
+</td><td class="description" valign="top">
+Takes a submatrix from a matrix
+   </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/function_s.png">&nbsp;<a href="matrix.ox.html#tidyMatrix">tidyMatrix</a>
+</td><td class="description" valign="top">
+Tidies a matrix.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<h2><span class="icon"><img class="icon" src="icons/global.png">&nbsp;</span><span class="text">Global functions details</span></h2>
+<a name="assertEqual"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">assertEqual</span></h3>
+<span class="declaration">assertEqual ( const A , const B )</span>
+<dl>
+<dd>Asserts that two matrices are equal up to epsilon
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">A</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">B</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">isUnitMatrix(X) returns true if X is a unit matrix
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="colvector"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">colvector</span></h3>
+<span class="declaration">colvector ( const X )</span>
+<dl>
+<dd>Converts a vector, array, double, or integer to a column vector
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">a vector or array
+  </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">a column vector
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="countnonneg"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">countnonneg</span></h3>
+<span class="declaration">countnonneg ( const X )</span>
+<dl>
+<dd>Counts the number of nonnegative elements in a matrix or vector
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">a matrix
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">The number of nonnegative elements
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="isfUnitMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">isfUnitMatrix</span></h3>
+<span class="declaration">isfUnitMatrix ( const X )</span>
+<dl>
+<dd>Checks whether a matrix is a unit matrix (with fuzziness)
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">isfUnitMatrix(X) returns true if X is a unit matrix
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="isfzero"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">isfzero</span></h3>
+<span class="declaration">isfzero ( const X )</span>
+<dl>
+<dd>Check whether a matrix is fuzzily zero
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="isSquare"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">isSquare</span></h3>
+<span class="declaration">isSquare ( const X , ... )</span>
+<dl>
+<dd>Checks whether a matrix is square
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">the matrix
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">n</td>
+<td class="description" valign="baseline">optional required dimension
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns"><tt>isSquare(X)</tt> returns true if X is a square matrix, false if not; 
+ <tt>isSquare(X, n)</tt> return true if X is an n x n square matrix, false if not.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="isUnitMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">isUnitMatrix</span></h3>
+<span class="declaration">isUnitMatrix ( const X )</span>
+<dl>
+<dd>Checks whether a matrix is a unit matrix
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">isUnitMatrix(X) returns true if X is a unit matrix
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="matricesIdentical"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">matricesIdentical</span></h3>
+<span class="declaration">matricesIdentical ( const A , const B )</span>
+<dl>
+<dd>Checks whether matrices are identical
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">A</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">B</td>
+<td class="description" valign="baseline">a matrix
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">matricesIdentical(A, B) returns true iff A === B, i.e.
+ if the number of rows and columns match, and A[i,j] = B[i,j]
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="partition"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">partition</span></h3>
+<span class="declaration">partition ( const X , const aRows , const aColumns )</span>
+<dl>
+<dd>Partitions a matrix
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">the matrix to partition
+  </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">rows</td>
+<td class="description" valign="baseline">vector, array or number containing the desired number of rows for each block, except the last one.
+  Specify an empty array to request all rows. Specify negative numbers to ignore a block row.
+  </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">columns</td>
+<td class="description" valign="baseline">vector, array or number containing the desired number of columns for each block, except the last one.
+  Specify an empty array to request all columns. Specify negative numbers to ignore a block column.
+  </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">An array of submatrices, row-by-row.
+</dd>
+<dt class="example">Example:</dt><dd class="example"><pre>
+X = unit(4);
+[A, B, C, D] = partition(X, {2}, {2}); // gives A = C = unit(2), B = D = zeros(2,2)
+[E, F] = partition(X, 2, {});          // gives E = unit(2) ~ zeros(2,2), F = zeros(2,2) ~ unit(2)
+[G, H] = partition(X, {}, <1>);        // gives G = 1 | zeros(3,1), H = zeros(1, 3) | unit(3)
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="rowvector"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">rowvector</span></h3>
+<span class="declaration">rowvector ( const X )</span>
+<dl>
+<dd>Converts a vector, array, double, or integer to a row vector
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">X</td>
+<td class="description" valign="baseline">a vector or array
+  </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">a row vector
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="submatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">submatrix</span></h3>
+<span class="declaration">submatrix ( const A , const row , const col , const rows , const cols )</span>
+<dl>
+<dd>Takes a submatrix from a matrix
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">A</td>
+<td class="description" valign="baseline">the matrix to take a submatrix from
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">row</td>
+<td class="description" valign="baseline">row of upper left element
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">col</td>
+<td class="description" valign="baseline">column of upper left element
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">rows</td>
+<td class="description" valign="baseline">number of rows to take
+ </td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cols</td>
+<td class="description" valign="baseline">number of columns to take
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">the desired submatrix
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="tidyMatrix"></a><h3><span class="icon"><img class="icon" src="icons/function.png">&nbsp;</span><span class="text">tidyMatrix</span></h3>
+<span class="declaration">tidyMatrix ( const M )</span>
+<dl>
+<dd>Tidies a matrix. Values smaller than <span class="expression">\(\epsilon\)</span> are replaced by zeroes.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">M</td>
+<td class="description" valign="baseline">a matrix
+</td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">The same matrix, where everything equal to zero (under current fuzziness) is replaced by
+zero.
+</dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

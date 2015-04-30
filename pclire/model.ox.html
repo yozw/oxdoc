@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>model.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">model.ox</span></h1>
+Provides the <a href="model.ox.html#LiRE_Model">LiRE_Model</a> class
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols, S. Mavroeidis</dd>
+</dl>
+<a name="LiRE_Model"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Model  : <a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a></span></h2>
+Represents a LiRE model in canonical form. The canonical form is
+<span class="equation">$$\sum_{i=0}^k \sum_{j=0}^l M_{ij} y_{t+j-i|t-i} + c_y = M_z z_t, \\
+\mbox{with}\ z_t = c_z + \Phi z_{t-1} + \varepsilon_t,  \\
+\varepsilon_t \ \mbox{i.i.d.}$$</span>
+<P/>
+Do not instantiate LiRE_Model objects yourself. Use <a href="lire.ox.html#LiRE___Model">Model</a> instead to get the model
+within the <a href="lire.ox.html#LiRE">LiRE</a> object context.
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___ChangeM">ChangeM</a>
+</td><td class="description" valign="top">
+Change the matrix <span class="expression">\(M_{ij}\)</span> matrix.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___ClearParameters">ClearParameters</a>
+</td><td class="description" valign="top">
+Reset the parameters to their default values.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___ConstY">ConstY</a>
+</td><td class="description" valign="top">
+Gets the constant <span class="expression">\(c_y\)</span> for <span class="expression">\(y\)</span> in the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___DimPred">DimPred</a>
+</td><td class="description" valign="top">
+Gets the number of predetermined variables in <span class="expression">\(y_t\)</span> in the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___LiRE_Model">LiRE_Model</a>
+</td><td class="description" valign="top">
+Creates a new LiRE model
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___M">M</a>
+</td><td class="description" valign="top">
+Returns the <span class="expression">\(M_{ij}\)</span> matrix  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___MatrixMstr">MatrixMstr</a>
+</td><td class="description" valign="top">
+Formats	the name of an <span class="expression">\(M_{ij}\)</span> matrix.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___MaxI">MaxI</a>
+</td><td class="description" valign="top">
+Gets the highest lag in the model, i.e.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___MaxJ">MaxJ</a>
+</td><td class="description" valign="top">
+Gets the highest lead in the model, i.e.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___Mz">Mz</a>
+</td><td class="description" valign="top">
+Gets the <span class="expression">\(M_z\)</span> matrix of the model  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___Print">Print</a>
+</td><td class="description" valign="top">
+Prints the model equations and the values of the coefficients  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___SetConstY">SetConstY</a>
+</td><td class="description" valign="top">
+Sets up the constant <span class="expression">\(c_y\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___SetM">SetM</a>
+</td><td class="description" valign="top">
+Sets up coefficient matrices for <span class="expression">\(y\)</span> in the model equation
+  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___SetMz">SetMz</a>
+</td><td class="description" valign="top">
+Sets up the parameter <span class="expression">\(M_z\)</span> for the driving process <span class="expression">\(z_t\)</span>  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="model.ox.html#LiRE_Model___SetVariableNames">SetVariableNames</a>
+</td><td class="description" valign="top">
+Sets up variable names of the elements of the <span class="expression">\(y_t\)</span> vector.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a>:</dt><dd>
+<a href="basemodel.ox.html#LiRE_BaseModel___ClearParameters">ClearParameters</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ConstZ">ConstZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___CopyElementDescriptors">CopyElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___CopyExogenous">CopyExogenous</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimEpsilon">DimEpsilon</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimY">DimY</a>, <a href="basemodel.ox.html#LiRE_BaseModel___DimZ">DimZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ElementName">ElementName</a>, <a href="basemodel.ox.html#LiRE_BaseModel___EpsilonDistribution">EpsilonDistribution</a>, <a href="basemodel.ox.html#LiRE_BaseModel___GetElementDescriptors">GetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___LiRE_BaseModel">LiRE_BaseModel</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Name">Name</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Names">Names</a>, <a href="basemodel.ox.html#LiRE_BaseModel___Phi">Phi</a>, <a href="basemodel.ox.html#LiRE_BaseModel___PrintElementDescriptors">PrintElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___ResetElementDescriptors">ResetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetConstZ">SetConstZ</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetElementDescriptors">SetElementDescriptors</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetEpsilonDistribution">SetEpsilonDistribution</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetName">SetName</a>, <a href="basemodel.ox.html#LiRE_BaseModel___SetPhi">SetPhi</a></dd>
+</dl>
+
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_Model details</span></h2>
+<a name="LiRE_Model___ChangeM"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ChangeM</span></h3>
+<span class="declaration">LiRE_Model :: ChangeM ( const i , const j , const M )</span>
+<dl>
+<dd>Change the matrix <span class="expression">\(M_{ij}\)</span> matrix. This is a faster way to update the M matrices, but
+the matrix <span class="expression">\(M_{ij}\)</span> must already be specified in the model.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___ClearParameters"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ClearParameters</span></h3>
+<span class="declaration">LiRE_Model :: ClearParameters ( )</span>
+<dl>
+<dd>Reset the parameters to their default values.
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___ConstY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ConstY</span></h3>
+<span class="declaration">LiRE_Model :: ConstY ( )</span>
+<dl>
+<dd>Gets the constant <span class="expression">\(c_y\)</span> for <span class="expression">\(y\)</span> in the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___DimPred"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">DimPred</span></h3>
+<span class="declaration">LiRE_Model :: DimPred ( )</span>
+<dl>
+<dd>Gets the number of predetermined variables in <span class="expression">\(y_t\)</span> in the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___LiRE_Model"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">LiRE_Model</span></h3>
+<span class="declaration">LiRE_Model :: LiRE_Model ( const cDimY , const cDimZ , const cPred , const cInit )</span>
+<dl>
+<dd>Creates a new LiRE model
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">cDimY</td>
+<td class="description" valign="baseline">Dimension of the <span class="expression">\(y\)</span> vector
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cDimZ</td>
+<td class="description" valign="baseline">Dimension of the <span class="expression">\(z\)</span> vector
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cPred</td>
+<td class="description" valign="baseline">Number of predetermined variables in the model. Note that
+the predetermined variables are assumed to be listed first in the <span class="expression">\(y\)</span> vector
+</td>
+</tr>
+<tr>
+<td class="declaration" valign="baseline">cInit</td>
+<td class="description" valign="baseline">Boolean that specifies whether or not to initialize matrices.  If set to
+false, it is up to the use to correctly specify matrices. Failing to do so may
+lead to run-time errors.
+</td>
+</tr>
+</table>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="model.ox.html#LiRE_Model___ClearParameters">ClearParameters</a></dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___M"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">M</span></h3>
+<span class="declaration">LiRE_Model :: M ( const i , const j )</span>
+<dl>
+<dd>Returns the <span class="expression">\(M_{ij}\)</span> matrix
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___MatrixMstr"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">MatrixMstr</span></h3>
+<span class="declaration">LiRE_Model :: MatrixMstr ( const i , const j )</span>
+<dl>
+<dd>Formats	the name of an <span class="expression">\(M_{ij}\)</span> matrix. If the number of leads or the number
+of lags equals 0, the more useful notation with only one subscript is introduced.
+<dl>
+<dt class="example">Example:</dt><dd class="example"><tt>MatrixMstr(3, 5)</tt> returns "M[3,5]".
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___MaxI"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">MaxI</span></h3>
+<span class="declaration">LiRE_Model :: MaxI ( )</span>
+<dl>
+<dd>Gets the highest lag in the model, i.e. it returns <span class="expression">\(k\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___MaxJ"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">MaxJ</span></h3>
+<span class="declaration">LiRE_Model :: MaxJ ( )</span>
+<dl>
+<dd>Gets the highest lead in the model, i.e. it returns <span class="expression">\(l\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___Mz"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Mz</span></h3>
+<span class="declaration">LiRE_Model :: Mz ( )</span>
+<dl>
+<dd>Gets the <span class="expression">\(M_z\)</span> matrix of the model
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___Print"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">Print</span></h3>
+<span class="declaration">LiRE_Model :: Print ( )</span>
+<dl>
+<dd>Prints the model equations and the values of the coefficients
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___SetConstY"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetConstY</span></h3>
+<span class="declaration">LiRE_Model :: SetConstY ( const vConstY )</span>
+<dl>
+<dd>Sets up the constant <span class="expression">\(c_y\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___SetM"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetM</span></h3>
+<span class="declaration">LiRE_Model :: SetM ( ... )</span>
+<dl>
+<dd>Sets up coefficient matrices for <span class="expression">\(y\)</span> in the model equation
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">amiCoef</td>
+<td class="description" valign="baseline">Array of the form <tt>{ {M1, i1, j1}, {M2, i2, j2}, ...}</tt>
+that specifies the coefficients for <span class="expression">\(y\)</span> in the model equation. The <tt>M</tt>
+matrices are supposed to be <span class="expression">\(n \times n\)</span> square matrices, 
+where <span class="expression">\(n\)</span> is the dimension of <span class="expression">\(y\)</span>.  The list of matrices may also
+be specified as a variable number of arguments list.
+<P/>
+</td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example">The following two statements are equivalent:
+<pre>
+model.SetM(  {A1, 0, 0}, {A2, 1, 0} );
+model.SetM( {{A1, 0, 0}, {A2, 1, 0}} );
+</pre>
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___SetMz"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetMz</span></h3>
+<span class="declaration">LiRE_Model :: SetMz ( const mMz )</span>
+<dl>
+<dd>Sets up the parameter <span class="expression">\(M_z\)</span> for the driving process <span class="expression">\(z_t\)</span>
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_Model___SetVariableNames"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">SetVariableNames</span></h3>
+<span class="declaration">LiRE_Model :: SetVariableNames ( const aNames )</span>
+<dl>
+<dd>Sets up variable names of the elements of the <span class="expression">\(y_t\)</span> vector. 
+The variable names are used to initialize the element descriptors that are defined in
+<a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a>.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">aNames</td>
+<td class="description" valign="baseline">Array of strings, of dimension DimY()
+</td>
+</tr>
+</table>
+</dd>
+<dt class="example">Example:</dt><dd class="example">To set up a vector <span class="expression">\(y_t = (x_t, z_t)\)</span>, use:
+<pre>
+model.SetVariableNames({"x", "z"});
+</pre>
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="basemodel.ox.html#LiRE_BaseModel">LiRE_BaseModel</a></dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>

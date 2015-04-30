@@ -1,0 +1,232 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="cs" />
+    <meta name="robots" content="all,follow" />
+
+    <meta name="author" content="All: ... [Nazev webu - www.url.cz]; e-mail: info@url.cz" />
+    <meta name="copyright" content="Design/Code: Vit Dlouhy [Nuvio - www.nuvio.cz]; e-mail: vit.dlouhy@nuvio.cz" />
+    
+    <title>oxdoc</title>
+    <meta name="description" content="..." />
+    <meta name="keywords" content="..." />
+    
+    <link rel="index" href="./" title="Home" />
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="./css/main.css" />
+    <link rel="stylesheet" media="print" type="text/css" href="./css/print.css" />
+    <link rel="stylesheet" media="aural" type="text/css" href="./css/aural.css" />
+</head>
+
+<body id="www-url-cz">
+
+<!-- Main -->
+<div id="main" class="box">
+
+    <!-- Header -->
+    <div id="header">
+
+        <!-- Logotyp -->
+        <div id="logo">
+        <h1>oxdoc</h1>
+        <h2>Documentation generator for the Ox programming language</h2>
+        </div>
+
+        <hr class="noscreen" />          
+
+        <!-- Quick links -->
+        <div class="noscreen noprint">
+            <p><em>Quick links: <a href="#content">content</a>, <a href="#tabs">navigation</a>, <a href="#search">search</a>.</em></p>
+            <hr />
+        </div>
+
+
+    </div> <!-- /header -->
+
+     <!-- Main menu (tabs) -->
+     <div id="tabs" class="noprint">
+
+            <h3 class="noscreen">Navigation</h3>
+            <ul class="box">
+                <li id="active"><a href="index.html">Home<span class="tab-l"></span><span class="tab-r"></span></a></li>
+                <li><a href="faq.html">F.A.Q.<span class="tab-l"></span><span class="tab-r"></span></a></li> <!-- Active -->
+                <li><a href="downloads.html">Downloads<span class="tab-l"></span><span class="tab-r"></span></a></li>
+            </ul>
+
+        <hr class="noscreen" />
+     </div> <!-- /tabs -->
+
+    <!-- Page (2 columns) -->
+    <div id="page" class="box">
+    <div id="page-in" class="box">
+
+        <!-- Content -->
+        <div id="content">
+
+            <!-- Article -->
+            <div class="article">
+			<h2><span>News</span></h2>
+			<h3>November 30, 2010</h3>
+			<p>
+			I have uploaded version 0.991alpha which contains some small bugfixes compared to version 0.99alpha.
+			Downloads:
+			<a href="https://sourceforge.net/projects/oxdoc/files/oxdoc/0.991alpha/oxdoc-0.991alpha-bin.zip/download">Windows version</a>
+			and 
+			<a href="https://sourceforge.net/projects/oxdoc/files/oxdoc/0.991alpha/oxdoc-0.991alpha-bin.tar.gz/download">Linux/MacOS version</a>.
+			</p>
+
+			<p>
+			The following issues have been resolved:
+			<ul>
+			<li>Issues with the 'include' option in oxdoc.xml have been resolved.
+			<li>Issues with the multiple transpose operators on a single line have been
+			partly resolved. See <a href="faq.html">F.A.Q.</a> for a workaround.
+			</ul>
+			Thanks to Michael Massmann (Vrije Universiteit Amsterdam) for pointing out these bugs.
+			</p>
+
+			<h3>November 28, 2010</h3>
+			<p>
+			New website design (downloaded from 
+				<a href="http://www.oswd.org/design/information/id/3465/">www.oswd.org</a>).
+			</p>
+
+			<h3>February 6, 2010</h3>
+			<p>
+			I have uploaded version 0.99alpha to the website.
+			Downloads: 
+			<a href="https://sourceforge.net/projects/oxdoc/files/oxdoc/0.99alpha/oxdoc-0.99alpha-bin.zip/download">Windows version</a>
+			and 
+			<a href="https://sourceforge.net/projects/oxdoc/files/oxdoc/0.99alpha/oxdoc-0.99alpha-bin.tar.gz/download">Linux/MacOS version</a>.
+			The new version includes:
+			<ul>
+			<li>a small setup program (<tt>bin\setup.bat</tt> on Windows, <tt>bin/setup</tt> on Linux) to 
+			set up LaTeX support
+
+			<li>a graphical interface (<tt>bin\oxdocgui</tt> on Windows, <tt>bin/oxdocgui</tt> on Linux) to run
+			<tt>oxdoc</tt> without using the terminal. It also generates batch files, bash scripts, and <tt>oxdoc.xml</tt> 
+			so that running <tt>oxdoc</tt> with the same options is easily automated.
+			</ul>
+			</p>
+
+			<h3>January 11, 2010</h3>
+			<p>
+			After a long break, and with kind help and suggestions from
+			<a href="http://econ.queensu.ca/~ferrall/">Chris Ferrall</a> from Queen's University, 
+			I have decided to update <tt>oxdoc</tt>. New features include:
+			<ul>
+			<li>Updated support for recent additions to the Ox language syntax
+			<li>Documentation of variables declared as members in classes
+			<li>Include search paths
+			<li>Option to include icons for projects / classes / members (see examples)
+			<li>Support for MathML, so that LaTeX formulas can be rendered from within the browser and there
+			is no need to generate external images for each formula.
+			</ul>
+			On top of that, the new version include many bug fixes.
+			I will upload the latest version within the next few days. In the mean time, please look at
+			the updated demonstration documentation.
+			</p>
+			</div>
+
+            <!-- Article -->
+            <div class="article">
+			<h2><span>Features</span></h2>
+
+			<ul>
+			<li>Formatted comments for classes, members, and global functions.
+			<li>Cross-referencing.
+			<li>Beautiful rendering of LaTeX formulas (through Mathjax). See e.g. <a href="/pclire/model.ox.html">model.ox</a> for an example.
+			</ul>
+
+			See also: <a href="/pclire">demonstration documentation</a>.
+			</div>
+
+            <!-- Article -->
+            <div class="article">
+			<h2><span>Example</span></h2>
+			As an example, have a look at the documentation for PcLiRE, an Ox package for solving
+			Linear Rational Expectations models written by  
+			<a href="https://sites.google.com/site/sophoclesmavroeidis/">Sophocles Mavroeidis</a> and me 
+			quite a while ago (see his website if you're interested in downloading the Ox code).
+			<a href="/pclire">PcLiRE documentation</a>.
+
+			</ul>
+			</div>
+			
+            
+        </div> <!-- /content -->
+
+        <!-- Right column -->
+        <div id="col" class="noprint">
+            <div id="col-in">
+
+                <!-- About Me -->
+                <h3>About oxdoc</h3>
+
+                <div id="about-me">
+					<tt>oxdoc</tt> is a tool for generating API documentation in 
+					HTML format from comments in <a href="http://www.doornik.com/">Ox</a> 
+					source code, inspired by
+					Sun Microsystems' <a href="http://java.sun.com/j2se/javadoc/">Javadoc</a>.
+
+					Ox is an object-oriented statistical matrix programming
+					language.
+
+					Go to the <a href="manual/manual.pdf">User's manual</a> for
+					more details. 
+				</div>
+
+                <hr class="noscreen" />
+
+                <!-- Links -->
+                <h3><span>Links</span></h3>
+
+                <ul id="links">
+                    <li><a href="http://www.sourceforge.net/projects/oxdoc">Sourceforge project page</a></li>
+                    <li><a href="http://www.doornik.com/">Ox website</a></li>
+                </ul>
+
+                <hr class="noscreen" />
+
+				Powered by<br>
+				<a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=144349&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a><br>
+
+            
+            </div> <!-- /col-in -->
+        </div> <!-- /col -->
+
+    </div> <!-- /page-in -->
+    </div> <!-- /page -->
+
+    <!-- Footer -->
+    <div id="footer">
+        <div id="top" class="noprint"><p><span class="noscreen">Back on top</span> <a href="#header" title="Back on top ^">^<span></span></a></p></div>
+        <hr class="noscreen" />
+        
+        <p id="createdby">created by <a href="http://www.nuvio.cz">Nuvio | Webdesign</a> <!-- DON´T REMOVE, PLEASE! --></p>
+        <p id="copyright">&copy; 2010 <a href="http://www.cs.mcgill.ca/~yzwols">Y. Zwols</a></p>
+    </div> <!-- /footer -->
+
+</div> <!-- /main -->
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=6424897; 
+var sc_invisible=1; 
+var sc_security="c2ca98fd"; 
+</script>
+
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script><noscript><div
+class="statcounter"><a title="hit counter for tumblr"
+href="http://statcounter.com/tumblr/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/6424897/0/c2ca98fd/1/"
+alt="hit counter for tumblr" ></a></div></noscript>
+<!-- End of StatCounter Code -->
+
+
+
+</body>
+</html>

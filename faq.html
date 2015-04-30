@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="cs" />
+    <meta name="robots" content="all,follow" />
+
+    <meta name="author" content="All: ... [Nazev webu - www.url.cz]; e-mail: info@url.cz" />
+    <meta name="copyright" content="Design/Code: Vit Dlouhy [Nuvio - www.nuvio.cz]; e-mail: vit.dlouhy@nuvio.cz" />
+    
+    <title>oxdoc</title>
+    <meta name="description" content="..." />
+    <meta name="keywords" content="..." />
+    
+    <link rel="index" href="./" title="Home" />
+    <link rel="stylesheet" media="screen,projection" type="text/css" href="./css/main.css" />
+    <link rel="stylesheet" media="print" type="text/css" href="./css/print.css" />
+    <link rel="stylesheet" media="aural" type="text/css" href="./css/aural.css" />
+</head>
+
+<body id="www-url-cz">
+
+<!-- Main -->
+<div id="main" class="box">
+
+    <!-- Header -->
+    <div id="header">
+
+        <!-- Logotyp -->
+        <div id="logo">
+        <h1>oxdoc</h1>
+        <h2>Documentation generator for the Ox programming language</h2>
+        </div>
+
+        <hr class="noscreen" />          
+
+        <!-- Quick links -->
+        <div class="noscreen noprint">
+            <p><em>Quick links: <a href="#content">content</a>, <a href="#tabs">navigation</a>, <a href="#search">search</a>.</em></p>
+            <hr />
+        </div>
+
+
+    </div> <!-- /header -->
+
+     <!-- Main menu (tabs) -->
+     <div id="tabs" class="noprint">
+
+            <h3 class="noscreen">Navigation</h3>
+            <ul class="box">
+                <li><a href="index.html">Home<span class="tab-l"></span><span class="tab-r"></span></a></li>
+                <li id="active"><a href="faq.html">F.A.Q.<span class="tab-l"></span><span class="tab-r"></span></a></li> <!-- Active -->
+                <li><a href="downloads.html">Downloads<span class="tab-l"></span><span class="tab-r"></span></a></li>
+            </ul>
+
+        <hr class="noscreen" />
+     </div> <!-- /tabs -->
+
+    <!-- Page (2 columns) -->
+    <div id="page" class="box">
+    <div id="page-in" class="box">
+
+        <!-- Content -->
+        <div id="content">
+
+            <!-- Article -->
+            <div class="article">
+			<h2><span>Oxdoc freezes while running LaTeX</span></h2>
+			<p>This happens sometimes when dvipng is run for the first time on files. 
+			In Windows, just use Ctrl+C to interrupt the program and run oxdoc again. 
+			Usually, the problem then disappears.</p>
+            </div>
+
+            <div class="article">
+			<h2><span>Formulas are not visible</span></h2>
+			<p>This problem happens in Internet Explorer when you use transparent PNG files. 
+			The image files created by oxdox are 
+			semi-transparent PNG (Portable Network Graphics) files, and Internet Explorer
+			does not support these files. I recommend using 
+			<a href="http://www.mozilla.org/products/firefox/">Firefox</a> instead.</p>
+			</div>
+
+            <div class="article">
+			<h2><span>When parsing a line that contains two tranpose (') characters, 
+			oxdoc stops with an error message</span></h2>
+			<p>Oxdoc stops with an error message when compiling Ox code that contains a line that
+			contains two transpose (') characters with exactly one character in between. Consider
+			for example the following code:</p>
+			<p>
+			<code>
+			&nbsp;&nbsp;&nbsp;mx = mx - meanc(mx')'
+			</code>
+			</p>
+
+			<p>
+			In this code, oxdoc erroneously recognizes the right parenthesis enclosed in two single quotes <code>')'</code>
+			as a character constant and produces the following error message:</p>
+
+			<p>
+			<code>
+				ParseException: Encountered " &lt;IDENTIFIER&gt; "pc1 "" at line 112, column 1.<br>
+				Was expecting one of:<br>
+					"decl" ...<br>
+					"static" ...<br>
+					"const" ...<br>
+					"class" ...<br>
+					"extern" ...<br>
+					"enum" ...<br>
+					"struct" ...<br>
+					"static" ...<br>
+					"extern" ...<br>
+					"static" ...<br>
+			</code></p>
+
+			<p>The problem is caused by the fact that the ox language 'overloads' the 
+			single quote character. In ox, it has two meanings: either it is the beginning of a 
+			character constant (e.g. 'x' or '\n' -- see also <a href="http://www.doornik.com/ox/oxsyntax.html#ox_syntax_RefChConst">character constants</a>
+			in the Ox language manual), or it means taking the transpose of a vector.</p>
+			
+			<h4>Workaround</h4>
+			<p>Although I have not been able to fix this issue completely, 
+			there is a simple workaround for the issue: adding an extra space will prevent oxdoc from
+			making a wrong judgment. (Remark: you need oxdoc version 0.991alpha or higher for this to work)
+			So, replacing the code above by the following circumvents the
+			problem:
+			<p>
+			<code>
+			&nbsp;&nbsp;&nbsp;mx = mx - meanc(mx' )'
+			</code>
+			</p>
+			Notice the extra space after the first single quote. Also note that, in this particular example,
+			perhaps an even better solution is to write:
+			<p>
+			<code>
+			&nbsp;&nbsp;&nbsp;mx = mx - meanr(mx)
+			</code>
+			</p>
+			</div>
+			
+            
+        </div> <!-- /content -->
+
+        <!-- Right column -->
+        <div id="col" class="noprint">
+            <div id="col-in">
+
+                <!-- About Me -->
+                <h3>About oxdoc</h3>
+
+                <div id="about-me">
+					<tt>oxdoc</tt> is a tool for generating API documentation in 
+					HTML format from comments in <a href="http://www.doornik.com/">Ox</a> 
+					source code, inspired by
+					Sun Microsystems' <a href="http://java.sun.com/j2se/javadoc/">Javadoc</a>.
+
+					Ox is an object-oriented statistical matrix programming
+					language.
+
+					Go to the <a href="manual/manual.pdf">User's manual</a> for
+					more details. 
+				</div>
+
+                <hr class="noscreen" />
+
+                <!-- Links -->
+                <h3><span>Links</span></h3>
+
+                <ul id="links">
+                    <li><a href="http://www.sourceforge.net/projects/oxdoc">Sourceforge project page</a></li>
+                    <li><a href="http://www.doornik.com/">Ox website</a></li>
+                </ul>
+
+                <hr class="noscreen" />
+
+				Powered by<br>
+				<a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=144349&amp;type=4" width="125" height="37" border="0" alt="SourceForge.net Logo" /></a><br>
+
+            
+            </div> <!-- /col-in -->
+        </div> <!-- /col -->
+
+    </div> <!-- /page-in -->
+    </div> <!-- /page -->
+
+    <!-- Footer -->
+    <div id="footer">
+        <div id="top" class="noprint"><p><span class="noscreen">Back on top</span> <a href="#header" title="Back on top ^">^<span></span></a></p></div>
+        <hr class="noscreen" />
+        
+        <p id="createdby">created by <a href="http://www.nuvio.cz">Nuvio | Webdesign</a> <!-- DON´T REMOVE, PLEASE! --></p>
+        <p id="copyright">&copy; 2010 <a href="http://www.cs.mcgill.ca/~yzwols">Y. Zwols</a></p>
+    </div> <!-- /footer -->
+
+</div> <!-- /main -->
+
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+var sc_project=6424897; 
+var sc_invisible=1; 
+var sc_security="c2ca98fd"; 
+</script>
+
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter.js"></script><noscript><div
+class="statcounter"><a title="hit counter for tumblr"
+href="http://statcounter.com/tumblr/" target="_blank"><img
+class="statcounter"
+src="http://c.statcounter.com/6424897/0/c2ca98fd/1/"
+alt="hit counter for tumblr" ></a></div></noscript>
+<!-- End of StatCounter Code -->
+
+</body>
+</html>

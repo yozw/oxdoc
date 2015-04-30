@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>solver_backdated.ox</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">solver_backdated.ox</span></h1>
+Code for solving LiRE models with backdated expectations.
+
+<dl><dt class="author">Author:</dt><dd class="author">Y. Zwols</dd>
+</dl>
+<a name="LiRE_BackdatedSolver"> </a>
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_BackdatedSolver  : <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a></span></h2>
+Code for solving LiRE models with backdated expectations
+
+<dl></dl>
+<table class="method_table">
+<tr><td colspan="3" class="header" valign="top">Public methods</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_backdated.ox.html#LiRE_BackdatedSolver___CanSolve">CanSolve</a>
+</td><td class="description" valign="top">
+Checks whether this solver can solve the specified model.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_backdated.ox.html#LiRE_BackdatedSolver___CheckSolutionSpace">CheckSolutionSpace</a>
+</td><td class="description" valign="top">
+Checks whether a solution exists and if so, if it is unique.</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_backdated.ox.html#LiRE_BackdatedSolver___ClassName">ClassName</a>
+</td><td class="description" valign="top">
+Returns the name of the solver class  </td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_backdated.ox.html#LiRE_BackdatedSolver___GetContemporaneous">GetContemporaneous</a>
+</td><td class="description" valign="top">
+</td><td class="modifiers" valign="top">
+</td></tr>
+<tr><td class="declaration" valign="top">
+<img class="icon" src="icons/method_s.png">&nbsp;<a href="solver_backdated.ox.html#LiRE_BackdatedSolver___PerformSolve">PerformSolve</a>
+</td><td class="description" valign="top">
+Solves the backdated expectations model.</td><td class="modifiers" valign="top">
+</td></tr>
+</table>
+<dl class="inherited_methods"><dt>Inherited methods from <a href="solver.ox.html#LiRE_Solver">LiRE_Solver</a>:</dt><dd>
+<a href="solver.ox.html#LiRE_Solver___CanSolve">CanSolve</a>, <a href="solver.ox.html#LiRE_Solver___CheckSolutionSpace">CheckSolutionSpace</a>, <a href="solver.ox.html#LiRE_Solver___ClassName">ClassName</a>, <a href="solver.ox.html#LiRE_Solver___isSolver">isSolver</a>, <a href="solver.ox.html#LiRE_Solver___isThisSolver">isThisSolver</a>, <a href="solver.ox.html#LiRE_Solver___LiRE_Solver">LiRE_Solver</a>, <a href="solver.ox.html#LiRE_Solver___PerformSolve">PerformSolve</a>, <a href="solver.ox.html#LiRE_Solver___Solve">Solve</a></dd>
+</dl>
+
+<h2><span class="icon"><img class="icon" src="icons/class.png">&nbsp;</span><span class="text">LiRE_BackdatedSolver details</span></h2>
+<a name="LiRE_BackdatedSolver___CanSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CanSolve</span></h3>
+<span class="declaration">LiRE_BackdatedSolver :: CanSolve ( const model )</span>
+<dl>
+<dd>Checks whether this solver can solve the specified model.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">the model to be checked
+  </td>
+</tr>
+</table>
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">CanSolve checks whether the number of predetermined variables equals zero
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BackdatedSolver___CheckSolutionSpace"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">CheckSolutionSpace</span></h3>
+<span class="declaration">LiRE_BackdatedSolver :: CheckSolutionSpace ( const model )</span>
+<dl>
+<dd>Checks whether a solution exists and if so, if it is unique.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">a <a href="model.ox.html#LiRE_Model">LiRE_Model</a> object that specifies the model to be solved
+ </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">The dimension of the solution space.  It returns -1 if no solution exists,
+          0 if the solution is unique, or a number greater than 0 than indicates
+		  the degree of indeterminacy.
+</dd>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BackdatedSolver___ClassName"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">ClassName</span></h3>
+<span class="declaration">LiRE_BackdatedSolver :: ClassName ( )</span>
+<dl>
+<dd>Returns the name of the solver class
+<dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BackdatedSolver___GetContemporaneous"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">GetContemporaneous</span></h3>
+<span class="declaration">LiRE_BackdatedSolver :: GetContemporaneous ( const model )</span>
+<dl>
+<dd><dl>
+</dl></dd>
+</dl>
+
+<hr>
+<a name="LiRE_BackdatedSolver___PerformSolve"></a><h3><span class="icon"><img class="icon" src="icons/method.png">&nbsp;</span><span class="text">PerformSolve</span></h3>
+<span class="declaration">LiRE_BackdatedSolver :: PerformSolve ( const model )</span>
+<dl>
+<dd>Solves the backdated expectations model.
+<dl>
+<dt class="parameters">Parameters:</dt><dd class="parameters"><!-- parameter table --!>
+<table class="parameter_table">
+<tr>
+<td class="declaration" valign="baseline">model</td>
+<td class="description" valign="baseline">the model to be solved
+  </td>
+</tr>
+</table>
+</dd>
+<dt class="returns">Returns:</dt><dd class="returns">a solution in the form a <a href="solution.ox.html#LiRE_Solution">LiRE_Solution</a> object or, in case of an error, a <a href="solveerror.ox.html#LiRE_SolveError">LiRE_SolveError</a> object
+containing an error message and roots if available
+</dd>
+<dt class="comments">Comments:</dt><dd class="comments">The model is solved by casting it in a contemporaneous expectations model, and
+  solving the model using LiRE_ContemporaneousSolver. Then, the returned solution is interpreted.
+</dd>
+<dt class="seealso">See also:</dt><dd class="seealso"><a href="solver_contemp.ox.html#LiRE_ContemporaneousSolver">LiRE_ContemporaneousSolver</a></dd>
+</dl></dd>
+</dl>
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>
