@@ -4,7 +4,7 @@
 
   <property file="build.properties"/>
 
-  <property name="version" value="1.1-beta"/>
+  <property name="version" value="1.1"/>
 
   <property name="src"      location="src"/>
   <property name="srcmisc"  location="src/misc"/>
@@ -94,7 +94,7 @@
 
   <target name="test" depends="build">
     <javac srcdir="${srctest}" destdir="${build}" classpath="${junit}:${mockito}" nowarn="on" debug="${debug}" includeantruntime="off"  />
-    <junit>
+    <junit fork="true">
       <classpath>
         <pathelement location="${build}" />    
         <pathelement location="${junit}"/>
