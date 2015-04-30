@@ -1,6 +1,6 @@
 # Oxdoc
 
-oxdoc 1.1-beta [23/02/2014] (c) Copyright 2005-2014 by Y. Zwols
+oxdoc 1.1 [30/04/2015] (c) Copyright 2005-2015 by Y. Zwols
 
 oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
