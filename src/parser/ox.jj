@@ -39,7 +39,7 @@ import oxdoc.util.Logging;
 
   	public Parser(java.io.InputStream stream, OxFile file, OxProject project) {
      		this(stream, null);
-		this.file = file; 
+		this.file = file;
 		this.project = project;
   	}
 
@@ -84,8 +84,8 @@ TOKEN : {
 	<INF: ".Inf"> |
 	<BREAK: "break"> |
 	<GOTO: "goto"> |
-	<NEW: "new"> | 
-	<DELETE: "delete"> | 
+	<NEW: "new"> |
+	<DELETE: "delete"> |
 	<CONST: "const"> |
 	<CLASS: "class"> |
 	<EXTERN: "extern"> |
@@ -96,6 +96,8 @@ TOKEN : {
 	<ENUM: "enum"> |
 	<FOR: "for"> |
 	<FOREACH: "foreach"> |
+	<PARALLELFOR: "parallel for">|
+	<SERIAL: "serial"> |
 	<IN: "in"> |
 	<IF: "if"> |
 	<DO: "do"> |
@@ -124,7 +126,7 @@ void OxFileDefinition() : {}
                             } catch (Exception E) { throw new ParseException(E.getMessage()); }
 		}
 	}
-/** C. Ferrall changed + to * so that a file with no declarations 
+/** C. Ferrall changed + to * so that a file with no declarations
     does not generate an error.  For example, a header file with only #includes
     Seemed to fix the problem ... not sure if it has bad side effects
 **/
@@ -157,18 +159,18 @@ void DeclarationStatement() : {}
 void GlobalVariableDeclaration() :
 {
 	Token externToken = null,
-              staticToken = null, 
+              staticToken = null,
               constToken = null,
               declToken = null,
-              firstToken = null; 
-        Token name; 
+              firstToken = null;
+        Token name;
         boolean Static = false, Constant = false, Extern = false;
         ArrayList<Token> variableNames = new ArrayList<Token>();
 }
 {
-    [externToken = <EXTERN> { Extern = true; } ] 
-    [staticToken = <STATIC> { Static = true; } ] 
-    [constToken = <CONST> { Constant = true; } ] 
+    [externToken = <EXTERN> { Extern = true; } ]
+    [staticToken = <STATIC> { Static = true; } ]
+    [constToken = <CONST> { Constant = true; } ]
     declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
 		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
     {
@@ -179,7 +181,7 @@ void GlobalVariableDeclaration() :
 void ClassDefinition() :
 { Token name, classtoken, parentclassname = null; }
 {
-	( classtoken = <STRUCT> { currentVisibility = OxClass.Visibility.Public; } | 
+	( classtoken = <STRUCT> { currentVisibility = OxClass.Visibility.Public; } |
       classtoken = <CLASS> { currentVisibility = OxClass.Visibility.Private; }  )
 	name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
 	{
@@ -192,11 +194,11 @@ void ClassDefinition() :
               if (classtoken.specialToken.beginLine != 1)
                  try { newClass.setComment(classtoken.specialToken.image);
                  } catch (Exception E) { throw new ParseException(E.getMessage()); }
-         	
+
 	  project.addSymbol(newClass);
 
       currentClass = newClass;
-	} 
+	}
     "{" ClassBody() "}"
     [";"]
     { currentClass = null; }
@@ -206,20 +208,20 @@ void ClassDefinition() :
 **/
 void ClassBody() : {}
 {
-	( 
-	  ((<PUBLIC> { currentVisibility = OxClass.Visibility.Public; } | 
-        <PROTECTED> { currentVisibility = OxClass.Visibility.Protected; } | 
+	(
+	  ((<PUBLIC> { currentVisibility = OxClass.Visibility.Public; } |
+        <PROTECTED> { currentVisibility = OxClass.Visibility.Protected; } |
         <PRIVATE> { currentVisibility = OxClass.Visibility.Private; } ) ":")
       |
-      ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | FieldDeclaration() | EnumDeclaration()  ) 
+      ( LOOKAHEAD(MethodDeclaration()) MethodDeclaration() | FieldDeclaration() | EnumDeclaration()  )
     )*
 }
 
 void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false; String methodPrefix = ""; }
 {
-    [<VIRTUAL> { Virtual = true; } ] 
-    [<STATIC> { Static = true; } ] 
-    ["~" { methodPrefix = "~"; } ] 
+    [<VIRTUAL> { Virtual = true; } ]
+    [<STATIC> { Static = true; } ]
+    ["~" { methodPrefix = "~"; } ]
     name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
     {
        OxMethod newMethod = currentClass.addMethod(methodPrefix + name.image);
@@ -230,19 +232,19 @@ void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false
 
 /** C. Ferrall switch STATIC and CONST to the order required by Ox
 **/
-void FieldDeclaration() : 
-   { 
-       Token staticToken = null, 
+void FieldDeclaration() :
+   {
+       Token staticToken = null,
              constToken = null,
              declToken = null,
-             firstToken = null; 
-       Token name; 
+             firstToken = null;
+       Token name;
        boolean Static = false, Constant = false;
-       ArrayList variableNames = new ArrayList(); 
+       ArrayList variableNames = new ArrayList();
    }
 {
-    [staticToken = <STATIC> { Static = true; } ] 
-    [constToken = <CONST> { Constant = true; } ] 
+    [staticToken = <STATIC> { Static = true; } ]
+    [constToken = <CONST> { Constant = true; } ]
     declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
 		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
     {
@@ -268,21 +270,21 @@ void FieldDeclaration() :
           else if (commentNextVariable != null)
              comment = commentNextVariable;
 
-          try { 
+          try {
              newField.setComment(comment);
              newField.setStatic(Static);
              newField.setConstant(Constant);
              project.addSymbol(newField);
              commentNextVariable = null;
-          } catch (Exception E) 
-          { 
-             throw new ParseException(E.getMessage()); 
+          } catch (Exception E)
+          {
+             throw new ParseException(E.getMessage());
           }
        }
     }
 }
 
-/** C. Ferrall added the optional ";" 
+/** C. Ferrall added the optional ";"
     And added option of = integer, created EnumElement
 **/
 Token EnumElement() : { Token name; }
@@ -293,10 +295,10 @@ Token EnumElement() : { Token name; }
 
 void EnumDeclaration() : { ArrayList<String> elements = new ArrayList<String>(); Token enumToken, el; }
 {
-	enumToken = <ENUM> 
-    "{" 
+	enumToken = <ENUM>
+    "{"
     el = EnumElement() { elements.add(el.image); }
-    ("," el = EnumElement() { elements.add(el.image); } )* 
+    ("," el = EnumElement() { elements.add(el.image); } )*
     "}" [";"]
     {
        String comment = null;
@@ -305,7 +307,7 @@ void EnumDeclaration() : { ArrayList<String> elements = new ArrayList<String>();
           if (enumToken.specialToken.beginLine != 1)
           {
              comment = enumToken.specialToken.image;
-             // trick to obtain alternative name 
+             // trick to obtain alternative name
              EnumComment ec = new EnumComment(project);
              try { ec.setText(comment); }
              catch ( Exception E ) { throw new ParseException(E.getMessage()); }
@@ -315,7 +317,7 @@ void EnumDeclaration() : { ArrayList<String> elements = new ArrayList<String>();
           }
 
        OxEnum newEnum = null;
-       if (currentClass == null) 
+       if (currentClass == null)
           newEnum = file.addEnum(alternativeName, elements);
        else
           newEnum = currentClass.addEnum(alternativeName, elements, currentVisibility);
@@ -341,7 +343,7 @@ void FunctionDeclaration() :{}
 	(
 	  LOOKAHEAD(4)
 	  <IDENTIFIER> ("::") ["~" ] <IDENTIFIER>
-|	  <IDENTIFIER> 
+|	  <IDENTIFIER>
 	)
     "(" [ ArgumentList() ] ")"  ";"
 }
@@ -376,7 +378,7 @@ void FunctionDefinition() :
 		 project.addSymbol(newMethod);
 		 func = newMethod;
 	  }
-|	  name = <IDENTIFIER> 
+|	  name = <IDENTIFIER>
 	  {
 	  	 OxMethod newFunction = file.addFunction(name.image);
 	     if (name.specialToken != null)
@@ -387,7 +389,7 @@ void FunctionDefinition() :
 		 func = newFunction;
 	  }
 	)
-    "(" [ ArgumentList() ] ")" 
+    "(" [ ArgumentList() ] ")"
 	{
 	  t2 = getToken(0);
 
@@ -404,7 +406,7 @@ void FunctionDefinition() :
 
 void ArgumentList() : {}
 {
-	"..." | 
+	"..." |
 	[<CONST>] <IDENTIFIER> [ "=" Expression() ] [ "," ArgumentList() ]
 }
 
@@ -420,7 +422,7 @@ void SimpleStatement() : {}
 	LOOKAHEAD(3)
       DeclarationInFunction() |
 	  AssignmentExpression() ("," AssignmentExpression())* |
-	  JumpStatement() 
+	  JumpStatement()
 }
 
 void Label() : {}
@@ -439,7 +441,7 @@ void Statement() : {}
 
 void JumpStatement() : {}
 {
-	( 
+	(
       <CONTINUE>  |
       <GOTO> <IDENTIFIER> |
 	  <BREAK>  |
@@ -455,14 +457,14 @@ Token VariableDeclaration() : { Token name; }
 
 void DeclarationInFunction() : {}
 {
-	<DECL> VariableDeclaration() ("," VariableDeclaration())*  	
+	[<SERIAL>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
 }
 
-/** Added by C. Ferrall to parse switches
+/** Added by C. Ferrall to parse switches, generalized to allow for character and strings
 **/
 void CaseStatement() : {}
 {
-    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <IDENTIFIER>) 
+    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL> |<IDENTIFIER>)
             ":" (Statement())*
 }
 
@@ -476,9 +478,9 @@ void DfltStatement() : {}
 void SelectionStatement() : {}
 {
 	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
-	  <SWITCH> "(" Expression() ")" 
+	  <SWITCH> "(" Expression() ")"
                 "{" (CaseStatement() | DfltStatement())* "}" |
-	  <SWITCHSINGLE> "(" Expression() ")" 
+	  <SWITCHSINGLE> "(" Expression() ")"
                 "{" (CaseStatement() | DfltStatement())* "}"  )
 }
 
@@ -486,8 +488,15 @@ void IterationStatement() : {}
 {
 	( <WHILE> "(" Expression() ")" Statement() |
 	  <DO> Statement() <WHILE> "(" Expression() ")" ";" |
-	  <FOREACH> "(" Expression() <IN> Expression() ")" |
+	  <FOREACH> "(" SimpleStatement() <IN> Expression() ")" |
 	  <FOR> "("
+	  		[ SimpleStatement() ]
+	  		";"
+	  		[ Expression() ]
+			";"
+	  		[ SimpleStatement() ]
+		")" Statement() |
+		<PARALLELFOR> "("
 	  		[ SimpleStatement() ]
 	  		";"
 	  		[ Expression() ]
@@ -501,7 +510,7 @@ void Expression() : {}
   AssignmentExpression()
 }
 
-void AssignmentExpression() : {}  
+void AssignmentExpression() : {}
 {
     "[=]" "(" [ ArgumentList() ] ")" CompoundStatement() |
 	  "[" UnaryExpression() ("," UnaryExpression())* "]" "=" AssignmentExpression() |
@@ -574,7 +583,7 @@ void MultiplicativeExpression() : {}
 void UnaryExpression() : {}
 {
 	( LOOKAHEAD(3) PowerExpression() |
-	  UnaryOperator() UnaryExpression() 
+	  UnaryOperator() UnaryExpression()
 	)
 }
 
@@ -640,6 +649,6 @@ void ArrayConstant() : {}
 void Constant() : {}
 {
  LOOKAHEAD(2) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(2) ["+"|"-"]  <INTEGER_LITERAL> |
- <CHARACTER_LITERAL> | 
+ <CHARACTER_LITERAL> |
  <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "." | LOOKAHEAD(2) ["+"|"-"] <INF> | <NAN>
 }
