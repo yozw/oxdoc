@@ -1,4 +1,8 @@
 # Changes
+### June 2017
+* Updated `foreach` to allow for more complicated expressions
+* Added `parallel for` and `serial`
+* Updated case statement to allow for characters and strings
 
 ### March 4th, 2014
 * Did a lot of refactoring and performance optimizations
