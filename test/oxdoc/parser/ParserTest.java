@@ -209,6 +209,42 @@ public class ParserTest {
     helper.test();
   }
 
+  @Test
+  public void testForEachWithDeclare() throws Exception {
+    String input = "main() { foreach(decl x in y[0]) { println(x); } }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+ 
+  @Test
+  public void testSerial() throws Exception {
+    String input = "main() { serial decl y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+ 
+  @Test
+  public void testParallelFor() throws Exception {
+    String input = "main() {parallel for(decl i=0; i<10; i++){ print(i);}}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+ 
+  @Test
+  public void testSwitchSingleOnCharacter() throws Exception {
+    String input = " main() {decl character = 'a'; switch_single(character){  case 'a': print(character);}}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testSwitchOnCharacter() throws Exception {
+    String input = " main() {decl character = 'a'; switch(character){  case 'a': print(character);}}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+ 
   /*
   @Test
   public void testVariableNamedIn() throws Exception {
