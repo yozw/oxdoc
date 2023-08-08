@@ -244,7 +244,13 @@ public class ParserTest {
     helper.test();
   }
 
- 
+  @Test
+  public void testDottedArgs() throws Exception {
+    String input = "main(...args) {decl a = 1;}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
   /*
   @Test
   public void testVariableNamedIn() throws Exception {
