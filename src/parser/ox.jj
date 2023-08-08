@@ -448,9 +448,16 @@ void JumpStatement() : {}
 		  <RETURN> [ Expression() ]  )
 }
 
+// TODO(yori): There are probably multiple places in which <IDENTIFIER> needs to be replaced with VariableName(). Find out which.
+Token VariableName() : { Token name; }
+{
+        ( name = <IN> | name = <IDENTIFIER> )
+	{ return name; }
+}
+
 Token VariableDeclaration() : { Token name; }
 {
-	name = <IDENTIFIER> [ "=" AssignmentExpression() ]
+	name = VariableName() [ "=" AssignmentExpression() ]
 	{ return name; }
 }
 
