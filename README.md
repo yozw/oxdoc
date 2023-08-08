@@ -27,9 +27,7 @@ The latest compiled version is available at https://github.com/yozw/oxdoc/releas
 
 
 ### Compilation instructions
-* Install JavaCC
-* Install JUnit and Hamcrest
-* Copy `build.properties.template` to build.properties and edit it
+* Install ant; see https://ant.apache.org/.
 * Run `ant build` to build Oxdoc.
 * Run `ant dist` -- this will make zip files containing source and
   binary distributions in the `dist/` subdirectory
