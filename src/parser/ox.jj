@@ -630,7 +630,12 @@ void ArgumentExpressionList() : {}
 
 void MatrixConstantElement() : {}
 {
-	"[" Constant() "]" "*" Constant() |
+/*
+ TODO(yori): Should all the Constant() entries here be expressions?
+ TODO(yori): Can the range option rely on RangeExpression() ?
+*/
+	LOOKAHEAD(4) "[" ( Constant() | <IDENTIFIER> ) "]" "*" Constant() |
+	( "[" ( Constant() | <IDENTIFIER> ) "]" )+ "=" Constant() |
 	LOOKAHEAD(3) Constant() ":" [ "[" Constant() "]" ] Constant() |
 	Constant() |
 	<IDENTIFIER>

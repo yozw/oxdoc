@@ -251,6 +251,62 @@ public class ParserTest {
     helper.test();
   }
 
+  @Test
+  public void testVectorConstant() throws Exception {
+    String input = "static decl vector = <0, 1, 2>;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithoutCommas() throws Exception {
+    String input = "static decl vector = <0 1 2>;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithRange() throws Exception {
+    String input = "static decl vector = < 1:5 >;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithStepRange() throws Exception {
+    String input = "static decl zerovector = < 1:[2]5 >;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithRepeat() throws Exception {
+    String input = "static decl zerovector = < [3] *0>;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithVariableRepeat() throws Exception {
+    String input = "enum{Vleng=3}; static decl zerovector = < [Vleng] *0>;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstantWithSpecificElement() throws Exception {
+    String input = "static decl vector = <1:3; 1:3; [0][0]=5>;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVectorConstant_Complicated() throws Exception {
+    String input = "static decl vector = < [4]*1,2; 10,11,14-2; 1:4; [3][4]=99,2; 8:[-3]2 >;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
   /*
   @Test
   public void testVariableNamedIn() throws Exception {
@@ -258,5 +314,5 @@ public class ParserTest {
     ParserTestHelper helper = create(input);
     helper.test();
   }
-   */
+  */
 }
