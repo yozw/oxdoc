@@ -4,12 +4,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static oxdoc.parser.ParserTestHelper.create;
 
 @RunWith(JUnit4.class)
 public class ParserTest {
+
+  private String readTestFile(String fileName) throws Exception {
+    return new String(Files.readAllBytes(Paths.get("test/oxdoc/parser/" + fileName)));
+  }
 
   @Test
   public void testClassDeclaration() throws Exception {
@@ -303,6 +310,13 @@ public class ParserTest {
   @Test
   public void testVectorConstant_Complicated() throws Exception {
     String input = "static decl vector = < [4]*1,2; 10,11,14-2; 1:4; [3][4]=99,2; 8:[-3]2 >;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testFile_test1() throws Exception {
+    String input = readTestFile("test1.ox");
     ParserTestHelper helper = create(input);
     helper.test();
   }
