@@ -1,9 +1,11 @@
 package oxdoc.entities;
 
+import org.junit.Assert;
 import junit.framework.TestCase;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import oxdoc.OxProject;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -79,5 +81,41 @@ public class OxEntityListTest extends TestCase {
 
     assertEquals(2, fields.size());
     assertEquals(1, methods.size());
+  }
+
+  public static <T> List<T> toList(Iterable<T> iterable) {
+    List<T> list = new ArrayList<T>();
+    Iterator<T> iterator = iterable.iterator();
+    while (iterator.hasNext()) {
+      list.add(iterator.next());
+    }
+    return list;
+  }
+
+  public void testOrdering() throws Exception {
+    OxEntityList<OxEntity> list = new OxEntityList<OxEntity>();
+    OxEntity a = new OxMethod("a", file);
+    OxEntity b = new OxMethod("b", file);
+    OxEntity c = new OxMethod("c", file);
+
+    assertEquals("a", a.getSortKey());
+    assertEquals("b", b.getSortKey());
+    assertEquals("c", c.getSortKey());
+
+    list.add(a);
+    list.add(c);
+    list.add(b);
+
+    assertEquals(Arrays.asList(a, b, c), toList(list));
+
+    // Double check that ordering matters when checking for list equality.
+    Assert.assertNotEquals(Arrays.asList(c, b, a), toList(list));
+
+    a.setComment("/** @sortkey d **/");
+    assertEquals("d", a.getSortKey());
+
+    assertEquals(Arrays.asList(b, c, a), toList(list));
+    c.setComment("/** @sortkey a **/");
+    assertEquals(Arrays.asList(c, b, a), toList(list));
   }
 }

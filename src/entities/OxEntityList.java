@@ -28,9 +28,10 @@ import java.util.*;
 
 public class OxEntityList<T extends OxEntity> implements Iterable<T> {
   private final Logger logger = Logging.getLogger();
+  private final Comparator<T> comparator = new OxEntityComparator<T>();
 
   private final Map<String, T> nameMap = new HashMap<String, T>();
-  private final TreeSet<T> entitySet = new TreeSet<T>(new OxEntityComparator<T>());
+  private final Set<T> entitySet = new HashSet<T>();
 
   public int size() {
     return entitySet.size();
@@ -65,7 +66,11 @@ public class OxEntityList<T extends OxEntity> implements Iterable<T> {
 
   @Override
   public Iterator<T> iterator() {
-    return entitySet.iterator();
+    // Make a sorted copy before iterating.
+    // Note that entities are mutable, and therefore so are their sort keys.
+    List<T> copy = new ArrayList<T>(entitySet);
+    Collections.sort(copy, comparator);
+    return copy.iterator();
   }
 
   public OxEntityList<T> filter(Predicate<T> filter) {
