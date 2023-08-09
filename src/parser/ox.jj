@@ -69,6 +69,7 @@ TOKEN : {
 |  <#EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+>
 |  <CHARACTER_LITERAL: "\'" (~["\'","\\","\n","\r"] | "\\" (["n","t","b","r","f","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"])) "\'">
 |  <STRING_LITERAL: "\"" (~["\"","\\","\n","\r"] | "\\" (["a","v","x","n","t","b","r","f","{","}","\\","\'","\""] | ["0"-"7"] (["0"-"7"])? | ["0"-"3"] ["0"-"7"] ["0"-"7"]))* "\"">
+|  <RAW_STRING_LITERAL: "`" (~["`"])* "`">
 }
 
 TOKEN : {
@@ -478,7 +479,7 @@ void DeclarationInFunction() : {}
 **/
 void CaseStatement() : {}
 {
-    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL> |<IDENTIFIER>)
+    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL> | <IDENTIFIER> | <RAW_STRING_LITERAL> )
             ":" (Statement())*
 }
 
@@ -669,5 +670,6 @@ void Constant() : {}
 {
  LOOKAHEAD(2) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(2) ["+"|"-"]  <INTEGER_LITERAL> |
  <CHARACTER_LITERAL> |
+ <RAW_STRING_LITERAL> |
  <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "." | LOOKAHEAD(2) ["+"|"-"] <INF> | <NAN>
 }

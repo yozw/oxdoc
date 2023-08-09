@@ -123,14 +123,12 @@ public class ParserTest {
     helper.test();
   }
 
-  /* TODO(yori): Currently not passing. Fix.
   @Test
   public void testRawString() throws Exception {
     String input = "static decl x = `line 1\nline 2`;";
     ParserTestHelper helper = create(input);
     helper.test();
   }
-  */
 
   @Test
   public void testEquality() throws Exception {

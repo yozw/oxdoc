@@ -64,6 +64,7 @@ THE SOFTWARE.
 * Added support for multiple variable declarations, e.g. `decl [a, b] = {1, 2}`.
 * Allow `in` as a variable name.
 * Added support for multiplicative matrix declaration, e.g. `enum{Vleng=3}; static decl zerovector = < [Vleng] *0>;`
+* Added support for "raw string literals", i.e., multi-line strings surrounded by backtics.
 
 ### June 2017 (oxdoc 1.1)
 * Updated `foreach` to allow for more complicated expressions
