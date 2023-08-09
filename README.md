@@ -66,6 +66,7 @@ THE SOFTWARE.
 * Added support for multiplicative matrix declaration, e.g. `enum{Vleng=3}; static decl zerovector = < [Vleng] *0>;`
 * Added support for "raw string literals", i.e., multi-line strings surrounded by backtics.
 * Added support for `.last` indexing in arrays.
+* Bugfix: sort keys were ignored.
 
 ### June 2017 (oxdoc 1.1)
 * Updated `foreach` to allow for more complicated expressions
