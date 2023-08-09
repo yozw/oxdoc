@@ -37,7 +37,7 @@ The latest compiled version is available at https://github.com/yozw/oxdoc/releas
 
 The MIT License (MIT)
 
-Copyright (c) 2005-2015 Y. Zwols
+Copyright (c) 2005-2023 Y. Zwols
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
