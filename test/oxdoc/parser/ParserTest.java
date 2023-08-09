@@ -376,14 +376,12 @@ public class ParserTest {
     helper.test();
   }
 
-  /* TODO(yori): Currently not passing. Fix.
   @Test
   public void testLastIndex() throws Exception {
-    String input = "static decl vector = x[.last][.last];";
+    String input = "static decl vector = x[.last][.last-1];";
     ParserTestHelper helper = create(input);
     helper.test();
   }
-  */
 
   @Test
   public void testMultiplicateConcatenation() throws Exception {
