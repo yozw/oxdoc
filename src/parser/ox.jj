@@ -163,7 +163,7 @@ void GlobalVariableDeclaration() :
               constToken = null,
               declToken = null,
               firstToken = null;
-        Token name;
+        ArrayList<Token> names = new ArrayList<Token>();
         boolean Static = false, Constant = false, Extern = false;
         ArrayList<Token> variableNames = new ArrayList<Token>();
 }
@@ -171,8 +171,7 @@ void GlobalVariableDeclaration() :
     [externToken = <EXTERN> { Extern = true; } ]
     [staticToken = <STATIC> { Static = true; } ]
     [constToken = <CONST> { Constant = true; } ]
-    declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
-		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
+    declToken = <DECL> names = VariableDeclarations() { variableNames.addAll(names); } ";"
     {
     }
 }
@@ -238,15 +237,15 @@ void FieldDeclaration() :
              constToken = null,
              declToken = null,
              firstToken = null;
-       Token name;
+       ArrayList<Token> names;
        boolean Static = false, Constant = false;
        ArrayList variableNames = new ArrayList();
    }
 {
     [staticToken = <STATIC> { Static = true; } ]
     [constToken = <CONST> { Constant = true; } ]
-    declToken = <DECL> name = VariableDeclaration()  { variableNames.add(name); }
-		("," name = VariableDeclaration() { variableNames.add(name); } )* ";"
+    declToken = <DECL> names = VariableDeclaration()  { variableNames.addAll(names); }
+		("," names = VariableDeclaration() { variableNames.addAll(names); } )* ";"
     {
        if (staticToken != null) firstToken = staticToken;
        if ((constToken != null) && (firstToken == null)) firstToken = constToken;
@@ -455,16 +454,24 @@ Token VariableName() : { Token name; }
 	{ return name; }
 }
 
-Token VariableDeclaration() : { Token name; }
+ArrayList<Token> VariableDeclaration() : { Token name; ArrayList<Token> names = new ArrayList<Token>(); }
 {
-	name = VariableName() [ "=" AssignmentExpression() ]
-	{ return name; }
+	( name = VariableName() { names.add(name); } [ "=" AssignmentExpression() ] |
+          "[" name = VariableName() { names.add(name); }
+	  ( "," name = VariableName() { names.add(name); } )* "]" [ "=" AssignmentExpression() ] )
+	{ return names; }
 }
 
+ArrayList<Token> VariableDeclarations() : { ArrayList<Token> subNames; ArrayList<Token> names = new ArrayList<Token>(); }
+{
+	subNames = VariableDeclaration() { names.addAll(subNames); }
+ 	("," subNames = VariableDeclaration() { names.addAll(subNames); } )*
+	{ return names; }
+}
 
 void DeclarationInFunction() : {}
 {
-	[<SERIAL>] <DECL> VariableDeclaration() ("," VariableDeclaration())*
+	[<SERIAL>] <DECL> VariableDeclarations()
 }
 
 /** Added by C. Ferrall to parse switches, generalized to allow for character and strings

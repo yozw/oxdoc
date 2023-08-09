@@ -30,10 +30,18 @@ public class ParserTest {
 
   @Test
   public void testFunction() throws Exception {
-    String input = "F() { }";
+    String input = "f() { }";
     ParserTestHelper helper = create(input);
     helper.test();
-    assertNotNull(helper.getProject().getSymbol("F"));
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testLambdaFunction() throws Exception {
+    String input = "decl f = [=](arg) { println(a, arg); return b; };";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
   }
 
   @Test
@@ -77,8 +85,50 @@ public class ParserTest {
   }
 
   @Test
+  public void testMultipleAssignmentInDecl() throws Exception {
+    String input = "decl [a, b, c] = {1, 2, 3};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("a"));
+    assertNotNull(helper.getProject().getSymbol("b"));
+    assertNotNull(helper.getProject().getSymbol("c"));
+  }
+
+  @Test
+  public void testMultipleAssignmentInDecl_Single() throws Exception {
+    String input = "decl [a] = {1};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("a"));
+  }
+
+  @Test
+  public void testMultipleAssignment_skip() throws Exception {
+    String input = "[a,,c] = {1, 3};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  /* TODO(yori): Currently not passing. Fix.
+  @Test
+  public void testRawString() throws Exception {
+    String input = "static decl x = `line 1\nline 2`;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+  */
+
+  @Test
   public void testEquality() throws Exception {
     String input = "f() { return x == y; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testDotEquality() throws Exception {
+    String input = "f() { return x .== y; }";
     ParserTestHelper helper = create(input);
     helper.test();
     assertNotNull(helper.getProject().getSymbol("f"));
@@ -310,6 +360,29 @@ public class ParserTest {
   @Test
   public void testVectorConstant_Complicated() throws Exception {
     String input = "static decl vector = < [4]*1,2; 10,11,14-2; 1:4; [3][4]=99,2; 8:[-3]2 >;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  /* TODO(yori): Currently not passing. Fix.
+  @Test
+  public void testLastIndex() throws Exception {
+    String input = "static decl vector = x[.last][.last];";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+  */
+
+  @Test
+  public void testMultiplicateConcatenation() throws Exception {
+    String input = "static decl a = {\"%6.0f\"} ~ {\"%#10.5g\"} * 4  ~ {\"%#15.10g\"};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testIndexArrayByString() throws Exception {
+    String input = "static decl aa = {\"one\", 10, \"two\", 0, \"four\", <1>, \"five\", {1,2}};";
     ParserTestHelper helper = create(input);
     helper.test();
   }
