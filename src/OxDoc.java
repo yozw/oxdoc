@@ -1,6 +1,6 @@
 /**
 
- oxdoc (c) Copyright 2005-2014 by Y. Zwols
+ oxdoc (c) Copyright 2005-2023 by Y. Zwols
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@ import java.io.OutputStreamWriter;
 
 public class OxDoc {
   public static final String PRODUCT_NAME = "oxdoc";
-  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2014 by Y. Zwols [yorizwols@users.sourceforge.net]";
+  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2023 by Y. Zwols [yorizwols@users.sourceforge.net]";
   public static final String VERSION = Constants.VERSION;
   public static final String URL = "http://oxdoc.sourceforge.net";
   public static final String LICENSE_NOTICE = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n"
