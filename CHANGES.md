@@ -1,4 +1,11 @@
 # Changes
+
+### August 2023
+* Added support for `...varname` variable-length arguments.
+* Added support for multiple variable declarations, e.g. `decl [a, b] = {1, 2}`.
+* Allow `in` as a variable name.
+* Added support for multiplicative matrix declaration, e.g. `enum{Vleng=3}; static decl zerovector = < [Vleng] *0>;`
+
 ### June 2017
 * Updated `foreach` to allow for more complicated expressions
 * Added `parallel for` and `serial`
