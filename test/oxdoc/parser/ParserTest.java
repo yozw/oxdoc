@@ -103,8 +103,22 @@ public class ParserTest {
   }
 
   @Test
+  public void testMultipleAssignment() throws Exception {
+    String input = "[a, b, c] = {1, 2, 3};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
   public void testMultipleAssignment_skip() throws Exception {
     String input = "[a,,c] = {1, 3};";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testMultipleAssignment_single() throws Exception {
+    String input = "[a] = {1};";
     ParserTestHelper helper = create(input);
     helper.test();
   }
