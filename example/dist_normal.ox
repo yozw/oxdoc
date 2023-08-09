@@ -1,9 +1,10 @@
-/** The multivariate Normal distribution $\mathcal{N}(\mu, \Sigma)$.
+/** The multivariate Normal distribution $N(\mu, \Sigma)$.
 An instance of a NormalDistribution class generates realizations of a random
 variable $X$ with probability density function 
 $$f_X(x) = |\Sigma|^{-1/2}(2\pi)^{-n/2}\exp\left(-\frac{1}{2}(x-\mu)'\Sigma^{-1}(x-\mu)\right).$$
 
 @author Y. Zwols
+@sortkey C
 
 @example To generate 20 samples from a standard normal distribution, the following code
 can be used:

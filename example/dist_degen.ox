@@ -1,4 +1,6 @@
-/** Provides standard distributions **/
+/** Provides a degenerate (non-random) distribution.
+@sortkey B
+**/
 
 /** The degenerate distribution.
 @author Y. Zwols

@@ -1,7 +1,7 @@
 /** Provides the `Distribution` class, representing an abstract random
 distribution
 @author Y. Zwols
-@sortkey ZZZZ
+@sortkey A
 **/
 
 #ifndef __PCLIRE_DISTRIBUTION__
