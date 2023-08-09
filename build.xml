@@ -96,7 +96,7 @@
   </target>
 
   <target name="test" depends="build">
-    <javac srcdir="${srctest}" destdir="${build}" classpath="${junit}:${mockito}" nowarn="on" debug="${debug}" includeantruntime="off"  />
+    <javac srcdir="${srctest}" destdir="${build}" classpath="${junit}:${mockito}" nowarn="on" debug="on" includeantruntime="off"  />
     <junit fork="true">
       <classpath>
         <pathelement location="${build}" />    
