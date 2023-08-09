@@ -37,6 +37,22 @@ public class ParserTest {
   }
 
   @Test
+  public void testFunctionForward() throws Exception {
+    String input = "f(a, b);\nf(a,b) { return a + b; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
+  public void testFunctionForwardWithDefault() throws Exception {
+    String input = "f(a, b=2);\nf(a,b) { return a + b; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("f"));
+  }
+
+  @Test
   public void testLambdaFunction() throws Exception {
     String input = "decl f = [=](arg) { println(a, arg); return b; };";
     ParserTestHelper helper = create(input);
