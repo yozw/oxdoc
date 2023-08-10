@@ -330,6 +330,13 @@ public class ParserTest {
     ParserTestHelper helper = create(input);
     helper.test();
   }
+
+  @Test
+  public void testParallelIfFor() throws Exception {
+    String input = "main() {decl do_in_parallel = TRUE; parallel if (do_in_parallel) for(decl i=0; i<10; i++){ print(i);}}";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
  
   @Test
   public void testSwitchSingleOnCharacter() throws Exception {

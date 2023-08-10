@@ -68,6 +68,7 @@ THE SOFTWARE.
 * Added support for `.last` indexing in arrays.
 * Added support for setting matrix dimensions in declaration, e.g., `decl x[3][3] = 1.5`.
 * Added support for `decl` statement in `if` statement.
+* Added support for `parallel if`.
 * Bugfix: sort keys were ignored.
 
 ### June 2017 (oxdoc 1.1)

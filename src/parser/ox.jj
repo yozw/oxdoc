@@ -97,7 +97,7 @@ TOKEN : {
 	<ENUM: "enum"> |
 	<FOR: "for"> |
 	<FOREACH: "foreach"> |
-	<PARALLELFOR: "parallel for">|
+	<PARALLEL: "parallel">|
 	<SERIAL: "serial"> |
 	<IN: "in"> |
 	<IF: "if"> |
@@ -516,7 +516,9 @@ void IterationStatement() : {}
 			";"
 	  		[ SimpleStatement() ]
 		")" Statement() |
-		<PARALLELFOR> "("
+		<PARALLEL>
+		        [ <IF> "(" Expression() ")" ]
+			<FOR> "("
 	  		[ SimpleStatement() ]
 	  		";"
 	  		[ Expression() ]
