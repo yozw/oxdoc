@@ -18,6 +18,10 @@ public class ParserTest {
     return new String(Files.readAllBytes(Paths.get("test/oxdoc/parser/" + fileName)));
   }
 
+  private String readExampleFile(String fileName) throws Exception {
+    return new String(Files.readAllBytes(Paths.get("example/" + fileName)));
+  }
+
   @Test
   public void testClassDeclaration() throws Exception {
     String input = "class X : Y { decl Z; X(); W(); virtual U(); }";
@@ -445,6 +449,13 @@ public class ParserTest {
   }
 
   @Test
+  public void testVariableNamedIn() throws Exception {
+    String input = "main() { decl in = 5; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
   public void testFile_test1() throws Exception {
     String input = readTestFile("test1.ox");
     ParserTestHelper helper = create(input);
@@ -452,8 +463,22 @@ public class ParserTest {
   }
 
   @Test
-  public void testVariableNamedIn() throws Exception {
-    String input = "main() { decl in = 5; }";
+  public void testExample_dist_degen() throws Exception {
+    String input = readExampleFile("dist_degen.ox");
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testExample_dist_normal() throws Exception {
+    String input = readExampleFile("dist_normal.ox");
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testExample_distribution() throws Exception {
+    String input = readExampleFile("distribution.ox");
     ParserTestHelper helper = create(input);
     helper.test();
   }
