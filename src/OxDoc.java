@@ -32,12 +32,13 @@ import java.io.OutputStreamWriter;
 
 public class OxDoc {
   public static final String PRODUCT_NAME = "oxdoc";
-  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2023 by Y. Zwols [yorizwols@users.sourceforge.net]";
+  public static final String COPYRIGHT_NOTICE = "(c) Copyright 2005-2023 by Y. Zwols.";
   public static final String VERSION = Constants.VERSION;
-  public static final String URL = "http://oxdoc.sourceforge.net";
+  public static final String URL = "http://yozw.github.io/oxdoc/";
   public static final String LICENSE_NOTICE = "oxdoc is free software and comes with ABSOLUTELY NO WARRANTY.\n"
       + "You are welcome to redistribute it under certain conditions.\n"
-      + "See the LICENSE file for distribution details.\n";
+      + "See the LICENSE file for distribution details.\n"
+      + "The code for oxdoc is hosted at https://github.com/yozw/oxdoc.\n";
 
   private final Logger logger = Logging.getLogger();
   private final OxProject project;
