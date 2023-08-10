@@ -455,9 +455,14 @@ Token VariableName() : { Token name; }
 	{ return name; }
 }
 
+void DimensionDeclaration() : {}
+{
+  ( "[" UnaryExpression() "]" )+
+}
+
 ArrayList<Token> VariableDeclaration() : { Token name; ArrayList<Token> names = new ArrayList<Token>(); }
 {
-	( name = VariableName() { names.add(name); } [ "=" AssignmentExpression() ] |
+	( name = VariableName() { names.add(name); } [ DimensionDeclaration() ] [ "=" AssignmentExpression() ] |
           "[" name = VariableName() { names.add(name); }
 	  ( "," name = VariableName() { names.add(name); } )* "]" [ "=" AssignmentExpression() ] )
 	{ return names; }
