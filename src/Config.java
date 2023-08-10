@@ -20,9 +20,14 @@
 
 package oxdoc;
 
+import org.xml.sax.SAXException;
+
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import oxdoc.util.FileUtils;
 import oxdoc.util.Logger;
 import oxdoc.util.Logging;
@@ -30,7 +35,15 @@ import oxdoc.util.Os;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 import static oxdoc.util.FileUtils.toNativePath;
@@ -127,63 +140,58 @@ public class Config {
     }
   }
 
-  public MathProcessor toMathProcessor(String value) throws Exception {
+  public MathProcessor toMathProcessor(String value) throws IllegalArgumentException {
     MathProcessor processor = mathProcessors.get(value);
     if (processor == null) {
-      throw new Exception("Formula specification " + value + " invalid. Ignored.");
+      throw new IllegalArgumentException("Formula specification " + value + " invalid. Ignored.");
     }
     return processor;
   }
 
   public boolean setOption(String name, String value) {
-    try {
-      if (name.equals("latex")) {
-        latex = FileUtils.toNativeFileName(value);
-      } else if (name.equals("dvipng")) {
-        dvipng = FileUtils.toNativeFileName(value);
-      } else if (name.equals("tempdir")) {
-        tempDir = toNativePath(value);
-      } else if (name.equals("outputdir")) {
-        outputDir = toNativePath(value);
-      } else if (name.equals("include")) {
-        Collections.addAll(includePaths, value.split(File.pathSeparator));
-      } else if (name.equals("imagebgcolor")) {
-        if (value.trim().equalsIgnoreCase("transparent")) {
-          imageBgColor = null;
-        } else {
-          String latexColor = htmlColorToLatex(value);
-          if (latexColor != null) {
-            imageBgColor = latexColor;
-          }
-        }
-      } else if (name.equals("imagepath")) {
-        imagePath = value;
-      } else if (name.equals("csspath")) {
-        cssPath = value;
-      } else if (name.equals("latexpackages")) {
-        String[] packages = value.split("[,;]");
-        Collections.addAll(latexPackages, packages);
-      } else if (name.equals("formulas")) {
-        mathProcessor = toMathProcessor(value);
-      } else if (name.equals("icons")) {
-        enableIcons = toBoolean(value);
-      } else if (name.equals("showinternals")) {
-        showInternals = toBoolean(value);
-      } else if (name.equals("projectname")) {
-        projectName = value;
-      } else if (name.equals("windowtitle")) {
-        windowTitle = value;
-      } else if (name.equals("verbose")) {
-        verbose = toBoolean(value);
-      } else if (name.equals("uplevel")) {
-        upLevel = toBoolean(value);
+    if (name.equals("latex")) {
+      latex = FileUtils.toNativeFileName(value);
+    } else if (name.equals("dvipng")) {
+      dvipng = FileUtils.toNativeFileName(value);
+    } else if (name.equals("tempdir")) {
+      tempDir = toNativePath(value);
+    } else if (name.equals("outputdir")) {
+      outputDir = toNativePath(value);
+    } else if (name.equals("include")) {
+      Collections.addAll(includePaths, value.split(File.pathSeparator));
+    } else if (name.equals("imagebgcolor")) {
+      if (value.trim().equalsIgnoreCase("transparent")) {
+        imageBgColor = null;
       } else {
-        return false;
+        String latexColor = htmlColorToLatex(value);
+        if (latexColor != null) {
+          imageBgColor = latexColor;
+        }
       }
-    } catch (Exception E) {
-      logger.warning(E.getMessage());
+    } else if (name.equals("imagepath")) {
+      imagePath = value;
+    } else if (name.equals("csspath")) {
+      cssPath = value;
+    } else if (name.equals("latexpackages")) {
+      String[] packages = value.split("[,;]");
+      Collections.addAll(latexPackages, packages);
+    } else if (name.equals("formulas")) {
+      mathProcessor = toMathProcessor(value);
+    } else if (name.equals("icons")) {
+      enableIcons = toBoolean(value);
+    } else if (name.equals("showinternals")) {
+      showInternals = toBoolean(value);
+    } else if (name.equals("projectname")) {
+      projectName = value;
+    } else if (name.equals("windowtitle")) {
+      windowTitle = value;
+    } else if (name.equals("verbose")) {
+      verbose = toBoolean(value);
+    } else if (name.equals("uplevel")) {
+      upLevel = toBoolean(value);
+    } else {
+      throw new IllegalArgumentException("Illegal option: " + name);
     }
-
     return true;
   }
 
@@ -251,6 +259,19 @@ public class Config {
     load(configFile);
   }
 
+  private static String nodeToString(Node node) {
+    StringWriter sw = new StringWriter();
+    try {
+      Transformer t = TransformerFactory.newInstance().newTransformer();
+      t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+      t.setOutputProperty(OutputKeys.INDENT, "yes");
+      t.transform(new DOMSource(node), new StreamResult(sw));
+    } catch (TransformerException te) {
+      System.out.println("nodeToString Transformer Exception");
+    }
+    return sw.toString();
+  }
+
   public void load(String filename) {
     File file = new File(filename);
     if (!file.exists()) {
@@ -258,22 +279,40 @@ public class Config {
     }
     logger.info("Loading configuration file " + filename);
 
+    // Parse the file
+    DocumentBuilder builder;
+    Document doc;
     try {
-      // Parse the file
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      Document doc = builder.parse(file);
+      builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      doc = builder.parse(file);
+    } catch (ParserConfigurationException | SAXException | IOException e) {
+      throw new RuntimeException("Could not parse " + filename + ": " + e.getMessage());
+    }
 
-      // Find the tags of interest
-      NodeList nodes = doc.getElementsByTagName("option");
-      for (int i = 0; i < nodes.getLength(); i++) {
-        Element element = (Element) nodes.item(i);
+    // Find the tags of interest
+    NodeList nodes = doc.getElementsByTagName("option");
+    for (int i = 0; i < nodes.getLength(); i++) {
+      Element element = (Element) nodes.item(i);
+      String name;
+      String value;
 
-        String name = element.getAttribute("name");
-        String value = element.getAttribute("value");
-        setOption(name, value);
+      if ((element.getAttributes() != null) &&
+          (element.getAttributes().getLength() == 2)) {
+	name = element.getAttribute("name");
+	value = element.getAttribute("value");
+      } else if ((element.getAttributes() != null) &&
+                 (element.getAttributes().getLength() == 1)) {
+	  Attr attr = (Attr) element.getAttributes().item(0);
+	  name = attr.getName();
+	  value = attr.getValue();
+      } else {
+        throw new IllegalArgumentException(
+	      "Config options should either have 'name' and 'value' attributes, and" +
+	      " nothing else, or a single key=value attribute. Found: " +
+	      nodeToString(nodes.item(i)));
       }
-    } catch (Exception E) {
-      logger.warning("Could not parse configuration file " + filename);
+      logger.info("Setting " + name + " = " + value);
+      setOption(name, value);
     }
   }
 

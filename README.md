@@ -71,6 +71,7 @@ THE SOFTWARE.
 * Added support for `decl` statement in `if` statement.
 * Added support for `parallel if`.
 * Added support for `.Null`.
+* Errors in `oxdoc.xml` are no longer silently ignored.
 * Bugfix: sort keys were ignored.
 
 ### June 2017 (oxdoc 1.1)
