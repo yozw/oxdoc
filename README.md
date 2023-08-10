@@ -60,6 +60,7 @@ THE SOFTWARE.
 ## Version history
 
 ### August 2023 (oxdoc 1.2)
+* This release aims to support new features in Ox 8 and Ox 9.
 * Added support for `...varname` variable-length arguments.
 * Added support for multiple variable declarations, e.g. `decl [a, b] = {1, 2}`.
 * Allow `in` as a variable name.
