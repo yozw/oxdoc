@@ -497,7 +497,7 @@ void DfltStatement() : {}
 **/
 void SelectionStatement() : {}
 {
-	( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
+	( <IF> "(" [ DeclarationInFunction() ";" ] Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ] |
 	  <SWITCH> "(" Expression() ")"
                 "{" (CaseStatement() | DfltStatement())* "}" |
 	  <SWITCHSINGLE> "(" Expression() ")"

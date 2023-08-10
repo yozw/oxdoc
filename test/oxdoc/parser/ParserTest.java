@@ -234,6 +234,14 @@ public class ParserTest {
   }
 
   @Test
+  public void testIfWithDecl() throws Exception {
+    String input = "main() { if (decl i = unit(2); i == 0) println(1); else println(2); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("main"));
+  }
+
+  @Test
   public void testInlineConditional() throws Exception {
     String input = "main() { decl x = u == 0 ? 0 : 1; }";
     ParserTestHelper helper = create(input);

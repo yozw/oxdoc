@@ -67,6 +67,7 @@ THE SOFTWARE.
 * Added support for "raw string literals", i.e., multi-line strings surrounded by backtics.
 * Added support for `.last` indexing in arrays.
 * Added support for setting matrix dimensions in declaration, e.g., `decl x[3][3] = 1.5`.
+* Added support for `decl` statement in `if` statement.
 * Bugfix: sort keys were ignored.
 
 ### June 2017 (oxdoc 1.1)
