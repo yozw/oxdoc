@@ -677,6 +677,7 @@ void Constant() : {}
 {
  LOOKAHEAD(2) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(2) ["+"|"-"]  <INTEGER_LITERAL> |
  ".last" |
+ ".Null" |
  <CHARACTER_LITERAL> |
  <RAW_STRING_LITERAL> |
  <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "." | LOOKAHEAD(2) ["+"|"-"] <INF> | <NAN>

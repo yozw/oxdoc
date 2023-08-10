@@ -101,6 +101,14 @@ public class ParserTest {
   }
 
   @Test
+  public void testAssignment_Null() throws Exception {
+    String input = "decl x = .Null;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
   public void testDeclareWithDimensions() throws Exception {
     String input = "decl x[3][3] = 1.5;";
     ParserTestHelper helper = create(input);
