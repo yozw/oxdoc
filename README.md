@@ -74,6 +74,7 @@ THE SOFTWARE.
 * Errors in `oxdoc.xml` are no longer silently ignored.
 * It is now possible to inject custom JavaScript by using the `-javascript` command line / configuration option.
 * Bugfix: sort keys were ignored.
+* Upgraded to MathJax 3.
 
 ### June 2017 (oxdoc 1.1)
 * Updated `foreach` to allow for more complicated expressions
