@@ -30,7 +30,9 @@ public class MathProcessorMathjax extends MathProcessor {
   }
 
   public String getExtraHeader() {
-    return "<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
+      // return "<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>";
+    return "<script src='https://polyfill.io/v3/polyfill.min.js?features=es6'></script>\n" +
+	"<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>";
   }
 
   public String getExtraFooter() {
