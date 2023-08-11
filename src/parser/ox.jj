@@ -81,8 +81,6 @@ TOKEN : {
 	<RETURN: "return"> |
 	<STATIC: "static"> |
 	<WHILE: "while"> |
-	<NAN: ".NaN"> |
-	<INF: ".Inf"> |
 	<BREAK: "break"> |
 	<GOTO: "goto"> |
 	<NEW: "new"> |
@@ -102,6 +100,10 @@ TOKEN : {
 	<IN: "in"> |
 	<IF: "if"> |
 	<DO: "do"> |
+	<LAST: "last"> |
+	<NULL: "Null"> |
+	<INF: "Inf"> |
+	<NAN: "NaN"> |
     <PUBLIC: "public"> | /** Three tokens added by C. Ferrall **/
     <STRUCT: "struct"> |
     <PROTECTED: "protected"> |
@@ -114,9 +116,18 @@ TOKEN : {
 |  <#DIGIT: ["0"-"9"]>
 }
 
+Token DotConstantKeyword() : { Token token; }
+{
+  ( token = <LAST> |
+    token = <NULL> |
+    token = <INF> |
+    token = <NAN> )
+  { return token; }
+}
+
 Token Identifier() : { Token name; }
 {
-        ( name = <IN> | name = <IDENTIFIER> )
+        ( name = <IDENTIFIER> | name = <IN> | name = DotConstantKeyword() )
 	{ return name; }
 }
 
@@ -657,7 +668,7 @@ void MatrixConstantElement() : {}
 */
 	LOOKAHEAD(4) "[" ( Constant() | Identifier() ) "]" "*" Constant() |
 	( "[" ( Constant() | Identifier() ) "]" )+ "=" Constant() |
-	LOOKAHEAD(3) Constant() ":" [ "[" Constant() "]" ] Constant() |
+	LOOKAHEAD(4) Constant() ":" [ "[" Constant() "]" ] Constant() |
 	Constant() |
 	Identifier()
 }
@@ -674,10 +685,9 @@ void ArrayConstant() : {}
 
 void Constant() : {}
 {
- LOOKAHEAD(2) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(2) ["+"|"-"]  <INTEGER_LITERAL> |
- ".last" |
- ".Null" |
+ LOOKAHEAD(3) ["+"|"-"] <FLOATING_POINT_LITERAL> | LOOKAHEAD(3) ["+"|"-"]  <INTEGER_LITERAL> |
+ LOOKAHEAD(3) ["+"|"-"] "." DotConstantKeyword() |
  <CHARACTER_LITERAL> |
  <RAW_STRING_LITERAL> |
- <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "." | LOOKAHEAD(2) ["+"|"-"] <INF> | <NAN>
+ <STRING_LITERAL> (LOOKAHEAD(1) <STRING_LITERAL>)* | MatrixConstant() | ArrayConstant()	| "."
 }

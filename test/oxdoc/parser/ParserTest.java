@@ -113,6 +113,38 @@ public class ParserTest {
   }
 
   @Test
+  public void testAssignment_Infinity() throws Exception {
+    String input = "decl x = .Inf, y = -.Inf;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
+  public void testAssignment_PlusInfinity() throws Exception {
+      String input = "decl x = +.Inf;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
+  public void testAssignment_MinusInfinity() throws Exception {
+    String input = "decl x = -.Inf;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
+  public void testAssignment_NaN() throws Exception {
+    String input = "decl x = .NaN;";
+    ParserTestHelper helper = create(input);
+    helper.test();
+    assertNotNull(helper.getProject().getSymbol("x"));
+  }
+
+  @Test
   public void testDeclareWithDimensions() throws Exception {
     String input = "decl x[3][3] = 1.5;";
     ParserTestHelper helper = create(input);
@@ -373,7 +405,7 @@ public class ParserTest {
 
   @Test
   public void testVectorConstant() throws Exception {
-    String input = "static decl vector = <0, 1, 2>;";
+    String input = "static decl vector = <0, 1, 2, -1, 0.5, -1.5, .Inf, +.Inf, -.Inf>;";
     ParserTestHelper helper = create(input);
     helper.test();
   }
@@ -450,7 +482,42 @@ public class ParserTest {
 
   @Test
   public void testVariableNamedIn() throws Exception {
-    String input = "main() { decl in = 5; decl out = in * 3; }";
+    String input = "main() { decl in = 5; decl out = in * 3; } f(in) { println(in); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVariableNamedInf() throws Exception {
+    String input = "main() { decl Inf = 5; decl out = Inf * 3; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVariableNamedNull() throws Exception {
+    String input = "main() { decl Null = 5; decl out = Null * 3; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVariableNamedNaN() throws Exception {
+    String input = "main() { decl NaN = 5; decl out = NaN * 3; }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testVariableNamedLast() throws Exception {
+    String input = "main() { decl last = 5; decl out = last * 3; } f(last) { println(last); }";
+    ParserTestHelper helper = create(input);
+    helper.test();
+  }
+
+  @Test
+  public void testMethodStartingWithDotConstant() throws Exception {
+    String input = "decl x = db.Info(), y = db.NaNa(), z = db.Nullify();";
     ParserTestHelper helper = create(input);
     helper.test();
   }
