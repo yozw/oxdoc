@@ -72,6 +72,7 @@ THE SOFTWARE.
 * Added support for `parallel if`.
 * Added support for `.Null`.
 * Errors in `oxdoc.xml` are no longer silently ignored.
+* It is now possible to inject custom JavaScript by using the `-javascript` command line / configuration option.
 * Bugfix: sort keys were ignored.
 
 ### June 2017 (oxdoc 1.1)
