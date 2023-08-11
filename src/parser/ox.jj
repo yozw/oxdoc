@@ -114,6 +114,12 @@ TOKEN : {
 |  <#DIGIT: ["0"-"9"]>
 }
 
+Token Identifier() : { Token name; }
+{
+        ( name = <IN> | name = <IDENTIFIER> )
+	{ return name; }
+}
+
 void OxFileDefinition() : {}
 {
 	{
@@ -147,7 +153,7 @@ void NamespaceDefinition() : {}
 
 void NamespaceDeclaration() : {}
 {
-	<NAMESPACE> <IDENTIFIER> "{" (NamespaceDefinition())* "}"
+	<NAMESPACE> Identifier() "{" (NamespaceDefinition())* "}"
 }
 
 void DeclarationStatement() : {}
@@ -183,7 +189,7 @@ void ClassDefinition() :
 {
 	( classtoken = <STRUCT> { currentVisibility = OxClass.Visibility.Public; } |
       classtoken = <CLASS> { currentVisibility = OxClass.Visibility.Private; }  )
-	name = <IDENTIFIER> [ ":" parentclassname = <IDENTIFIER> ]
+	name = Identifier() [ ":" parentclassname = Identifier() ]
 	{
 	  OxClass newClass;
 	  if (parentclassname == null)
@@ -222,7 +228,7 @@ void MethodDeclaration() : { Token name; boolean Virtual = false, Static = false
     [<VIRTUAL> { Virtual = true; } ]
     [<STATIC> { Static = true; } ]
     ["~" { methodPrefix = "~"; } ]
-    name = <IDENTIFIER> "(" [ ArgumentList() ] ")" ";"
+    name = Identifier() "(" [ ArgumentList() ] ")" ";"
     {
        OxMethod newMethod = currentClass.addMethod(methodPrefix + name.image);
        newMethod.setVirtual(Virtual);
@@ -289,7 +295,7 @@ void FieldDeclaration() :
 **/
 Token EnumElement() : { Token name; }
 {
-  name = <IDENTIFIER> ["=" AssignmentExpression() ]
+  name = Identifier() ["=" AssignmentExpression() ]
   { return name; }
 }
 
@@ -334,7 +340,7 @@ void EnumDeclaration() : { ArrayList<String> elements = new ArrayList<String>();
 
 void ExternFunctionDeclaration() : {}
 {
-	<EXTERN> [<STRING_LITERAL>] <IDENTIFIER> "(" [ ArgumentList() ] ")"  ";"
+	<EXTERN> [<STRING_LITERAL>] Identifier() "(" [ ArgumentList() ] ")"  ";"
 }
 
 void FunctionDeclaration() :{}
@@ -342,8 +348,8 @@ void FunctionDeclaration() :{}
 	[<STATIC>]
 	(
 	  LOOKAHEAD(4)
-	  <IDENTIFIER> ("::") ["~" ] <IDENTIFIER>
-|	  <IDENTIFIER>
+	  Identifier() ("::") ["~" ] Identifier()
+|	  Identifier()
 	)
     "(" [ ArgumentList() ] ")"  ";"
 }
@@ -356,7 +362,7 @@ void FunctionDefinition() :
 	[<STATIC>]
 	(
 	  LOOKAHEAD(4)
-	  classname = <IDENTIFIER> ("::") ["~" { methodPrefix = "~"; } ] name = <IDENTIFIER>
+	  classname = Identifier() ("::") ["~" { methodPrefix = "~"; } ] name = Identifier()
 	  {
 		 String methodName = methodPrefix + name.image;
 
@@ -378,7 +384,7 @@ void FunctionDefinition() :
 		 project.addSymbol(newMethod);
 		 func = newMethod;
 	  }
-|	  name = <IDENTIFIER>
+|	  name = Identifier()
 	  {
 	  	 OxMethod newFunction = file.addFunction(name.image);
 	     if (name.specialToken != null)
@@ -406,8 +412,8 @@ void FunctionDefinition() :
 
 void ArgumentList() : {}
 {
-	"..." [<IDENTIFIER>] |
-	[<CONST>] <IDENTIFIER> [ "=" Expression() ] [ "," ArgumentList() ]
+	"..." [Identifier()] |
+	[<CONST>] Identifier() [ "=" Expression() ] [ "," ArgumentList() ]
 }
 
 void CompoundStatement() : {}
@@ -427,7 +433,7 @@ void SimpleStatement() : {}
 
 void Label() : {}
 {
-    ":" <IDENTIFIER>
+    ":" Identifier()
 }
 
 void Statement() : {}
@@ -443,16 +449,9 @@ void JumpStatement() : {}
 {
 	(
       <CONTINUE>  |
-      <GOTO> <IDENTIFIER> |
+      <GOTO> Identifier() |
 	  <BREAK>  |
-		  <RETURN> [ Expression() ]  )
-}
-
-// TODO(yori): There are probably multiple places in which <IDENTIFIER> needs to be replaced with VariableName(). Find out which.
-Token VariableName() : { Token name; }
-{
-        ( name = <IN> | name = <IDENTIFIER> )
-	{ return name; }
+		  <RETURN> [ LOOKAHEAD(2) Expression() ]  )
 }
 
 void DimensionDeclaration() : {}
@@ -462,9 +461,9 @@ void DimensionDeclaration() : {}
 
 ArrayList<Token> VariableDeclaration() : { Token name; ArrayList<Token> names = new ArrayList<Token>(); }
 {
-	( name = VariableName() { names.add(name); } [ DimensionDeclaration() ] [ "=" AssignmentExpression() ] |
-          "[" name = VariableName() { names.add(name); }
-	  ( "," name = VariableName() { names.add(name); } )* "]" [ "=" AssignmentExpression() ] )
+	( name = Identifier() { names.add(name); } [ DimensionDeclaration() ] [ "=" AssignmentExpression() ] |
+          "[" name = Identifier() { names.add(name); }
+	  ( "," name = Identifier() { names.add(name); } )* "]" [ "=" AssignmentExpression() ] )
 	{ return names; }
 }
 
@@ -484,7 +483,7 @@ void DeclarationInFunction() : {}
 **/
 void CaseStatement() : {}
 {
-    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL> | <IDENTIFIER> | <RAW_STRING_LITERAL> )
+    <CASE> [( "+" | "-" )] (<INTEGER_LITERAL> | <CHARACTER_LITERAL> | <STRING_LITERAL> | Identifier() | <RAW_STRING_LITERAL> )
             ":" (Statement())*
 }
 
@@ -623,11 +622,11 @@ void PostfixExpression() : {}
 {
 	PrimaryExpression()  ( "[" [ RangeExpression() ] "]" |
 	                      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
-	  					  "." <IDENTIFIER> |
-						  LOOKAHEAD(3) "->" <IDENTIFIER> "::" <IDENTIFIER> |
-	  					  "->" <IDENTIFIER> |
+	  					  "." Identifier() |
+						  LOOKAHEAD(3) "->" Identifier() "::" Identifier() |
+	  					  "->" Identifier() |
 	  					  "++" |
-						  "'" [<IDENTIFIER>] |
+						  "'" [LOOKAHEAD(2) Identifier()] |
 	  					  "--" )*
 }
 
@@ -639,8 +638,8 @@ void RangeExpression() : {}
 
 void PrimaryExpression() : {}
 {
-	( LOOKAHEAD(2) <IDENTIFIER> "::" <IDENTIFIER> |
-	  <IDENTIFIER> |
+	( LOOKAHEAD(2) Identifier() "::" Identifier() |
+	  Identifier() |
 	  Constant() |
       "(" Expression() ")" )
 }
@@ -656,11 +655,11 @@ void MatrixConstantElement() : {}
  TODO(yori): Should all the Constant() entries here be expressions?
  TODO(yori): Can the range option rely on RangeExpression() ?
 */
-	LOOKAHEAD(4) "[" ( Constant() | <IDENTIFIER> ) "]" "*" Constant() |
-	( "[" ( Constant() | <IDENTIFIER> ) "]" )+ "=" Constant() |
+	LOOKAHEAD(4) "[" ( Constant() | Identifier() ) "]" "*" Constant() |
+	( "[" ( Constant() | Identifier() ) "]" )+ "=" Constant() |
 	LOOKAHEAD(3) Constant() ":" [ "[" Constant() "]" ] Constant() |
 	Constant() |
-	<IDENTIFIER>
+	Identifier()
 }
 
 void MatrixConstant() : {}

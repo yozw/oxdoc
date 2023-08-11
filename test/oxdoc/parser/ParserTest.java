@@ -450,7 +450,7 @@ public class ParserTest {
 
   @Test
   public void testVariableNamedIn() throws Exception {
-    String input = "main() { decl in = 5; }";
+    String input = "main() { decl in = 5; decl out = in * 3; }";
     ParserTestHelper helper = create(input);
     helper.test();
   }
