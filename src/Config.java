@@ -48,6 +48,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static oxdoc.util.FileUtils.toNativePath;
@@ -64,6 +66,7 @@ public class Config {
   private String imagePath = "images/";
   private String windowTitle = "";
   private String projectName = "";
+  private String javascriptFilename = "";
   private MathProcessor mathProcessor = null;
   private boolean verbose = false;
   private boolean upLevel = false;
@@ -187,6 +190,8 @@ public class Config {
       showInternals = toBoolean(value);
     } else if (name.equals("projectname")) {
       projectName = value;
+    } else if (name.equals("javascript")) {
+      javascriptFilename = value;
     } else if (name.equals("windowtitle")) {
       windowTitle = value;
     } else if (name.equals("verbose")) {
@@ -210,6 +215,7 @@ public class Config {
     System.out.println("    -formulas <method>     Specifies how to generate formulas. Available");
     System.out.println("                           methods are: latex, mathml, mathjax, plain");
     System.out.println("                           (default=mathjax)");
+    System.out.println("    -javascript <file.js>  JavaScript code to include in all HTML outputs.");
     System.out.println("    -noicons               Disables icons");
     System.out.println("    -outputdir \"dir\"       Specifies the output directory. Default: doc" + File.separator);
     System.out.println("    -projectname \"name\"    Specifies the name of the project");
@@ -388,6 +394,13 @@ public class Config {
 
   public String getImageBgColor() {
     return imageBgColor;
+  }
+
+  public Path getJavascriptFile() {
+    if (javascriptFilename.trim().length() == 0) {
+      return null;
+    }
+    return Paths.get(javascriptFilename);
   }
 
   public List<String> getLatexPackages() {

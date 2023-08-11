@@ -24,6 +24,7 @@ import oxdoc.html.Header;
 import oxdoc.html.RenderContext;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 
 import static oxdoc.util.FileUtils.joinPath;
@@ -95,6 +96,13 @@ public class OutputFile {
       output.writeln("<style type=\"text/css\">");
       output.writeln(css.toString());
       output.writeln("</style>");
+    }
+
+    if (config.getJavascriptFile() != null) {
+	String javascript = new String(Files.readAllBytes(config.getJavascriptFile()));
+	output.writeln("<script type='text/javascript'>");
+	output.writeln(javascript);
+	output.writeln("</script>");
     }
 
     output.writeln("<link rel=\"stylesheet\" type=\"text/css\" href=\"" +

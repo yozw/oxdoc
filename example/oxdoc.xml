@@ -3,4 +3,5 @@
   <option showinternals="off"/>
   <option icons="on"/>
   <option outputdir="doc"/>
+  <option javascript="oxdoc.js"/>
 </oxdoc>
