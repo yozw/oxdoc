@@ -20,6 +20,7 @@
 
 package oxdoc;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import org.w3c.dom.Attr;
@@ -42,6 +43,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
@@ -255,8 +259,8 @@ public class Config {
   }
 
   public void load() {
-    load(userHomeConfigFile());
-    load(configFile);
+    loadIfExists(userHomeConfigFile());
+    loadIfExists(configFile);
   }
 
   private static String nodeToString(Node node) {
@@ -272,22 +276,29 @@ public class Config {
     return sw.toString();
   }
 
-  public void load(String filename) {
+  public void loadIfExists(String filename) {
     File file = new File(filename);
     if (!file.exists()) {
       return;
     }
     logger.info("Loading configuration file " + filename);
+    try {
+      InputStream in = new FileInputStream(file);
+      InputSource inputSource = new InputSource(new InputStreamReader(in));
+      parse(inputSource);
+    } catch (SAXException | IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-    // Parse the file
+  public void parse(InputSource inputSource) throws SAXException, IOException {
     DocumentBuilder builder;
-    Document doc;
     try {
       builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-      doc = builder.parse(file);
-    } catch (ParserConfigurationException | SAXException | IOException e) {
-      throw new RuntimeException("Could not parse " + filename + ": " + e.getMessage());
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException(e);
     }
+    Document doc = builder.parse(inputSource);
 
     // Find the tags of interest
     NodeList nodes = doc.getElementsByTagName("option");
@@ -311,7 +322,6 @@ public class Config {
 	      " nothing else, or a single key=value attribute. Found: " +
 	      nodeToString(nodes.item(i)));
       }
-      logger.info("Setting " + name + " = " + value);
       setOption(name, value);
     }
   }
