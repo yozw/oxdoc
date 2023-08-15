@@ -1,8 +1,13 @@
-# Oxdoc 1.1
+# Oxdoc 1.2beta
 
 oxdoc is a tool for generating API documentation in HTML format from comments in Ox source code, inspired by Sun Microsystems' Javadoc. Ox is an object-oriented statistical matrix programming language.
 
-See http://yozw.github.io/oxdoc/ for examples and a user manual.
+Examples of generated documentation:
+
+* [PcLiRE](http://yozw.github.io/oxdoc/pclire/default.html).
+* [Niqlow](https://ferrall.github.io/niqlow/niqlow.ox.html) by Christopher Ferrall.
+
+See http://yozw.github.io/oxdoc/ for example code and a user manual.
 
 ### Installation instructions (binaries)
 
