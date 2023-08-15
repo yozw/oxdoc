@@ -62,6 +62,66 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+## Frequently Asked Questions
+
+### Oxdoc freezes while running LaTeX
+
+This happens sometimes when dvipng is run for the first time on files. In Windows, just use Ctrl+C to interrupt
+the program and run oxdoc again. Usually, the problem then disappears.
+
+### Formulas are not visible
+
+This problem happens in Internet Explorer when you use transparent PNG files. The image files created by oxdoc
+are semi-transparent PNG (Portable Network Graphics) files, and Internet Explorer does not support these files.
+I recommend using Firefox instead.
+
+
+### When parsing a line that contains two tranpose (') characters, oxdoc stops with an error message
+
+Oxdoc stops with an error message when compiling Ox code that contains a line that contains two transpose (') characters with exactly one
+character in between. Consider for example the following code:
+
+```
+mx = mx - meanc(mx')'
+```
+
+In this code, oxdoc erroneously recognizes the right parenthesis enclosed in two single quotes `')'` as a character constant and produces the following error message:
+
+```
+ParseException: Encountered " <IDENTIFIER> "pc1 "" at line 112, column 1.
+Was expecting one of:
+"decl" ...
+"static" ...
+"const" ...
+"class" ...
+"extern" ...
+"enum" ...
+"struct" ...
+"static" ...
+"extern" ...
+"static" ...
+```
+
+The problem is caused by the fact that the ox language 'overloads' the single quote character.
+In ox, it has two meanings: either it is the beginning of a character constant (e.g. 'x' or '\n' --
+see also character constants in the Ox language manual), or it means taking the transpose of a vector.
+
+**Workaround**
+
+Although I have not been able to fix this issue completely, there is a simple workaround for the issue: adding an extra space
+will prevent oxdoc from making a wrong judgment. (Remark: you need oxdoc version 0.991alpha or higher for this to work.)
+So, replacing the code above by the following circumvents the problem:
+
+```
+mx = mx - meanc(mx' )'
+```
+
+Notice the extra space after the first single quote. Also note that, in this particular example, perhaps an even better solution is to write:
+
+```
+mx = mx - meanr(mx)
+```  
+
 ## Version history
 
 ### August 2023 (oxdoc 1.2)
