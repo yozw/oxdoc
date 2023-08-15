@@ -11,7 +11,10 @@ Examples of generated documentation:
 * [PcLiRE](http://yozw.github.io/oxdoc/pclire/default.html).
 * [Niqlow](https://ferrall.github.io/niqlow/niqlow.ox.html) by Christopher Ferrall.
 
-See http://yozw.github.io/oxdoc/ for example code and a user manual.
+Getting started:
+
+* [Manual](https://github.com/yozw/oxdoc/blob/master/manual/manual.pdf)
+* [Example code](https://github.com/yozw/oxdoc/tree/master/example)
 
 ## Installation instructions (binaries)
 
