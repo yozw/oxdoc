@@ -168,39 +168,29 @@ Note that this happens only for main ".ox" files, and not for files that are inc
 ```
 
   The usual other `@` tags should work as well.
-
 * Implemented indexing as per Chris Ferrall's suggestion: any overridden methods are
   placed on the same line.
-
 * Added document to the output: the hierarchy tree. Notice that you need to update your 
   `oxdoc.css` to get this to work
-
 * Changed the default oxdoc.css so that the output looks a bit prettier. At the same
   time, the HTML output is slightly different. The icons and texts in H1, H2, H3 headers
   are now inside SPANs.
-
 * Implemented math display through Mathjax, as per suggestion of Michael Massman 
   (see http://www.mathjax.org/). Mathjax is superior to LaTeX image generation, but 
   it requires an internet connection. Since everybody these days has an internet connection, 
   this now the default behavior. You can still use LaTeX to generate formulas by specifying
   the option "-formulas latex". 
-
 * Implemented automatic writing of auxiliary icons (for e.g. the tree, but also for 
   prettier output). If required icon files are not available, they are written. They are 
   never overwritten though. Icons are also on by default now. This can be disable by
   specifying `-noicons`
-
 * Added an option `-uplevel` to enable the "up level" link.
-
 * Implemented a `@sortkey` tag in all places. Every object has a sort key, which by default is
   the name of object (e.g. function name or class name), but which can be overridden by the 
   `@sortkey` tag. Objects are sorted according to their `@sortkey`s. In particular, this works
   for files, as you requested.
-
 * The index now distinguishes between constructors, destructors, and methods.
-
 * Default settings for Latex/dvipng executables now depend on the operating system.
-
 * The `#import` command now includes appropriate header file
 * The following code is no longer rejected:
   `[ a[1], a[2] ] = ... `
