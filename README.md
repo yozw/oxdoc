@@ -60,10 +60,9 @@ This problem happens in Internet Explorer when you use transparent PNG files. Th
 are semi-transparent PNG (Portable Network Graphics) files, and Internet Explorer does not support these files.
 I recommend using Firefox instead.
 
+### When parsing a line that contains two tranpose (`'`) characters, oxdoc stops with an error message
 
-### When parsing a line that contains two tranpose (') characters, oxdoc stops with an error message
-
-Oxdoc stops with an error message when compiling Ox code that contains a line that contains two transpose (') characters with exactly one
+Oxdoc stops with an error message when compiling Ox code that contains a line that contains two transpose (`'`) characters with exactly one
 character in between. Consider for example the following code:
 
 ```
