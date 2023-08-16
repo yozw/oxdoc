@@ -1,5 +1,7 @@
 # Oxdoc 1.2beta
 
+*Last update:* August 2023.
+
 oxdoc is a tool for generating API documentation in HTML format from comments in Ox source code, inspired by Sun Microsystems' Javadoc. Ox is an object-oriented statistical matrix programming language. Features:
 
 * Formatted comments for classes, members, and global functions.
